@@ -31,6 +31,7 @@
   },
   "defaultProject": "fun-4-fund",
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "d1c5d76b-9273-4f05-b326-03105b006882"
   }
 }

@@ -1,0 +1,94 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="proyect">
+            <h2><span jhiTranslate="fun4FundApp.proyect.detail.title">Proyect</span> {{ proyect.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.proyect.name">Name</span></dt>
+                <dd>
+                    <span>{{ proyect.name }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.description">Description</span></dt>
+                <dd>
+                    <span>{{ proyect.description }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.idType">Id Type</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'fun4FundApp.ProyectType.' + proyect.idType }}">{{ proyect.idType }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.goalAmount">Goal Amount</span></dt>
+                <dd>
+                    <span>{{ proyect.goalAmount }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.collected">Collected</span></dt>
+                <dd>
+                    <span>{{ proyect.collected }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.rating">Rating</span></dt>
+                <dd>
+                    <span>{{ proyect.rating }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.creationDate">Creation Date</span></dt>
+                <dd>
+                    <span>{{ proyect.creationDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.lastUpdated">Last Updated</span></dt>
+                <dd>
+                    <span>{{ proyect.lastUpdated }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.coordX">Coord X</span></dt>
+                <dd>
+                    <span>{{ proyect.coordX }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.coordY">Coord Y</span></dt>
+                <dd>
+                    <span>{{ proyect.coordY }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.fee">Fee</span></dt>
+                <dd>
+                    <span>{{ proyect.fee }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.account">Account</span></dt>
+                <dd>
+                    <div *ngIf="proyect.account">
+                        <a [routerLink]="['/proyect-account', proyect.account?.id, 'view']">{{ proyect.account?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.owner">Owner</span></dt>
+                <dd>
+                    <div *ngIf="proyect.owner">
+                        <a [routerLink]="['/application-user', proyect.owner?.id, 'view']">{{ proyect.owner?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.applicationUser">Application User</span></dt>
+                <dd>
+                    <div *ngIf="proyect.applicationUser">
+                        <a [routerLink]="['/application-user', proyect.applicationUser?.id, 'view']">{{ proyect.applicationUser?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.category">Category</span></dt>
+                <dd>
+                    <div *ngIf="proyect.category">
+                        <a [routerLink]="['/category', proyect.category?.id, 'view']">{{ proyect.category?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/proyect', proyect.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

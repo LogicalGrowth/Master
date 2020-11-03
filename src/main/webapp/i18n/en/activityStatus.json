@@ -1,0 +1,10 @@
+{
+  "fun4FundApp": {
+    "ActivityStatus": {
+      "null": "",
+      "ENABLED": "ENABLED",
+      "DISABLED": "DISABLED",
+      "FINISHED": "FINISHED"
+    }
+  }
+}

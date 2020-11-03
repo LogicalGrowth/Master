@@ -1,0 +1,12 @@
+{
+  "fun4FundApp": {
+    "ProductType": {
+      "null": "",
+      "RAFFLE": "RAFFLE",
+      "AUCTION": "AUCTION",
+      "DONATION": "DONATION",
+      "EXCLUSIVE_CONTENT": "EXCLUSIVE_CONTENT",
+      "PARTNERSHIP": "PARTNERSHIP"
+    }
+  }
+}

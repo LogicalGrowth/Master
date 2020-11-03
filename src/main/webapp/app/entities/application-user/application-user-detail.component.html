@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="applicationUser">
+            <h2><span jhiTranslate="fun4FundApp.applicationUser.detail.title">Application User</span> {{ applicationUser.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.applicationUser.identification">Identification</span></dt>
+                <dd>
+                    <span>{{ applicationUser.identification }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.applicationUser.idType">Id Type</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'fun4FundApp.IdType.' + applicationUser.idType }}">{{ applicationUser.idType }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.applicationUser.birthDate">Birth Date</span></dt>
+                <dd>
+                    <span>{{ applicationUser.birthDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.applicationUser.phoneNumber">Phone Number</span></dt>
+                <dd>
+                    <span>{{ applicationUser.phoneNumber }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.applicationUser.admin">Admin</span></dt>
+                <dd>
+                    <span>{{ applicationUser.admin }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.applicationUser.internalUser">Internal User</span></dt>
+                <dd>
+                    {{ applicationUser.internalUser?.id }}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/application-user', applicationUser.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+{
+  "name": "ApplicationUser",
+  "fields": [
+    {
+      "fieldName": "identification",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required",
+        "minlength",
+        "maxlength"
+      ],
+      "fieldValidateRulesMinlength": "9",
+      "fieldValidateRulesMaxlength": "13"
+    },
+    {
+      "fieldName": "idType",
+      "fieldType": "IdType",
+      "fieldValues": "PASSPORT,IDENTIFICATION",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "birthDate",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "phoneNumber",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required",
+        "minlength",
+        "maxlength"
+      ],
+      "fieldValidateRulesMinlength": "8",
+      "fieldValidateRulesMaxlength": "11"
+    },
+    {
+      "fieldName": "admin",
+      "fieldType": "Boolean",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "applicationUser",
+      "relationshipName": "internalUser",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "paymentMethod",
+      "otherEntityRelationshipName": "owner",
+      "relationshipName": "paymentMethod"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "proyect",
+      "otherEntityRelationshipName": "owner",
+      "relationshipName": "proyect"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "donationHistory",
+      "otherEntityRelationshipName": "applicationUser",
+      "relationshipName": "donation"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "notification",
+      "otherEntityRelationshipName": "applicationUser",
+      "relationshipName": "notification"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "applicationUser",
+      "relationshipName": "payment"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "proyect",
+      "otherEntityRelationshipName": "applicationUser",
+      "relationshipName": "favorite"
+    }
+  ],
+  "changelogDate": "20201103003727",
+  "entityTableName": "application_user",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

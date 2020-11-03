@@ -1,0 +1,11 @@
+id;identification;id_type;birth_date;phone_number;admin
+1;Practical sta;IDENTIFICATION;2020-11-02T09:50:01;Internation;true
+2;local Officer;IDENTIFICATION;2020-11-02T11:03:49;Accountabil;true
+3;Refined Concr;IDENTIFICATION;2020-11-03T00:08:29;Checking Ac;false
+4;open-source T;PASSPORT;2020-11-02T04:27:44;Movies empo;false
+5;Administrator;IDENTIFICATION;2020-11-02T12:49:46;MontanaX;true
+6;Uganda Shilli;IDENTIFICATION;2020-11-02T16:13:51;indexing Au;true
+7;open-source;PASSPORT;2020-11-02T10:48:07;invoice Reg;true
+8;RegionalX;IDENTIFICATION;2020-11-02T12:12:58;Investor by;false
+9;white Berkshi;PASSPORT;2020-11-02T15:20:51;European Un;true
+10;backing up de;PASSPORT;2020-11-02T23:15:09;Central rep;false

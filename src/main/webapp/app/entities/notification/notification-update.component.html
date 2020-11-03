@@ -1,0 +1,85 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-notification-heading" jhiTranslate="fun4FundApp.notification.home.createOrEditLabel">Create or edit a Notification</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fun4FundApp.notification.type" for="field_type">Type</label>
+                    <select class="form-control" name="type" formControlName="type" id="field_type">
+                        <option value="APP">{{ 'fun4FundApp.NotificationType.APP' | translate }}</option>
+                        <option value="EMAIL">{{ 'fun4FundApp.NotificationType.EMAIL' | translate }}</option>
+                    </select>
+                    <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fun4FundApp.notification.message" for="field_message">Message</label>
+                    <input type="text" class="form-control" name="message" id="field_message"
+                           formControlName="message"/>
+                    <div *ngIf="editForm.get('message')!.invalid && (editForm.get('message')!.dirty || editForm.get('message')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('message')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fun4FundApp.notification.timeStamp" for="field_timeStamp">Time Stamp</label>
+                    <div class="d-flex">
+                        <input id="field_timeStamp" type="datetime-local" class="form-control" name="timeStamp" formControlName="timeStamp" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                    <div *ngIf="editForm.get('timeStamp')!.invalid && (editForm.get('timeStamp')!.dirty || editForm.get('timeStamp')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('timeStamp')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('timeStamp')?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            This field should be a date and time.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fun4FundApp.notification.status" for="field_status">Status</label>
+                    <select class="form-control" name="status" formControlName="status" id="field_status">
+                        <option value="SEEN">{{ 'fun4FundApp.NotificationStatus.SEEN' | translate }}</option>
+                        <option value="UNSEEN">{{ 'fun4FundApp.NotificationStatus.UNSEEN' | translate }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fun4FundApp.notification.applicationUser" for="field_applicationUser">Application User</label>
+                    <select class="form-control" id="field_applicationUser" name="applicationUser" formControlName="applicationUser">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="applicationUserOption.id === editForm.get('applicationUser')!.value?.id ? editForm.get('applicationUser')!.value : applicationUserOption" *ngFor="let applicationUserOption of applicationusers; trackBy: trackById">{{ applicationUserOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

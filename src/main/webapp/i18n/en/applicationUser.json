@@ -1,0 +1,33 @@
+{
+  "fun4FundApp": {
+    "applicationUser": {
+      "home": {
+        "title": "Application Users",
+        "createLabel": "Create a new Application User",
+        "createOrEditLabel": "Create or edit a Application User",
+        "notFound": "No Application Users found"
+      },
+      "created": "A new Application User is created with identifier {{ param }}",
+      "updated": "A Application User is updated with identifier {{ param }}",
+      "deleted": "A Application User is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Application User {{ id }}?"
+      },
+      "detail": {
+        "title": "Application User"
+      },
+      "identification": "Identification",
+      "idType": "Id Type",
+      "birthDate": "Birth Date",
+      "phoneNumber": "Phone Number",
+      "admin": "Admin",
+      "internalUser": "Internal User",
+      "paymentMethod": "Payment Method",
+      "proyect": "Proyect",
+      "donation": "Donation",
+      "notification": "Notification",
+      "payment": "Payment",
+      "favorite": "Favorite"
+    }
+  }
+}

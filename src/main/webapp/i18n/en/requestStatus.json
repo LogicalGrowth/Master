@@ -1,0 +1,11 @@
+{
+  "fun4FundApp": {
+    "RequestStatus": {
+      "null": "",
+      "SEND": "SEND",
+      "RECEIVED": "RECEIVED",
+      "ACCEPTED": "ACCEPTED",
+      "DENIED": "DENIED"
+    }
+  }
+}

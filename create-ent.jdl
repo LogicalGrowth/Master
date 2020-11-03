@@ -1,0 +1,286 @@
+DEFAULT_MIN_LENGTH = 1
+DEFAULT_MAX_LENGTH = 999
+ID_MIN_LENGTH = 9
+ID_MAX_LENGTH = 13
+
+CARD_MIN_LENGTH = 14
+CARD_MAX_LENGTH = 19
+
+PROYECT_NAME_MAX_LENGTH = 30
+PROYECT_DESC_MAX_LENGTH = 300
+
+NAME_MAX_LENGTH = 50
+EMAIL_MIN_LENGTH = 8
+EMAIL_MAX_LENGTH = 8
+PHONE_MIN_LENGTH = 8
+PHONE_MAX_LENGTH = 11
+
+enum IdType {
+	PASSPORT, IDENTIFICATION
+}
+
+enum ActivityStatus {
+	ENABLED, DISABLED, FINISHED
+}
+
+enum CardType {
+	VISA, MASTERCARD, EXPRESS
+}
+
+enum CategoryStatus {
+	ENABLED, DISABLED
+}
+
+enum PasswordStatus {
+	ACTIVE, EXPIRED
+}
+
+enum Currency {
+	USD, CRC
+}
+
+enum ProyectType {
+	PROFITABLE, NONPROFIT
+}
+
+enum NotificationType {
+	APP, EMAIL
+}
+
+enum NotificationStatus {
+	SEEN, UNSEEN
+}
+
+enum RequestStatus {
+	SEND, RECEIVED, ACCEPTED, DENIED
+}
+
+enum ProductType {
+	RAFFLE, AUCTION, DONATION, EXCLUSIVE_CONTENT, PARTNERSHIP
+}
+
+enum ActionType {
+	CREATE, UPDATE, DELETE
+}
+
+entity Image {
+	url String required
+}
+
+entity ApplicationUser {
+	identification String required minlength(ID_MIN_LENGTH) maxlength(ID_MAX_LENGTH)
+	idType IdType required
+    birthDate ZonedDateTime required
+    phoneNumber String required minlength(PHONE_MIN_LENGTH) maxlength(PHONE_MAX_LENGTH)
+    //status UserStatus required
+    admin Boolean required
+}
+
+entity PaymentMethod {
+	cardNumber String unique required minlength(CARD_MIN_LENGTH) maxlength(CARD_MAX_LENGTH)
+    cardOwner String required
+    expirationDate ZonedDateTime required
+    type CardType required
+    cvc String required 
+}
+
+entity Proyect {
+	name String required maxlength(PROYECT_NAME_MAX_LENGTH)
+    description String required maxlength(PROYECT_DESC_MAX_LENGTH)
+    idType ProyectType required
+    goalAmount Double min(1) required
+    collected Double min(0)
+    //crear trigger que actualice el rating cuando se crea un review
+    rating Double
+    creationDate ZonedDateTime required
+    //ver ejemplo del profe que nadie le puso atención
+    lastUpdated ZonedDateTime
+    coordX Long required
+    coordY Long required
+    //% de fee con el que se registra el proyecto
+    fee Double required
+}
+
+entity ProyectAccount {
+	number String required
+    currencyType Currency required
+}
+
+entity Category {
+	name String required
+    description String required
+    status CategoryStatus required
+}
+
+entity Checkpoint {
+	completitionPercentage Double required
+    message String required
+    completed Boolean required
+}
+
+entity Review {
+	timeStamp ZonedDateTime required
+    message String required
+    user String required
+    rating Double required
+}
+
+entity DonationHistory {
+	amount Double required min(0)
+    timeStamp ZonedDateTime required    
+}
+
+entity Auction {
+	initialBid Double required min(0)
+    winningBid Double min(0)
+    expirationDate ZonedDateTime required
+    state ActivityStatus required
+}
+
+entity Raffle {
+	price Double required min(0)
+    totalTicket Integer required min(1)
+    expirationDate ZonedDateTime required
+	state ActivityStatus required
+}
+
+entity ExclusiveContent {
+	price Double required min(0)
+    stock Integer min(1)
+	state ActivityStatus required
+}
+
+entity Prize {
+	name String required
+    description String required
+}
+
+entity PartnerRequest {
+	amount Double required min(0)
+    status RequestStatus required
+}
+
+entity Notification {
+	type NotificationType required
+    message String required
+    timeStamp ZonedDateTime required
+    status NotificationStatus
+}
+
+entity Payment {
+	amount Double required min(0)
+    type ProductType required
+    timeStamp ZonedDateTime required
+}
+
+entity UserPreferences {
+	notifications Boolean required
+}
+
+entity AdminPreferences {
+    //en días
+    inactivityTime Integer required
+    //en días
+    notificationRecurrence Integer required
+}
+
+//Histórico de porcentaje tomar en cuenta
+entity Fee {
+	percentage Double required min(0)
+    highestAmount Double required min(0)
+}
+
+entity AppLog {
+	timeStamp ZonedDateTime required
+    action ActionType required
+    user String required
+    description String required
+}
+
+//Agregar requerimiento
+entity Recommendation {
+	description String required
+}
+
+entity PasswordHistory {
+	password String
+    startDate ZonedDateTime
+	endDate ZonedDateTime
+    status PasswordStatus
+}
+
+//Composición entre User y ApplicationUser para extender fields
+relationship OneToOne {
+  ApplicationUser{internalUser} to User
+}
+
+//ApplicationUser
+relationship OneToMany {
+	ApplicationUser{paymentMethod} to PaymentMethod{owner},
+    
+    ApplicationUser{proyect} to Proyect{owner},
+    ApplicationUser{donation} to DonationHistory,
+    ApplicationUser{notification} to Notification,
+    ApplicationUser{payment} to Payment,
+    ApplicationUser{favorite} to Proyect
+}
+
+//Proyect
+relationship OneToMany {
+	Proyect{image} to Image,
+    Proyect{donation} to DonationHistory,
+    Proyect{checkpoint} to Checkpoint,
+    Proyect{review} to Review,
+    //Socios
+    Proyect{partner} to PartnerRequest,
+    Proyect{raffle} to Raffle,
+    Proyect{auction} to Auction,
+    Proyect{exclusiveContent} to ExclusiveContent,
+    Proyect{payment} to Payment
+}
+
+//Proyect
+relationship OneToOne {
+    Proyect{account} to ProyectAccount
+}
+
+//Category
+relationship OneToMany {
+    Category{proyect} to Proyect
+}
+
+//Category
+relationship OneToOne {
+    Category{image} to Image
+}
+
+//Prize
+relationship OneToMany {
+	Prize{image} to Image
+}
+
+//Auction
+relationship OneToOne {
+	Auction{prize} to Prize,
+    Auction{winner} to ApplicationUser
+}
+
+//Raffle
+relationship OneToOne {
+	Raffle{prize} to Prize
+}
+
+//Raffle
+relationship ManyToOne {
+	Raffle{buyer} to ApplicationUser
+}
+
+//ExclusiveContent
+relationship OneToOne {
+	ExclusiveContent{prize} to Prize
+}
+
+//PartnerRequest
+relationship OneToOne {
+	PartnerRequest{applicant} to ApplicationUser
+}

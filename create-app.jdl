@@ -1,0 +1,18 @@
+/**
+ * The application configuration.
+ * @author Logical Growth
+ */
+application {
+  config {
+    applicationType monolith,
+    authenticationType jwt,
+    baseName fun4fund,
+    buildTool maven,
+    clientFramework angularX,
+    clientPackageManager npm,
+    devDatabaseType mysql,
+    languages [en],
+    packageName cr.ac.ucenfotec.fun4fund,
+    prodDatabaseType mysql
+  }
+}

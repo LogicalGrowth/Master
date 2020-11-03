@@ -1,0 +1,50 @@
+{
+  "name": "PartnerRequest",
+  "fields": [
+    {
+      "fieldName": "amount",
+      "fieldType": "Double",
+      "fieldValidateRules": [
+        "required",
+        "min"
+      ],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "RequestStatus",
+      "fieldValues": "SEND,RECEIVED,ACCEPTED,DENIED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "partnerRequest",
+      "relationshipName": "applicant",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "proyect",
+      "otherEntityRelationshipName": "partner",
+      "relationshipName": "proyect",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201103004927",
+  "entityTableName": "partner_request",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

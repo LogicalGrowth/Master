@@ -1,0 +1,73 @@
+{
+  "name": "Auction",
+  "fields": [
+    {
+      "fieldName": "initialBid",
+      "fieldType": "Double",
+      "fieldValidateRules": [
+        "required",
+        "min"
+      ],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "winningBid",
+      "fieldType": "Double",
+      "fieldValidateRules": [
+        "min"
+      ],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "expirationDate",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "state",
+      "fieldType": "ActivityStatus",
+      "fieldValues": "ENABLED,DISABLED,FINISHED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "prize",
+      "otherEntityRelationshipName": "auction",
+      "relationshipName": "prize",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "auction",
+      "relationshipName": "winner",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "proyect",
+      "otherEntityRelationshipName": "auction",
+      "relationshipName": "proyect",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201103004527",
+  "entityTableName": "auction",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

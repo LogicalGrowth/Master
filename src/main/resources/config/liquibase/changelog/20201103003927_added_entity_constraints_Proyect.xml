@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity Proyect.
+    -->
+    <changeSet id="20201103003927-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="proyect"
+                                 constraintName="fk_proyect_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="proyect_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="proyect"
+                                 constraintName="fk_proyect_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="application_user_id"
+                                 baseTableName="proyect"
+                                 constraintName="fk_proyect_application_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="proyect"
+                                 constraintName="fk_proyect_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="category"/>
+
+    </changeSet>
+</databaseChangeLog>

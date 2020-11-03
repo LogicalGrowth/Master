@@ -1,0 +1,9 @@
+{
+  "fun4FundApp": {
+    "IdType": {
+      "null": "",
+      "PASSPORT": "PASSPORT",
+      "IDENTIFICATION": "IDENTIFICATION"
+    }
+  }
+}

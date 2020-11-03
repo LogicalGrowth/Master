@@ -1,0 +1,105 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="fun4FundApp.proyect.home.title">Proyects</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-proyect" [routerLink]="['/proyect/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="fun4FundApp.proyect.home.createLabel">
+            Create a new Proyect
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="proyects?.length === 0">
+        <span jhiTranslate="fun4FundApp.proyect.home.notFound">No proyects found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="proyects && proyects.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.name">Name</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.description">Description</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.idType">Id Type</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.goalAmount">Goal Amount</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.collected">Collected</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.rating">Rating</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.creationDate">Creation Date</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.lastUpdated">Last Updated</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.coordX">Coord X</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.coordY">Coord Y</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.fee">Fee</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.account">Account</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.owner">Owner</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.applicationUser">Application User</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.category">Category</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let proyect of proyects ;trackBy: trackId">
+                    <td><a [routerLink]="['/proyect', proyect.id, 'view']">{{ proyect.id }}</a></td>
+                    <td>{{ proyect.name }}</td>
+                    <td>{{ proyect.description }}</td>
+                    <td jhiTranslate="{{ 'fun4FundApp.ProyectType.' + proyect.idType }}">{{ proyect.idType }}</td>
+                    <td>{{ proyect.goalAmount }}</td>
+                    <td>{{ proyect.collected }}</td>
+                    <td>{{ proyect.rating }}</td>
+                    <td>{{ proyect.creationDate | date:'medium' }}</td>
+                    <td>{{ proyect.lastUpdated | date:'medium' }}</td>
+                    <td>{{ proyect.coordX }}</td>
+                    <td>{{ proyect.coordY }}</td>
+                    <td>{{ proyect.fee }}</td>
+                    <td>
+                        <div *ngIf="proyect.account">
+                            <a [routerLink]="['/proyect-account', proyect.account?.id, 'view']" >{{ proyect.account?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="proyect.owner">
+                            <a [routerLink]="['/application-user', proyect.owner?.id, 'view']" >{{ proyect.owner?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="proyect.applicationUser">
+                            <a [routerLink]="['/application-user', proyect.applicationUser?.id, 'view']" >{{ proyect.applicationUser?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="proyect.category">
+                            <a [routerLink]="['/category', proyect.category?.id, 'view']" >{{ proyect.category?.id }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/proyect', proyect.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/proyect', proyect.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(proyect)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

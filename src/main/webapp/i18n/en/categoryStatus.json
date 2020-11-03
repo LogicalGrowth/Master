@@ -1,0 +1,9 @@
+{
+  "fun4FundApp": {
+    "CategoryStatus": {
+      "null": "",
+      "ENABLED": "ENABLED",
+      "DISABLED": "DISABLED"
+    }
+  }
+}

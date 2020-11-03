@@ -1,0 +1,73 @@
+{
+  "name": "Raffle",
+  "fields": [
+    {
+      "fieldName": "price",
+      "fieldType": "Double",
+      "fieldValidateRules": [
+        "required",
+        "min"
+      ],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "totalTicket",
+      "fieldType": "Integer",
+      "fieldValidateRules": [
+        "required",
+        "min"
+      ],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "expirationDate",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "state",
+      "fieldType": "ActivityStatus",
+      "fieldValues": "ENABLED,DISABLED,FINISHED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "prize",
+      "otherEntityRelationshipName": "raffle",
+      "relationshipName": "prize",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "raffle",
+      "relationshipName": "buyer",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "proyect",
+      "otherEntityRelationshipName": "raffle",
+      "relationshipName": "proyect",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201103004627",
+  "entityTableName": "raffle",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

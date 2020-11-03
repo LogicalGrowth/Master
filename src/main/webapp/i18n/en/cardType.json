@@ -1,0 +1,10 @@
+{
+  "fun4FundApp": {
+    "CardType": {
+      "null": "",
+      "VISA": "VISA",
+      "MASTERCARD": "MASTERCARD",
+      "EXPRESS": "EXPRESS"
+    }
+  }
+}

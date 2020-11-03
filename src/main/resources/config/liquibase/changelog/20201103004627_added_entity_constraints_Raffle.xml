@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity Raffle.
+    -->
+    <changeSet id="20201103004627-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="prize_id"
+                                 baseTableName="raffle"
+                                 constraintName="fk_raffle_prize_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="prize"/>
+
+        <addForeignKeyConstraint baseColumnNames="buyer_id"
+                                 baseTableName="raffle"
+                                 constraintName="fk_raffle_buyer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="proyect_id"
+                                 baseTableName="raffle"
+                                 constraintName="fk_raffle_proyect_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="proyect"/>
+
+    </changeSet>
+</databaseChangeLog>

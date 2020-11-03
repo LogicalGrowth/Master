@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="raffle">
+            <h2><span jhiTranslate="fun4FundApp.raffle.detail.title">Raffle</span> {{ raffle.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.raffle.price">Price</span></dt>
+                <dd>
+                    <span>{{ raffle.price }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.raffle.totalTicket">Total Ticket</span></dt>
+                <dd>
+                    <span>{{ raffle.totalTicket }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.raffle.expirationDate">Expiration Date</span></dt>
+                <dd>
+                    <span>{{ raffle.expirationDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.raffle.state">State</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'fun4FundApp.ActivityStatus.' + raffle.state }}">{{ raffle.state }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.raffle.prize">Prize</span></dt>
+                <dd>
+                    <div *ngIf="raffle.prize">
+                        <a [routerLink]="['/prize', raffle.prize?.id, 'view']">{{ raffle.prize?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.raffle.buyer">Buyer</span></dt>
+                <dd>
+                    <div *ngIf="raffle.buyer">
+                        <a [routerLink]="['/application-user', raffle.buyer?.id, 'view']">{{ raffle.buyer?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.raffle.proyect">Proyect</span></dt>
+                <dd>
+                    <div *ngIf="raffle.proyect">
+                        <a [routerLink]="['/proyect', raffle.proyect?.id, 'view']">{{ raffle.proyect?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/raffle', raffle.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

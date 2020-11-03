@@ -1,0 +1,67 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="fun4FundApp.appLog.home.title">App Logs</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-app-log" [routerLink]="['/app-log/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="fun4FundApp.appLog.home.createLabel">
+            Create a new App Log
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="appLogs?.length === 0">
+        <span jhiTranslate="fun4FundApp.appLog.home.notFound">No appLogs found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="appLogs && appLogs.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.appLog.timeStamp">Time Stamp</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.appLog.action">Action</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.appLog.user">User</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.appLog.description">Description</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let appLog of appLogs ;trackBy: trackId">
+                    <td><a [routerLink]="['/app-log', appLog.id, 'view']">{{ appLog.id }}</a></td>
+                    <td>{{ appLog.timeStamp | date:'medium' }}</td>
+                    <td jhiTranslate="{{ 'fun4FundApp.ActionType.' + appLog.action }}">{{ appLog.action }}</td>
+                    <td>{{ appLog.user }}</td>
+                    <td>{{ appLog.description }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/app-log', appLog.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/app-log', appLog.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(appLog)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

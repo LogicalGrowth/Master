@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="auction">
+            <h2><span jhiTranslate="fun4FundApp.auction.detail.title">Auction</span> {{ auction.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.auction.initialBid">Initial Bid</span></dt>
+                <dd>
+                    <span>{{ auction.initialBid }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.auction.winningBid">Winning Bid</span></dt>
+                <dd>
+                    <span>{{ auction.winningBid }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.auction.expirationDate">Expiration Date</span></dt>
+                <dd>
+                    <span>{{ auction.expirationDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.auction.state">State</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'fun4FundApp.ActivityStatus.' + auction.state }}">{{ auction.state }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.auction.prize">Prize</span></dt>
+                <dd>
+                    <div *ngIf="auction.prize">
+                        <a [routerLink]="['/prize', auction.prize?.id, 'view']">{{ auction.prize?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.auction.winner">Winner</span></dt>
+                <dd>
+                    <div *ngIf="auction.winner">
+                        <a [routerLink]="['/application-user', auction.winner?.id, 'view']">{{ auction.winner?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.auction.proyect">Proyect</span></dt>
+                <dd>
+                    <div *ngIf="auction.proyect">
+                        <a [routerLink]="['/proyect', auction.proyect?.id, 'view']">{{ auction.proyect?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/auction', auction.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

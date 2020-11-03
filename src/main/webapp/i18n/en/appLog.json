@@ -1,0 +1,25 @@
+{
+  "fun4FundApp": {
+    "appLog": {
+      "home": {
+        "title": "App Logs",
+        "createLabel": "Create a new App Log",
+        "createOrEditLabel": "Create or edit a App Log",
+        "notFound": "No App Logs found"
+      },
+      "created": "A new App Log is created with identifier {{ param }}",
+      "updated": "A App Log is updated with identifier {{ param }}",
+      "deleted": "A App Log is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete App Log {{ id }}?"
+      },
+      "detail": {
+        "title": "App Log"
+      },
+      "timeStamp": "Time Stamp",
+      "action": "Action",
+      "user": "User",
+      "description": "Description"
+    }
+  }
+}

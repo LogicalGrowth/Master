@@ -1,0 +1,23 @@
+{
+  "fun4FundApp": {
+    "adminPreferences": {
+      "home": {
+        "title": "Admin Preferences",
+        "createLabel": "Create a new Admin Preferences",
+        "createOrEditLabel": "Create or edit a Admin Preferences",
+        "notFound": "No Admin Preferences found"
+      },
+      "created": "A new Admin Preferences is created with identifier {{ param }}",
+      "updated": "A Admin Preferences is updated with identifier {{ param }}",
+      "deleted": "A Admin Preferences is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Admin Preferences {{ id }}?"
+      },
+      "detail": {
+        "title": "Admin Preferences"
+      },
+      "inactivityTime": "Inactivity Time",
+      "notificationRecurrence": "Notification Recurrence"
+    }
+  }
+}

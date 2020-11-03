@@ -1,0 +1,28 @@
+{
+  "fun4FundApp": {
+    "raffle": {
+      "home": {
+        "title": "Raffles",
+        "createLabel": "Create a new Raffle",
+        "createOrEditLabel": "Create or edit a Raffle",
+        "notFound": "No Raffles found"
+      },
+      "created": "A new Raffle is created with identifier {{ param }}",
+      "updated": "A Raffle is updated with identifier {{ param }}",
+      "deleted": "A Raffle is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Raffle {{ id }}?"
+      },
+      "detail": {
+        "title": "Raffle"
+      },
+      "price": "Price",
+      "totalTicket": "Total Ticket",
+      "expirationDate": "Expiration Date",
+      "state": "State",
+      "prize": "Prize",
+      "buyer": "Buyer",
+      "proyect": "Proyect"
+    }
+  }
+}

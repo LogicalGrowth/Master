@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="review">
+            <h2><span jhiTranslate="fun4FundApp.review.detail.title">Review</span> {{ review.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.review.timeStamp">Time Stamp</span></dt>
+                <dd>
+                    <span>{{ review.timeStamp }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.review.message">Message</span></dt>
+                <dd>
+                    <span>{{ review.message }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.review.user">User</span></dt>
+                <dd>
+                    <span>{{ review.user }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.review.rating">Rating</span></dt>
+                <dd>
+                    <span>{{ review.rating }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.review.proyect">Proyect</span></dt>
+                <dd>
+                    <div *ngIf="review.proyect">
+                        <a [routerLink]="['/proyect', review.proyect?.id, 'view']">{{ review.proyect?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/review', review.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

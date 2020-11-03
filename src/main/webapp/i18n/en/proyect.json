@@ -1,0 +1,45 @@
+{
+  "fun4FundApp": {
+    "proyect": {
+      "home": {
+        "title": "Proyects",
+        "createLabel": "Create a new Proyect",
+        "createOrEditLabel": "Create or edit a Proyect",
+        "notFound": "No Proyects found"
+      },
+      "created": "A new Proyect is created with identifier {{ param }}",
+      "updated": "A Proyect is updated with identifier {{ param }}",
+      "deleted": "A Proyect is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Proyect {{ id }}?"
+      },
+      "detail": {
+        "title": "Proyect"
+      },
+      "name": "Name",
+      "description": "Description",
+      "idType": "Id Type",
+      "goalAmount": "Goal Amount",
+      "collected": "Collected",
+      "rating": "Rating",
+      "creationDate": "Creation Date",
+      "lastUpdated": "Last Updated",
+      "coordX": "Coord X",
+      "coordY": "Coord Y",
+      "fee": "Fee",
+      "account": "Account",
+      "image": "Image",
+      "donation": "Donation",
+      "checkpoint": "Checkpoint",
+      "review": "Review",
+      "partner": "Partner",
+      "raffle": "Raffle",
+      "auction": "Auction",
+      "exclusiveContent": "Exclusive Content",
+      "payment": "Payment",
+      "owner": "Owner",
+      "applicationUser": "Application User",
+      "category": "Category"
+    }
+  }
+}

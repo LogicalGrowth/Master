@@ -1,0 +1,75 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="fun4FundApp.partnerRequest.home.title">Partner Requests</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-partner-request" [routerLink]="['/partner-request/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="fun4FundApp.partnerRequest.home.createLabel">
+            Create a new Partner Request
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="partnerRequests?.length === 0">
+        <span jhiTranslate="fun4FundApp.partnerRequest.home.notFound">No partnerRequests found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="partnerRequests && partnerRequests.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.partnerRequest.amount">Amount</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.partnerRequest.status">Status</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.partnerRequest.applicant">Applicant</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.partnerRequest.proyect">Proyect</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let partnerRequest of partnerRequests ;trackBy: trackId">
+                    <td><a [routerLink]="['/partner-request', partnerRequest.id, 'view']">{{ partnerRequest.id }}</a></td>
+                    <td>{{ partnerRequest.amount }}</td>
+                    <td jhiTranslate="{{ 'fun4FundApp.RequestStatus.' + partnerRequest.status }}">{{ partnerRequest.status }}</td>
+                    <td>
+                        <div *ngIf="partnerRequest.applicant">
+                            <a [routerLink]="['/application-user', partnerRequest.applicant?.id, 'view']" >{{ partnerRequest.applicant?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="partnerRequest.proyect">
+                            <a [routerLink]="['/proyect', partnerRequest.proyect?.id, 'view']" >{{ partnerRequest.proyect?.id }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/partner-request', partnerRequest.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/partner-request', partnerRequest.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(partnerRequest)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

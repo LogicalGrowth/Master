@@ -1,0 +1,180 @@
+{
+  "name": "Proyect",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required",
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "30"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required",
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "300"
+    },
+    {
+      "fieldName": "idType",
+      "fieldType": "ProyectType",
+      "fieldValues": "PROFITABLE,NONPROFIT",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "goalAmount",
+      "fieldType": "Double",
+      "fieldValidateRules": [
+        "min",
+        "required"
+      ],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "collected",
+      "fieldType": "Double",
+      "fieldValidateRules": [
+        "min"
+      ],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "rating",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "creationDate",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "lastUpdated",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "coordX",
+      "fieldType": "Long",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "coordY",
+      "fieldType": "Long",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "fee",
+      "fieldType": "Double",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "proyectAccount",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "account",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "image",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "image"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "donationHistory",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "donation"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "checkpoint",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "checkpoint"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "review",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "review"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "partnerRequest",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "partner"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "raffle",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "raffle"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "auction",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "auction"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "exclusiveContent",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "exclusiveContent"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "payment"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "owner",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "favorite",
+      "relationshipName": "applicationUser",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "category",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "category",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201103003927",
+  "entityTableName": "proyect",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

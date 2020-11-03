@@ -1,0 +1,28 @@
+{
+  "fun4FundApp": {
+    "auction": {
+      "home": {
+        "title": "Auctions",
+        "createLabel": "Create a new Auction",
+        "createOrEditLabel": "Create or edit a Auction",
+        "notFound": "No Auctions found"
+      },
+      "created": "A new Auction is created with identifier {{ param }}",
+      "updated": "A Auction is updated with identifier {{ param }}",
+      "deleted": "A Auction is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Auction {{ id }}?"
+      },
+      "detail": {
+        "title": "Auction"
+      },
+      "initialBid": "Initial Bid",
+      "winningBid": "Winning Bid",
+      "expirationDate": "Expiration Date",
+      "state": "State",
+      "prize": "Prize",
+      "winner": "Winner",
+      "proyect": "Proyect"
+    }
+  }
+}

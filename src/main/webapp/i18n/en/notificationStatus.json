@@ -1,0 +1,9 @@
+{
+  "fun4FundApp": {
+    "NotificationStatus": {
+      "null": "",
+      "SEEN": "SEEN",
+      "UNSEEN": "UNSEEN"
+    }
+  }
+}

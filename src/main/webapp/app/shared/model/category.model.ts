@@ -1,0 +1,23 @@
+import { IImage } from 'app/shared/model/image.model';
+import { IProyect } from 'app/shared/model/proyect.model';
+import { CategoryStatus } from 'app/shared/model/enumerations/category-status.model';
+
+export interface ICategory {
+  id?: number;
+  name?: string;
+  description?: string;
+  status?: CategoryStatus;
+  image?: IImage;
+  proyects?: IProyect[];
+}
+
+export class Category implements ICategory {
+  constructor(
+    public id?: number,
+    public name?: string,
+    public description?: string,
+    public status?: CategoryStatus,
+    public image?: IImage,
+    public proyects?: IProyect[]
+  ) {}
+}

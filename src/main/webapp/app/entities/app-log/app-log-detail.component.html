@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="appLog">
+            <h2><span jhiTranslate="fun4FundApp.appLog.detail.title">App Log</span> {{ appLog.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.appLog.timeStamp">Time Stamp</span></dt>
+                <dd>
+                    <span>{{ appLog.timeStamp }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.appLog.action">Action</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'fun4FundApp.ActionType.' + appLog.action }}">{{ appLog.action }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.appLog.user">User</span></dt>
+                <dd>
+                    <span>{{ appLog.user }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.appLog.description">Description</span></dt>
+                <dd>
+                    <span>{{ appLog.description }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/app-log', appLog.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="fun4FundApp.auction.home.title">Auctions</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-auction" [routerLink]="['/auction/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="fun4FundApp.auction.home.createLabel">
+            Create a new Auction
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="auctions?.length === 0">
+        <span jhiTranslate="fun4FundApp.auction.home.notFound">No auctions found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="auctions && auctions.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.auction.initialBid">Initial Bid</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.auction.winningBid">Winning Bid</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.auction.expirationDate">Expiration Date</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.auction.state">State</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.auction.prize">Prize</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.auction.winner">Winner</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.auction.proyect">Proyect</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let auction of auctions ;trackBy: trackId">
+                    <td><a [routerLink]="['/auction', auction.id, 'view']">{{ auction.id }}</a></td>
+                    <td>{{ auction.initialBid }}</td>
+                    <td>{{ auction.winningBid }}</td>
+                    <td>{{ auction.expirationDate | date:'medium' }}</td>
+                    <td jhiTranslate="{{ 'fun4FundApp.ActivityStatus.' + auction.state }}">{{ auction.state }}</td>
+                    <td>
+                        <div *ngIf="auction.prize">
+                            <a [routerLink]="['/prize', auction.prize?.id, 'view']" >{{ auction.prize?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="auction.winner">
+                            <a [routerLink]="['/application-user', auction.winner?.id, 'view']" >{{ auction.winner?.id }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="auction.proyect">
+                            <a [routerLink]="['/proyect', auction.proyect?.id, 'view']" >{{ auction.proyect?.id }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/auction', auction.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/auction', auction.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(auction)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

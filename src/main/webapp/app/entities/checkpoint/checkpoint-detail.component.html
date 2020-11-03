@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="checkpoint">
+            <h2><span jhiTranslate="fun4FundApp.checkpoint.detail.title">Checkpoint</span> {{ checkpoint.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.checkpoint.completitionPercentage">Completition Percentage</span></dt>
+                <dd>
+                    <span>{{ checkpoint.completitionPercentage }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.checkpoint.message">Message</span></dt>
+                <dd>
+                    <span>{{ checkpoint.message }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.checkpoint.completed">Completed</span></dt>
+                <dd>
+                    <span>{{ checkpoint.completed }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.checkpoint.proyect">Proyect</span></dt>
+                <dd>
+                    <div *ngIf="checkpoint.proyect">
+                        <a [routerLink]="['/proyect', checkpoint.proyect?.id, 'view']">{{ checkpoint.proyect?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/checkpoint', checkpoint.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

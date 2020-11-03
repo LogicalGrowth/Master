@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="exclusiveContent">
+            <h2><span jhiTranslate="fun4FundApp.exclusiveContent.detail.title">Exclusive Content</span> {{ exclusiveContent.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.price">Price</span></dt>
+                <dd>
+                    <span>{{ exclusiveContent.price }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.stock">Stock</span></dt>
+                <dd>
+                    <span>{{ exclusiveContent.stock }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.state">State</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'fun4FundApp.ActivityStatus.' + exclusiveContent.state }}">{{ exclusiveContent.state }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.prize">Prize</span></dt>
+                <dd>
+                    <div *ngIf="exclusiveContent.prize">
+                        <a [routerLink]="['/prize', exclusiveContent.prize?.id, 'view']">{{ exclusiveContent.prize?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.proyect">Proyect</span></dt>
+                <dd>
+                    <div *ngIf="exclusiveContent.proyect">
+                        <a [routerLink]="['/proyect', exclusiveContent.proyect?.id, 'view']">{{ exclusiveContent.proyect?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

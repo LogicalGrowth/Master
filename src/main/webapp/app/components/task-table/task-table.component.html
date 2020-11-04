@@ -1,0 +1,44 @@
+    <div class="card  card-tasks">
+        <div class="card-header ">
+          <h4 class="card-title">{{tableTitle}}</h4>
+          <h5 class="card-category">{{tableDescription}}</h5>
+        </div>
+        <div class="card-body ">
+          <div ngClass="table-full-width table-responsive {{tableClass}}">
+            <table class="table">
+              <tbody>
+                <tr *ngFor="let item of data; let i = index">
+                    <td>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" checked>
+                            <span class="form-check-sign"></span>
+                          </label>
+                        </div>
+                      </td>
+                      <td class="img-row">
+                        <div class="img-wrapper">
+                          <img src="{{item.img}}" class="img-raised" />
+                        </div>
+                      </td>
+                      <td class="text-left">{{item.textLeft}}</td>
+                      <td class="td-actions text-right">
+                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
+                          <i ngClass="nc-icon {{firstIcon}}"></i>
+                        </button>
+                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
+                          <i ngClass="nc-icon {{secondIcon}}"></i>
+                        </button>
+                      </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i ngClass="{{bottomIcon}}"></i> {{bottomDescription}}
+          </div>
+        </div>
+      </div>

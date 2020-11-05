@@ -37,9 +37,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/fun4fund?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password: password
+    url: jdbc:mysql://fun4foundmysql.mysql.database.azure.com:3306/fun4fund?useUnicode=true&characterEncoding=utf8&useSSL=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: AdminFun4@fun4foundmysql
+    password: Admin123
     hikari:
       poolName: Hikari
       auto-commit: false

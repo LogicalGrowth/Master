@@ -23,12 +23,10 @@
                       </td>
                       <td class="text-left">{{item.textLeft}}</td>
                       <td class="td-actions text-right">
-                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
-                          <i ngClass="nc-icon {{firstIcon}}"></i>
+                        <button *ngFor="let button of dataButton; let j = index" type="button" rel="tooltip" title={{button.name}} ngClass={{button.class}} >
+                          <i ngClass="{{button.icon}}"></i>
                         </button>
-                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
-                          <i ngClass="nc-icon {{secondIcon}}"></i>
-                        </button>
+  
                       </td>
                 </tr>
               </tbody>

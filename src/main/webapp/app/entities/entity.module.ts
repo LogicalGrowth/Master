@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ComponentsModule } from 'app/components/components.module';
 
 @NgModule({
   imports: [
+    ComponentsModule,
     RouterModule.forChild([
       {
         path: 'image',

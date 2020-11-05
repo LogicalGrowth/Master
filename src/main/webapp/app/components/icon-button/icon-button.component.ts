@@ -1,14 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'jhi-small-card',
-  templateUrl: './small-card.component.html',
+  selector: 'jhi-icon-button',
+  templateUrl: './icon-button.component.html',
   styleUrls: ['../../../content/scss/paper-dashboard.scss']
 })
-export class SmallCardComponent implements OnInit {
-  @Input() title: any;
-  @Input() description: any;
+export class IconButtonComponent implements OnInit {
+
+  @Input() label: any;
+  @Input() type: any;
   @Input() icon: any;
+
   constructor() { }
 
   ngOnInit(): void {

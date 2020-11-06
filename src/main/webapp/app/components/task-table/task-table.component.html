@@ -23,7 +23,7 @@
                       </td>
                       <td class="text-left">{{item.textLeft}}</td>
                       <td class="td-actions text-right">
-                        <button *ngFor="let button of dataButton; let j = index" type="button" rel="tooltip" title={{button.name}} ngClass={{button.class}} >
+                        <button *ngFor="let button of dataButton; let j = index" type="button" rel="tooltip" title={{button.name}} ngClass={{button.class}} (click)="button.onClick()" >
                           <i ngClass="{{button.icon}}"></i>
                         </button>
   

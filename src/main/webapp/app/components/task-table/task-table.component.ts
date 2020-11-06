@@ -36,5 +36,5 @@ interface IRowButtons {
   name: string;
   class: string;
   icon: string;
-  onClick: string;
+  onClick: () => void;
 }

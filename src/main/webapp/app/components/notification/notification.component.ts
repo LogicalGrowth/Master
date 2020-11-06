@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-declare var $: any;
+import * as $ from 'jquery';
+import 'bootstrap-notify';
 
 @Component({
   selector: 'jhi-notification-state',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss'],
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class NotificationComponent implements OnInit {
   @Input() icon: any;
@@ -31,16 +32,16 @@ export class NotificationComponent implements OnInit {
         timer: 2000,
         placement: {
           from: this.from,
-          align: this.align,
+          align: 'right',
         },
         template:
-          '<div data-notify="container" class="col-11 col-md-4 alert alert-{0} alert-with-icon" role="alert">}' +
+          '<div data-notify="container" class="col-11 col-md-4 alert alert-{0} alert-with-icon" role="alert">' +
           '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">' +
-          '<i class="nc-icon nc-simple-remove"></i>' +
+          '<i class="fa fa-times"></i>' +
           '</button>' +
           '<span data-notify="icon" class="nc-icon nc-bell-55"></span> ' +
-          '<span data-notify="title">{1}</span> ' +
-          '<span data-notify="message">{2}</span>',
+          '<strong><span data-notify="title">{1}</span></strong> ' +
+          '<span data-notify="message">{2}</span></div>',
       }
     );
   }

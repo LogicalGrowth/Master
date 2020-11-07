@@ -2,6 +2,8 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
+import cr.ac.ucenfotec.fun4fund.repository.UserRepository;
+import cr.ac.ucenfotec.fun4fund.service.UserService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -35,9 +37,13 @@ public class ProyectResource {
     private String applicationName;
 
     private final ProyectRepository proyectRepository;
+    private final UserService userService;
 
-    public ProyectResource(ProyectRepository proyectRepository) {
+    public ProyectResource(ProyectRepository proyectRepository,
+                           UserService userService)
+    {
         this.proyectRepository = proyectRepository;
+        this.userService = userService;
     }
 
     /**
@@ -53,6 +59,7 @@ public class ProyectResource {
         if (proyect.getId() != null) {
             throw new BadRequestAlertException("A new proyect cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        proyect.setOwner(userService.getUserWithAuthorities().get());
         Proyect result = proyectRepository.save(proyect);
         return ResponseEntity.created(new URI("/api/proyects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

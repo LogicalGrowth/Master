@@ -6,13 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
 import { IProyect, Proyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
 import { IProyectAccount } from 'app/shared/model/proyect-account.model';
 import { ProyectAccountService } from 'app/entities/proyect-account/proyect-account.service';
-import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { ApplicationUser, IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from 'app/entities/category/category.service';
@@ -22,6 +21,7 @@ type SelectableEntity = IProyectAccount | IApplicationUser | ICategory;
 @Component({
   selector: 'jhi-proyect-update',
   templateUrl: './proyect-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ProyectUpdateComponent implements OnInit {
   isSaving = false;
@@ -35,13 +35,13 @@ export class ProyectUpdateComponent implements OnInit {
     description: [null, [Validators.required, Validators.maxLength(300)]],
     idType: [null, [Validators.required]],
     goalAmount: [null, [Validators.required, Validators.min(1)]],
-    collected: [null, [Validators.min(0)]],
-    rating: [],
-    creationDate: [null, [Validators.required]],
-    lastUpdated: [],
-    coordX: [null, [Validators.required]],
-    coordY: [null, [Validators.required]],
-    fee: [null, [Validators.required]],
+    // collected: [null, [Validators.min(0)]],
+    // rating: [],
+    // creationDate: [null, [Validators.required]],
+    // lastUpdated: [],
+    // coordX: [null, [Validators.required]],
+    // coordY: [null, [Validators.required]],
+    // fee: [null, [Validators.required]],
     account: [],
     owner: [],
     applicationUser: [],
@@ -102,13 +102,13 @@ export class ProyectUpdateComponent implements OnInit {
       description: proyect.description,
       idType: proyect.idType,
       goalAmount: proyect.goalAmount,
-      collected: proyect.collected,
-      rating: proyect.rating,
-      creationDate: proyect.creationDate ? proyect.creationDate.format(DATE_TIME_FORMAT) : null,
-      lastUpdated: proyect.lastUpdated ? proyect.lastUpdated.format(DATE_TIME_FORMAT) : null,
-      coordX: proyect.coordX,
-      coordY: proyect.coordY,
-      fee: proyect.fee,
+      // collected: proyect.collected,
+      // rating: proyect.rating,
+      // creationDate: proyect.creationDate ? proyect.creationDate.format(DATE_TIME_FORMAT) : null,
+      // lastUpdated: proyect.lastUpdated ? proyect.lastUpdated.format(DATE_TIME_FORMAT) : null,
+      // coordX: proyect.coordX,
+      // coordY: proyect.coordY,
+      // fee: proyect.fee,
       account: proyect.account,
       owner: proyect.owner,
       applicationUser: proyect.applicationUser,
@@ -138,20 +138,16 @@ export class ProyectUpdateComponent implements OnInit {
       description: this.editForm.get(['description'])!.value,
       idType: this.editForm.get(['idType'])!.value,
       goalAmount: this.editForm.get(['goalAmount'])!.value,
-      collected: this.editForm.get(['collected'])!.value,
-      rating: this.editForm.get(['rating'])!.value,
-      creationDate: this.editForm.get(['creationDate'])!.value
-        ? moment(this.editForm.get(['creationDate'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      lastUpdated: this.editForm.get(['lastUpdated'])!.value
-        ? moment(this.editForm.get(['lastUpdated'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      coordX: this.editForm.get(['coordX'])!.value,
-      coordY: this.editForm.get(['coordY'])!.value,
-      fee: this.editForm.get(['fee'])!.value,
+      collected: 0,
+      rating: 0,
+      creationDate: moment(),
+      lastUpdated: moment(),
+      // coordX: this.editForm.get(['coordX'])!.value,
+      // coordY: this.editForm.get(['coordY'])!.value,
+      // fee: this.editForm.get(['fee'])!.value,
       account: this.editForm.get(['account'])!.value,
-      owner: this.editForm.get(['owner'])!.value,
-      applicationUser: this.editForm.get(['applicationUser'])!.value,
+      owner: new ApplicationUser(1),
+      // applicationUser: this.editForm.get(['applicationUser'])!.value,
       category: this.editForm.get(['category'])!.value,
     };
   }

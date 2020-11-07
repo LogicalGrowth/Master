@@ -1,218 +1,125 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-proyect-heading" jhiTranslate="fun4FundApp.proyect.home.createOrEditLabel">Create or edit a Proyect</h2>
-
-            <div>
+<div class="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+              <div class="card-header ">
+                <h4 class="card-title">Proyecto</h4>
+              </div>
+              <div class="card-body ">
                 <jhi-alert-error></jhi-alert-error>
-
-                <div class="form-group" [hidden]="!editForm.get('id')!.value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.name" for="field_name">Name</label>
-                    <input type="text" class="form-control" name="name" id="field_name"
-                           formControlName="name"/>
-                    <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('name')?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 30 }">
-                        This field cannot be longer than 30 characters.
-                        </small>
+                <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm" class="form-horizontal">
+                  <div class="row" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" class="col-sm-2 col-form-label">Id</label>
+                    <div class="col-sm-10">
+                      <div class="form-group">
+                        <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly>
+                      </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.description" for="field_description">Description</label>
-                    <input type="text" class="form-control" name="description" id="field_description"
-                           formControlName="description"/>
-                    <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('description')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('description')?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 300 }">
-                        This field cannot be longer than 300 characters.
-                        </small>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label" for="field_name">Nombre</label>
+                    <div class="col-sm-10">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="name" id="field_name" formControlName="name">
+                        <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                            <small class="form-text text-danger"
+                                   *ngIf="editForm.get('name')?.errors?.required">
+                            Campo es requerido.
+                            </small>
+                            <small class="form-text text-danger"
+                                   *ngIf="editForm.get('name')?.errors?.maxlength">
+                            El nombre no puede ser mayor a 30 caracteres.
+                            </small>
+                        </div>
+                      </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.idType" for="field_idType">Id Type</label>
-                    <select class="form-control" name="idType" formControlName="idType" id="field_idType">
-                        <option value="PROFITABLE">{{ 'fun4FundApp.ProyectType.PROFITABLE' | translate }}</option>
-                        <option value="NONPROFIT">{{ 'fun4FundApp.ProyectType.NONPROFIT' | translate }}</option>
-                    </select>
-                    <div *ngIf="editForm.get('idType')!.invalid && (editForm.get('idType')!.dirty || editForm.get('idType')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('idType')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label" for="field_description">Descripción</label>
+                    <div class="col-sm-10">
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="description" id="field_description" formControlName="description">
+                        <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+                            <small class="form-text text-danger"
+                                   *ngIf="editForm.get('description')?.errors?.required">
+                            El campo es requerido.
+                            </small>
+                            <small class="form-text text-danger"
+                                   *ngIf="editForm.get('description')?.errors?.maxlength">
+                            El campo no puede ser mayor a 300 caracteres.
+                            </small>
+                        </div>
+                      </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.goalAmount" for="field_goalAmount">Goal Amount</label>
-                    <input type="number" class="form-control" name="goalAmount" id="field_goalAmount"
-                           formControlName="goalAmount"/>
-                    <div *ngIf="editForm.get('goalAmount')!.invalid && (editForm.get('goalAmount')!.dirty || editForm.get('goalAmount')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('goalAmount')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('goalAmount')?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }">
-                            This field should be at least 1.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('goalAmount')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label" for="field_idType">Tipo de proyecto</label>
+                    <div class="col-sm-10">
+                        <div class="form-group">
+                            <select class="form-control custom-select custom-select-lg" name="idType" formControlName="idType" id="field_idType">
+                                <option value="PROFITABLE">Lucrativo</option>
+                                <option value="NONPROFIT">No lucrativo</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.collected" for="field_collected">Collected</label>
-                    <input type="number" class="form-control" name="collected" id="field_collected"
-                           formControlName="collected"/>
-                    <div *ngIf="editForm.get('collected')!.invalid && (editForm.get('collected')!.dirty || editForm.get('collected')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('collected')?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
-                            This field should be at least 0.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('collected')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label" for="field_goalAmount">Monto objectivo</label>
+                    <div class="col-sm-10">
+                      <div class="form-group">
+                        <input type="number" class="form-control" name="goalAmount" id="field_goalAmount" formControlName="goalAmount">
+                        <div *ngIf="editForm.get('goalAmount')!.invalid && (editForm.get('goalAmount')!.dirty || editForm.get('goalAmount')!.touched)">
+                            <small class="form-text text-danger"
+                                   *ngIf="editForm.get('goalAmount')?.errors?.required">
+                            El campo es requerido.
+                            </small>
+                            <small class="form-text text-danger"
+                                   *ngIf="editForm.get('goalAmount')?.errors?.min">
+                                El campo tiene que ser mayor a un $1.
+                            </small>
+                            <small class="form-text text-danger"
+                                [hidden]="!editForm.get('goalAmount')?.errors?.number">
+                                El campo debe ser un numero.
+                            </small>
+                        </div>
+                      </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.rating" for="field_rating">Rating</label>
-                    <input type="number" class="form-control" name="rating" id="field_rating"
-                           formControlName="rating"/>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.creationDate" for="field_creationDate">Creation Date</label>
-                    <div class="d-flex">
-                        <input id="field_creationDate" type="datetime-local" class="form-control" name="creationDate" formControlName="creationDate" placeholder="YYYY-MM-DD HH:mm"/>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label" for="field_category">Categoría</label>
+                    <div class="col-sm-10">
+                        <div class="form-group">
+                            <select class="form-control custom-select custom-select-lg" id="field_category" name="category" formControlName="category">
+                                <option [ngValue]="null"></option>
+                                <option [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption" *ngFor="let categoryOption of categories; trackBy: trackById">{{ categoryOption.name }}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div *ngIf="editForm.get('creationDate')!.invalid && (editForm.get('creationDate')!.dirty || editForm.get('creationDate')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('creationDate')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('creationDate')?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
-                            This field should be a date and time.
-                        </small>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 col-form-label" for="field_account">Cuenta bancaria</label>
+                    <div class="col-sm-10">
+                        <div class="form-group">
+                            <select class="form-control custom-select custom-select-lg" id="field_account" name="account" formControlName="account">
+                                <option [ngValue]="null"></option>
+                                <option [ngValue]="proyectAccountOption.id === editForm.get('account')!.value?.id ? editForm.get('account')!.value : proyectAccountOption" *ngFor="let proyectAccountOption of accounts; trackBy: trackById">{{ proyectAccountOption.number }}</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
+                  </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.lastUpdated" for="field_lastUpdated">Last Updated</label>
-                    <div class="d-flex">
-                        <input id="field_lastUpdated" type="datetime-local" class="form-control" name="lastUpdated" formControlName="lastUpdated" placeholder="YYYY-MM-DD HH:mm"/>
-                    </div>
+                  <div>
+                    <button type="button" id="cancel-save" class="btn btn-warning" (click)="previousState()">
+                        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                    </button>
+    
+                    <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                        <fa-icon icon="save"></fa-icon>&nbsp;<span>Guardar</span>
+                    </button>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.coordX" for="field_coordX">Coord X</label>
-                    <input type="number" class="form-control" name="coordX" id="field_coordX"
-                           formControlName="coordX"/>
-                    <div *ngIf="editForm.get('coordX')!.invalid && (editForm.get('coordX')!.dirty || editForm.get('coordX')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('coordX')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('coordX')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.coordY" for="field_coordY">Coord Y</label>
-                    <input type="number" class="form-control" name="coordY" id="field_coordY"
-                           formControlName="coordY"/>
-                    <div *ngIf="editForm.get('coordY')!.invalid && (editForm.get('coordY')!.dirty || editForm.get('coordY')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('coordY')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('coordY')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.fee" for="field_fee">Fee</label>
-                    <input type="number" class="form-control" name="fee" id="field_fee"
-                           formControlName="fee"/>
-                    <div *ngIf="editForm.get('fee')!.invalid && (editForm.get('fee')!.dirty || editForm.get('fee')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('fee')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('fee')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.account" for="field_account">Account</label>
-                    <select class="form-control" id="field_account" name="account" formControlName="account">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="proyectAccountOption.id === editForm.get('account')!.value?.id ? editForm.get('account')!.value : proyectAccountOption" *ngFor="let proyectAccountOption of accounts; trackBy: trackById">{{ proyectAccountOption.id }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.owner" for="field_owner">Owner</label>
-                    <select class="form-control" id="field_owner" name="owner" formControlName="owner">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="applicationUserOption.id === editForm.get('owner')!.value?.id ? editForm.get('owner')!.value : applicationUserOption" *ngFor="let applicationUserOption of applicationusers; trackBy: trackById">{{ applicationUserOption.id }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.applicationUser" for="field_applicationUser">Application User</label>
-                    <select class="form-control" id="field_applicationUser" name="applicationUser" formControlName="applicationUser">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="applicationUserOption.id === editForm.get('applicationUser')!.value?.id ? editForm.get('applicationUser')!.value : applicationUserOption" *ngFor="let applicationUserOption of applicationusers; trackBy: trackById">{{ applicationUserOption.id }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.category" for="field_category">Category</label>
-                    <select class="form-control" id="field_category" name="category" formControlName="category">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption" *ngFor="let categoryOption of categories; trackBy: trackById">{{ categoryOption.id }}</option>
-                    </select>
-                </div>
+                </form>
+              </div>
             </div>
-
-            <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-                </button>
-
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-                </button>
-            </div>
-        </form>
+          </div>
     </div>
 </div>

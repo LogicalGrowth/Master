@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'jhi-small-card',
-  templateUrl: './small-card.component.html',
+  selector: 'jhi-timeline',
+  templateUrl: './timeline.component.html',
   styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
-export class SmallCardComponent implements OnInit {
+export class TimelineComponent implements OnInit {
   @Input() title: any;
-  @Input() description: any;
-  @Input() icon: any;
+  @Input() cards: any;
   constructor() {}
 
   ngOnInit(): void {}

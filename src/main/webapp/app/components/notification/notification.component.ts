@@ -10,9 +10,6 @@ import 'bootstrap-notify';
 export class NotificationComponent implements OnInit {
   @Input() icon: any;
   @Input() message: any;
-  @Input() title: any;
-  @Input() from: any;
-  @Input() align: any;
   @Input() type: any;
   constructor() {}
 
@@ -21,17 +18,19 @@ export class NotificationComponent implements OnInit {
   }
 
   showNotification(): void {
+    const messageType =
+      this.type === 'warning' ? 'Alerta: ' : this.type === 'danger' ? 'Error: ' : this.type === 'success' ? 'Éxito: ' : 'Información: ';
     $.notify(
       {
         icon: this.icon,
-        title: this.title,
+        title: messageType,
         message: this.message,
       },
       {
         type: this.type,
-        timer: 2000,
+        timer: 1500,
         placement: {
-          from: this.from,
+          from: 'top',
           align: 'right',
         },
         template:
@@ -39,8 +38,7 @@ export class NotificationComponent implements OnInit {
           '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">' +
           '<i class="fa fa-times"></i>' +
           '</button>' +
-          '<span data-notify="icon" class="nc-icon nc-bell-55"></span> ' +
-          '<strong><span data-notify="title">{1}</span></strong> ' +
+          '<strong><span data-notify="title">{1}</span></strong>' +
           '<span data-notify="message">{2}</span></div>',
       }
     );

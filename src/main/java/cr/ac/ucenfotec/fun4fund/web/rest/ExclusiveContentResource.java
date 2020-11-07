@@ -1,7 +1,9 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent;
+import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.repository.ExclusiveContentRepository;
+import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -35,9 +37,11 @@ public class ExclusiveContentResource {
     private String applicationName;
 
     private final ExclusiveContentRepository exclusiveContentRepository;
+    private final ProyectRepository proyectRepository;
 
-    public ExclusiveContentResource(ExclusiveContentRepository exclusiveContentRepository) {
+    public ExclusiveContentResource(ExclusiveContentRepository exclusiveContentRepository, ProyectRepository proyectRepository) {
         this.exclusiveContentRepository = exclusiveContentRepository;
+        this.proyectRepository = proyectRepository;
     }
 
     /**
@@ -89,6 +93,19 @@ public class ExclusiveContentResource {
     public List<ExclusiveContent> getAllExclusiveContents() {
         log.debug("REST request to get all ExclusiveContents");
         return exclusiveContentRepository.findAll();
+    }
+
+    /**
+     * {@code GET  /exclusive-contents/byProject} : get all the exclusiveContents by project.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exclusiveContents in body.
+     */
+    @GetMapping("/exclusive-contents/byProject/{id}")
+    public List<ExclusiveContent> getAllExclusiveContentsByProject(@PathVariable Long id) {
+        log.debug("REST request to get all ExclusiveContentsByProject");
+        Optional<Proyect> currentProyect = proyectRepository.findById(id);
+
+        return exclusiveContentRepository.findExclusiveContentsByProyect(currentProyect.get());
     }
 
     /**

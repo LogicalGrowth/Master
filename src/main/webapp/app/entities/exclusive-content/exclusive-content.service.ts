@@ -32,6 +32,10 @@ export class ExclusiveContentService {
     return this.http.get<IExclusiveContent[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  findAllByProject(id: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IExclusiveContent[]>(`${this.resourceUrl}/byProject/${id}`, { observe: 'response' });
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

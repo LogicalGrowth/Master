@@ -107,9 +107,13 @@ export class ProyectUpdateComponent implements OnInit {
     });
   }
 
-  previousState(data: any): void {
+  goToAddImage(data: any): void {
     window.sessionStorage.proyect = data.body.id;
     this.router.navigate(['/proyect/image/new']);
+  }
+
+  previousState(): void {
+    window.history.back();
   }
 
   save(): void {
@@ -148,7 +152,7 @@ export class ProyectUpdateComponent implements OnInit {
 
   protected onSaveSuccess(data: any): void {
     this.isSaving = false;
-    this.previousState(data);
+    this.goToAddImage(data);
   }
 
   protected onSaveError(): void {

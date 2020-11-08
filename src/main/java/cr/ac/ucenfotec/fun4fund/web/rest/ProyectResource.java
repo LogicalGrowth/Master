@@ -1,8 +1,9 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
+import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
-import cr.ac.ucenfotec.fun4fund.repository.UserRepository;
 import cr.ac.ucenfotec.fun4fund.service.UserService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 
@@ -37,12 +38,15 @@ public class ProyectResource {
     private String applicationName;
 
     private final ProyectRepository proyectRepository;
+    private final ApplicationUserRepository applicationUserRepository;
     private final UserService userService;
 
     public ProyectResource(ProyectRepository proyectRepository,
+                           ApplicationUserRepository applicationUserRepository,
                            UserService userService)
     {
         this.proyectRepository = proyectRepository;
+        this.applicationUserRepository = applicationUserRepository;
         this.userService = userService;
     }
 
@@ -59,7 +63,14 @@ public class ProyectResource {
         if (proyect.getId() != null) {
             throw new BadRequestAlertException("A new proyect cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        proyect.setOwner(userService.getUserWithAuthorities().get());
+
+        Optional<ApplicationUser> applicationUser = applicationUserRepository.findByInternalUserId(userService.getUserWithAuthorities().get().getId());
+
+        if (!applicationUser.isPresent()){
+            throw new BadRequestAlertException("Problemas con el dueño del proyecto", ENTITY_NAME, "");
+        }
+
+        proyect.setOwner(applicationUser.get());
         Proyect result = proyectRepository.save(proyect);
         return ResponseEntity.created(new URI("/api/proyects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

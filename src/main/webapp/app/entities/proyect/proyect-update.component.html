@@ -123,3 +123,16 @@
           </div>
     </div>
 </div>
+
+<div class="col-md-12">
+  <div class="card ">
+    <div class="card-header ">
+      <h4 class='card-title'>Regular Map</h4>
+    </div>
+    <div class="card-body ">
+      <ngui-map zoom="7" center="9.7489,-83.7534" (mapClick)="onMapClick($event)">
+          <marker [position]="position" *ngIf="hasMarker"></marker>
+      </ngui-map>
+    </div>
+  </div>
+</div>

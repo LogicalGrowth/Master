@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -11,7 +11,7 @@ import { IProyect, Proyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
 import { IProyectAccount } from 'app/shared/model/proyect-account.model';
 import { ProyectAccountService } from 'app/entities/proyect-account/proyect-account.service';
-import { ApplicationUser, IApplicationUser } from 'app/shared/model/application-user.model';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from 'app/entities/category/category.service';
@@ -28,6 +28,8 @@ export class ProyectUpdateComponent implements OnInit {
   accounts: IProyectAccount[] = [];
   applicationusers: IApplicationUser[] = [];
   categories: ICategory[] = [];
+  hasMarker = false;
+  position: any[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -35,17 +37,11 @@ export class ProyectUpdateComponent implements OnInit {
     description: [null, [Validators.required, Validators.maxLength(300)]],
     idType: [null, [Validators.required]],
     goalAmount: [null, [Validators.required, Validators.min(1)]],
-    // collected: [null, [Validators.min(0)]],
-    // rating: [],
-    // creationDate: [null, [Validators.required]],
-    // lastUpdated: [],
-    // coordX: [null, [Validators.required]],
-    // coordY: [null, [Validators.required]],
-    // fee: [null, [Validators.required]],
-    account: [],
-    owner: [],
-    applicationUser: [],
-    category: [],
+    coordX: [[Validators.required]],
+    coordY: [],
+    fee: [],
+    account: [null, [Validators.required]],
+    category: [null, [Validators.required]],
   });
 
   constructor(
@@ -54,6 +50,7 @@ export class ProyectUpdateComponent implements OnInit {
     protected applicationUserService: ApplicationUserService,
     protected categoryService: CategoryService,
     protected activatedRoute: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder
   ) {}
 
@@ -102,22 +99,17 @@ export class ProyectUpdateComponent implements OnInit {
       description: proyect.description,
       idType: proyect.idType,
       goalAmount: proyect.goalAmount,
-      // collected: proyect.collected,
-      // rating: proyect.rating,
-      // creationDate: proyect.creationDate ? proyect.creationDate.format(DATE_TIME_FORMAT) : null,
-      // lastUpdated: proyect.lastUpdated ? proyect.lastUpdated.format(DATE_TIME_FORMAT) : null,
-      // coordX: proyect.coordX,
-      // coordY: proyect.coordY,
-      // fee: proyect.fee,
+      coordX: this.position[1],
+      coordY: this.position[0],
+      fee: 0,
       account: proyect.account,
-      owner: proyect.owner,
-      applicationUser: proyect.applicationUser,
       category: proyect.category,
     });
   }
 
-  previousState(): void {
-    window.history.back();
+  previousState(data: any): void {
+    window.sessionStorage.proyect = data.body.id;
+    this.router.navigate(['/proyect/image/new']);
   }
 
   save(): void {
@@ -138,30 +130,25 @@ export class ProyectUpdateComponent implements OnInit {
       description: this.editForm.get(['description'])!.value,
       idType: this.editForm.get(['idType'])!.value,
       goalAmount: this.editForm.get(['goalAmount'])!.value,
-      collected: 0,
-      rating: 0,
       creationDate: moment(),
-      lastUpdated: moment(),
-      // coordX: this.editForm.get(['coordX'])!.value,
-      // coordY: this.editForm.get(['coordY'])!.value,
-      // fee: this.editForm.get(['fee'])!.value,
+      coordX: this.position[1],
+      coordY: this.position[0] || 0,
+      fee: 0,
       account: this.editForm.get(['account'])!.value,
-      owner: new ApplicationUser(1),
-      // applicationUser: this.editForm.get(['applicationUser'])!.value,
       category: this.editForm.get(['category'])!.value,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IProyect>>): void {
     result.subscribe(
-      () => this.onSaveSuccess(),
+      (data: any) => this.onSaveSuccess(data),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(data: any): void {
     this.isSaving = false;
-    this.previousState();
+    this.previousState(data);
   }
 
   protected onSaveError(): void {
@@ -170,5 +157,11 @@ export class ProyectUpdateComponent implements OnInit {
 
   trackById(index: number, item: SelectableEntity): any {
     return item.id;
+  }
+
+  onMapClick($event: any): void {
+    this.position.push($event.latLng.lat());
+    this.position.push($event.latLng.lng());
+    this.hasMarker = true;
   }
 }

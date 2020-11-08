@@ -1,138 +1,147 @@
 <div class="main-content">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card ">
-              <div class="card-header ">
-                <h4 class="card-title">Proyecto</h4>
-              </div>
-              <div class="card-body ">
-                <jhi-alert-error></jhi-alert-error>
-                <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm" class="form-horizontal">
-                  <div class="row" [hidden]="!editForm.get('id')!.value">
-                    <label for="id" class="col-sm-2 col-form-label">Id</label>
-                    <div class="col-sm-10">
-                      <div class="form-group">
-                        <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label class="col-sm-2 col-form-label" for="field_name">Nombre</label>
-                    <div class="col-sm-10">
-                      <div class="form-group">
-                        <input type="text" class="form-control" name="name" id="field_name" formControlName="name">
-                        <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-                            <small class="form-text text-danger"
-                                   *ngIf="editForm.get('name')?.errors?.required">
-                            Campo es requerido.
-                            </small>
-                            <small class="form-text text-danger"
-                                   *ngIf="editForm.get('name')?.errors?.maxlength">
-                            El nombre no puede ser mayor a 30 caracteres.
-                            </small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label class="col-sm-2 col-form-label" for="field_description">Descripción</label>
-                    <div class="col-sm-10">
-                      <div class="form-group">
-                        <input type="text" class="form-control" name="description" id="field_description" formControlName="description">
-                        <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
-                            <small class="form-text text-danger"
-                                   *ngIf="editForm.get('description')?.errors?.required">
-                            El campo es requerido.
-                            </small>
-                            <small class="form-text text-danger"
-                                   *ngIf="editForm.get('description')?.errors?.maxlength">
-                            El campo no puede ser mayor a 300 caracteres.
-                            </small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label class="col-sm-2 col-form-label" for="field_idType">Tipo de proyecto</label>
-                    <div class="col-sm-10">
-                        <div class="form-group">
-                            <select class="form-control custom-select custom-select-lg" name="idType" formControlName="idType" id="field_idType">
-                                <option value="PROFITABLE">Lucrativo</option>
-                                <option value="NONPROFIT">No lucrativo</option>
-                            </select>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label class="col-sm-2 col-form-label" for="field_goalAmount">Monto objectivo</label>
-                    <div class="col-sm-10">
-                      <div class="form-group">
-                        <input type="number" class="form-control" name="goalAmount" id="field_goalAmount" formControlName="goalAmount">
-                        <div *ngIf="editForm.get('goalAmount')!.invalid && (editForm.get('goalAmount')!.dirty || editForm.get('goalAmount')!.touched)">
-                            <small class="form-text text-danger"
-                                   *ngIf="editForm.get('goalAmount')?.errors?.required">
-                            El campo es requerido.
-                            </small>
-                            <small class="form-text text-danger"
-                                   *ngIf="editForm.get('goalAmount')?.errors?.min">
-                                El campo tiene que ser mayor a un $1.
-                            </small>
-                            <small class="form-text text-danger"
-                                [hidden]="!editForm.get('goalAmount')?.errors?.number">
-                                El campo debe ser un numero.
-                            </small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label class="col-sm-2 col-form-label" for="field_category">Categoría</label>
-                    <div class="col-sm-10">
-                        <div class="form-group">
-                            <select class="form-control custom-select custom-select-lg" id="field_category" name="category" formControlName="category">
-                                <option [ngValue]="null"></option>
-                                <option [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption" *ngFor="let categoryOption of categories; trackBy: trackById">{{ categoryOption.name }}</option>
-                            </select>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <label class="col-sm-2 col-form-label" for="field_account">Cuenta bancaria</label>
-                    <div class="col-sm-10">
-                        <div class="form-group">
-                            <select class="form-control custom-select custom-select-lg" id="field_account" name="account" formControlName="account">
-                                <option [ngValue]="null"></option>
-                                <option [ngValue]="proyectAccountOption.id === editForm.get('account')!.value?.id ? editForm.get('account')!.value : proyectAccountOption" *ngFor="let proyectAccountOption of accounts; trackBy: trackById">{{ proyectAccountOption.number }}</option>
-                            </select>
-                        </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <button type="button" id="cancel-save" class="btn btn-warning" (click)="previousState()">
-                        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
-                    </button>
-    
-                    <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                        <fa-icon icon="save"></fa-icon>&nbsp;<span>Guardar</span>
-                    </button>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card ">
+        <div class="card-header ">
+          <h4 class="card-title">Proyecto</h4>
+        </div>
+        <div class="card-body ">
+          <jhi-alert-error></jhi-alert-error>
+          <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"
+            class="form-horizontal">
+            <div class="row" [hidden]="!editForm.get('id')!.value">
+              <label for="id" class="col-sm-2 col-form-label">Id</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly>
                 </div>
-                </form>
               </div>
             </div>
-          </div>
-    </div>
-</div>
+            <div class="row">
+              <label class="col-sm-2 col-form-label" for="field_name">Nombre</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="name" id="field_name" formControlName="name">
+                  <div
+                    *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                    <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required">
+                      Campo es requerido.
+                    </small>
+                    <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.maxlength">
+                      El nombre no puede ser mayor a 30 caracteres.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 col-form-label" for="field_description">Descripción</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="description" id="field_description"
+                    formControlName="description">
+                  <div
+                    *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+                    <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors?.required">
+                      El campo es requerido.
+                    </small>
+                    <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors?.maxlength">
+                      El campo no puede ser mayor a 300 caracteres.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 col-form-label" for="field_idType">Tipo de proyecto</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <select class="form-control custom-select custom-select-lg" name="idType" formControlName="idType"
+                    id="field_idType">
+                    <option value="PROFITABLE">Lucrativo</option>
+                    <option value="NONPROFIT">No lucrativo</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 col-form-label" for="field_goalAmount">Monto objectivo</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <input type="number" class="form-control" name="goalAmount" id="field_goalAmount"
+                    formControlName="goalAmount">
+                  <div
+                    *ngIf="editForm.get('goalAmount')!.invalid && (editForm.get('goalAmount')!.dirty || editForm.get('goalAmount')!.touched)">
+                    <small class="form-text text-danger" *ngIf="editForm.get('goalAmount')?.errors?.required">
+                      El campo es requerido.
+                    </small>
+                    <small class="form-text text-danger" *ngIf="editForm.get('goalAmount')?.errors?.min">
+                      El campo tiene que ser mayor a un $1.
+                    </small>
+                    <small class="form-text text-danger" [hidden]="!editForm.get('goalAmount')?.errors?.number">
+                      El campo debe ser un numero.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 col-form-label" for="field_category">Categoría</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <select class="form-control custom-select custom-select-lg" id="field_category" name="category"
+                    formControlName="category">
+                    <option [ngValue]="null"></option>
+                    <option
+                      [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption"
+                      *ngFor="let categoryOption of categories; trackBy: trackById">{{ categoryOption.name }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 col-form-label" for="field_account">Cuenta bancaria</label>
+              <div class="col-sm-10">
+                <div class="form-group">
+                  <select class="form-control custom-select custom-select-lg" id="field_account" name="account"
+                    formControlName="account">
+                    <option [ngValue]="null"></option>
+                    <option
+                      [ngValue]="proyectAccountOption.id === editForm.get('account')!.value?.id ? editForm.get('account')!.value : proyectAccountOption"
+                      *ngFor="let proyectAccountOption of accounts; trackBy: trackById">
+                      {{ proyectAccountOption.number }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
-<div class="col-md-12">
-  <div class="card ">
-    <div class="card-header ">
-      <h4 class='card-title'>Regular Map</h4>
-    </div>
-    <div class="card-body ">
-      <ngui-map zoom="7" center="9.7489,-83.7534" (mapClick)="onMapClick($event)">
-          <marker [position]="position" *ngIf="hasMarker"></marker>
-      </ngui-map>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card ">
+                  <div class="card-header ">
+                    <h4 class='card-title'>Regular Map</h4>
+                  </div>
+                  <div class="card-body ">
+                    <ngui-map zoom="7" center="9.7489,-83.7534" (mapClick)="onMapClick($event)">
+                      <marker [position]="position" *ngIf="hasMarker"></marker>
+                    </ngui-map>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <button type="button" id="cancel-save" class="btn btn-warning" (click)="previousState()">
+                <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+              </button>
+
+              <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                <fa-icon icon="save"></fa-icon>&nbsp;<span>Guardar</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,6 +1,7 @@
 <div class="row" *ngIf="proyect">
     <div class="col-lg-12 col-sm-6">
-        <jhi-progress-bar progressBarClass="progress-bar-danger" minValue="0" maxValue="{{proyect.goalAmount}}" percentile="{{100*proyect.collected/proyect.goalAmount}}" currentValue="{{proyect.collected}}">
+        <jhi-progress-bar progressBarClass="progress-bar-danger" minValue="0" maxValue="{{proyect.goalAmount}}"
+            percentile="{{percentile}}" currentValue="{{proyect.collected}}">
         </jhi-progress-bar>
     </div>
     <div class="col-lg-8 col-sm-6">
@@ -8,8 +9,8 @@
             <div class="card card-testimonial card-block">
                 <h2>{{ proyect.name }}</h2>
                 <div class="stars-outer">
-                <div class="stars-inner" style="width:{{100*proyect.rating/5}}%"></div>
-                  </div>
+                    <div class="stars-inner" style="width:{{rating}}%"></div>
+                </div>
                 <div class="card-body ">
                     <p class="card-description">
                         {{ proyect.description }}
@@ -69,8 +70,8 @@
             <dt><span>Dueño del proyecto</span></dt>
             <dd>
                 <div *ngIf="proyect.owner">
-                    <a [routerLink]="['/application-user', proyect.owner?.id, 'view']">{{ proyect.owner?.name }}
-                        {{ proyect.owner?.lastName }}</a>
+                    <a [routerLink]="['/application-user', proyect.owner?.id, 'view']">{{ proyect.owner?.id }}
+                        {{ proyect.owner?.id }}</a>
                 </div>
             </dd>
             <dt><span>Categoría</span></dt>
@@ -85,6 +86,38 @@
             <button type="button" [routerLink]="['/proyect', proyect.id, 'edit']" class="btn btn-primary">
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
             </button>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <h4 class='card-title'>Localización del proyecto</h4>
+            </div>
+            <div class="card-body ">
+                <ngui-map zoom="7" center="9.7489,-83.7534">
+                    <marker [position]="position" *ngIf="hasMarker"></marker>
+                </ngui-map>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" *ngFor="let review of reviews;">
+        <div class="card card-testimonial">
+            <div class="card-body ">
+                <div class="icon icon-primary">
+                    <i class="fa fa-quote-right"></i>
+                </div>
+                <p class="card-description">
+                    {{ review.message }}
+                </p>
+            </div>
+            <div class="card-footer ">
+                <h4 class="card-title">{{ review.user }}</h4>
+                <div class="card-avatar">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width:{{review.rating*100/5}}%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

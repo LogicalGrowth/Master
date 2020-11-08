@@ -116,4 +116,10 @@ public class ReviewResource {
         reviewRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    @GetMapping("/reviews/proyect/{id}")
+    public List<Review> getProyectReviews(@PathVariable Long id) {
+        log.debug("REST request to get Review : {}", id);
+        return reviewRepository.findTop6ByProyectId(id);
+    }
 }

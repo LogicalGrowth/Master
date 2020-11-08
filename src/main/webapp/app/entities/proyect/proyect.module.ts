@@ -7,9 +7,10 @@ import { ProyectDetailComponent } from './proyect-detail.component';
 import { ProyectUpdateComponent } from './proyect-update.component';
 import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component';
 import { proyectRoute } from './proyect.route';
+import { ComponentsModule } from 'app/components/components.module';
 
 @NgModule({
-  imports: [Fun4FundSharedModule, RouterModule.forChild(proyectRoute)],
+  imports: [Fun4FundSharedModule, RouterModule.forChild(proyectRoute), ComponentsModule],
   declarations: [ProyectComponent, ProyectDetailComponent, ProyectUpdateComponent, ProyectDeleteDialogComponent],
   entryComponents: [ProyectDeleteDialogComponent],
 })

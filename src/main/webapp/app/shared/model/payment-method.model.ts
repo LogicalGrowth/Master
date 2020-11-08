@@ -10,6 +10,7 @@ export interface IPaymentMethod {
   type?: CardType;
   cvc?: string;
   owner?: IApplicationUser;
+  typeImage?: string;
 }
 
 export class PaymentMethod implements IPaymentMethod {
@@ -20,6 +21,7 @@ export class PaymentMethod implements IPaymentMethod {
     public expirationDate?: Moment,
     public type?: CardType,
     public cvc?: string,
-    public owner?: IApplicationUser
+    public owner?: IApplicationUser,
+    public typeImage?: string
   ) {}
 }

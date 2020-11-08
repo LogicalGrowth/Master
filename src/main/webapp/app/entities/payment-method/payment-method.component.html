@@ -1,11 +1,12 @@
 <div>
+    
     <h2 id="page-heading">
-        <span jhiTranslate="fun4FundApp.paymentMethod.home.title">Payment Methods</span>
+        <span>Métodos de pago</span>
 
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-payment-method" [routerLink]="['/payment-method/new']">
             <fa-icon icon="plus"></fa-icon>
-            <span  jhiTranslate="fun4FundApp.paymentMethod.home.createLabel">
-            Create a new Payment Method
+            <span>
+            Agregar nueva tarjeta
             </span>
         </button>
     </h2>
@@ -15,36 +16,31 @@
     <jhi-alert></jhi-alert>
 
     <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
-        <span jhiTranslate="fun4FundApp.paymentMethod.home.notFound">No paymentMethods found</span>
+        <span class="notFoundCard">No has agregado ningun método de pago</span>
     </div>
-
+   
     <div class="table-responsive" id="entities" *ngIf="paymentMethods && paymentMethods.length > 0">
-        <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-                <tr>
-                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.cardNumber">Card Number</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.cardOwner">Card Owner</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.expirationDate">Expiration Date</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.type">Type</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.cvc">Cvc</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.owner">Owner</span></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
+        
+
+         <table class="table">
             <tbody>
-                <tr *ngFor="let paymentMethod of paymentMethods ;trackBy: trackId">
-                    <td><a [routerLink]="['/payment-method', paymentMethod.id, 'view']">{{ paymentMethod.id }}</a></td>
-                    <td>{{ paymentMethod.cardNumber }}</td>
-                    <td>{{ paymentMethod.cardOwner }}</td>
-                    <td>{{ paymentMethod.expirationDate | date:'medium' }}</td>
-                    <td jhiTranslate="{{ 'fun4FundApp.CardType.' + paymentMethod.type }}">{{ paymentMethod.type }}</td>
-                    <td>{{ paymentMethod.cvc }}</td>
-                    <td>
-                        <div *ngIf="paymentMethod.owner">
-                            <a [routerLink]="['/application-user', paymentMethod.owner?.id, 'view']" >{{ paymentMethod.owner?.id }}</a>
-                        </div>
+              <tr *ngFor="let paymentMethod of paymentMethods ;trackBy: trackId">
+                  <td>
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" checked>
+                          <span class="form-check-sign"></span>
+                        </label>
+                      </div>
                     </td>
+                    <td>
+                   
+                        <img class="img-payment-cards" src="{{paymentMethod.typeImage}}" alt="{{paymentMethod.type}}">
+                    
+                    </td>
+                    <td>***********{{ paymentMethod.cardNumber! | slice:12:19  }}</td>
+                    <td>{{ paymentMethod.cardOwner }}</td>
+                    <td>{{ paymentMethod.expirationDate | date:"MM/yy"  }}</td>
                     <td class="text-right">
                         <div class="btn-group">
                             <button type="submit"
@@ -68,8 +64,11 @@
                             </button>
                         </div>
                     </td>
-                </tr>
+              </tr>
             </tbody>
-        </table>
+          </table>
+
+
+
     </div>
 </div>

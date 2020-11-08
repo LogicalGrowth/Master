@@ -3,6 +3,8 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 import cr.ac.ucenfotec.fun4fund.domain.PaymentMethod;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentMethodRepository;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.PaymentMethodCriteria;
+import cr.ac.ucenfotec.fun4fund.service.PaymentMethodQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -36,8 +38,11 @@ public class PaymentMethodResource {
 
     private final PaymentMethodRepository paymentMethodRepository;
 
-    public PaymentMethodResource(PaymentMethodRepository paymentMethodRepository) {
+    private final PaymentMethodQueryService paymentMethodQueryService;
+
+    public PaymentMethodResource(PaymentMethodRepository paymentMethodRepository, PaymentMethodQueryService paymentMethodQueryService) {
         this.paymentMethodRepository = paymentMethodRepository;
+        this.paymentMethodQueryService = paymentMethodQueryService;
     }
 
     /**
@@ -83,12 +88,26 @@ public class PaymentMethodResource {
     /**
      * {@code GET  /payment-methods} : get all the paymentMethods.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of paymentMethods in body.
      */
     @GetMapping("/payment-methods")
-    public List<PaymentMethod> getAllPaymentMethods() {
-        log.debug("REST request to get all PaymentMethods");
-        return paymentMethodRepository.findAll();
+    public ResponseEntity<List<PaymentMethod>> getAllPaymentMethods(PaymentMethodCriteria criteria) {
+        log.debug("REST request to get PaymentMethods by criteria: {}", criteria);
+        List<PaymentMethod> entityList = paymentMethodQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /payment-methods/count} : count all the paymentMethods.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/payment-methods/count")
+    public ResponseEntity<Long> countPaymentMethods(PaymentMethodCriteria criteria) {
+        log.debug("REST request to count PaymentMethods by criteria: {}", criteria);
+        return ResponseEntity.ok().body(paymentMethodQueryService.countByCriteria(criteria));
     }
 
     /**

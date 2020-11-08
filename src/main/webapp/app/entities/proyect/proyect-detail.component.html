@@ -5,8 +5,6 @@
 
             <hr>
 
-            <jhi-alert-error></jhi-alert-error>
-
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="fun4FundApp.proyect.name">Name</span></dt>
                 <dd>
@@ -55,7 +53,8 @@
                 <dt><span jhiTranslate="fun4FundApp.proyect.account">Account</span></dt>
                 <dd>
                     <div *ngIf="proyect.account">
-                        <a [routerLink]="['/proyect-account', proyect.account?.id, 'view']">{{ proyect.account?.id }}</a>
+                        <a
+                            [routerLink]="['/proyect-account', proyect.account?.id, 'view']">{{ proyect.account?.id }}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="fun4FundApp.proyect.owner">Owner</span></dt>
@@ -67,7 +66,8 @@
                 <dt><span jhiTranslate="fun4FundApp.proyect.applicationUser">Application User</span></dt>
                 <dd>
                     <div *ngIf="proyect.applicationUser">
-                        <a [routerLink]="['/application-user', proyect.applicationUser?.id, 'view']">{{ proyect.applicationUser?.id }}</a>
+                        <a
+                            [routerLink]="['/application-user', proyect.applicationUser?.id, 'view']">{{ proyect.applicationUser?.id }}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="fun4FundApp.proyect.category">Category</span></dt>
@@ -78,15 +78,11 @@
                 </dd>
             </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
+            <button type="submit" (click)="previousState()" class="btn btn-info">
                 <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
             </button>
 
-            <button type="button"
-                    [routerLink]="['/proyect', proyect.id, 'edit']"
-                    class="btn btn-primary">
+            <button type="button" [routerLink]="['/proyect', proyect.id, 'edit']" class="btn btn-primary">
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
             </button>
         </div>
@@ -96,47 +92,50 @@
 <div class="row justify-content-center">
     <div class="col-lg-6">
         <div class="card">
-        <div class="card-header">
-            <h4 class="card-title"> Contenido exclusivo </h4>
-        </div>
-
-        <jhi-alert-error></jhi-alert-error>
-
-        <jhi-alert></jhi-alert>
-
-        <div class="alert alert-warning" id="no-result" *ngIf="exclusiveContents?.length === 0">
-            <span>No hay elementos</span>
-        </div>
-
-        <div class="card-body">
-            <div class="table-responsive" id="entities" *ngIf="exclusiveContents && exclusiveContents.length > 0">
-            <table class="table">
-                <thead class="text-primary">
-                    <th scope="col" ><span>Nombre</span></th>
-                    <th scope="col" ><span>Precio</span></th>
-                    <th scope="col" ><span>Disponibles</span></th>
-                    <th scope="col"></th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let exclusiveContent of exclusiveContents">
-                        <td>
-                            <div *ngIf="exclusiveContent.prize">
-                                <a [routerLink]="['/prize', exclusiveContent.prize?.id, 'view']" >{{ exclusiveContent.prize?.name }}</a>
-                            </div>
-                        </td>
-                        <td>${{ exclusiveContent.price }}</td>
-                        <td>{{ exclusiveContent.stock }}</td>
-                        <td class="text-right">
-                            <div class="btn-group">
-                                <jhi-icon-button type="info" label="" icon="nc-zoom-split" [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']"></jhi-icon-button>
-                                <jhi-icon-button type="success" label="" icon="nc-ruler-pencil" [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']"></jhi-icon-button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card-header">
+                <h4 class="card-title"> Contenido exclusivo </h4>
             </div>
-        </div>
+
+            <jhi-alert></jhi-alert>
+
+            <div class="alert alert-warning" id="no-result" *ngIf="exclusiveContents?.length === 0">
+                <span>No hay elementos</span>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive" id="entities" *ngIf="exclusiveContents && exclusiveContents.length > 0">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th scope="col"><span>Nombre</span></th>
+                            <th scope="col"><span>Precio</span></th>
+                            <th scope="col"><span>Disponibles</span></th>
+                            <th scope="col" class="text-center" *ngIf="projectOwner"><span>Acciones</span></th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let exclusiveContent of exclusiveContents">
+                                <td>
+                                    <div *ngIf="exclusiveContent.prize">
+                                        <a
+                                            [routerLink]="['/prize', exclusiveContent.prize?.id, 'view']">{{ exclusiveContent.prize?.name }}</a>
+                                    </div>
+                                </td>
+                                <td>${{ exclusiveContent.price }}</td>
+                                <td>{{ exclusiveContent.stock }}</td>
+                                <td class="text-right">
+                                    <div class="btn-group" *ngIf="projectOwner">
+                                        <jhi-icon-button type="info" label="" icon="nc-zoom-split"
+                                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
+                                        </jhi-icon-button>
+                                        <jhi-icon-button type="success" label="" icon="nc-ruler-pencil"
+                                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
+                                        </jhi-icon-button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

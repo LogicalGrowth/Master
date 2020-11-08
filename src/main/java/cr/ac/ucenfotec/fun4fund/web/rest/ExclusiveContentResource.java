@@ -1,10 +1,11 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent;
-import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ActivityStatus;
 import cr.ac.ucenfotec.fun4fund.repository.ExclusiveContentRepository;
-import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.ExclusiveContentCriteria;
+import cr.ac.ucenfotec.fun4fund.service.ExclusiveContentQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -37,11 +38,11 @@ public class ExclusiveContentResource {
     private String applicationName;
 
     private final ExclusiveContentRepository exclusiveContentRepository;
-    private final ProyectRepository proyectRepository;
+    private final ExclusiveContentQueryService exclusiveContentQueryService;
 
-    public ExclusiveContentResource(ExclusiveContentRepository exclusiveContentRepository, ProyectRepository proyectRepository) {
+    public ExclusiveContentResource(ExclusiveContentRepository exclusiveContentRepository, ExclusiveContentQueryService exclusiveContentQueryService) {
         this.exclusiveContentRepository = exclusiveContentRepository;
-        this.proyectRepository = proyectRepository;
+        this.exclusiveContentQueryService = exclusiveContentQueryService;
     }
 
     /**
@@ -78,6 +79,9 @@ public class ExclusiveContentResource {
         if (exclusiveContent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (exclusiveContent.getStock() == 0) {
+            exclusiveContent.setState(ActivityStatus.DISABLED);
+        }
         ExclusiveContent result = exclusiveContentRepository.save(exclusiveContent);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exclusiveContent.getId().toString()))
@@ -87,25 +91,26 @@ public class ExclusiveContentResource {
     /**
      * {@code GET  /exclusive-contents} : get all the exclusiveContents.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exclusiveContents in body.
      */
     @GetMapping("/exclusive-contents")
-    public List<ExclusiveContent> getAllExclusiveContents() {
-        log.debug("REST request to get all ExclusiveContents");
-        return exclusiveContentRepository.findAll();
+    public ResponseEntity<List<ExclusiveContent>> getAllExclusiveContents(ExclusiveContentCriteria criteria) {
+        log.debug("REST request to get ExclusiveContents by criteria: {}", criteria);
+        List<ExclusiveContent> entityList = exclusiveContentQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
     }
 
     /**
-     * {@code GET  /exclusive-contents/byProject} : get all the exclusiveContents by project.
+     * {@code GET  /exclusive-contents/count} : count all the exclusiveContents.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exclusiveContents in body.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
-    @GetMapping("/exclusive-contents/byProject/{id}")
-    public List<ExclusiveContent> getAllExclusiveContentsByProject(@PathVariable Long id) {
-        log.debug("REST request to get all ExclusiveContentsByProject");
-        Optional<Proyect> currentProyect = proyectRepository.findById(id);
-
-        return exclusiveContentRepository.findExclusiveContentsByProyect(currentProyect.get());
+    @GetMapping("/exclusive-contents/count")
+    public ResponseEntity<Long> countExclusiveContents(ExclusiveContentCriteria criteria) {
+        log.debug("REST request to count ExclusiveContents by criteria: {}", criteria);
+        return ResponseEntity.ok().body(exclusiveContentQueryService.countByCriteria(criteria));
     }
 
     /**

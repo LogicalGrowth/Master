@@ -7,6 +7,9 @@
         "createOrEditLabel": "Create or edit a Proyect",
         "notFound": "No Proyects found"
       },
+      "imagen": {
+        "created": "Una imagen fue creada con el id {{ param }}"
+      },
       "created": "A new Proyect is created with identifier {{ param }}",
       "updated": "A Proyect is updated with identifier {{ param }}",
       "deleted": "A Proyect is deleted with identifier {{ param }}",

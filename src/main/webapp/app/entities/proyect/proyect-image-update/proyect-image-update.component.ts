@@ -1,20 +1,48 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProyectService } from '../proyect.service';
+import * as $ from 'jquery';
+import * as boostrap from 'bootstrap';
+import { FormBuilder, Validators } from '@angular/forms';
+import { HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ImageService } from 'app/entities/image/image.service';
+import { IImage, Image } from 'app/shared/model/image.model';
+import { IProyect } from 'app/shared/model/proyect.model';
 
 @Component({
   selector: 'jhi-proyect-image-update',
   templateUrl: './proyect-image-update.component.html',
-  styleUrls: ['./proyect-image-update.component.scss'],
+  styleUrls: ['./proyect-image-update.component.scss', '../../../../content/scss/paper-dashboard.scss'],
 })
 export class ProyectImageUpdateComponent implements OnInit {
   imagen: any;
   imagenMin: any;
+  isSaving = false;
+  proyect: IProyect | undefined;
 
-  constructor(private proyectService: ProyectService, private router: Router, private spinner: NgxSpinnerService) {}
+  editForm = this.fb.group({
+    url: [null, [Validators.required, Validators.maxLength(255)]],
+  });
 
-  ngOnInit(): void {}
+  constructor(
+    private proyectService: ProyectService,
+    private spinner: NgxSpinnerService,
+    private imageService: ImageService,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    boostrap.Button;
+    this.proyectService.find(window.sessionStorage.proyect).subscribe(
+      data => {
+        this.proyect = data.body || undefined;
+      },
+      error => {
+        alert(error);
+      }
+    );
+  }
 
   onFileChange(event: any): void {
     this.imagen = event.target.files[0];
@@ -31,11 +59,42 @@ export class ProyectImageUpdateComponent implements OnInit {
       () => {
         this.spinner.hide();
         this.imagen = null;
+        this.imagenMin = '';
       },
       (err: any) => {
         alert(err.error.mensaje);
         this.spinner.hide();
       }
     );
+  }
+
+  save(): void {
+    this.isSaving = true;
+    const image = this.createFromForm();
+    this.subscribeToSaveResponse(this.imageService.create(image));
+  }
+
+  private createFromForm(): IImage {
+    return {
+      ...new Image(),
+      url: this.editForm.get(['url'])!.value,
+      proyect: this.proyect,
+    };
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IImage>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveSuccess(): void {
+    $('#field_url').val('');
+    this.isSaving = false;
+  }
+
+  protected onSaveError(): void {
+    this.isSaving = false;
   }
 }

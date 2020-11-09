@@ -138,6 +138,10 @@
                                 <td class="text-left col-md-12">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}
                                 </td>
                             </tr>
+                            <tr *ngIf="!donors.length">
+                                <td class="text-left col-md-12">No hay donadores en el proyecto
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

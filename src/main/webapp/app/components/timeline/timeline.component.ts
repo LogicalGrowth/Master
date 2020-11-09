@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TimelineComponent implements OnInit {
   @Input() title: any;
+  @Input() timelineClass: any = '';
   @Input() cards: any;
   constructor() {}
 

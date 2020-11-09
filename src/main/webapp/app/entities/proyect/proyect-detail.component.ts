@@ -26,7 +26,7 @@ export class ProyectDetailComponent implements OnInit {
       body: 'body',
     },
     {
-      inverted: false,
+      inverted: true,
       type: 'success',
       icon: 'nc-icon nc-sun-fog-29',
       subTitle: 'sub',

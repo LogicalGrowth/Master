@@ -113,11 +113,38 @@
             <div class="card-footer ">
                 <h4 class="card-title">{{ review.user }}</h4>
                 <div class="card-avatar">
-                    <div class="stars-outer">
+                    <div class="stars-outer little-stars">
                         <div class="stars-inner" style="width:{{review.rating*100/5}}%"></div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-lg-6 col-md-12 text-center">
+        <div class="card  card-tasks">
+            <div class="card-header ">
+                <h4 class="card-title">Top 5 de donadores del proyecto</h4>
+            </div>
+            <div class="card-body ">
+                <div class="table-full-width table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="img-row">
+                                    <div class="img-wrapper">
+                                        <img src="https://res.cloudinary.com/barnesnoble/image/upload/v1604808889/dqwshrqqwagg51jhzeky.jpg" class="img-raised" />
+                                    </div>
+                                </td>
+                                <td class="text-left">Sign contract for "What are conference organizers afraid of?"
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <jhi-timeline title="sss" [cards]="cards" timelineClass="timeline-simple"></jhi-timeline>
     </div>
 </div>

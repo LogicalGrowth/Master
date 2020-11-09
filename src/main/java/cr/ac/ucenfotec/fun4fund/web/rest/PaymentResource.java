@@ -2,6 +2,9 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -115,5 +118,12 @@ public class PaymentResource {
         log.debug("REST request to delete Payment : {}", id);
         paymentRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/payments/proyect/{id}")
+    public List<?> getProyectDonations(@PathVariable Long id) {
+        log.debug("REST request to get Payment : {}", id);
+        Pageable paging = PageRequest.of(0, 5);
+        return paymentRepository.findTop5ByProyectId(id, paging);
     }
 }

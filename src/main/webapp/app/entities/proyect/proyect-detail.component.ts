@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IProyect } from 'app/shared/model/proyect.model';
+import { PaymentService } from '../payment/payment.service';
 import { ReviewService } from '../review/review.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class ProyectDetailComponent implements OnInit {
   hasMarker = false;
   percentile: any;
   rating: any;
+  donors: any;
   cards: any[] = [
     {
       inverted: true,
@@ -34,7 +36,7 @@ export class ProyectDetailComponent implements OnInit {
     },
   ];
 
-  constructor(protected activatedRoute: ActivatedRoute, private reviewService: ReviewService) {}
+  constructor(protected activatedRoute: ActivatedRoute, private reviewService: ReviewService, private paymentService: PaymentService) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ proyect }) => {
@@ -46,6 +48,9 @@ export class ProyectDetailComponent implements OnInit {
       this.rating = (100 * proyect.rating) / 5;
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
+      });
+      this.paymentService.findTopDonations(proyect.id).subscribe(data => {
+        this.donors = data.body;
       });
     });
   }

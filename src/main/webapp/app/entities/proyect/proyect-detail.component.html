@@ -138,7 +138,7 @@
                                 <td class="text-left col-md-12">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}
                                 </td>
                             </tr>
-                            <tr *ngIf="!donors.length">
+                            <tr *ngIf="donors && !donors.length">
                                 <td class="text-left col-md-12">No hay donadores en el proyecto
                                 </td>
                             </tr>
@@ -149,6 +149,6 @@
         </div>
     </div>
     <div class="col-md-6">
-        <jhi-timeline title="sss" [cards]="cards" timelineClass="timeline-simple"></jhi-timeline>
+        <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple"></jhi-timeline>
     </div>
 </div>

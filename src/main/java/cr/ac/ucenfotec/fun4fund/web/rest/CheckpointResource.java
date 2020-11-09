@@ -116,4 +116,14 @@ public class CheckpointResource {
         checkpointRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    @GetMapping("/checkpoints/byproyect")
+    public List<Checkpoint> getCheckpointByProyect(@RequestParam(name = "idproyect", required = true) String idproyect,
+                                                   @RequestParam(name = "percentile", required = true) String percentile)
+    {
+        log.debug("REST request to get Checkpoint : {}", idproyect);
+        Long id = Long.parseLong(idproyect);
+        Double per = Double.parseDouble(percentile);
+        return checkpointRepository.findByProyectIdAndCompletitionPercentageLessThanEqual(id,per);
+    }
 }

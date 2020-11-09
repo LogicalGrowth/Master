@@ -20,6 +20,16 @@
             </div>
           </div>
         </li>
+        <li *ngIf="!cards.length" class="timeline-inverted">
+          <div class="timeline-badge danger">
+            <i class="nc-icon nc-single-copy-04"></i>
+          </div>
+          <div class="timeline-panel">
+            <div class="timeline-body">
+              <p>No hay datos para mostrar.</p>
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
   </div>

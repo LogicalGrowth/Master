@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IProyect } from 'app/shared/model/proyect.model';
+import { CheckpointService } from '../checkpoint/checkpoint.service';
 import { PaymentService } from '../payment/payment.service';
 import { ReviewService } from '../review/review.service';
 
@@ -19,24 +20,15 @@ export class ProyectDetailComponent implements OnInit {
   percentile: any;
   rating: any;
   donors: any;
-  cards: any[] = [
-    {
-      inverted: true,
-      type: 'danger',
-      icon: 'nc-icon nc-single-copy-04',
-      subTitle: 'sub',
-      body: 'body',
-    },
-    {
-      inverted: true,
-      type: 'success',
-      icon: 'nc-icon nc-sun-fog-29',
-      subTitle: 'sub',
-      body: 'body',
-    },
-  ];
+  checkpoints: any;
+  cards: any[] = [];
 
-  constructor(protected activatedRoute: ActivatedRoute, private reviewService: ReviewService, private paymentService: PaymentService) {}
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    private reviewService: ReviewService,
+    private paymentService: PaymentService,
+    private checkPointService: CheckpointService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ proyect }) => {
@@ -51,6 +43,22 @@ export class ProyectDetailComponent implements OnInit {
       });
       this.paymentService.findTopDonations(proyect.id).subscribe(data => {
         this.donors = data.body;
+      });
+      this.checkPointService.findByProyectId(proyect.id, this.percentile).subscribe(data => {
+        if (data.body) {
+          let i = 0;
+          for (const checkpoint of data.body) {
+            i++;
+            const obj = {
+              inverted: true,
+              type: 'success',
+              icon: 'nc-icon nc-sun-fog-29',
+              subTitle: 'Checkpoint ' + i,
+              body: checkpoint.message,
+            };
+            this.cards.push(obj);
+          }
+        }
       });
     });
   }

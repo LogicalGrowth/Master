@@ -70,4 +70,10 @@ export class PaymentService {
     }
     return res;
   }
+
+  findTopDonations(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<IPayment>(`${this.resourceUrl}/proyect/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 }

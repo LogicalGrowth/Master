@@ -1,6 +1,7 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Checkpoint;
+import cr.ac.ucenfotec.fun4fund.repository.CheckpointRepository;
 import cr.ac.ucenfotec.fun4fund.service.CheckpointService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.CheckpointCriteria;
@@ -38,9 +39,14 @@ public class CheckpointResource {
 
     private final CheckpointQueryService checkpointQueryService;
 
-    public CheckpointResource(CheckpointService checkpointService, CheckpointQueryService checkpointQueryService) {
+    private final CheckpointRepository checkpointRepository;
+
+    public CheckpointResource(CheckpointService checkpointService,
+                              CheckpointQueryService checkpointQueryService,
+                              CheckpointRepository checkpointRepository) {
         this.checkpointService = checkpointService;
         this.checkpointQueryService = checkpointQueryService;
+        this.checkpointRepository = checkpointRepository;
     }
 
     /**
@@ -132,5 +138,15 @@ public class CheckpointResource {
         log.debug("REST request to delete Checkpoint : {}", id);
         checkpointService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/checkpoints/byproyect")
+    public List<Checkpoint> getCheckpointByProyect(@RequestParam(name = "idproyect", required = true) String idproyect,
+                                                   @RequestParam(name = "percentile", required = true) String percentile)
+    {
+        log.debug("REST request to get Checkpoint : {}", idproyect);
+        Long id = Long.parseLong(idproyect);
+        Double per = Double.parseDouble(percentile);
+        return checkpointRepository.findByProyectIdAndCompletitionPercentageLessThanEqual(id,per);
     }
 }

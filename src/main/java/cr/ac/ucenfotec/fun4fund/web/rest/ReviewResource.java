@@ -1,6 +1,7 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Review;
+import cr.ac.ucenfotec.fun4fund.repository.ReviewRepository;
 import cr.ac.ucenfotec.fun4fund.service.ReviewService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.ReviewCriteria;
@@ -38,9 +39,13 @@ public class ReviewResource {
 
     private final ReviewQueryService reviewQueryService;
 
-    public ReviewResource(ReviewService reviewService, ReviewQueryService reviewQueryService) {
+    private final ReviewRepository reviewRepository;
+
+    public ReviewResource(ReviewService reviewService, ReviewQueryService reviewQueryService,
+                          ReviewRepository reviewRepository) {
         this.reviewService = reviewService;
         this.reviewQueryService = reviewQueryService;
+        this.reviewRepository = reviewRepository;
     }
 
     /**
@@ -132,5 +137,11 @@ public class ReviewResource {
         log.debug("REST request to delete Review : {}", id);
         reviewService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/reviews/proyect/{id}")
+    public List<Review> getProyectReviews(@PathVariable Long id) {
+        log.debug("REST request to get Review : {}", id);
+        return reviewRepository.findTop6ByProyectId(id);
     }
 }

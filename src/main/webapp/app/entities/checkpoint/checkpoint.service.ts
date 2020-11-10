@@ -35,4 +35,8 @@ export class CheckpointService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
+
+  findByProyectId(id: number, percentile: number): Observable<EntityArrayResponseType> {
+    return this.http.get<ICheckpoint[]>(`${this.resourceUrl}/byproyect?idproyect=${id}&percentile=${percentile}`, { observe: 'response' });
+  }
 }

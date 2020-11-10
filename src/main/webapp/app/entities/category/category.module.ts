@@ -7,9 +7,10 @@ import { CategoryDetailComponent } from './category-detail.component';
 import { CategoryUpdateComponent } from './category-update.component';
 import { CategoryDeleteDialogComponent } from './category-delete-dialog.component';
 import { categoryRoute } from './category.route';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
-  imports: [Fun4FundSharedModule, RouterModule.forChild(categoryRoute)],
+  imports: [Fun4FundSharedModule, RouterModule.forChild(categoryRoute), ComponentsModule],
   declarations: [CategoryComponent, CategoryDetailComponent, CategoryUpdateComponent, CategoryDeleteDialogComponent],
   entryComponents: [CategoryDeleteDialogComponent],
 })

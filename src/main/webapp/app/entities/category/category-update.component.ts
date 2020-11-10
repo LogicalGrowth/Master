@@ -14,6 +14,7 @@ import { ImageService } from 'app/entities/image/image.service';
 @Component({
   selector: 'jhi-category-update',
   templateUrl: './category-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class CategoryUpdateComponent implements OnInit {
   isSaving = false;

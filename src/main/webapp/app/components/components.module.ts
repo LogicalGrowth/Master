@@ -9,6 +9,8 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { SliderBarComponent } from './slider-bar/slider-bar.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
+import { RegularCardAvatarComponent } from './regular-card-avatar/regular-card-avatar.component';
+import { RegularCardImageComponent } from './regular-card-image/regular-card-image.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
     SliderBarComponent,
     TimelineComponent,
     VerticalTabsComponent,
+    RegularCardAvatarComponent,
+    RegularCardImageComponent,
   ],
   imports: [CommonModule],
   exports: [
@@ -33,6 +37,8 @@ import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
     SliderBarComponent,
     TimelineComponent,
     VerticalTabsComponent,
+    RegularCardAvatarComponent,
+    RegularCardImageComponent,
   ],
 })
 export class ComponentsModule {}

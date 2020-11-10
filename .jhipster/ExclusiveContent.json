@@ -16,7 +16,7 @@
       "fieldValidateRules": [
         "min"
       ],
-      "fieldValidateRulesMin": "1"
+      "fieldValidateRulesMin": "0"
     },
     {
       "fieldName": "state",

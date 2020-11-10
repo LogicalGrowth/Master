@@ -109,7 +109,7 @@
                             <th scope="col"><span>Nombre</span></th>
                             <th scope="col"><span>Precio</span></th>
                             <th scope="col"><span>Disponibles</span></th>
-                            <th scope="col" class="text-center" *ngIf="projectOwner"><span>Acciones</span></th>
+                            <th scope="col" class="text-center" *ngIf="isProjectOwner"><span>Acciones</span></th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let exclusiveContent of exclusiveContents">
@@ -122,7 +122,7 @@
                                 <td>${{ exclusiveContent.price }}</td>
                                 <td>{{ exclusiveContent.stock }}</td>
                                 <td class="text-right">
-                                    <div class="btn-group" *ngIf="projectOwner">
+                                    <div class="btn-group" *ngIf="isProjectOwner">
                                         <jhi-icon-button type="info" label="" icon="nc-zoom-split"
                                             [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
                                         </jhi-icon-button>

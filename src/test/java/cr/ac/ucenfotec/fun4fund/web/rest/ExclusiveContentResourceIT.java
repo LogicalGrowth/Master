@@ -38,9 +38,9 @@ public class ExclusiveContentResourceIT {
     private static final Double UPDATED_PRICE = 1D;
     private static final Double SMALLER_PRICE = 0D - 1D;
 
-    private static final Integer DEFAULT_STOCK = 1;
-    private static final Integer UPDATED_STOCK = 2;
-    private static final Integer SMALLER_STOCK = 1 - 1;
+    private static final Integer DEFAULT_STOCK = 0;
+    private static final Integer UPDATED_STOCK = 1;
+    private static final Integer SMALLER_STOCK = 0 - 1;
 
     private static final ActivityStatus DEFAULT_STATE = ActivityStatus.ENABLED;
     private static final ActivityStatus UPDATED_STATE = ActivityStatus.DISABLED;

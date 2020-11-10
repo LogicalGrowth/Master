@@ -18,7 +18,7 @@ export class ProyectDetailComponent implements OnInit {
   proyect: IProyect | null = null;
   exclusiveContents?: IExclusiveContent[];
   account!: User;
-  projectOwner!: Boolean;
+  isProjectOwner!: Boolean;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -28,7 +28,7 @@ export class ProyectDetailComponent implements OnInit {
 
   loadExclusiveContent(projectId: number): void {
     if (this.proyect != null) {
-      if (this.projectOwner) {
+      if (this.isProjectOwner) {
         this.exclusiveContentService
           .query({ 'proyectId.equals': projectId })
           .subscribe((res: HttpResponse<IExclusiveContent[]>) => (this.exclusiveContents = res.body || []));
@@ -49,7 +49,7 @@ export class ProyectDetailComponent implements OnInit {
       }
     });
 
-    this.projectOwner = this.account.id === this.proyect?.owner?.id ? true : false;
+    this.isProjectOwner = this.account.id === this.proyect?.owner?.id ? true : false;
 
     this.loadExclusiveContent(this.proyect?.id as number);
   }

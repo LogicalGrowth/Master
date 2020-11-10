@@ -10,6 +10,7 @@ import { ProyectUpdateComponent } from './proyect-update.component';
 import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component';
 import { proyectRoute } from './proyect.route';
 import { ComponentsModule } from 'app/components/components.module';
+import { ProyectImageUpdateComponent } from './proyect-image-update/proyect-image-update.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,13 @@ import { ComponentsModule } from 'app/components/components.module';
     ComponentsModule,
     NguiMapModule.forRoot({ apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyAKXA3_YJlVwwt1lx60eO0ljRVUKQO3fNY' }),
   ],
-  declarations: [ProyectComponent, ProyectDetailComponent, ProyectUpdateComponent, ProyectDeleteDialogComponent],
+  declarations: [
+    ProyectComponent,
+    ProyectDetailComponent,
+    ProyectUpdateComponent,
+    ProyectDeleteDialogComponent,
+    ProyectImageUpdateComponent,
+  ],
   entryComponents: [ProyectDeleteDialogComponent],
 })
 export class Fun4FundProyectModule {}

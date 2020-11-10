@@ -1,7 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
+import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.service.ProyectService;
+import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
+import cr.ac.ucenfotec.fun4fund.service.UserService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.ProyectCriteria;
 import cr.ac.ucenfotec.fun4fund.service.ProyectQueryService;
@@ -38,9 +41,17 @@ public class ProyectResource {
 
     private final ProyectQueryService proyectQueryService;
 
-    public ProyectResource(ProyectService proyectService, ProyectQueryService proyectQueryService) {
+    private final ApplicationUserRepository applicationUserRepository;
+    private final UserService userService;
+
+    public ProyectResource(ProyectService proyectService,
+                           ProyectQueryService proyectQueryService,
+                           ApplicationUserRepository applicationUserRepository,
+                           UserService userService) {
         this.proyectService = proyectService;
         this.proyectQueryService = proyectQueryService;
+        this.applicationUserRepository = applicationUserRepository;
+        this.userService = userService;
     }
 
     /**
@@ -56,6 +67,13 @@ public class ProyectResource {
         if (proyect.getId() != null) {
             throw new BadRequestAlertException("A new proyect cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Optional<ApplicationUser> applicationUser = applicationUserRepository.findByInternalUserId(userService.getUserWithAuthorities().get().getId());
+
+        if (!applicationUser.isPresent()){
+            throw new BadRequestAlertException("Problemas con el dueño del proyecto", ENTITY_NAME, "");
+        }
+
+        proyect.setOwner(applicationUser.get());
         Proyect result = proyectService.save(proyect);
         return ResponseEntity.created(new URI("/api/proyects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

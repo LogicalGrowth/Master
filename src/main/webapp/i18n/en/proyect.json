@@ -7,7 +7,10 @@
         "createOrEditLabel": "Create or edit a Proyect",
         "notFound": "No Proyects found"
       },
-      "created": "A new Proyect is created with identifier {{ param }}",
+      "imagen": {
+        "created": "Una imagen fue creada con el id {{ param }}"
+      },
+      "created": "Un nuevo proyecto fue creado con el id {{ param }}",
       "updated": "A Proyect is updated with identifier {{ param }}",
       "deleted": "A Proyect is deleted with identifier {{ param }}",
       "delete": {
@@ -24,8 +27,8 @@
       "rating": "Rating",
       "creationDate": "Creation Date",
       "lastUpdated": "Last Updated",
-      "coordX": "Coord X",
-      "coordY": "Coord Y",
+      "coordX": "del mapa",
+      "coordY": "del mapa",
       "fee": "Fee",
       "number": "Number",
       "currencyType": "Currency Type",

@@ -21,6 +21,7 @@
       "expirationDate": "Expiration Date",
       "type": "Type",
       "cvc": "Cvc",
+      "favorite": "Favorite",
       "owner": "Owner"
     }
   }

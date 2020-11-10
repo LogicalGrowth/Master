@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new PaymentMethod(0, 'AAAAAAA', 'AAAAAAA', currentDate, CardType.VISA, 'AAAAAAA');
+      elemDefault = new PaymentMethod(0, 'AAAAAAA', 'AAAAAAA', currentDate, CardType.VISA, 'AAAAAAA', false);
     });
 
     describe('Service methods', () => {
@@ -75,6 +75,7 @@ describe('Service Tests', () => {
             expirationDate: currentDate.format(DATE_TIME_FORMAT),
             type: 'BBBBBB',
             cvc: 'BBBBBB',
+            favorite: true,
           },
           elemDefault
         );
@@ -101,6 +102,7 @@ describe('Service Tests', () => {
             expirationDate: currentDate.format(DATE_TIME_FORMAT),
             type: 'BBBBBB',
             cvc: 'BBBBBB',
+            favorite: true,
           },
           elemDefault
         );

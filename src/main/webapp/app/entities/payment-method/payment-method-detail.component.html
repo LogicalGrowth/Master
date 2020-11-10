@@ -28,6 +28,10 @@
                 <dd>
                     <span>{{ paymentMethod.cvc }}</span>
                 </dd>
+                <dt><span jhiTranslate="fun4FundApp.paymentMethod.favorite">Favorite</span></dt>
+                <dd>
+                    <span>{{ paymentMethod.favorite }}</span>
+                </dd>
                 <dt><span jhiTranslate="fun4FundApp.paymentMethod.owner">Owner</span></dt>
                 <dd>
                     <div *ngIf="paymentMethod.owner">

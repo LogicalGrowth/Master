@@ -172,11 +172,29 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.account" for="field_account">Account</label>
-                    <select class="form-control" id="field_account" name="account" formControlName="account">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="proyectAccountOption.id === editForm.get('account')!.value?.id ? editForm.get('account')!.value : proyectAccountOption" *ngFor="let proyectAccountOption of accounts; trackBy: trackById">{{ proyectAccountOption.id }}</option>
+                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.number" for="field_number">Number</label>
+                    <input type="text" class="form-control" name="number" id="field_number"
+                           formControlName="number"/>
+                    <div *ngIf="editForm.get('number')!.invalid && (editForm.get('number')!.dirty || editForm.get('number')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('number')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fun4FundApp.proyect.currencyType" for="field_currencyType">Currency Type</label>
+                    <select class="form-control" name="currencyType" formControlName="currencyType" id="field_currencyType">
+                        <option value="USD">{{ 'fun4FundApp.Currency.USD' | translate }}</option>
+                        <option value="CRC">{{ 'fun4FundApp.Currency.CRC' | translate }}</option>
                     </select>
+                    <div *ngIf="editForm.get('currencyType')!.invalid && (editForm.get('currencyType')!.dirty || editForm.get('currencyType')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('currencyType')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">

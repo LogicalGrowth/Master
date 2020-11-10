@@ -28,6 +28,7 @@
                     <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.expirationDate">Expiration Date</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.type">Type</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.cvc">Cvc</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.favorite">Favorite</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.owner">Owner</span></th>
                     <th scope="col"></th>
                 </tr>
@@ -40,6 +41,7 @@
                     <td>{{ paymentMethod.expirationDate | date:'medium' }}</td>
                     <td jhiTranslate="{{ 'fun4FundApp.CardType.' + paymentMethod.type }}">{{ paymentMethod.type }}</td>
                     <td>{{ paymentMethod.cvc }}</td>
+                    <td>{{ paymentMethod.favorite }}</td>
                     <td>
                         <div *ngIf="paymentMethod.owner">
                             <a [routerLink]="['/application-user', paymentMethod.owner?.id, 'view']" >{{ paymentMethod.owner?.id }}</a>

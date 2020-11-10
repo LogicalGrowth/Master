@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
-import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
+import cr.ac.ucenfotec.fun4fund.service.ProyectService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.ProyectCriteria;
+import cr.ac.ucenfotec.fun4fund.service.ProyectQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class ProyectResource {
 
     private final Logger log = LoggerFactory.getLogger(ProyectResource.class);
@@ -34,10 +34,13 @@ public class ProyectResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ProyectRepository proyectRepository;
+    private final ProyectService proyectService;
 
-    public ProyectResource(ProyectRepository proyectRepository) {
-        this.proyectRepository = proyectRepository;
+    private final ProyectQueryService proyectQueryService;
+
+    public ProyectResource(ProyectService proyectService, ProyectQueryService proyectQueryService) {
+        this.proyectService = proyectService;
+        this.proyectQueryService = proyectQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class ProyectResource {
         if (proyect.getId() != null) {
             throw new BadRequestAlertException("A new proyect cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Proyect result = proyectRepository.save(proyect);
+        Proyect result = proyectService.save(proyect);
         return ResponseEntity.created(new URI("/api/proyects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class ProyectResource {
         if (proyect.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Proyect result = proyectRepository.save(proyect);
+        Proyect result = proyectService.save(proyect);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, proyect.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class ProyectResource {
     /**
      * {@code GET  /proyects} : get all the proyects.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of proyects in body.
      */
     @GetMapping("/proyects")
-    public List<Proyect> getAllProyects() {
-        log.debug("REST request to get all Proyects");
-        return proyectRepository.findAll();
+    public ResponseEntity<List<Proyect>> getAllProyects(ProyectCriteria criteria) {
+        log.debug("REST request to get Proyects by criteria: {}", criteria);
+        List<Proyect> entityList = proyectQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /proyects/count} : count all the proyects.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/proyects/count")
+    public ResponseEntity<Long> countProyects(ProyectCriteria criteria) {
+        log.debug("REST request to count Proyects by criteria: {}", criteria);
+        return ResponseEntity.ok().body(proyectQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class ProyectResource {
     @GetMapping("/proyects/{id}")
     public ResponseEntity<Proyect> getProyect(@PathVariable Long id) {
         log.debug("REST request to get Proyect : {}", id);
-        Optional<Proyect> proyect = proyectRepository.findById(id);
+        Optional<Proyect> proyect = proyectService.findOne(id);
         return ResponseUtil.wrapOrNotFound(proyect);
     }
 
@@ -113,7 +130,7 @@ public class ProyectResource {
     @DeleteMapping("/proyects/{id}")
     public ResponseEntity<Void> deleteProyect(@PathVariable Long id) {
         log.debug("REST request to delete Proyect : {}", id);
-        proyectRepository.deleteById(id);
+        proyectService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

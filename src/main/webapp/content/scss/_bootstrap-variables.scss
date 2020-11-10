@@ -18,7 +18,6 @@ $danger: #dc3545;
 // Quickly modify global styling by enabling or disabling optional features.
 $enable-rounded: true;
 $enable-shadows: false;
-$enable-shadows: true;
 $enable-gradients: false;
 $enable-transitions: true;
 $enable-hover-media-query: false;
@@ -35,7 +34,7 @@ $border-radius-sm: 0.1rem;
 // Body:
 // Settings for the `<body>` element.
 
-$body-bg: #f4f3ef;
+$body-bg: #e4e5e6;
 
 // Typography:
 // Font, line-height, and color for body text, headings, and more.

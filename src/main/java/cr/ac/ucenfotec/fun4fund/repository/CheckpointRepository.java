@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CheckpointRepository extends JpaRepository<Checkpoint, Long> {
+public interface CheckpointRepository extends JpaRepository<Checkpoint, Long>, JpaSpecificationExecutor<Checkpoint> {
 }

@@ -37,8 +37,8 @@
                            formControlName="stock"/>
                     <div *ngIf="editForm.get('stock')!.invalid && (editForm.get('stock')!.dirty || editForm.get('stock')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('stock')?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 1 }">
-                            This field should be at least 1.
+                               *ngIf="editForm.get('stock')?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                            This field should be at least 0.
                         </small>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('stock')?.errors?.number" jhiTranslate="entity.validation.number">

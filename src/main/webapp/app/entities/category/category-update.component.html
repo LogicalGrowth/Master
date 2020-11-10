@@ -53,7 +53,7 @@
                     <label class="form-control-label" jhiTranslate="fun4FundApp.category.image" for="field_image">Image</label>
                     <select class="form-control" id="field_image" name="image" formControlName="image">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="imageOption.id === editForm.get('image')!.value?.id ? editForm.get('image')!.value : imageOption" *ngFor="let imageOption of images; trackBy: trackById">{{ imageOption.id }}</option>
+                        <option [ngValue]="resourceOption.id === editForm.get('image')!.value?.id ? editForm.get('image')!.value : resourceOption" *ngFor="let resourceOption of images; trackBy: trackById">{{ resourceOption.id }}</option>
                     </select>
                 </div>
             </div>

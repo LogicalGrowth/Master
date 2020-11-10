@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Review;
-import cr.ac.ucenfotec.fun4fund.repository.ReviewRepository;
+import cr.ac.ucenfotec.fun4fund.service.ReviewService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.ReviewCriteria;
+import cr.ac.ucenfotec.fun4fund.service.ReviewQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class ReviewResource {
 
     private final Logger log = LoggerFactory.getLogger(ReviewResource.class);
@@ -34,10 +34,13 @@ public class ReviewResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewService reviewService;
 
-    public ReviewResource(ReviewRepository reviewRepository) {
-        this.reviewRepository = reviewRepository;
+    private final ReviewQueryService reviewQueryService;
+
+    public ReviewResource(ReviewService reviewService, ReviewQueryService reviewQueryService) {
+        this.reviewService = reviewService;
+        this.reviewQueryService = reviewQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class ReviewResource {
         if (review.getId() != null) {
             throw new BadRequestAlertException("A new review cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Review result = reviewRepository.save(review);
+        Review result = reviewService.save(review);
         return ResponseEntity.created(new URI("/api/reviews/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class ReviewResource {
         if (review.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Review result = reviewRepository.save(review);
+        Review result = reviewService.save(review);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, review.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class ReviewResource {
     /**
      * {@code GET  /reviews} : get all the reviews.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reviews in body.
      */
     @GetMapping("/reviews")
-    public List<Review> getAllReviews() {
-        log.debug("REST request to get all Reviews");
-        return reviewRepository.findAll();
+    public ResponseEntity<List<Review>> getAllReviews(ReviewCriteria criteria) {
+        log.debug("REST request to get Reviews by criteria: {}", criteria);
+        List<Review> entityList = reviewQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /reviews/count} : count all the reviews.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/reviews/count")
+    public ResponseEntity<Long> countReviews(ReviewCriteria criteria) {
+        log.debug("REST request to count Reviews by criteria: {}", criteria);
+        return ResponseEntity.ok().body(reviewQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class ReviewResource {
     @GetMapping("/reviews/{id}")
     public ResponseEntity<Review> getReview(@PathVariable Long id) {
         log.debug("REST request to get Review : {}", id);
-        Optional<Review> review = reviewRepository.findById(id);
+        Optional<Review> review = reviewService.findOne(id);
         return ResponseUtil.wrapOrNotFound(review);
     }
 
@@ -113,7 +130,7 @@ public class ReviewResource {
     @DeleteMapping("/reviews/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         log.debug("REST request to delete Review : {}", id);
-        reviewRepository.deleteById(id);
+        reviewService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -27,7 +27,7 @@
   "relationships": [
     {
       "relationshipType": "one-to-one",
-      "otherEntityName": "image",
+      "otherEntityName": "resource",
       "otherEntityRelationshipName": "category",
       "relationshipName": "image",
       "otherEntityField": "id",
@@ -44,8 +44,8 @@
   "entityTableName": "category",
   "dto": "no",
   "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,

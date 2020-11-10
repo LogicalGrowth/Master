@@ -6,6 +6,7 @@ Main page styles
   display: inline-block;
   width: 347px;
   height: 497px;
+  background: url('../../content/images/jhipster_family_member_2.svg') no-repeat center top;
   background-size: contain;
 }
 
@@ -16,73 +17,7 @@ Main page styles
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
   .hipster {
+    background: url('../../content/images/jhipster_family_member_2.svg') no-repeat center top;
     background-size: contain;
   }
-}
-
-section {
-  padding: 85px 0;
-}
-
-header.masthead {
-  position: relative;
-  overflow: hidden;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  background: linear-gradient(0deg, #0a7faf 0%, #51cbce 100%);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: scroll;
-  background-size: cover;
-}
-
-header.masthead .masthead-content {
-  z-index: 1;
-  position: relative;
-}
-
-header.masthead .bg-circle {
-  z-index: 0;
-  position: absolute;
-  border-radius: 100%;
-  background: linear-gradient(0deg, #0a7faf 0%, #51cbce 100%);
-}
-
-header.masthead .bg-circle-1 {
-  height: 90rem;
-  width: 90rem;
-  bottom: -55rem;
-  left: -55rem;
-}
-
-header.masthead .bg-circle-2 {
-  height: 50rem;
-  width: 50rem;
-  top: -25rem;
-  right: -25rem;
-}
-
-header.masthead .bg-circle-3 {
-  height: 20rem;
-  width: 20rem;
-  bottom: -10rem;
-  right: 5%;
-}
-
-header.masthead .bg-circle-4 {
-  height: 30rem;
-  width: 30rem;
-  top: -5rem;
-  right: 35%;
-}
-
-.home-icon {
-  color: #51cbce;
-  font-size: 48px;
-  text-align: center;
-  transition: transform 0.2s;
-}
-
-.home-icon:hover {
-  transform: scale(0.5);
 }

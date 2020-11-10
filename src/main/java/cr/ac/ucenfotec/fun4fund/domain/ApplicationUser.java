@@ -64,10 +64,6 @@ public class ApplicationUser implements Serializable {
 
     @OneToMany(mappedBy = "applicationUser")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<DonationHistory> donations = new HashSet<>();
-
-    @OneToMany(mappedBy = "applicationUser")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Notification> notifications = new HashSet<>();
 
     @OneToMany(mappedBy = "applicationUser")
@@ -213,31 +209,6 @@ public class ApplicationUser implements Serializable {
 
     public void setProyects(Set<Proyect> proyects) {
         this.proyects = proyects;
-    }
-
-    public Set<DonationHistory> getDonations() {
-        return donations;
-    }
-
-    public ApplicationUser donations(Set<DonationHistory> donationHistories) {
-        this.donations = donationHistories;
-        return this;
-    }
-
-    public ApplicationUser addDonation(DonationHistory donationHistory) {
-        this.donations.add(donationHistory);
-        donationHistory.setApplicationUser(this);
-        return this;
-    }
-
-    public ApplicationUser removeDonation(DonationHistory donationHistory) {
-        this.donations.remove(donationHistory);
-        donationHistory.setApplicationUser(null);
-        return this;
-    }
-
-    public void setDonations(Set<DonationHistory> donationHistories) {
-        this.donations = donationHistories;
     }
 
     public Set<Notification> getNotifications() {

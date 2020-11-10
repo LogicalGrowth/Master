@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.UserPreferences;
-import cr.ac.ucenfotec.fun4fund.repository.UserPreferencesRepository;
+import cr.ac.ucenfotec.fun4fund.service.UserPreferencesService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.UserPreferencesCriteria;
+import cr.ac.ucenfotec.fun4fund.service.UserPreferencesQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class UserPreferencesResource {
 
     private final Logger log = LoggerFactory.getLogger(UserPreferencesResource.class);
@@ -34,10 +34,13 @@ public class UserPreferencesResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final UserPreferencesRepository userPreferencesRepository;
+    private final UserPreferencesService userPreferencesService;
 
-    public UserPreferencesResource(UserPreferencesRepository userPreferencesRepository) {
-        this.userPreferencesRepository = userPreferencesRepository;
+    private final UserPreferencesQueryService userPreferencesQueryService;
+
+    public UserPreferencesResource(UserPreferencesService userPreferencesService, UserPreferencesQueryService userPreferencesQueryService) {
+        this.userPreferencesService = userPreferencesService;
+        this.userPreferencesQueryService = userPreferencesQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class UserPreferencesResource {
         if (userPreferences.getId() != null) {
             throw new BadRequestAlertException("A new userPreferences cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        UserPreferences result = userPreferencesRepository.save(userPreferences);
+        UserPreferences result = userPreferencesService.save(userPreferences);
         return ResponseEntity.created(new URI("/api/user-preferences/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class UserPreferencesResource {
         if (userPreferences.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        UserPreferences result = userPreferencesRepository.save(userPreferences);
+        UserPreferences result = userPreferencesService.save(userPreferences);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userPreferences.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class UserPreferencesResource {
     /**
      * {@code GET  /user-preferences} : get all the userPreferences.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userPreferences in body.
      */
     @GetMapping("/user-preferences")
-    public List<UserPreferences> getAllUserPreferences() {
-        log.debug("REST request to get all UserPreferences");
-        return userPreferencesRepository.findAll();
+    public ResponseEntity<List<UserPreferences>> getAllUserPreferences(UserPreferencesCriteria criteria) {
+        log.debug("REST request to get UserPreferences by criteria: {}", criteria);
+        List<UserPreferences> entityList = userPreferencesQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /user-preferences/count} : count all the userPreferences.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/user-preferences/count")
+    public ResponseEntity<Long> countUserPreferences(UserPreferencesCriteria criteria) {
+        log.debug("REST request to count UserPreferences by criteria: {}", criteria);
+        return ResponseEntity.ok().body(userPreferencesQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class UserPreferencesResource {
     @GetMapping("/user-preferences/{id}")
     public ResponseEntity<UserPreferences> getUserPreferences(@PathVariable Long id) {
         log.debug("REST request to get UserPreferences : {}", id);
-        Optional<UserPreferences> userPreferences = userPreferencesRepository.findById(id);
+        Optional<UserPreferences> userPreferences = userPreferencesService.findOne(id);
         return ResponseUtil.wrapOrNotFound(userPreferences);
     }
 
@@ -113,7 +130,7 @@ public class UserPreferencesResource {
     @DeleteMapping("/user-preferences/{id}")
     public ResponseEntity<Void> deleteUserPreferences(@PathVariable Long id) {
         log.debug("REST request to delete UserPreferences : {}", id);
-        userPreferencesRepository.deleteById(id);
+        userPreferencesService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

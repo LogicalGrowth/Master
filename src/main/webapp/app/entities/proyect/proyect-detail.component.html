@@ -52,11 +52,13 @@
                 <dd>
                     <span>{{ proyect.fee }}</span>
                 </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.account">Account</span></dt>
+                <dt><span jhiTranslate="fun4FundApp.proyect.number">Number</span></dt>
                 <dd>
-                    <div *ngIf="proyect.account">
-                        <a [routerLink]="['/proyect-account', proyect.account?.id, 'view']">{{ proyect.account?.id }}</a>
-                    </div>
+                    <span>{{ proyect.number }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.proyect.currencyType">Currency Type</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'fun4FundApp.Currency.' + proyect.currencyType }}">{{ proyect.currencyType }}</span>
                 </dd>
                 <dt><span jhiTranslate="fun4FundApp.proyect.owner">Owner</span></dt>
                 <dd>

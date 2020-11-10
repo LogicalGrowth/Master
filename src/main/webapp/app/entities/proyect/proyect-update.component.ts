@@ -4,20 +4,17 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
 import { IProyect, Proyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
-import { IProyectAccount } from 'app/shared/model/proyect-account.model';
-import { ProyectAccountService } from 'app/entities/proyect-account/proyect-account.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from 'app/entities/category/category.service';
 
-type SelectableEntity = IProyectAccount | IApplicationUser | ICategory;
+type SelectableEntity = IApplicationUser | ICategory;
 
 @Component({
   selector: 'jhi-proyect-update',
@@ -25,7 +22,6 @@ type SelectableEntity = IProyectAccount | IApplicationUser | ICategory;
 })
 export class ProyectUpdateComponent implements OnInit {
   isSaving = false;
-  accounts: IProyectAccount[] = [];
   applicationusers: IApplicationUser[] = [];
   categories: ICategory[] = [];
 
@@ -42,7 +38,8 @@ export class ProyectUpdateComponent implements OnInit {
     coordX: [null, [Validators.required]],
     coordY: [null, [Validators.required]],
     fee: [null, [Validators.required]],
-    account: [],
+    number: [null, [Validators.required]],
+    currencyType: [null, [Validators.required]],
     owner: [],
     applicationUser: [],
     category: [],
@@ -50,7 +47,6 @@ export class ProyectUpdateComponent implements OnInit {
 
   constructor(
     protected proyectService: ProyectService,
-    protected proyectAccountService: ProyectAccountService,
     protected applicationUserService: ApplicationUserService,
     protected categoryService: CategoryService,
     protected activatedRoute: ActivatedRoute,
@@ -66,28 +62,6 @@ export class ProyectUpdateComponent implements OnInit {
       }
 
       this.updateForm(proyect);
-
-      this.proyectAccountService
-        .query({ filter: 'proyect-is-null' })
-        .pipe(
-          map((res: HttpResponse<IProyectAccount[]>) => {
-            return res.body || [];
-          })
-        )
-        .subscribe((resBody: IProyectAccount[]) => {
-          if (!proyect.account || !proyect.account.id) {
-            this.accounts = resBody;
-          } else {
-            this.proyectAccountService
-              .find(proyect.account.id)
-              .pipe(
-                map((subRes: HttpResponse<IProyectAccount>) => {
-                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                })
-              )
-              .subscribe((concatRes: IProyectAccount[]) => (this.accounts = concatRes));
-          }
-        });
 
       this.applicationUserService.query().subscribe((res: HttpResponse<IApplicationUser[]>) => (this.applicationusers = res.body || []));
 
@@ -109,7 +83,8 @@ export class ProyectUpdateComponent implements OnInit {
       coordX: proyect.coordX,
       coordY: proyect.coordY,
       fee: proyect.fee,
-      account: proyect.account,
+      number: proyect.number,
+      currencyType: proyect.currencyType,
       owner: proyect.owner,
       applicationUser: proyect.applicationUser,
       category: proyect.category,
@@ -149,7 +124,8 @@ export class ProyectUpdateComponent implements OnInit {
       coordX: this.editForm.get(['coordX'])!.value,
       coordY: this.editForm.get(['coordY'])!.value,
       fee: this.editForm.get(['fee'])!.value,
-      account: this.editForm.get(['account'])!.value,
+      number: this.editForm.get(['number'])!.value,
+      currencyType: this.editForm.get(['currencyType'])!.value,
       owner: this.editForm.get(['owner'])!.value,
       applicationUser: this.editForm.get(['applicationUser'])!.value,
       category: this.editForm.get(['category'])!.value,

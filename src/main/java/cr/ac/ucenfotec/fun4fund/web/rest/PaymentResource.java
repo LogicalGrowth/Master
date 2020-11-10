@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
-import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
+import cr.ac.ucenfotec.fun4fund.service.PaymentService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.PaymentCriteria;
+import cr.ac.ucenfotec.fun4fund.service.PaymentQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class PaymentResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentResource.class);
@@ -34,10 +34,13 @@ public class PaymentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PaymentRepository paymentRepository;
+    private final PaymentService paymentService;
 
-    public PaymentResource(PaymentRepository paymentRepository) {
-        this.paymentRepository = paymentRepository;
+    private final PaymentQueryService paymentQueryService;
+
+    public PaymentResource(PaymentService paymentService, PaymentQueryService paymentQueryService) {
+        this.paymentService = paymentService;
+        this.paymentQueryService = paymentQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class PaymentResource {
         if (payment.getId() != null) {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Payment result = paymentRepository.save(payment);
+        Payment result = paymentService.save(payment);
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class PaymentResource {
         if (payment.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Payment result = paymentRepository.save(payment);
+        Payment result = paymentService.save(payment);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, payment.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class PaymentResource {
     /**
      * {@code GET  /payments} : get all the payments.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of payments in body.
      */
     @GetMapping("/payments")
-    public List<Payment> getAllPayments() {
-        log.debug("REST request to get all Payments");
-        return paymentRepository.findAll();
+    public ResponseEntity<List<Payment>> getAllPayments(PaymentCriteria criteria) {
+        log.debug("REST request to get Payments by criteria: {}", criteria);
+        List<Payment> entityList = paymentQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /payments/count} : count all the payments.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/payments/count")
+    public ResponseEntity<Long> countPayments(PaymentCriteria criteria) {
+        log.debug("REST request to count Payments by criteria: {}", criteria);
+        return ResponseEntity.ok().body(paymentQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class PaymentResource {
     @GetMapping("/payments/{id}")
     public ResponseEntity<Payment> getPayment(@PathVariable Long id) {
         log.debug("REST request to get Payment : {}", id);
-        Optional<Payment> payment = paymentRepository.findById(id);
+        Optional<Payment> payment = paymentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(payment);
     }
 
@@ -113,7 +130,7 @@ public class PaymentResource {
     @DeleteMapping("/payments/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
         log.debug("REST request to delete Payment : {}", id);
-        paymentRepository.deleteById(id);
+        paymentService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

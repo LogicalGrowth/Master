@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Raffle;
-import cr.ac.ucenfotec.fun4fund.repository.RaffleRepository;
+import cr.ac.ucenfotec.fun4fund.service.RaffleService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.RaffleCriteria;
+import cr.ac.ucenfotec.fun4fund.service.RaffleQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class RaffleResource {
 
     private final Logger log = LoggerFactory.getLogger(RaffleResource.class);
@@ -34,10 +34,13 @@ public class RaffleResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RaffleRepository raffleRepository;
+    private final RaffleService raffleService;
 
-    public RaffleResource(RaffleRepository raffleRepository) {
-        this.raffleRepository = raffleRepository;
+    private final RaffleQueryService raffleQueryService;
+
+    public RaffleResource(RaffleService raffleService, RaffleQueryService raffleQueryService) {
+        this.raffleService = raffleService;
+        this.raffleQueryService = raffleQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class RaffleResource {
         if (raffle.getId() != null) {
             throw new BadRequestAlertException("A new raffle cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Raffle result = raffleRepository.save(raffle);
+        Raffle result = raffleService.save(raffle);
         return ResponseEntity.created(new URI("/api/raffles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class RaffleResource {
         if (raffle.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Raffle result = raffleRepository.save(raffle);
+        Raffle result = raffleService.save(raffle);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, raffle.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class RaffleResource {
     /**
      * {@code GET  /raffles} : get all the raffles.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of raffles in body.
      */
     @GetMapping("/raffles")
-    public List<Raffle> getAllRaffles() {
-        log.debug("REST request to get all Raffles");
-        return raffleRepository.findAll();
+    public ResponseEntity<List<Raffle>> getAllRaffles(RaffleCriteria criteria) {
+        log.debug("REST request to get Raffles by criteria: {}", criteria);
+        List<Raffle> entityList = raffleQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /raffles/count} : count all the raffles.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/raffles/count")
+    public ResponseEntity<Long> countRaffles(RaffleCriteria criteria) {
+        log.debug("REST request to count Raffles by criteria: {}", criteria);
+        return ResponseEntity.ok().body(raffleQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class RaffleResource {
     @GetMapping("/raffles/{id}")
     public ResponseEntity<Raffle> getRaffle(@PathVariable Long id) {
         log.debug("REST request to get Raffle : {}", id);
-        Optional<Raffle> raffle = raffleRepository.findById(id);
+        Optional<Raffle> raffle = raffleService.findOne(id);
         return ResponseUtil.wrapOrNotFound(raffle);
     }
 
@@ -113,7 +130,7 @@ public class RaffleResource {
     @DeleteMapping("/raffles/{id}")
     public ResponseEntity<Void> deleteRaffle(@PathVariable Long id) {
         log.debug("REST request to delete Raffle : {}", id);
-        raffleRepository.deleteById(id);
+        raffleService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

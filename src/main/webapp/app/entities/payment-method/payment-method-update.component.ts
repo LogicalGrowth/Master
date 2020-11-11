@@ -15,11 +15,14 @@ import { ApplicationUserService } from 'app/entities/application-user/applicatio
 @Component({
   selector: 'jhi-payment-method-update',
   templateUrl: './payment-method-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss', './payment-method.scss'],
 })
 export class PaymentMethodUpdateComponent implements OnInit {
   isSaving = false;
   applicationusers: IApplicationUser[] = [];
-
+  isValid = true;
+  cardTypeImage = '';
+  showCardImage = false;
   editForm = this.fb.group({
     id: [],
     cardNumber: [null, [Validators.required, Validators.minLength(14), Validators.maxLength(19)]],
@@ -112,5 +115,75 @@ export class PaymentMethodUpdateComponent implements OnInit {
 
   trackById(index: number, item: IApplicationUser): any {
     return item.id;
+  }
+
+  validateCard(x: any): any {
+    if (this.validateCreditCardNumber(x.target.value)) {
+      const type = this.cardType(x.target.value);
+      const imgSrc = this.setCardImage(type);
+
+      if (imgSrc !== '') {
+        this.cardTypeImage = imgSrc;
+        this.showCardImage = true;
+      } else {
+        this.cardTypeImage = '';
+        this.showCardImage = false;
+      }
+    } else {
+      this.isValid = false;
+      this.cardTypeImage = '';
+      this.showCardImage = false;
+    }
+  }
+
+  validateCreditCardNumber(cardNumber: string): any {
+    cardNumber = cardNumber.split(' ').join('');
+    if (Number(cardNumber) <= 0 || !/\d{15,16}(~W[a-zA-Z])*$/.test(cardNumber) || cardNumber.length > 16) {
+      return false;
+    }
+    const carray = [];
+    for (let i = 0; i < cardNumber.length; i++) {
+      carray[carray.length] = cardNumber.charCodeAt(i) - 48;
+    }
+    carray.reverse(); // luhn approaches number from the end
+    let sum = 0;
+    for (let i = 0; i < carray.length; i++) {
+      let tmp = carray[i];
+      if (i % 2 !== 0) {
+        tmp *= 2;
+        if (tmp > 9) {
+          tmp -= 9;
+        }
+      }
+      sum += tmp;
+    }
+    return sum % 10 === 0;
+  }
+
+  cardType(cardNumber: string): any {
+    cardNumber = cardNumber.split(' ').join('');
+    const o = {
+      Visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+      Mastercard: /^5[1-5][0-9]{14}$/,
+      American: /^3[47]\d{13,14}$/,
+    };
+    for (const k in o) {
+      if (o[k].test(cardNumber)) {
+        return k;
+      }
+    }
+    return null;
+  }
+
+  setCardImage(cardType: string): any {
+    if (cardType === 'Visa') {
+      return '../../../content/images/CardTypes/Visa.png';
+    } else if (cardType === 'American') {
+      return '../../../content/images/CardTypes/Express.png';
+    } else if (cardType === 'Mastercard') {
+      return '../../../content/images/CardTypes/Mastercard.png';
+    }
+
+    return '';
   }
 }

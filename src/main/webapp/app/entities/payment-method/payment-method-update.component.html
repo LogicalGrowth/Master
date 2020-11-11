@@ -14,11 +14,11 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.cardNumber" for="field_cardNumber">Card Number</label>
                     <input type="text" class="form-control" name="cardNumber" id="field_cardNumber"
-                           formControlName="cardNumber"/>
+                           formControlName="cardNumber" (keyup)="validateCard($event)"/>
                     <div *ngIf="editForm.get('cardNumber')!.invalid && (editForm.get('cardNumber')!.dirty || editForm.get('cardNumber')!.touched)">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('cardNumber')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                        Este campo es requerido
                         </small>
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('cardNumber')?.errors?.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 14 }">
@@ -28,7 +28,12 @@
                                *ngIf="editForm.get('cardNumber')?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 19 }">
                         This field cannot be longer than 19 characters.
                         </small>
+                        <small class="form-text text-danger"
+                        *ngIf="!isValid">
+                        Tarjeta invalida
+                         </small>
                     </div>
+                    <img class="img-payment-cards" src="{{cardTypeImage}}" *ngIf="showCardImage" />
                 </div>
 
                 <div class="form-group">

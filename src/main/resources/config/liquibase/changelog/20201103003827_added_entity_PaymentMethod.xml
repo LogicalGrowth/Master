@@ -31,6 +31,9 @@
             <column name="cvc" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="favorite" type="boolean">
+                <constraints nullable="false" />
+            </column>
             <column name="owner_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -63,6 +66,7 @@
             <column name="expiration_date" type="datetime"/>
             <column name="type" type="string"/>
             <column name="cvc" type="string"/>
+            <column name="favorite" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

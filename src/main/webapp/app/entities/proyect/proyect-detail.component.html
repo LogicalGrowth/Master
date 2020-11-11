@@ -1,94 +1,154 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="proyect">
-            <h2><span jhiTranslate="fun4FundApp.proyect.detail.title">Proyect</span> {{ proyect.id }}</h2>
+<div class="row" *ngIf="proyect">
+    <div class="col-lg-12 col-sm-6">
+        <jhi-progress-bar progressBarClass="progress-bar-danger" minValue="0" maxValue="{{proyect.goalAmount}}"
+            percentile="{{percentile}}" currentValue="{{proyect.collected}}">
+        </jhi-progress-bar>
+    </div>
+    <div class="col-lg-8 col-sm-6">
+        <div class="col-md-12">
+            <div class="card card-testimonial card-block">
+                <h2>{{ proyect.name }}</h2>
+                <div class="stars-outer">
+                    <div class="stars-inner" style="width:{{rating}}%"></div>
+                </div>
+                <div class="card-body ">
+                    <p class="card-description">
+                        {{ proyect.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-6">
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header ">
+                    <h4 class="card-title">Horizontal Form</h4>
+                </div>
+                <div class="card-body ">
+                    <button class="btn btn-warning col-md-12">
+                        <span class="btn-label">
+                            <i class="nc-icon nc-money-coins"></i>
+                        </span>
+                        Hacer una donación
+                    </button>
+                    <button class="btn btn-info col-md-12">
+                        <span class="btn-label">
+                            <i class="nc-icon nc-circle-10"></i>
+                        </span>
+                        Hacerce socio
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <img src="http://res.cloudinary.com/barnesnoble/image/upload/v1604828586/gwiydfej4tdaqammaz4p.png">
+    </div>
+    <div class="col-lg-4">
+        <dl class="row-md jh-entity-details">
+            <dt><span>Tipo de proyecto:</span></dt>
+            <dd>
+                <span jhiTranslate="{{ 'fun4FundApp.ProyectType.' + proyect.idType }}">{{ proyect.idType }}</span>
+            </dd>
+            <dt><span>Monto meta:</span></dt>
+            <dd>
+                <span>${{ proyect.goalAmount }}</span>
+            </dd>
+            <dt><span>Recolectado:</span></dt>
+            <dd>
+                <span>${{ proyect.collected }}</span>
+            </dd>
+            <dt><span>Día de creación</span></dt>
+            <dd>
+                <span>{{ proyect.creationDate | date:'medium' }}</span>
+            </dd>
+            <dt><span>Última modificación</span></dt>
+            <dd>
+                <span>{{ proyect.lastUpdated | date:'medium' }}</span>
+            </dd>
+            <dt><span>Dueño del proyecto</span></dt>
+            <dd>
+                <div *ngIf="proyect.owner">
+                    <a [routerLink]="['/application-user', proyect.owner?.id, 'view']">{{ proyect.owner?.internalUser?.firstName }}
+                        {{ proyect.owner?.internalUser?.lastName }}</a>
+                </div>
+            </dd>
+            <dt><span>Categoría</span></dt>
+            <dd>
+                <div *ngIf="proyect.category">
+                    <span>{{ proyect.category?.name }}</span>
+                </div>
+            </dd>
+        </dl>
 
-            <hr>
-
-            <jhi-alert-error></jhi-alert-error>
-
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="fun4FundApp.proyect.name">Name</span></dt>
-                <dd>
-                    <span>{{ proyect.name }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.description">Description</span></dt>
-                <dd>
-                    <span>{{ proyect.description }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.idType">Id Type</span></dt>
-                <dd>
-                    <span jhiTranslate="{{ 'fun4FundApp.ProyectType.' + proyect.idType }}">{{ proyect.idType }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.goalAmount">Goal Amount</span></dt>
-                <dd>
-                    <span>{{ proyect.goalAmount }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.collected">Collected</span></dt>
-                <dd>
-                    <span>{{ proyect.collected }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.rating">Rating</span></dt>
-                <dd>
-                    <span>{{ proyect.rating }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.creationDate">Creation Date</span></dt>
-                <dd>
-                    <span>{{ proyect.creationDate }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.lastUpdated">Last Updated</span></dt>
-                <dd>
-                    <span>{{ proyect.lastUpdated }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.coordX">Coord X</span></dt>
-                <dd>
-                    <span>{{ proyect.coordX }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.coordY">Coord Y</span></dt>
-                <dd>
-                    <span>{{ proyect.coordY }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.fee">Fee</span></dt>
-                <dd>
-                    <span>{{ proyect.fee }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.account">Account</span></dt>
-                <dd>
-                    <div *ngIf="proyect.account">
-                        <a [routerLink]="['/proyect-account', proyect.account?.id, 'view']">{{ proyect.account?.id }}</a>
-                    </div>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.owner">Owner</span></dt>
-                <dd>
-                    <div *ngIf="proyect.owner">
-                        <a [routerLink]="['/application-user', proyect.owner?.id, 'view']">{{ proyect.owner?.id }}</a>
-                    </div>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.applicationUser">Application User</span></dt>
-                <dd>
-                    <div *ngIf="proyect.applicationUser">
-                        <a [routerLink]="['/application-user', proyect.applicationUser?.id, 'view']">{{ proyect.applicationUser?.id }}</a>
-                    </div>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.proyect.category">Category</span></dt>
-                <dd>
-                    <div *ngIf="proyect.category">
-                        <a [routerLink]="['/category', proyect.category?.id, 'view']">{{ proyect.category?.id }}</a>
-                    </div>
-                </dd>
-            </dl>
-
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
-                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-            </button>
-
-            <button type="button"
-                    [routerLink]="['/proyect', proyect.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <div>
+            <button type="button" [routerLink]="['/proyect', proyect.id, 'edit']" class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
             </button>
         </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <h4 class='card-title'>Localización del proyecto</h4>
+            </div>
+            <div class="card-body ">
+                <ngui-map zoom="7" center="9.7489,-83.7534">
+                    <marker [position]="position" *ngIf="hasMarker"></marker>
+                </ngui-map>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" *ngFor="let review of reviews;">
+        <div class="card card-testimonial">
+            <div class="card-body ">
+                <div class="icon icon-primary">
+                    <i class="fa fa-quote-right"></i>
+                </div>
+                <p class="card-description">
+                    {{ review.message }}
+                </p>
+            </div>
+            <div class="card-footer ">
+                <h4 class="card-title">{{ review.user }}</h4>
+                <div class="card-avatar">
+                    <div class="stars-outer little-stars">
+                        <div class="stars-inner" style="width:{{review.rating*100/5}}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12 text-center">
+        <div class="card card-tasks">
+            <div class="card-header ">
+                <h4 class="card-title">Top 5 de donadores del proyecto</h4>
+            </div>
+            <div class="card-body ">
+                <div class="table-full-width table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr *ngFor="let donor of donors;">
+                                <td class="img-row">
+                                    <div class="img-wrapper">
+                                        <img src="{{donor[1].internalUser.imageUrl}}" class="img-raised" />
+                                    </div>
+                                </td>
+                                <td class="text-left col-md-12">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}
+                                </td>
+                            </tr>
+                            <tr *ngIf="donors && !donors.length">
+                                <td class="text-left col-md-12">No hay donadores en el proyecto
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple"></jhi-timeline>
     </div>
 </div>

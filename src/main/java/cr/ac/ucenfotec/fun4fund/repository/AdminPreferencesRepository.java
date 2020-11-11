@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AdminPreferencesRepository extends JpaRepository<AdminPreferences, Long> {
+public interface AdminPreferencesRepository extends JpaRepository<AdminPreferences, Long>, JpaSpecificationExecutor<AdminPreferences> {
 }

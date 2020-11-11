@@ -14,15 +14,13 @@
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20201103003627_added_entity_Image.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201110023914_added_entity_Resource.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103003727_added_entity_ApplicationUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103003827_added_entity_PaymentMethod.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103003927_added_entity_Proyect.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20201103004027_added_entity_ProyectAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004127_added_entity_Category.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004227_added_entity_Checkpoint.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004327_added_entity_Review.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20201103004427_added_entity_DonationHistory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004527_added_entity_Auction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004627_added_entity_Raffle.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004727_added_entity_ExclusiveContent.xml" relativeToChangelogFile="false"/>
@@ -37,14 +35,13 @@
     <include file="config/liquibase/changelog/20201103005627_added_entity_Recommendation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103005727_added_entity_PasswordHistory.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20201103003627_added_entity_constraints_Image.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201110023914_added_entity_constraints_Resource.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103003727_added_entity_constraints_ApplicationUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103003827_added_entity_constraints_PaymentMethod.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103003927_added_entity_constraints_Proyect.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004127_added_entity_constraints_Category.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004227_added_entity_constraints_Checkpoint.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004327_added_entity_constraints_Review.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20201103004427_added_entity_constraints_DonationHistory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004527_added_entity_constraints_Auction.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004627_added_entity_constraints_Raffle.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103004727_added_entity_constraints_ExclusiveContent.xml" relativeToChangelogFile="false"/>

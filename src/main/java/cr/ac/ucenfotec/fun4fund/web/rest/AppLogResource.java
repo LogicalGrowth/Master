@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.AppLog;
-import cr.ac.ucenfotec.fun4fund.repository.AppLogRepository;
+import cr.ac.ucenfotec.fun4fund.service.AppLogService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.AppLogCriteria;
+import cr.ac.ucenfotec.fun4fund.service.AppLogQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class AppLogResource {
 
     private final Logger log = LoggerFactory.getLogger(AppLogResource.class);
@@ -34,10 +34,13 @@ public class AppLogResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AppLogRepository appLogRepository;
+    private final AppLogService appLogService;
 
-    public AppLogResource(AppLogRepository appLogRepository) {
-        this.appLogRepository = appLogRepository;
+    private final AppLogQueryService appLogQueryService;
+
+    public AppLogResource(AppLogService appLogService, AppLogQueryService appLogQueryService) {
+        this.appLogService = appLogService;
+        this.appLogQueryService = appLogQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class AppLogResource {
         if (appLog.getId() != null) {
             throw new BadRequestAlertException("A new appLog cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AppLog result = appLogRepository.save(appLog);
+        AppLog result = appLogService.save(appLog);
         return ResponseEntity.created(new URI("/api/app-logs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class AppLogResource {
         if (appLog.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AppLog result = appLogRepository.save(appLog);
+        AppLog result = appLogService.save(appLog);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, appLog.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class AppLogResource {
     /**
      * {@code GET  /app-logs} : get all the appLogs.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of appLogs in body.
      */
     @GetMapping("/app-logs")
-    public List<AppLog> getAllAppLogs() {
-        log.debug("REST request to get all AppLogs");
-        return appLogRepository.findAll();
+    public ResponseEntity<List<AppLog>> getAllAppLogs(AppLogCriteria criteria) {
+        log.debug("REST request to get AppLogs by criteria: {}", criteria);
+        List<AppLog> entityList = appLogQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /app-logs/count} : count all the appLogs.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/app-logs/count")
+    public ResponseEntity<Long> countAppLogs(AppLogCriteria criteria) {
+        log.debug("REST request to count AppLogs by criteria: {}", criteria);
+        return ResponseEntity.ok().body(appLogQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class AppLogResource {
     @GetMapping("/app-logs/{id}")
     public ResponseEntity<AppLog> getAppLog(@PathVariable Long id) {
         log.debug("REST request to get AppLog : {}", id);
-        Optional<AppLog> appLog = appLogRepository.findById(id);
+        Optional<AppLog> appLog = appLogService.findOne(id);
         return ResponseUtil.wrapOrNotFound(appLog);
     }
 
@@ -113,7 +130,7 @@ public class AppLogResource {
     @DeleteMapping("/app-logs/{id}")
     public ResponseEntity<Void> deleteAppLog(@PathVariable Long id) {
         log.debug("REST request to delete AppLog : {}", id);
-        appLogRepository.deleteById(id);
+        appLogService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

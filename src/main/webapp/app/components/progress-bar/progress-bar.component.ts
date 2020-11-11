@@ -10,6 +10,7 @@ export class ProgressBarComponent implements OnInit {
   @Input() minValue: any;
   @Input() maxValue: any;
   @Input() currentValue: any;
+  @Input() percentile: any;
   constructor() {}
 
   ngOnInit(): void {}

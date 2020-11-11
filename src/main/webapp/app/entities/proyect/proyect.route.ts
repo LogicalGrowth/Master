@@ -11,6 +11,7 @@ import { ProyectService } from './proyect.service';
 import { ProyectComponent } from './proyect.component';
 import { ProyectDetailComponent } from './proyect-detail.component';
 import { ProyectUpdateComponent } from './proyect-update.component';
+import { ProyectImageUpdateComponent } from './proyect-image-update/proyect-image-update.component';
 
 @Injectable({ providedIn: 'root' })
 export class ProyectResolve implements Resolve<IProyect> {
@@ -71,6 +72,18 @@ export const proyectRoute: Routes = [
   {
     path: ':id/edit',
     component: ProyectUpdateComponent,
+    resolve: {
+      proyect: ProyectResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'fun4FundApp.proyect.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'image/new',
+    component: ProyectImageUpdateComponent,
     resolve: {
       proyect: ProyectResolve,
     },

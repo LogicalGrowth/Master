@@ -19,7 +19,7 @@
   "relationships": [
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "image",
+      "otherEntityName": "resource",
       "otherEntityRelationshipName": "prize",
       "relationshipName": "image"
     }
@@ -28,8 +28,8 @@
   "entityTableName": "prize",
   "dto": "no",
   "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,

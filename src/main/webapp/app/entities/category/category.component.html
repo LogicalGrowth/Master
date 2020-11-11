@@ -38,7 +38,7 @@
                     <td jhiTranslate="{{ 'fun4FundApp.CategoryStatus.' + category.status }}">{{ category.status }}</td>
                     <td>
                         <div *ngIf="category.image">
-                            <a [routerLink]="['/image', category.image?.id, 'view']" >{{ category.image?.id }}</a>
+                            <a [routerLink]="['/resource', category.image?.id, 'view']" >{{ category.image?.id }}</a>
                         </div>
                     </td>
                     <td class="text-right">

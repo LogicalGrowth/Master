@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.PartnerRequest;
-import cr.ac.ucenfotec.fun4fund.repository.PartnerRequestRepository;
+import cr.ac.ucenfotec.fun4fund.service.PartnerRequestService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.PartnerRequestCriteria;
+import cr.ac.ucenfotec.fun4fund.service.PartnerRequestQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class PartnerRequestResource {
 
     private final Logger log = LoggerFactory.getLogger(PartnerRequestResource.class);
@@ -34,10 +34,13 @@ public class PartnerRequestResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PartnerRequestRepository partnerRequestRepository;
+    private final PartnerRequestService partnerRequestService;
 
-    public PartnerRequestResource(PartnerRequestRepository partnerRequestRepository) {
-        this.partnerRequestRepository = partnerRequestRepository;
+    private final PartnerRequestQueryService partnerRequestQueryService;
+
+    public PartnerRequestResource(PartnerRequestService partnerRequestService, PartnerRequestQueryService partnerRequestQueryService) {
+        this.partnerRequestService = partnerRequestService;
+        this.partnerRequestQueryService = partnerRequestQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class PartnerRequestResource {
         if (partnerRequest.getId() != null) {
             throw new BadRequestAlertException("A new partnerRequest cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PartnerRequest result = partnerRequestRepository.save(partnerRequest);
+        PartnerRequest result = partnerRequestService.save(partnerRequest);
         return ResponseEntity.created(new URI("/api/partner-requests/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class PartnerRequestResource {
         if (partnerRequest.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PartnerRequest result = partnerRequestRepository.save(partnerRequest);
+        PartnerRequest result = partnerRequestService.save(partnerRequest);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, partnerRequest.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class PartnerRequestResource {
     /**
      * {@code GET  /partner-requests} : get all the partnerRequests.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of partnerRequests in body.
      */
     @GetMapping("/partner-requests")
-    public List<PartnerRequest> getAllPartnerRequests() {
-        log.debug("REST request to get all PartnerRequests");
-        return partnerRequestRepository.findAll();
+    public ResponseEntity<List<PartnerRequest>> getAllPartnerRequests(PartnerRequestCriteria criteria) {
+        log.debug("REST request to get PartnerRequests by criteria: {}", criteria);
+        List<PartnerRequest> entityList = partnerRequestQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /partner-requests/count} : count all the partnerRequests.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/partner-requests/count")
+    public ResponseEntity<Long> countPartnerRequests(PartnerRequestCriteria criteria) {
+        log.debug("REST request to count PartnerRequests by criteria: {}", criteria);
+        return ResponseEntity.ok().body(partnerRequestQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class PartnerRequestResource {
     @GetMapping("/partner-requests/{id}")
     public ResponseEntity<PartnerRequest> getPartnerRequest(@PathVariable Long id) {
         log.debug("REST request to get PartnerRequest : {}", id);
-        Optional<PartnerRequest> partnerRequest = partnerRequestRepository.findById(id);
+        Optional<PartnerRequest> partnerRequest = partnerRequestService.findOne(id);
         return ResponseUtil.wrapOrNotFound(partnerRequest);
     }
 
@@ -113,7 +130,7 @@ public class PartnerRequestResource {
     @DeleteMapping("/partner-requests/{id}")
     public ResponseEntity<Void> deletePartnerRequest(@PathVariable Long id) {
         log.debug("REST request to delete PartnerRequest : {}", id);
-        partnerRequestRepository.deleteById(id);
+        partnerRequestService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

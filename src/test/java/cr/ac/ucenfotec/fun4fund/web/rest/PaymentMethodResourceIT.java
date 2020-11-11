@@ -4,6 +4,7 @@ import cr.ac.ucenfotec.fun4fund.Fun4FundApp;
 import cr.ac.ucenfotec.fun4fund.domain.PaymentMethod;
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentMethodRepository;
+import cr.ac.ucenfotec.fun4fund.service.PaymentMethodService;
 import cr.ac.ucenfotec.fun4fund.service.dto.PaymentMethodCriteria;
 import cr.ac.ucenfotec.fun4fund.service.PaymentMethodQueryService;
 
@@ -54,8 +55,14 @@ public class PaymentMethodResourceIT {
     private static final String DEFAULT_CVC = "AAAAAAAAAA";
     private static final String UPDATED_CVC = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_FAVORITE = false;
+    private static final Boolean UPDATED_FAVORITE = true;
+
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
+
+    @Autowired
+    private PaymentMethodService paymentMethodService;
 
     @Autowired
     private PaymentMethodQueryService paymentMethodQueryService;
@@ -80,7 +87,8 @@ public class PaymentMethodResourceIT {
             .cardOwner(DEFAULT_CARD_OWNER)
             .expirationDate(DEFAULT_EXPIRATION_DATE)
             .type(DEFAULT_TYPE)
-            .cvc(DEFAULT_CVC);
+            .cvc(DEFAULT_CVC)
+            .favorite(DEFAULT_FAVORITE);
         return paymentMethod;
     }
     /**
@@ -95,7 +103,8 @@ public class PaymentMethodResourceIT {
             .cardOwner(UPDATED_CARD_OWNER)
             .expirationDate(UPDATED_EXPIRATION_DATE)
             .type(UPDATED_TYPE)
-            .cvc(UPDATED_CVC);
+            .cvc(UPDATED_CVC)
+            .favorite(UPDATED_FAVORITE);
         return paymentMethod;
     }
 
@@ -123,6 +132,7 @@ public class PaymentMethodResourceIT {
         assertThat(testPaymentMethod.getExpirationDate()).isEqualTo(DEFAULT_EXPIRATION_DATE);
         assertThat(testPaymentMethod.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testPaymentMethod.getCvc()).isEqualTo(DEFAULT_CVC);
+        assertThat(testPaymentMethod.isFavorite()).isEqualTo(DEFAULT_FAVORITE);
     }
 
     @Test
@@ -242,6 +252,25 @@ public class PaymentMethodResourceIT {
 
     @Test
     @Transactional
+    public void checkFavoriteIsRequired() throws Exception {
+        int databaseSizeBeforeTest = paymentMethodRepository.findAll().size();
+        // set the field null
+        paymentMethod.setFavorite(null);
+
+        // Create the PaymentMethod, which fails.
+
+
+        restPaymentMethodMockMvc.perform(post("/api/payment-methods")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(paymentMethod)))
+            .andExpect(status().isBadRequest());
+
+        List<PaymentMethod> paymentMethodList = paymentMethodRepository.findAll();
+        assertThat(paymentMethodList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllPaymentMethods() throws Exception {
         // Initialize the database
         paymentMethodRepository.saveAndFlush(paymentMethod);
@@ -255,7 +284,8 @@ public class PaymentMethodResourceIT {
             .andExpect(jsonPath("$.[*].cardOwner").value(hasItem(DEFAULT_CARD_OWNER)))
             .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(sameInstant(DEFAULT_EXPIRATION_DATE))))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].cvc").value(hasItem(DEFAULT_CVC)));
+            .andExpect(jsonPath("$.[*].cvc").value(hasItem(DEFAULT_CVC)))
+            .andExpect(jsonPath("$.[*].favorite").value(hasItem(DEFAULT_FAVORITE.booleanValue())));
     }
     
     @Test
@@ -273,7 +303,8 @@ public class PaymentMethodResourceIT {
             .andExpect(jsonPath("$.cardOwner").value(DEFAULT_CARD_OWNER))
             .andExpect(jsonPath("$.expirationDate").value(sameInstant(DEFAULT_EXPIRATION_DATE)))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.cvc").value(DEFAULT_CVC));
+            .andExpect(jsonPath("$.cvc").value(DEFAULT_CVC))
+            .andExpect(jsonPath("$.favorite").value(DEFAULT_FAVORITE.booleanValue()));
     }
 
 
@@ -689,6 +720,58 @@ public class PaymentMethodResourceIT {
 
     @Test
     @Transactional
+    public void getAllPaymentMethodsByFavoriteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentMethodRepository.saveAndFlush(paymentMethod);
+
+        // Get all the paymentMethodList where favorite equals to DEFAULT_FAVORITE
+        defaultPaymentMethodShouldBeFound("favorite.equals=" + DEFAULT_FAVORITE);
+
+        // Get all the paymentMethodList where favorite equals to UPDATED_FAVORITE
+        defaultPaymentMethodShouldNotBeFound("favorite.equals=" + UPDATED_FAVORITE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPaymentMethodsByFavoriteIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        paymentMethodRepository.saveAndFlush(paymentMethod);
+
+        // Get all the paymentMethodList where favorite not equals to DEFAULT_FAVORITE
+        defaultPaymentMethodShouldNotBeFound("favorite.notEquals=" + DEFAULT_FAVORITE);
+
+        // Get all the paymentMethodList where favorite not equals to UPDATED_FAVORITE
+        defaultPaymentMethodShouldBeFound("favorite.notEquals=" + UPDATED_FAVORITE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPaymentMethodsByFavoriteIsInShouldWork() throws Exception {
+        // Initialize the database
+        paymentMethodRepository.saveAndFlush(paymentMethod);
+
+        // Get all the paymentMethodList where favorite in DEFAULT_FAVORITE or UPDATED_FAVORITE
+        defaultPaymentMethodShouldBeFound("favorite.in=" + DEFAULT_FAVORITE + "," + UPDATED_FAVORITE);
+
+        // Get all the paymentMethodList where favorite equals to UPDATED_FAVORITE
+        defaultPaymentMethodShouldNotBeFound("favorite.in=" + UPDATED_FAVORITE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPaymentMethodsByFavoriteIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        paymentMethodRepository.saveAndFlush(paymentMethod);
+
+        // Get all the paymentMethodList where favorite is not null
+        defaultPaymentMethodShouldBeFound("favorite.specified=true");
+
+        // Get all the paymentMethodList where favorite is null
+        defaultPaymentMethodShouldNotBeFound("favorite.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllPaymentMethodsByOwnerIsEqualToSomething() throws Exception {
         // Initialize the database
         paymentMethodRepository.saveAndFlush(paymentMethod);
@@ -718,7 +801,8 @@ public class PaymentMethodResourceIT {
             .andExpect(jsonPath("$.[*].cardOwner").value(hasItem(DEFAULT_CARD_OWNER)))
             .andExpect(jsonPath("$.[*].expirationDate").value(hasItem(sameInstant(DEFAULT_EXPIRATION_DATE))))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].cvc").value(hasItem(DEFAULT_CVC)));
+            .andExpect(jsonPath("$.[*].cvc").value(hasItem(DEFAULT_CVC)))
+            .andExpect(jsonPath("$.[*].favorite").value(hasItem(DEFAULT_FAVORITE.booleanValue())));
 
         // Check, that the count call also returns 1
         restPaymentMethodMockMvc.perform(get("/api/payment-methods/count?sort=id,desc&" + filter))
@@ -756,7 +840,7 @@ public class PaymentMethodResourceIT {
     @Transactional
     public void updatePaymentMethod() throws Exception {
         // Initialize the database
-        paymentMethodRepository.saveAndFlush(paymentMethod);
+        paymentMethodService.save(paymentMethod);
 
         int databaseSizeBeforeUpdate = paymentMethodRepository.findAll().size();
 
@@ -769,7 +853,8 @@ public class PaymentMethodResourceIT {
             .cardOwner(UPDATED_CARD_OWNER)
             .expirationDate(UPDATED_EXPIRATION_DATE)
             .type(UPDATED_TYPE)
-            .cvc(UPDATED_CVC);
+            .cvc(UPDATED_CVC)
+            .favorite(UPDATED_FAVORITE);
 
         restPaymentMethodMockMvc.perform(put("/api/payment-methods")
             .contentType(MediaType.APPLICATION_JSON)
@@ -785,6 +870,7 @@ public class PaymentMethodResourceIT {
         assertThat(testPaymentMethod.getExpirationDate()).isEqualTo(UPDATED_EXPIRATION_DATE);
         assertThat(testPaymentMethod.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testPaymentMethod.getCvc()).isEqualTo(UPDATED_CVC);
+        assertThat(testPaymentMethod.isFavorite()).isEqualTo(UPDATED_FAVORITE);
     }
 
     @Test
@@ -807,7 +893,7 @@ public class PaymentMethodResourceIT {
     @Transactional
     public void deletePaymentMethod() throws Exception {
         // Initialize the database
-        paymentMethodRepository.saveAndFlush(paymentMethod);
+        paymentMethodService.save(paymentMethod);
 
         int databaseSizeBeforeDelete = paymentMethodRepository.findAll().size();
 

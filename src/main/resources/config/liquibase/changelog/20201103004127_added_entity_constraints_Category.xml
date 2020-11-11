@@ -12,7 +12,7 @@
                                  baseTableName="category"
                                  constraintName="fk_category_image_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="image"/>
+                                 referencedTableName="resource"/>
 
     </changeSet>
 </databaseChangeLog>

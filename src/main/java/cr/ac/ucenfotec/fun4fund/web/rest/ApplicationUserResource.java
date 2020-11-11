@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
-import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
+import cr.ac.ucenfotec.fun4fund.service.ApplicationUserService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.ApplicationUserCriteria;
+import cr.ac.ucenfotec.fun4fund.service.ApplicationUserQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class ApplicationUserResource {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationUserResource.class);
@@ -34,10 +34,13 @@ public class ApplicationUserResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ApplicationUserRepository applicationUserRepository;
+    private final ApplicationUserService applicationUserService;
 
-    public ApplicationUserResource(ApplicationUserRepository applicationUserRepository) {
-        this.applicationUserRepository = applicationUserRepository;
+    private final ApplicationUserQueryService applicationUserQueryService;
+
+    public ApplicationUserResource(ApplicationUserService applicationUserService, ApplicationUserQueryService applicationUserQueryService) {
+        this.applicationUserService = applicationUserService;
+        this.applicationUserQueryService = applicationUserQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class ApplicationUserResource {
         if (applicationUser.getId() != null) {
             throw new BadRequestAlertException("A new applicationUser cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ApplicationUser result = applicationUserRepository.save(applicationUser);
+        ApplicationUser result = applicationUserService.save(applicationUser);
         return ResponseEntity.created(new URI("/api/application-users/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class ApplicationUserResource {
         if (applicationUser.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ApplicationUser result = applicationUserRepository.save(applicationUser);
+        ApplicationUser result = applicationUserService.save(applicationUser);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, applicationUser.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class ApplicationUserResource {
     /**
      * {@code GET  /application-users} : get all the applicationUsers.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of applicationUsers in body.
      */
     @GetMapping("/application-users")
-    public List<ApplicationUser> getAllApplicationUsers() {
-        log.debug("REST request to get all ApplicationUsers");
-        return applicationUserRepository.findAll();
+    public ResponseEntity<List<ApplicationUser>> getAllApplicationUsers(ApplicationUserCriteria criteria) {
+        log.debug("REST request to get ApplicationUsers by criteria: {}", criteria);
+        List<ApplicationUser> entityList = applicationUserQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /application-users/count} : count all the applicationUsers.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/application-users/count")
+    public ResponseEntity<Long> countApplicationUsers(ApplicationUserCriteria criteria) {
+        log.debug("REST request to count ApplicationUsers by criteria: {}", criteria);
+        return ResponseEntity.ok().body(applicationUserQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class ApplicationUserResource {
     @GetMapping("/application-users/{id}")
     public ResponseEntity<ApplicationUser> getApplicationUser(@PathVariable Long id) {
         log.debug("REST request to get ApplicationUser : {}", id);
-        Optional<ApplicationUser> applicationUser = applicationUserRepository.findById(id);
+        Optional<ApplicationUser> applicationUser = applicationUserService.findOne(id);
         return ResponseUtil.wrapOrNotFound(applicationUser);
     }
 
@@ -113,7 +130,7 @@ public class ApplicationUserResource {
     @DeleteMapping("/application-users/{id}")
     public ResponseEntity<Void> deleteApplicationUser(@PathVariable Long id) {
         log.debug("REST request to delete ApplicationUser : {}", id);
-        applicationUserRepository.deleteById(id);
+        applicationUserService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

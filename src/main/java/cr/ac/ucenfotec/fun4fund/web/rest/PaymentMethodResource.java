@@ -1,7 +1,7 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.PaymentMethod;
-import cr.ac.ucenfotec.fun4fund.repository.PaymentMethodRepository;
+import cr.ac.ucenfotec.fun4fund.service.PaymentMethodService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.PaymentMethodCriteria;
 import cr.ac.ucenfotec.fun4fund.service.PaymentMethodQueryService;
@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class PaymentMethodResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentMethodResource.class);
@@ -36,12 +34,12 @@ public class PaymentMethodResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PaymentMethodRepository paymentMethodRepository;
+    private final PaymentMethodService paymentMethodService;
 
     private final PaymentMethodQueryService paymentMethodQueryService;
 
-    public PaymentMethodResource(PaymentMethodRepository paymentMethodRepository, PaymentMethodQueryService paymentMethodQueryService) {
-        this.paymentMethodRepository = paymentMethodRepository;
+    public PaymentMethodResource(PaymentMethodService paymentMethodService, PaymentMethodQueryService paymentMethodQueryService) {
+        this.paymentMethodService = paymentMethodService;
         this.paymentMethodQueryService = paymentMethodQueryService;
     }
 
@@ -58,7 +56,7 @@ public class PaymentMethodResource {
         if (paymentMethod.getId() != null) {
             throw new BadRequestAlertException("A new paymentMethod cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PaymentMethod result = paymentMethodRepository.save(paymentMethod);
+        PaymentMethod result = paymentMethodService.save(paymentMethod);
         return ResponseEntity.created(new URI("/api/payment-methods/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -79,7 +77,7 @@ public class PaymentMethodResource {
         if (paymentMethod.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PaymentMethod result = paymentMethodRepository.save(paymentMethod);
+        PaymentMethod result = paymentMethodService.save(paymentMethod);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, paymentMethod.getId().toString()))
             .body(result);
@@ -119,7 +117,7 @@ public class PaymentMethodResource {
     @GetMapping("/payment-methods/{id}")
     public ResponseEntity<PaymentMethod> getPaymentMethod(@PathVariable Long id) {
         log.debug("REST request to get PaymentMethod : {}", id);
-        Optional<PaymentMethod> paymentMethod = paymentMethodRepository.findById(id);
+        Optional<PaymentMethod> paymentMethod = paymentMethodService.findOne(id);
         return ResponseUtil.wrapOrNotFound(paymentMethod);
     }
 
@@ -132,7 +130,7 @@ public class PaymentMethodResource {
     @DeleteMapping("/payment-methods/{id}")
     public ResponseEntity<Void> deletePaymentMethod(@PathVariable Long id) {
         log.debug("REST request to delete PaymentMethod : {}", id);
-        paymentMethodRepository.deleteById(id);
+        paymentMethodService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

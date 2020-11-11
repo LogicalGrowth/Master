@@ -1,0 +1,46 @@
+{
+  "name": "Resource",
+  "fields": [
+    {
+      "fieldName": "url",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "proyect",
+      "otherEntityRelationshipName": "image",
+      "relationshipName": "proyect",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "prize",
+      "otherEntityRelationshipName": "image",
+      "relationshipName": "prize",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201110023914",
+  "entityTableName": "resource",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

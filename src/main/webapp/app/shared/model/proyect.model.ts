@@ -1,7 +1,5 @@
 import { Moment } from 'moment';
-import { IProyectAccount } from 'app/shared/model/proyect-account.model';
-import { IImage } from 'app/shared/model/image.model';
-import { IDonationHistory } from 'app/shared/model/donation-history.model';
+import { IResource } from 'app/shared/model/resource.model';
 import { ICheckpoint } from 'app/shared/model/checkpoint.model';
 import { IReview } from 'app/shared/model/review.model';
 import { IPartnerRequest } from 'app/shared/model/partner-request.model';
@@ -12,6 +10,7 @@ import { IPayment } from 'app/shared/model/payment.model';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ICategory } from 'app/shared/model/category.model';
 import { ProyectType } from 'app/shared/model/enumerations/proyect-type.model';
+import { Currency } from 'app/shared/model/enumerations/currency.model';
 
 export interface IProyect {
   id?: number;
@@ -26,9 +25,9 @@ export interface IProyect {
   coordX?: number;
   coordY?: number;
   fee?: number;
-  account?: IProyectAccount;
-  images?: IImage[];
-  donations?: IDonationHistory[];
+  number?: string;
+  currencyType?: Currency;
+  images?: IResource[];
   checkpoints?: ICheckpoint[];
   reviews?: IReview[];
   partners?: IPartnerRequest[];
@@ -55,9 +54,9 @@ export class Proyect implements IProyect {
     public coordX?: number,
     public coordY?: number,
     public fee?: number,
-    public account?: IProyectAccount,
-    public images?: IImage[],
-    public donations?: IDonationHistory[],
+    public number?: string,
+    public currencyType?: Currency,
+    public images?: IResource[],
     public checkpoints?: ICheckpoint[],
     public reviews?: IReview[],
     public partners?: IPartnerRequest[],

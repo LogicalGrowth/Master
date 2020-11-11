@@ -27,6 +27,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
     expirationDate: [null, [Validators.required]],
     type: [null, [Validators.required]],
     cvc: [null, [Validators.required]],
+    favorite: [null, [Validators.required]],
     owner: [],
   });
 
@@ -58,6 +59,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
       expirationDate: paymentMethod.expirationDate ? paymentMethod.expirationDate.format(DATE_TIME_FORMAT) : null,
       type: paymentMethod.type,
       cvc: paymentMethod.cvc,
+      favorite: paymentMethod.favorite,
       owner: paymentMethod.owner,
     });
   }
@@ -87,6 +89,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
         : undefined,
       type: this.editForm.get(['type'])!.value,
       cvc: this.editForm.get(['cvc'])!.value,
+      favorite: this.editForm.get(['favorite'])!.value,
       owner: this.editForm.get(['owner'])!.value,
     };
   }

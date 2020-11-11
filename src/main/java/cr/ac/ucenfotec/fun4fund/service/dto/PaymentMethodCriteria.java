@@ -56,6 +56,8 @@ public class PaymentMethodCriteria implements Serializable, Criteria {
 
     private StringFilter cvc;
 
+    private BooleanFilter favorite;
+
     private LongFilter ownerId;
 
     public PaymentMethodCriteria() {
@@ -68,6 +70,7 @@ public class PaymentMethodCriteria implements Serializable, Criteria {
         this.expirationDate = other.expirationDate == null ? null : other.expirationDate.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.cvc = other.cvc == null ? null : other.cvc.copy();
+        this.favorite = other.favorite == null ? null : other.favorite.copy();
         this.ownerId = other.ownerId == null ? null : other.ownerId.copy();
     }
 
@@ -124,6 +127,14 @@ public class PaymentMethodCriteria implements Serializable, Criteria {
         this.cvc = cvc;
     }
 
+    public BooleanFilter getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(BooleanFilter favorite) {
+        this.favorite = favorite;
+    }
+
     public LongFilter getOwnerId() {
         return ownerId;
     }
@@ -149,6 +160,7 @@ public class PaymentMethodCriteria implements Serializable, Criteria {
             Objects.equals(expirationDate, that.expirationDate) &&
             Objects.equals(type, that.type) &&
             Objects.equals(cvc, that.cvc) &&
+            Objects.equals(favorite, that.favorite) &&
             Objects.equals(ownerId, that.ownerId);
     }
 
@@ -161,6 +173,7 @@ public class PaymentMethodCriteria implements Serializable, Criteria {
         expirationDate,
         type,
         cvc,
+        favorite,
         ownerId
         );
     }
@@ -175,6 +188,7 @@ public class PaymentMethodCriteria implements Serializable, Criteria {
                 (expirationDate != null ? "expirationDate=" + expirationDate + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (cvc != null ? "cvc=" + cvc + ", " : "") +
+                (favorite != null ? "favorite=" + favorite + ", " : "") +
                 (ownerId != null ? "ownerId=" + ownerId + ", " : "") +
             "}";
     }

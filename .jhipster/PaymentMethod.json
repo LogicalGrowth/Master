@@ -41,6 +41,13 @@
       "fieldValidateRules": [
         "required"
       ]
+    },
+    {
+      "fieldName": "favorite",
+      "fieldType": "Boolean",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [
@@ -56,7 +63,7 @@
   "entityTableName": "payment_method",
   "dto": "no",
   "pagination": "no",
-  "serviceClass": "no",
+  "service": "serviceClass",
   "jpaMetamodelFiltering": true,
   "fluentMethods": true,
   "readOnly": false,

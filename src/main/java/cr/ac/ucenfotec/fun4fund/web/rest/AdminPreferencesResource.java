@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.AdminPreferences;
-import cr.ac.ucenfotec.fun4fund.repository.AdminPreferencesRepository;
+import cr.ac.ucenfotec.fun4fund.service.AdminPreferencesService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.AdminPreferencesCriteria;
+import cr.ac.ucenfotec.fun4fund.service.AdminPreferencesQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class AdminPreferencesResource {
 
     private final Logger log = LoggerFactory.getLogger(AdminPreferencesResource.class);
@@ -34,10 +34,13 @@ public class AdminPreferencesResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AdminPreferencesRepository adminPreferencesRepository;
+    private final AdminPreferencesService adminPreferencesService;
 
-    public AdminPreferencesResource(AdminPreferencesRepository adminPreferencesRepository) {
-        this.adminPreferencesRepository = adminPreferencesRepository;
+    private final AdminPreferencesQueryService adminPreferencesQueryService;
+
+    public AdminPreferencesResource(AdminPreferencesService adminPreferencesService, AdminPreferencesQueryService adminPreferencesQueryService) {
+        this.adminPreferencesService = adminPreferencesService;
+        this.adminPreferencesQueryService = adminPreferencesQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class AdminPreferencesResource {
         if (adminPreferences.getId() != null) {
             throw new BadRequestAlertException("A new adminPreferences cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AdminPreferences result = adminPreferencesRepository.save(adminPreferences);
+        AdminPreferences result = adminPreferencesService.save(adminPreferences);
         return ResponseEntity.created(new URI("/api/admin-preferences/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class AdminPreferencesResource {
         if (adminPreferences.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AdminPreferences result = adminPreferencesRepository.save(adminPreferences);
+        AdminPreferences result = adminPreferencesService.save(adminPreferences);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, adminPreferences.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class AdminPreferencesResource {
     /**
      * {@code GET  /admin-preferences} : get all the adminPreferences.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of adminPreferences in body.
      */
     @GetMapping("/admin-preferences")
-    public List<AdminPreferences> getAllAdminPreferences() {
-        log.debug("REST request to get all AdminPreferences");
-        return adminPreferencesRepository.findAll();
+    public ResponseEntity<List<AdminPreferences>> getAllAdminPreferences(AdminPreferencesCriteria criteria) {
+        log.debug("REST request to get AdminPreferences by criteria: {}", criteria);
+        List<AdminPreferences> entityList = adminPreferencesQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /admin-preferences/count} : count all the adminPreferences.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/admin-preferences/count")
+    public ResponseEntity<Long> countAdminPreferences(AdminPreferencesCriteria criteria) {
+        log.debug("REST request to count AdminPreferences by criteria: {}", criteria);
+        return ResponseEntity.ok().body(adminPreferencesQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class AdminPreferencesResource {
     @GetMapping("/admin-preferences/{id}")
     public ResponseEntity<AdminPreferences> getAdminPreferences(@PathVariable Long id) {
         log.debug("REST request to get AdminPreferences : {}", id);
-        Optional<AdminPreferences> adminPreferences = adminPreferencesRepository.findById(id);
+        Optional<AdminPreferences> adminPreferences = adminPreferencesService.findOne(id);
         return ResponseUtil.wrapOrNotFound(adminPreferences);
     }
 
@@ -113,7 +130,7 @@ public class AdminPreferencesResource {
     @DeleteMapping("/admin-preferences/{id}")
     public ResponseEntity<Void> deleteAdminPreferences(@PathVariable Long id) {
         log.debug("REST request to delete AdminPreferences : {}", id);
-        adminPreferencesRepository.deleteById(id);
+        adminPreferencesService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

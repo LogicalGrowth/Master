@@ -9,6 +9,7 @@ export interface IPaymentMethod {
   expirationDate?: Moment;
   type?: CardType;
   cvc?: string;
+  favorite?: boolean;
   owner?: IApplicationUser;
   typeImage?: string;
 }
@@ -21,7 +22,10 @@ export class PaymentMethod implements IPaymentMethod {
     public expirationDate?: Moment,
     public type?: CardType,
     public cvc?: string,
-    public owner?: IApplicationUser,
-    public typeImage?: string
-  ) {}
+    public typeImage?: string,
+    public favorite?: boolean,
+    public owner?: IApplicationUser
+  ) {
+    this.favorite = this.favorite || false;
+  }
 }

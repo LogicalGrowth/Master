@@ -100,6 +100,9 @@ public class PaymentMethodQueryService extends QueryService<PaymentMethod> {
             if (criteria.getCvc() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getCvc(), PaymentMethod_.cvc));
             }
+            if (criteria.getFavorite() != null) {
+                specification = specification.and(buildSpecification(criteria.getFavorite(), PaymentMethod_.favorite));
+            }
             if (criteria.getOwnerId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOwnerId(),
                     root -> root.join(PaymentMethod_.owner, JoinType.LEFT).get(ApplicationUser_.id)));

@@ -4,6 +4,7 @@ import cr.ac.ucenfotec.fun4fund.config.Constants;
 import cr.ac.ucenfotec.fun4fund.domain.User;
 import cr.ac.ucenfotec.fun4fund.repository.UserRepository;
 import cr.ac.ucenfotec.fun4fund.security.AuthoritiesConstants;
+import cr.ac.ucenfotec.fun4fund.security.SecurityUtils;
 import cr.ac.ucenfotec.fun4fund.service.MailService;
 import org.springframework.data.domain.Sort;
 import java.util.Collections;

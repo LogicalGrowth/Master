@@ -7,27 +7,61 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IPaymentMethod } from 'app/shared/model/payment-method.model';
 import { PaymentMethodService } from './payment-method.service';
 import { PaymentMethodDeleteDialogComponent } from './payment-method-delete-dialog.component';
-
+import { User } from 'app/core/user/user.model';
+import { AccountService } from 'app/core/auth/account.service';
 @Component({
   selector: 'jhi-payment-method',
   templateUrl: './payment-method.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss', './payment-method.scss'],
 })
 export class PaymentMethodComponent implements OnInit, OnDestroy {
   paymentMethods?: IPaymentMethod[];
   eventSubscriber?: Subscription;
+  data?: IPaymentMethod[];
+  account!: User;
 
   constructor(
     protected paymentMethodService: PaymentMethodService,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    private accountService: AccountService
   ) {}
 
   loadAll(): void {
     this.paymentMethodService.query().subscribe((res: HttpResponse<IPaymentMethod[]>) => (this.paymentMethods = res.body || []));
   }
 
+  loadPaymentMethods(userId: number): void {
+    if (userId != null) {
+      this.paymentMethodService.query({ 'ownerId.equals': userId }).subscribe((res: HttpResponse<IPaymentMethod[]>) => {
+        this.paymentMethods = res.body || [];
+        this.setImageType();
+      });
+    }
+  }
+
+  setImageType(): void {
+    if (this.paymentMethods) {
+      for (let i = 0; i < this.paymentMethods.length; i++) {
+        if (this.paymentMethods[i].type === 'MASTERCARD') {
+          this.paymentMethods[i].typeImage = '../../../content/images/CardTypes/Mastercard.png';
+        } else if (this.paymentMethods[i].type === 'VISA') {
+          this.paymentMethods[i].typeImage = '../../../content/images/CardTypes/Visa.png';
+        } else if (this.paymentMethods[i].type === 'EXPRESS') {
+          this.paymentMethods[i].typeImage = '../../../content/images/CardTypes/Express.png';
+        }
+      }
+    }
+  }
+
   ngOnInit(): void {
-    this.loadAll();
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+      }
+    });
+
+    this.loadPaymentMethods(this.account.id);
     this.registerChangeInPaymentMethods();
   }
 

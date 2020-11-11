@@ -7,9 +7,10 @@ import { PaymentMethodDetailComponent } from './payment-method-detail.component'
 import { PaymentMethodUpdateComponent } from './payment-method-update.component';
 import { PaymentMethodDeleteDialogComponent } from './payment-method-delete-dialog.component';
 import { paymentMethodRoute } from './payment-method.route';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
-  imports: [Fun4FundSharedModule, RouterModule.forChild(paymentMethodRoute)],
+  imports: [Fun4FundSharedModule, RouterModule.forChild(paymentMethodRoute), ComponentsModule],
   declarations: [PaymentMethodComponent, PaymentMethodDetailComponent, PaymentMethodUpdateComponent, PaymentMethodDeleteDialogComponent],
   entryComponents: [PaymentMethodDeleteDialogComponent],
 })

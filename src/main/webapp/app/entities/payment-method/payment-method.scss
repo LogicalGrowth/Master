@@ -1,3 +1,5 @@
+@import '../../../content/scss/paper-dashboard/variables';
+
 .create-payment-method {
   font-size: 16px;
 }
@@ -8,4 +10,8 @@
 
 .favouriteCard {
   background: yellow;
+}
+
+.white {
+  background: $white-color;
 }

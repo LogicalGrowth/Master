@@ -7,7 +7,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IPaymentMethod } from 'app/shared/model/payment-method.model';
 import { PaymentMethodService } from './payment-method.service';
 import { PaymentMethodDeleteDialogComponent } from './payment-method-delete-dialog.component';
-
+import { User } from 'app/core/user/user.model';
+import { AccountService } from 'app/core/auth/account.service';
 @Component({
   selector: 'jhi-payment-method',
   templateUrl: './payment-method.component.html',
@@ -17,10 +18,13 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
   paymentMethods?: IPaymentMethod[];
   eventSubscriber?: Subscription;
   data?: IPaymentMethod[];
+  account!: User;
+
   constructor(
     protected paymentMethodService: PaymentMethodService,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    private accountService: AccountService
   ) {}
 
   loadAll(): void {
@@ -51,7 +55,13 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadPaymentMethods(1);
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+      }
+    });
+
+    this.loadPaymentMethods(this.account.id);
     this.registerChangeInPaymentMethods();
   }
 

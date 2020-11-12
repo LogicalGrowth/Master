@@ -51,6 +51,7 @@
                           <span class="input-group-text"><i class="nc-icon nc-single-02"></i></span>
                         </div>
                         <input type="text" class="form-control" placeholder="First Name (required)" name="firstname" (focus)="focus=true" (blur)="focus=false" />
+                        <input type="text" class="form-control" placeholder="Cédula (required)" name="identify" (focus)="focus=true" (blur)="focus=false" />
                       </div>
                       <div class="input-group" [ngClass]="{'input-group-focus':focus1===true}">
                         <div class="input-group-prepend">
@@ -65,6 +66,8 @@
                           <span class="input-group-text"><i class="nc-icon nc-send"></i></span>
                         </div>
                         <input type="email" placeholder="Email (required)" class="form-control" name="email" (focus)="focus2=true" (blur)="focus2=false" />
+                        <input type="password" placeholder="password (required)" class="form-control" name="password" (focus)="focus2=true" (blur)="focus2=false" />
+                        <label for="isadmin"><input type="checkbox" placeholder="Admin" class="form-control" name="Admin" (focus)="focus2=true" (blur)="focus2=false" />Admin</label>
                       </div>
                     </div>
                   </div>

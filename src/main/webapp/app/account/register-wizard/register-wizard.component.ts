@@ -106,6 +106,15 @@ export class RegisterWizardComponent implements AfterViewInit {
           required: true,
           minlength: 3,
         },
+        identify: {
+          required: true,
+          minlength: 3,
+          maxlength: 13,
+        },
+        password: {
+          required: true,
+          minlength: 6,
+        },
       },
 
       highlight(element: any): void {

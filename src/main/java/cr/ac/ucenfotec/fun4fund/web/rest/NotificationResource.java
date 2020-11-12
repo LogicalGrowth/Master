@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Notification;
-import cr.ac.ucenfotec.fun4fund.repository.NotificationRepository;
+import cr.ac.ucenfotec.fun4fund.service.NotificationService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.NotificationCriteria;
+import cr.ac.ucenfotec.fun4fund.service.NotificationQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class NotificationResource {
 
     private final Logger log = LoggerFactory.getLogger(NotificationResource.class);
@@ -34,10 +34,13 @@ public class NotificationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
 
-    public NotificationResource(NotificationRepository notificationRepository) {
-        this.notificationRepository = notificationRepository;
+    private final NotificationQueryService notificationQueryService;
+
+    public NotificationResource(NotificationService notificationService, NotificationQueryService notificationQueryService) {
+        this.notificationService = notificationService;
+        this.notificationQueryService = notificationQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class NotificationResource {
         if (notification.getId() != null) {
             throw new BadRequestAlertException("A new notification cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Notification result = notificationRepository.save(notification);
+        Notification result = notificationService.save(notification);
         return ResponseEntity.created(new URI("/api/notifications/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class NotificationResource {
         if (notification.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Notification result = notificationRepository.save(notification);
+        Notification result = notificationService.save(notification);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notification.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class NotificationResource {
     /**
      * {@code GET  /notifications} : get all the notifications.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of notifications in body.
      */
     @GetMapping("/notifications")
-    public List<Notification> getAllNotifications() {
-        log.debug("REST request to get all Notifications");
-        return notificationRepository.findAll();
+    public ResponseEntity<List<Notification>> getAllNotifications(NotificationCriteria criteria) {
+        log.debug("REST request to get Notifications by criteria: {}", criteria);
+        List<Notification> entityList = notificationQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /notifications/count} : count all the notifications.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/notifications/count")
+    public ResponseEntity<Long> countNotifications(NotificationCriteria criteria) {
+        log.debug("REST request to count Notifications by criteria: {}", criteria);
+        return ResponseEntity.ok().body(notificationQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class NotificationResource {
     @GetMapping("/notifications/{id}")
     public ResponseEntity<Notification> getNotification(@PathVariable Long id) {
         log.debug("REST request to get Notification : {}", id);
-        Optional<Notification> notification = notificationRepository.findById(id);
+        Optional<Notification> notification = notificationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(notification);
     }
 
@@ -113,7 +130,7 @@ public class NotificationResource {
     @DeleteMapping("/notifications/{id}")
     public ResponseEntity<Void> deleteNotification(@PathVariable Long id) {
         log.debug("REST request to delete Notification : {}", id);
-        notificationRepository.deleteById(id);
+        notificationService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

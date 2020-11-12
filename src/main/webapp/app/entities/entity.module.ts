@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forChild([
       {
-        path: 'image',
-        loadChildren: () => import('./image/image.module').then(m => m.Fun4FundImageModule),
+        path: 'resource',
+        loadChildren: () => import('./resource/resource.module').then(m => m.Fun4FundResourceModule),
       },
       {
         path: 'application-user',
@@ -21,10 +21,6 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./proyect/proyect.module').then(m => m.Fun4FundProyectModule),
       },
       {
-        path: 'proyect-account',
-        loadChildren: () => import('./proyect-account/proyect-account.module').then(m => m.Fun4FundProyectAccountModule),
-      },
-      {
         path: 'category',
         loadChildren: () => import('./category/category.module').then(m => m.Fun4FundCategoryModule),
       },
@@ -35,10 +31,6 @@ import { RouterModule } from '@angular/router';
       {
         path: 'review',
         loadChildren: () => import('./review/review.module').then(m => m.Fun4FundReviewModule),
-      },
-      {
-        path: 'donation-history',
-        loadChildren: () => import('./donation-history/donation-history.module').then(m => m.Fun4FundDonationHistoryModule),
       },
       {
         path: 'auction',

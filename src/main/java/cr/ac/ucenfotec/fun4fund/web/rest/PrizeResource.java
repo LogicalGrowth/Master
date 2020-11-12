@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Prize;
-import cr.ac.ucenfotec.fun4fund.repository.PrizeRepository;
+import cr.ac.ucenfotec.fun4fund.service.PrizeService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.PrizeCriteria;
+import cr.ac.ucenfotec.fun4fund.service.PrizeQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class PrizeResource {
 
     private final Logger log = LoggerFactory.getLogger(PrizeResource.class);
@@ -34,10 +34,13 @@ public class PrizeResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PrizeRepository prizeRepository;
+    private final PrizeService prizeService;
 
-    public PrizeResource(PrizeRepository prizeRepository) {
-        this.prizeRepository = prizeRepository;
+    private final PrizeQueryService prizeQueryService;
+
+    public PrizeResource(PrizeService prizeService, PrizeQueryService prizeQueryService) {
+        this.prizeService = prizeService;
+        this.prizeQueryService = prizeQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class PrizeResource {
         if (prize.getId() != null) {
             throw new BadRequestAlertException("A new prize cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Prize result = prizeRepository.save(prize);
+        Prize result = prizeService.save(prize);
         return ResponseEntity.created(new URI("/api/prizes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class PrizeResource {
         if (prize.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Prize result = prizeRepository.save(prize);
+        Prize result = prizeService.save(prize);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, prize.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class PrizeResource {
     /**
      * {@code GET  /prizes} : get all the prizes.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of prizes in body.
      */
     @GetMapping("/prizes")
-    public List<Prize> getAllPrizes() {
-        log.debug("REST request to get all Prizes");
-        return prizeRepository.findAll();
+    public ResponseEntity<List<Prize>> getAllPrizes(PrizeCriteria criteria) {
+        log.debug("REST request to get Prizes by criteria: {}", criteria);
+        List<Prize> entityList = prizeQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /prizes/count} : count all the prizes.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/prizes/count")
+    public ResponseEntity<Long> countPrizes(PrizeCriteria criteria) {
+        log.debug("REST request to count Prizes by criteria: {}", criteria);
+        return ResponseEntity.ok().body(prizeQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class PrizeResource {
     @GetMapping("/prizes/{id}")
     public ResponseEntity<Prize> getPrize(@PathVariable Long id) {
         log.debug("REST request to get Prize : {}", id);
-        Optional<Prize> prize = prizeRepository.findById(id);
+        Optional<Prize> prize = prizeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(prize);
     }
 
@@ -113,7 +130,7 @@ public class PrizeResource {
     @DeleteMapping("/prizes/{id}")
     public ResponseEntity<Void> deletePrize(@PathVariable Long id) {
         log.debug("REST request to delete Prize : {}", id);
-        prizeRepository.deleteById(id);
+        prizeService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

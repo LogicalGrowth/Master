@@ -3,6 +3,9 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 import cr.ac.ucenfotec.fun4fund.Fun4FundApp;
 import cr.ac.ucenfotec.fun4fund.domain.Recommendation;
 import cr.ac.ucenfotec.fun4fund.repository.RecommendationRepository;
+import cr.ac.ucenfotec.fun4fund.service.RecommendationService;
+import cr.ac.ucenfotec.fun4fund.service.dto.RecommendationCriteria;
+import cr.ac.ucenfotec.fun4fund.service.RecommendationQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +37,12 @@ public class RecommendationResourceIT {
 
     @Autowired
     private RecommendationRepository recommendationRepository;
+
+    @Autowired
+    private RecommendationService recommendationService;
+
+    @Autowired
+    private RecommendationQueryService recommendationQueryService;
 
     @Autowired
     private EntityManager em;
@@ -154,6 +163,138 @@ public class RecommendationResourceIT {
             .andExpect(jsonPath("$.id").value(recommendation.getId().intValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
+
+
+    @Test
+    @Transactional
+    public void getRecommendationsByIdFiltering() throws Exception {
+        // Initialize the database
+        recommendationRepository.saveAndFlush(recommendation);
+
+        Long id = recommendation.getId();
+
+        defaultRecommendationShouldBeFound("id.equals=" + id);
+        defaultRecommendationShouldNotBeFound("id.notEquals=" + id);
+
+        defaultRecommendationShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultRecommendationShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultRecommendationShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultRecommendationShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllRecommendationsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        recommendationRepository.saveAndFlush(recommendation);
+
+        // Get all the recommendationList where description equals to DEFAULT_DESCRIPTION
+        defaultRecommendationShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the recommendationList where description equals to UPDATED_DESCRIPTION
+        defaultRecommendationShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRecommendationsByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        recommendationRepository.saveAndFlush(recommendation);
+
+        // Get all the recommendationList where description not equals to DEFAULT_DESCRIPTION
+        defaultRecommendationShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the recommendationList where description not equals to UPDATED_DESCRIPTION
+        defaultRecommendationShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRecommendationsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        recommendationRepository.saveAndFlush(recommendation);
+
+        // Get all the recommendationList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultRecommendationShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the recommendationList where description equals to UPDATED_DESCRIPTION
+        defaultRecommendationShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRecommendationsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        recommendationRepository.saveAndFlush(recommendation);
+
+        // Get all the recommendationList where description is not null
+        defaultRecommendationShouldBeFound("description.specified=true");
+
+        // Get all the recommendationList where description is null
+        defaultRecommendationShouldNotBeFound("description.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllRecommendationsByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        recommendationRepository.saveAndFlush(recommendation);
+
+        // Get all the recommendationList where description contains DEFAULT_DESCRIPTION
+        defaultRecommendationShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the recommendationList where description contains UPDATED_DESCRIPTION
+        defaultRecommendationShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllRecommendationsByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        recommendationRepository.saveAndFlush(recommendation);
+
+        // Get all the recommendationList where description does not contain DEFAULT_DESCRIPTION
+        defaultRecommendationShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the recommendationList where description does not contain UPDATED_DESCRIPTION
+        defaultRecommendationShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultRecommendationShouldBeFound(String filter) throws Exception {
+        restRecommendationMockMvc.perform(get("/api/recommendations?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(recommendation.getId().intValue())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+
+        // Check, that the count call also returns 1
+        restRecommendationMockMvc.perform(get("/api/recommendations/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultRecommendationShouldNotBeFound(String filter) throws Exception {
+        restRecommendationMockMvc.perform(get("/api/recommendations?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restRecommendationMockMvc.perform(get("/api/recommendations/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
     @Test
     @Transactional
     public void getNonExistingRecommendation() throws Exception {
@@ -166,7 +307,7 @@ public class RecommendationResourceIT {
     @Transactional
     public void updateRecommendation() throws Exception {
         // Initialize the database
-        recommendationRepository.saveAndFlush(recommendation);
+        recommendationService.save(recommendation);
 
         int databaseSizeBeforeUpdate = recommendationRepository.findAll().size();
 
@@ -209,7 +350,7 @@ public class RecommendationResourceIT {
     @Transactional
     public void deleteRecommendation() throws Exception {
         // Initialize the database
-        recommendationRepository.saveAndFlush(recommendation);
+        recommendationService.save(recommendation);
 
         int databaseSizeBeforeDelete = recommendationRepository.findAll().size();
 

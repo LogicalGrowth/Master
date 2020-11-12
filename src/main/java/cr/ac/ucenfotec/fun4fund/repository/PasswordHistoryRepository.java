@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory, Long> {
+public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory, Long>, JpaSpecificationExecutor<PasswordHistory> {
 }

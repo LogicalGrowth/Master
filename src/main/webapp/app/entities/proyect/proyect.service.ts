@@ -73,4 +73,10 @@ export class ProyectService {
     }
     return res;
   }
+
+  public uploadImage(imagen: File, id: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('multipartFile', imagen);
+    return this.http.post<any>('api/cloudinary/uploadtoproyect/' + id, formData);
+  }
 }

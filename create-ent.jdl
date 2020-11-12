@@ -63,8 +63,9 @@ enum ActionType {
 	CREATE, UPDATE, DELETE
 }
 
-entity Image {
+entity Resource {
 	url String required
+    type String required
 }
 
 entity ApplicationUser {
@@ -81,7 +82,8 @@ entity PaymentMethod {
     cardOwner String required
     expirationDate ZonedDateTime required
     type CardType required
-    cvc String required 
+    cvc String required
+    favorite Boolean required
 }
 
 entity Proyect {
@@ -95,14 +97,11 @@ entity Proyect {
     creationDate ZonedDateTime required
     //ver ejemplo del profe que nadie le puso atención
     lastUpdated ZonedDateTime
-    coordX Long required
-    coordY Long required
+    coordX Double required
+    coordY Double required
     //% de fee con el que se registra el proyecto
     fee Double required
-}
-
-entity ProyectAccount {
-	number String required
+    number String required
     currencyType Currency required
 }
 
@@ -125,11 +124,6 @@ entity Review {
     rating Double required
 }
 
-entity DonationHistory {
-	amount Double required min(0)
-    timeStamp ZonedDateTime required    
-}
-
 entity Auction {
 	initialBid Double required min(0)
     winningBid Double min(0)
@@ -146,7 +140,7 @@ entity Raffle {
 
 entity ExclusiveContent {
 	price Double required min(0)
-    stock Integer min(1)
+    stock Integer min(0)
 	state ActivityStatus required
 }
 
@@ -209,6 +203,10 @@ entity PasswordHistory {
     status PasswordStatus
 }
 
+//filter
+filter Resource, ApplicationUser, PasswordHistory, Recommendation, AppLog, Fee, AdminPreferences, UserPreferences, Payment, Notification
+filter PartnerRequest, Prize, ExclusiveContent, Raffle, Auction, Review, Checkpoint, Category, Proyect, PaymentMethod
+
 //Composición entre User y ApplicationUser para extender fields
 relationship OneToOne {
   ApplicationUser{internalUser} to User
@@ -219,7 +217,6 @@ relationship OneToMany {
 	ApplicationUser{paymentMethod} to PaymentMethod{owner},
     
     ApplicationUser{proyect} to Proyect{owner},
-    ApplicationUser{donation} to DonationHistory,
     ApplicationUser{notification} to Notification,
     ApplicationUser{payment} to Payment,
     ApplicationUser{favorite} to Proyect
@@ -227,8 +224,7 @@ relationship OneToMany {
 
 //Proyect
 relationship OneToMany {
-	Proyect{image} to Image,
-    Proyect{donation} to DonationHistory,
+	Proyect{image} to Resource,
     Proyect{checkpoint} to Checkpoint,
     Proyect{review} to Review,
     //Socios
@@ -239,11 +235,6 @@ relationship OneToMany {
     Proyect{payment} to Payment
 }
 
-//Proyect
-relationship OneToOne {
-    Proyect{account} to ProyectAccount
-}
-
 //Category
 relationship OneToMany {
     Category{proyect} to Proyect
@@ -251,12 +242,12 @@ relationship OneToMany {
 
 //Category
 relationship OneToOne {
-    Category{image} to Image
+    Category{image} to Resource
 }
 
 //Prize
 relationship OneToMany {
-	Prize{image} to Image
+	Prize{image} to Resource
 }
 
 //Auction

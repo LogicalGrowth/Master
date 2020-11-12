@@ -5,6 +5,7 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { ProyectService } from 'app/entities/proyect/proyect.service';
 import { IProyect, Proyect } from 'app/shared/model/proyect.model';
 import { ProyectType } from 'app/shared/model/enumerations/proyect-type.model';
+import { Currency } from 'app/shared/model/enumerations/currency.model';
 
 describe('Service Tests', () => {
   describe('Proyect Service', () => {
@@ -25,7 +26,22 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Proyect(0, 'AAAAAAA', 'AAAAAAA', ProyectType.PROFITABLE, 0, 0, 0, currentDate, currentDate, 0, 0, 0);
+      elemDefault = new Proyect(
+        0,
+        'AAAAAAA',
+        'AAAAAAA',
+        ProyectType.PROFITABLE,
+        0,
+        0,
+        0,
+        currentDate,
+        currentDate,
+        0,
+        0,
+        0,
+        'AAAAAAA',
+        Currency.USD
+      );
     });
 
     describe('Service methods', () => {
@@ -84,6 +100,8 @@ describe('Service Tests', () => {
             coordX: 1,
             coordY: 1,
             fee: 1,
+            number: 'BBBBBB',
+            currencyType: 'BBBBBB',
           },
           elemDefault
         );
@@ -117,6 +135,8 @@ describe('Service Tests', () => {
             coordX: 1,
             coordY: 1,
             fee: 1,
+            number: 'BBBBBB',
+            currencyType: 'BBBBBB',
           },
           elemDefault
         );

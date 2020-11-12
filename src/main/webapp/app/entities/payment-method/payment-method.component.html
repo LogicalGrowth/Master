@@ -1,75 +1,73 @@
-<div>
-    <h2 id="page-heading">
-        <span jhiTranslate="fun4FundApp.paymentMethod.home.title">Payment Methods</span>
+<div class="card-body white">
+  <h2 id="page-heading">
+    <span>Métodos de pago</span>
 
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-payment-method" [routerLink]="['/payment-method/new']">
-            <fa-icon icon="plus"></fa-icon>
-            <span  jhiTranslate="fun4FundApp.paymentMethod.home.createLabel">
-            Create a new Payment Method
-            </span>
-        </button>
-    </h2>
+    <button
+      id="jh-create-entity"
+      class="btn btn-primary float-right jh-create-entity create-payment-method"
+      [routerLink]="['/payment-method/new']"
+    >
+      <fa-icon icon="plus"></fa-icon>
+      <span> Agregar nueva tarjeta </span>
+    </button>
+  </h2>
 
-    <jhi-alert-error></jhi-alert-error>
+  <jhi-alert-error></jhi-alert-error>
 
-    <jhi-alert></jhi-alert>
+  <jhi-alert></jhi-alert>
 
-    <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
-        <span jhiTranslate="fun4FundApp.paymentMethod.home.notFound">No paymentMethods found</span>
-    </div>
+  <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
+    <span class="notFoundCard">No has agregado ningun método de pago</span>
+  </div>
 
-    <div class="table-responsive" id="entities" *ngIf="paymentMethods && paymentMethods.length > 0">
-        <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-                <tr>
-                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.cardNumber">Card Number</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.cardOwner">Card Owner</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.expirationDate">Expiration Date</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.type">Type</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.cvc">Cvc</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.paymentMethod.owner">Owner</span></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let paymentMethod of paymentMethods ;trackBy: trackId">
-                    <td><a [routerLink]="['/payment-method', paymentMethod.id, 'view']">{{ paymentMethod.id }}</a></td>
-                    <td>{{ paymentMethod.cardNumber }}</td>
-                    <td>{{ paymentMethod.cardOwner }}</td>
-                    <td>{{ paymentMethod.expirationDate | date:'medium' }}</td>
-                    <td jhiTranslate="{{ 'fun4FundApp.CardType.' + paymentMethod.type }}">{{ paymentMethod.type }}</td>
-                    <td>{{ paymentMethod.cvc }}</td>
-                    <td>
-                        <div *ngIf="paymentMethod.owner">
-                            <a [routerLink]="['/application-user', paymentMethod.owner?.id, 'view']" >{{ paymentMethod.owner?.id }}</a>
-                        </div>
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <button type="submit"
-                                    [routerLink]="['/payment-method', paymentMethod.id, 'view']"
-                                    class="btn btn-info btn-sm">
-                                <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                            </button>
+  <div class="table-responsive" id="entities" *ngIf="paymentMethods && paymentMethods.length > 0">
+    <table class="table">
+      <thead class="text-primary">
+        <th class="text-left">Favorito</th>
+        <th class="text-center">Tipo de tarjeta</th>
+        <th class="text-center">Número de tarjeta</th>
+        <th class="text-center">Dueño de la tarjeta</th>
+        <th class="text-center">Fecha de vencimiento</th>
+        <th class="text-center">Acciones</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let paymentMethod of paymentMethods; trackBy: trackId">
+          <td>
+            <!--      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" checked>
+                          <span class="form-check-sign"></span>
+                        </label>
+                      </div> -->
+            <button class="btn btn-round">
+              <i class="fa fa-heart"></i>
+            </button>
+          </td>
 
-                            <button type="submit"
-                                    [routerLink]="['/payment-method', paymentMethod.id, 'edit']"
-                                    class="btn btn-primary btn-sm">
-                                <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                            </button>
+          <td class="text-center">
+            <img class="img-payment-cards" src="{{ paymentMethod.typeImage }}" alt="{{ paymentMethod.type }}" />
+          </td>
+          <td class="text-center">***********{{ paymentMethod.cardNumber! | slice: 12:19 }}</td>
+          <td class="text-center">{{ paymentMethod.cardOwner }}</td>
+          <td class="text-center">{{ paymentMethod.expirationDate | date: 'MM/yy' }}</td>
 
-                            <button type="submit" (click)="delete(paymentMethod)"
-                                    class="btn btn-danger btn-sm">
-                                <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+          <td class="text-center">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/payment-method', paymentMethod.id, 'edit']" class="btn btn-primary btn-sm">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Editar</span>
+              </button>
+
+              <button type="submit" (click)="delete(paymentMethod)" class="btn btn-danger btn-sm">
+                <i class="fa fa-times"></i>
+                <span class="d-none d-md-inline">Eliminar</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div></div>
+  </div>
 </div>

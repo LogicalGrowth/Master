@@ -34,7 +34,7 @@ public class Prize implements Serializable {
 
     @OneToMany(mappedBy = "prize")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Image> images = new HashSet<>();
+    private Set<Resource> images = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -71,29 +71,29 @@ public class Prize implements Serializable {
         this.description = description;
     }
 
-    public Set<Image> getImages() {
+    public Set<Resource> getImages() {
         return images;
     }
 
-    public Prize images(Set<Image> images) {
-        this.images = images;
+    public Prize images(Set<Resource> resources) {
+        this.images = resources;
         return this;
     }
 
-    public Prize addImage(Image image) {
-        this.images.add(image);
-        image.setPrize(this);
+    public Prize addImage(Resource resource) {
+        this.images.add(resource);
+        resource.setPrize(this);
         return this;
     }
 
-    public Prize removeImage(Image image) {
-        this.images.remove(image);
-        image.setPrize(null);
+    public Prize removeImage(Resource resource) {
+        this.images.remove(resource);
+        resource.setPrize(null);
         return this;
     }
 
-    public void setImages(Set<Image> images) {
-        this.images = images;
+    public void setImages(Set<Resource> resources) {
+        this.images = resources;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

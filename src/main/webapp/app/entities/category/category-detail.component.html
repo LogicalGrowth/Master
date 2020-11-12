@@ -23,7 +23,7 @@
                 <dt><span jhiTranslate="fun4FundApp.category.image">Image</span></dt>
                 <dd>
                     <div *ngIf="category.image">
-                        <a [routerLink]="['/image', category.image?.id, 'view']">{{ category.image?.id }}</a>
+                        <a [routerLink]="['/resource', category.image?.id, 'view']">{{ category.image?.id }}</a>
                     </div>
                 </dd>
             </dl>

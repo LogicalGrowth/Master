@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RaffleRepository extends JpaRepository<Raffle, Long> {
+public interface RaffleRepository extends JpaRepository<Raffle, Long>, JpaSpecificationExecutor<Raffle> {
 }

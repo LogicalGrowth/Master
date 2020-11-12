@@ -48,6 +48,10 @@ public class PaymentMethod implements Serializable {
     @Column(name = "cvc", nullable = false)
     private String cvc;
 
+    @NotNull
+    @Column(name = "favorite", nullable = false)
+    private Boolean favorite;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "paymentMethods", allowSetters = true)
     private ApplicationUser owner;
@@ -126,6 +130,19 @@ public class PaymentMethod implements Serializable {
         this.cvc = cvc;
     }
 
+    public Boolean isFavorite() {
+        return favorite;
+    }
+
+    public PaymentMethod favorite(Boolean favorite) {
+        this.favorite = favorite;
+        return this;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public ApplicationUser getOwner() {
         return owner;
     }
@@ -166,6 +183,7 @@ public class PaymentMethod implements Serializable {
             ", expirationDate='" + getExpirationDate() + "'" +
             ", type='" + getType() + "'" +
             ", cvc='" + getCvc() + "'" +
+            ", favorite='" + isFavorite() + "'" +
             "}";
     }
 }

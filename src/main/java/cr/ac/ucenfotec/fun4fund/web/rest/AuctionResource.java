@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Auction;
-import cr.ac.ucenfotec.fun4fund.repository.AuctionRepository;
+import cr.ac.ucenfotec.fun4fund.service.AuctionService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.AuctionCriteria;
+import cr.ac.ucenfotec.fun4fund.service.AuctionQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class AuctionResource {
 
     private final Logger log = LoggerFactory.getLogger(AuctionResource.class);
@@ -34,10 +34,13 @@ public class AuctionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AuctionRepository auctionRepository;
+    private final AuctionService auctionService;
 
-    public AuctionResource(AuctionRepository auctionRepository) {
-        this.auctionRepository = auctionRepository;
+    private final AuctionQueryService auctionQueryService;
+
+    public AuctionResource(AuctionService auctionService, AuctionQueryService auctionQueryService) {
+        this.auctionService = auctionService;
+        this.auctionQueryService = auctionQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class AuctionResource {
         if (auction.getId() != null) {
             throw new BadRequestAlertException("A new auction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Auction result = auctionRepository.save(auction);
+        Auction result = auctionService.save(auction);
         return ResponseEntity.created(new URI("/api/auctions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class AuctionResource {
         if (auction.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Auction result = auctionRepository.save(auction);
+        Auction result = auctionService.save(auction);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, auction.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class AuctionResource {
     /**
      * {@code GET  /auctions} : get all the auctions.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of auctions in body.
      */
     @GetMapping("/auctions")
-    public List<Auction> getAllAuctions() {
-        log.debug("REST request to get all Auctions");
-        return auctionRepository.findAll();
+    public ResponseEntity<List<Auction>> getAllAuctions(AuctionCriteria criteria) {
+        log.debug("REST request to get Auctions by criteria: {}", criteria);
+        List<Auction> entityList = auctionQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /auctions/count} : count all the auctions.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/auctions/count")
+    public ResponseEntity<Long> countAuctions(AuctionCriteria criteria) {
+        log.debug("REST request to count Auctions by criteria: {}", criteria);
+        return ResponseEntity.ok().body(auctionQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class AuctionResource {
     @GetMapping("/auctions/{id}")
     public ResponseEntity<Auction> getAuction(@PathVariable Long id) {
         log.debug("REST request to get Auction : {}", id);
-        Optional<Auction> auction = auctionRepository.findById(id);
+        Optional<Auction> auction = auctionService.findOne(id);
         return ResponseUtil.wrapOrNotFound(auction);
     }
 
@@ -113,7 +130,7 @@ public class AuctionResource {
     @DeleteMapping("/auctions/{id}")
     public ResponseEntity<Void> deleteAuction(@PathVariable Long id) {
         log.debug("REST request to delete Auction : {}", id);
-        auctionRepository.deleteById(id);
+        auctionService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

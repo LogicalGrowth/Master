@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Recommendation;
-import cr.ac.ucenfotec.fun4fund.repository.RecommendationRepository;
+import cr.ac.ucenfotec.fun4fund.service.RecommendationService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.RecommendationCriteria;
+import cr.ac.ucenfotec.fun4fund.service.RecommendationQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class RecommendationResource {
 
     private final Logger log = LoggerFactory.getLogger(RecommendationResource.class);
@@ -34,10 +34,13 @@ public class RecommendationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RecommendationRepository recommendationRepository;
+    private final RecommendationService recommendationService;
 
-    public RecommendationResource(RecommendationRepository recommendationRepository) {
-        this.recommendationRepository = recommendationRepository;
+    private final RecommendationQueryService recommendationQueryService;
+
+    public RecommendationResource(RecommendationService recommendationService, RecommendationQueryService recommendationQueryService) {
+        this.recommendationService = recommendationService;
+        this.recommendationQueryService = recommendationQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class RecommendationResource {
         if (recommendation.getId() != null) {
             throw new BadRequestAlertException("A new recommendation cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Recommendation result = recommendationRepository.save(recommendation);
+        Recommendation result = recommendationService.save(recommendation);
         return ResponseEntity.created(new URI("/api/recommendations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class RecommendationResource {
         if (recommendation.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Recommendation result = recommendationRepository.save(recommendation);
+        Recommendation result = recommendationService.save(recommendation);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, recommendation.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class RecommendationResource {
     /**
      * {@code GET  /recommendations} : get all the recommendations.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of recommendations in body.
      */
     @GetMapping("/recommendations")
-    public List<Recommendation> getAllRecommendations() {
-        log.debug("REST request to get all Recommendations");
-        return recommendationRepository.findAll();
+    public ResponseEntity<List<Recommendation>> getAllRecommendations(RecommendationCriteria criteria) {
+        log.debug("REST request to get Recommendations by criteria: {}", criteria);
+        List<Recommendation> entityList = recommendationQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /recommendations/count} : count all the recommendations.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/recommendations/count")
+    public ResponseEntity<Long> countRecommendations(RecommendationCriteria criteria) {
+        log.debug("REST request to count Recommendations by criteria: {}", criteria);
+        return ResponseEntity.ok().body(recommendationQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class RecommendationResource {
     @GetMapping("/recommendations/{id}")
     public ResponseEntity<Recommendation> getRecommendation(@PathVariable Long id) {
         log.debug("REST request to get Recommendation : {}", id);
-        Optional<Recommendation> recommendation = recommendationRepository.findById(id);
+        Optional<Recommendation> recommendation = recommendationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(recommendation);
     }
 
@@ -113,7 +130,7 @@ public class RecommendationResource {
     @DeleteMapping("/recommendations/{id}")
     public ResponseEntity<Void> deleteRecommendation(@PathVariable Long id) {
         log.debug("REST request to delete Recommendation : {}", id);
-        recommendationRepository.deleteById(id);
+        recommendationService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

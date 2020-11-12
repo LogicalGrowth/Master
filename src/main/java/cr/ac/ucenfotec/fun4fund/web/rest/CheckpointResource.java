@@ -2,7 +2,10 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Checkpoint;
 import cr.ac.ucenfotec.fun4fund.repository.CheckpointRepository;
+import cr.ac.ucenfotec.fun4fund.service.CheckpointService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.CheckpointCriteria;
+import cr.ac.ucenfotec.fun4fund.service.CheckpointQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +26,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class CheckpointResource {
 
     private final Logger log = LoggerFactory.getLogger(CheckpointResource.class);
@@ -34,9 +35,17 @@ public class CheckpointResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final CheckpointService checkpointService;
+
+    private final CheckpointQueryService checkpointQueryService;
+
     private final CheckpointRepository checkpointRepository;
 
-    public CheckpointResource(CheckpointRepository checkpointRepository) {
+    public CheckpointResource(CheckpointService checkpointService,
+                              CheckpointQueryService checkpointQueryService,
+                              CheckpointRepository checkpointRepository) {
+        this.checkpointService = checkpointService;
+        this.checkpointQueryService = checkpointQueryService;
         this.checkpointRepository = checkpointRepository;
     }
 
@@ -53,7 +62,7 @@ public class CheckpointResource {
         if (checkpoint.getId() != null) {
             throw new BadRequestAlertException("A new checkpoint cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Checkpoint result = checkpointRepository.save(checkpoint);
+        Checkpoint result = checkpointService.save(checkpoint);
         return ResponseEntity.created(new URI("/api/checkpoints/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +83,7 @@ public class CheckpointResource {
         if (checkpoint.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Checkpoint result = checkpointRepository.save(checkpoint);
+        Checkpoint result = checkpointService.save(checkpoint);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, checkpoint.getId().toString()))
             .body(result);
@@ -83,12 +92,26 @@ public class CheckpointResource {
     /**
      * {@code GET  /checkpoints} : get all the checkpoints.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of checkpoints in body.
      */
     @GetMapping("/checkpoints")
-    public List<Checkpoint> getAllCheckpoints() {
-        log.debug("REST request to get all Checkpoints");
-        return checkpointRepository.findAll();
+    public ResponseEntity<List<Checkpoint>> getAllCheckpoints(CheckpointCriteria criteria) {
+        log.debug("REST request to get Checkpoints by criteria: {}", criteria);
+        List<Checkpoint> entityList = checkpointQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /checkpoints/count} : count all the checkpoints.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/checkpoints/count")
+    public ResponseEntity<Long> countCheckpoints(CheckpointCriteria criteria) {
+        log.debug("REST request to count Checkpoints by criteria: {}", criteria);
+        return ResponseEntity.ok().body(checkpointQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +123,7 @@ public class CheckpointResource {
     @GetMapping("/checkpoints/{id}")
     public ResponseEntity<Checkpoint> getCheckpoint(@PathVariable Long id) {
         log.debug("REST request to get Checkpoint : {}", id);
-        Optional<Checkpoint> checkpoint = checkpointRepository.findById(id);
+        Optional<Checkpoint> checkpoint = checkpointService.findOne(id);
         return ResponseUtil.wrapOrNotFound(checkpoint);
     }
 
@@ -113,7 +136,17 @@ public class CheckpointResource {
     @DeleteMapping("/checkpoints/{id}")
     public ResponseEntity<Void> deleteCheckpoint(@PathVariable Long id) {
         log.debug("REST request to delete Checkpoint : {}", id);
-        checkpointRepository.deleteById(id);
+        checkpointService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/checkpoints/byproyect")
+    public List<Checkpoint> getCheckpointByProyect(@RequestParam(name = "idproyect", required = true) String idproyect,
+                                                   @RequestParam(name = "percentile", required = true) String percentile)
+    {
+        log.debug("REST request to get Checkpoint : {}", idproyect);
+        Long id = Long.parseLong(idproyect);
+        Double per = Double.parseDouble(percentile);
+        return checkpointRepository.findByProyectIdAndCompletitionPercentageLessThanEqual(id,per);
     }
 }

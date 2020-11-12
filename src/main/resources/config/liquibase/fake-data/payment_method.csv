@@ -1,11 +1,11 @@
-id;card_number;card_owner;expiration_date;type;cvc
-1;GardenXXXXXXXX;Technician Kyrgyz Republic transmit;2020-11-02T08:11:13;MASTERCARD;array Vietnam
-2;Trail GamesXXX;payment convergence;2020-11-02T23:02:08;EXPRESS;Tasty Fresh Keyboard Jewelery
-3;bricks-and-clicks;Games;2020-11-03T00:17:10;VISA;Cotton
-4;deposit zero defect;Swedish Krona Shoals;2020-11-02T13:30:17;MASTERCARD;Nebraska
-5;Hawaii Usability;Garden multi-tasking hub;2020-11-02T21:46:12;MASTERCARD;Romania
-6;Personal Loan Accou;virtual indexing Lari;2020-11-02T08:54:29;MASTERCARD;maximized Personal Loan Account RAM
-7;Interactions Buckin;Re-contextualized cross-media turquoise;2020-11-02T09:56:59;VISA;transitional
-8;depositXXXXXXX;Generic;2020-11-02T15:49:10;VISA;Generic reciprocal Interactions
-9;Rwanda CheeseX;Kina Producer;2020-11-02T06:19:27;VISA;Borders
-10;payment Berkshire J;markets National;2020-11-02T19:21:51;EXPRESS;SMTP
+id;card_number;card_owner;expiration_date;type;cvc;favorite
+1;GardenXXXXXXXX;Technician Kyrgyz Republic transmit;2020-11-02T08:11:13;MASTERCARD;array Vietnam;false
+2;TCP PantsXXXXX;Michigan Avon;2020-11-02T03:12:50;MASTERCARD;Facilitator;false
+3;digitalXXXXXXX;microchip Games;2020-11-03T00:17:10;VISA;Cotton;true
+4;Ball AgentXXXX;Rapid sensor connect;2020-11-02T22:13:59;MASTERCARD;Usability;true
+5;B2BXXXXXXXXXXX;hub Soft Chair;2020-11-02T17:25:59;MASTERCARD;Communications Response Ergonomic;true
+6;virtual indexing La;Savings Account iterate;2020-11-02T19:22:19;EXPRESS;Frozen Interactions Buckinghamshire;true
+7;SSL array Danish Kr;Credit Card Account SAS;2020-11-02T10:26:48;VISA;Generic;false
+8;Checking Account;Executive;2020-11-02T09:25:23;EXPRESS;Rwanda Cheese;false
+9;Personal Loan Accou;Sausages;2020-11-02T18:09:19;EXPRESS;firewall Ridge;false
+10;markets National;back up;2020-11-02T21:02:19;MASTERCARD;Pizza invoice Orchestrator;true

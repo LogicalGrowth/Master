@@ -2,32 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
 import { IProyect, Proyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
-import { IProyectAccount } from 'app/shared/model/proyect-account.model';
-import { ProyectAccountService } from 'app/entities/proyect-account/proyect-account.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from 'app/entities/category/category.service';
 
-type SelectableEntity = IProyectAccount | IApplicationUser | ICategory;
+type SelectableEntity = IApplicationUser | ICategory;
 
 @Component({
   selector: 'jhi-proyect-update',
   templateUrl: './proyect-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ProyectUpdateComponent implements OnInit {
   isSaving = false;
-  accounts: IProyectAccount[] = [];
   applicationusers: IApplicationUser[] = [];
   categories: ICategory[] = [];
+  hasMarker = false;
+  position: any[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -35,25 +33,20 @@ export class ProyectUpdateComponent implements OnInit {
     description: [null, [Validators.required, Validators.maxLength(300)]],
     idType: [null, [Validators.required]],
     goalAmount: [null, [Validators.required, Validators.min(1)]],
-    collected: [null, [Validators.min(0)]],
-    rating: [],
-    creationDate: [null, [Validators.required]],
-    lastUpdated: [],
-    coordX: [null, [Validators.required]],
-    coordY: [null, [Validators.required]],
-    fee: [null, [Validators.required]],
-    account: [],
-    owner: [],
-    applicationUser: [],
-    category: [],
+    coordX: [[Validators.required]],
+    coordY: [],
+    fee: [],
+    number: [null, [Validators.required]],
+    currencyType: [null, [Validators.required]],
+    category: [null, [Validators.required]],
   });
 
   constructor(
     protected proyectService: ProyectService,
-    protected proyectAccountService: ProyectAccountService,
     protected applicationUserService: ApplicationUserService,
     protected categoryService: CategoryService,
     protected activatedRoute: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder
   ) {}
 
@@ -66,28 +59,6 @@ export class ProyectUpdateComponent implements OnInit {
       }
 
       this.updateForm(proyect);
-
-      this.proyectAccountService
-        .query({ filter: 'proyect-is-null' })
-        .pipe(
-          map((res: HttpResponse<IProyectAccount[]>) => {
-            return res.body || [];
-          })
-        )
-        .subscribe((resBody: IProyectAccount[]) => {
-          if (!proyect.account || !proyect.account.id) {
-            this.accounts = resBody;
-          } else {
-            this.proyectAccountService
-              .find(proyect.account.id)
-              .pipe(
-                map((subRes: HttpResponse<IProyectAccount>) => {
-                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                })
-              )
-              .subscribe((concatRes: IProyectAccount[]) => (this.accounts = concatRes));
-          }
-        });
 
       this.applicationUserService.query().subscribe((res: HttpResponse<IApplicationUser[]>) => (this.applicationusers = res.body || []));
 
@@ -102,18 +73,18 @@ export class ProyectUpdateComponent implements OnInit {
       description: proyect.description,
       idType: proyect.idType,
       goalAmount: proyect.goalAmount,
-      collected: proyect.collected,
-      rating: proyect.rating,
-      creationDate: proyect.creationDate ? proyect.creationDate.format(DATE_TIME_FORMAT) : null,
-      lastUpdated: proyect.lastUpdated ? proyect.lastUpdated.format(DATE_TIME_FORMAT) : null,
-      coordX: proyect.coordX,
-      coordY: proyect.coordY,
-      fee: proyect.fee,
-      account: proyect.account,
-      owner: proyect.owner,
-      applicationUser: proyect.applicationUser,
+      coordX: this.position[1],
+      coordY: this.position[0],
+      fee: 0,
+      number: proyect.number,
+      currencyType: proyect.currencyType,
       category: proyect.category,
     });
+  }
+
+  goToAddImage(data: any): void {
+    window.sessionStorage.proyect = data.body.id;
+    this.router.navigate(['/proyect/image/new']);
   }
 
   previousState(): void {
@@ -138,34 +109,26 @@ export class ProyectUpdateComponent implements OnInit {
       description: this.editForm.get(['description'])!.value,
       idType: this.editForm.get(['idType'])!.value,
       goalAmount: this.editForm.get(['goalAmount'])!.value,
-      collected: this.editForm.get(['collected'])!.value,
-      rating: this.editForm.get(['rating'])!.value,
-      creationDate: this.editForm.get(['creationDate'])!.value
-        ? moment(this.editForm.get(['creationDate'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      lastUpdated: this.editForm.get(['lastUpdated'])!.value
-        ? moment(this.editForm.get(['lastUpdated'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      coordX: this.editForm.get(['coordX'])!.value,
-      coordY: this.editForm.get(['coordY'])!.value,
-      fee: this.editForm.get(['fee'])!.value,
-      account: this.editForm.get(['account'])!.value,
-      owner: this.editForm.get(['owner'])!.value,
-      applicationUser: this.editForm.get(['applicationUser'])!.value,
+      creationDate: moment(),
+      coordX: this.position[1],
+      coordY: this.position[0] || 0,
+      fee: 0,
+      number: this.editForm.get(['number'])!.value,
+      currencyType: this.editForm.get(['currencyType'])!.value,
       category: this.editForm.get(['category'])!.value,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IProyect>>): void {
     result.subscribe(
-      () => this.onSaveSuccess(),
+      (data: any) => this.onSaveSuccess(data),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(data: any): void {
     this.isSaving = false;
-    this.previousState();
+    this.goToAddImage(data);
   }
 
   protected onSaveError(): void {
@@ -174,5 +137,11 @@ export class ProyectUpdateComponent implements OnInit {
 
   trackById(index: number, item: SelectableEntity): any {
     return item.id;
+  }
+
+  onMapClick($event: any): void {
+    this.position.push($event.latLng.lat());
+    this.position.push($event.latLng.lng());
+    this.hasMarker = true;
   }
 }

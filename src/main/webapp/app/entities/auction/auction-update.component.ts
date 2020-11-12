@@ -59,7 +59,7 @@ export class AuctionUpdateComponent implements OnInit {
       this.updateForm(auction);
 
       this.prizeService
-        .query({ filter: 'auction-is-null' })
+        .query({ 'auctionId.specified': 'false' })
         .pipe(
           map((res: HttpResponse<IPrize[]>) => {
             return res.body || [];
@@ -81,7 +81,7 @@ export class AuctionUpdateComponent implements OnInit {
         });
 
       this.applicationUserService
-        .query({ filter: 'auction-is-null' })
+        .query({ 'auctionId.specified': 'false' })
         .pipe(
           map((res: HttpResponse<IApplicationUser[]>) => {
             return res.body || [];

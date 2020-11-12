@@ -34,7 +34,8 @@
                     <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.coordX">Coord X</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.coordY">Coord Y</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.fee">Fee</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.account">Account</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.number">Number</span></th>
+                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.currencyType">Currency Type</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.owner">Owner</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.applicationUser">Application User</span></th>
                     <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.category">Category</span></th>
@@ -55,11 +56,8 @@
                     <td>{{ proyect.coordX }}</td>
                     <td>{{ proyect.coordY }}</td>
                     <td>{{ proyect.fee }}</td>
-                    <td>
-                        <div *ngIf="proyect.account">
-                            <a [routerLink]="['/proyect-account', proyect.account?.id, 'view']" >{{ proyect.account?.id }}</a>
-                        </div>
-                    </td>
+                    <td>{{ proyect.number }}</td>
+                    <td jhiTranslate="{{ 'fun4FundApp.Currency.' + proyect.currencyType }}">{{ proyect.currencyType }}</td>
                     <td>
                         <div *ngIf="proyect.owner">
                             <a [routerLink]="['/application-user', proyect.owner?.id, 'view']" >{{ proyect.owner?.id }}</a>

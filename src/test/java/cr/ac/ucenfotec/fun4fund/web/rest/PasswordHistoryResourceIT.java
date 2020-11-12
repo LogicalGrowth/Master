@@ -3,6 +3,9 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 import cr.ac.ucenfotec.fun4fund.Fun4FundApp;
 import cr.ac.ucenfotec.fun4fund.domain.PasswordHistory;
 import cr.ac.ucenfotec.fun4fund.repository.PasswordHistoryRepository;
+import cr.ac.ucenfotec.fun4fund.service.PasswordHistoryService;
+import cr.ac.ucenfotec.fun4fund.service.dto.PasswordHistoryCriteria;
+import cr.ac.ucenfotec.fun4fund.service.PasswordHistoryQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,15 +43,23 @@ public class PasswordHistoryResourceIT {
 
     private static final ZonedDateTime DEFAULT_START_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_START_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_START_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     private static final ZonedDateTime DEFAULT_END_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_END_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_END_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     private static final PasswordStatus DEFAULT_STATUS = PasswordStatus.ACTIVE;
     private static final PasswordStatus UPDATED_STATUS = PasswordStatus.EXPIRED;
 
     @Autowired
     private PasswordHistoryRepository passwordHistoryRepository;
+
+    @Autowired
+    private PasswordHistoryService passwordHistoryService;
+
+    @Autowired
+    private PasswordHistoryQueryService passwordHistoryQueryService;
 
     @Autowired
     private EntityManager em;
@@ -165,6 +176,403 @@ public class PasswordHistoryResourceIT {
             .andExpect(jsonPath("$.endDate").value(sameInstant(DEFAULT_END_DATE)))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
+
+
+    @Test
+    @Transactional
+    public void getPasswordHistoriesByIdFiltering() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        Long id = passwordHistory.getId();
+
+        defaultPasswordHistoryShouldBeFound("id.equals=" + id);
+        defaultPasswordHistoryShouldNotBeFound("id.notEquals=" + id);
+
+        defaultPasswordHistoryShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultPasswordHistoryShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultPasswordHistoryShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultPasswordHistoryShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByPasswordIsEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where password equals to DEFAULT_PASSWORD
+        defaultPasswordHistoryShouldBeFound("password.equals=" + DEFAULT_PASSWORD);
+
+        // Get all the passwordHistoryList where password equals to UPDATED_PASSWORD
+        defaultPasswordHistoryShouldNotBeFound("password.equals=" + UPDATED_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByPasswordIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where password not equals to DEFAULT_PASSWORD
+        defaultPasswordHistoryShouldNotBeFound("password.notEquals=" + DEFAULT_PASSWORD);
+
+        // Get all the passwordHistoryList where password not equals to UPDATED_PASSWORD
+        defaultPasswordHistoryShouldBeFound("password.notEquals=" + UPDATED_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByPasswordIsInShouldWork() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where password in DEFAULT_PASSWORD or UPDATED_PASSWORD
+        defaultPasswordHistoryShouldBeFound("password.in=" + DEFAULT_PASSWORD + "," + UPDATED_PASSWORD);
+
+        // Get all the passwordHistoryList where password equals to UPDATED_PASSWORD
+        defaultPasswordHistoryShouldNotBeFound("password.in=" + UPDATED_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByPasswordIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where password is not null
+        defaultPasswordHistoryShouldBeFound("password.specified=true");
+
+        // Get all the passwordHistoryList where password is null
+        defaultPasswordHistoryShouldNotBeFound("password.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllPasswordHistoriesByPasswordContainsSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where password contains DEFAULT_PASSWORD
+        defaultPasswordHistoryShouldBeFound("password.contains=" + DEFAULT_PASSWORD);
+
+        // Get all the passwordHistoryList where password contains UPDATED_PASSWORD
+        defaultPasswordHistoryShouldNotBeFound("password.contains=" + UPDATED_PASSWORD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByPasswordNotContainsSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where password does not contain DEFAULT_PASSWORD
+        defaultPasswordHistoryShouldNotBeFound("password.doesNotContain=" + DEFAULT_PASSWORD);
+
+        // Get all the passwordHistoryList where password does not contain UPDATED_PASSWORD
+        defaultPasswordHistoryShouldBeFound("password.doesNotContain=" + UPDATED_PASSWORD);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate equals to DEFAULT_START_DATE
+        defaultPasswordHistoryShouldBeFound("startDate.equals=" + DEFAULT_START_DATE);
+
+        // Get all the passwordHistoryList where startDate equals to UPDATED_START_DATE
+        defaultPasswordHistoryShouldNotBeFound("startDate.equals=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate not equals to DEFAULT_START_DATE
+        defaultPasswordHistoryShouldNotBeFound("startDate.notEquals=" + DEFAULT_START_DATE);
+
+        // Get all the passwordHistoryList where startDate not equals to UPDATED_START_DATE
+        defaultPasswordHistoryShouldBeFound("startDate.notEquals=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate in DEFAULT_START_DATE or UPDATED_START_DATE
+        defaultPasswordHistoryShouldBeFound("startDate.in=" + DEFAULT_START_DATE + "," + UPDATED_START_DATE);
+
+        // Get all the passwordHistoryList where startDate equals to UPDATED_START_DATE
+        defaultPasswordHistoryShouldNotBeFound("startDate.in=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate is not null
+        defaultPasswordHistoryShouldBeFound("startDate.specified=true");
+
+        // Get all the passwordHistoryList where startDate is null
+        defaultPasswordHistoryShouldNotBeFound("startDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate is greater than or equal to DEFAULT_START_DATE
+        defaultPasswordHistoryShouldBeFound("startDate.greaterThanOrEqual=" + DEFAULT_START_DATE);
+
+        // Get all the passwordHistoryList where startDate is greater than or equal to UPDATED_START_DATE
+        defaultPasswordHistoryShouldNotBeFound("startDate.greaterThanOrEqual=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate is less than or equal to DEFAULT_START_DATE
+        defaultPasswordHistoryShouldBeFound("startDate.lessThanOrEqual=" + DEFAULT_START_DATE);
+
+        // Get all the passwordHistoryList where startDate is less than or equal to SMALLER_START_DATE
+        defaultPasswordHistoryShouldNotBeFound("startDate.lessThanOrEqual=" + SMALLER_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate is less than DEFAULT_START_DATE
+        defaultPasswordHistoryShouldNotBeFound("startDate.lessThan=" + DEFAULT_START_DATE);
+
+        // Get all the passwordHistoryList where startDate is less than UPDATED_START_DATE
+        defaultPasswordHistoryShouldBeFound("startDate.lessThan=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStartDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where startDate is greater than DEFAULT_START_DATE
+        defaultPasswordHistoryShouldNotBeFound("startDate.greaterThan=" + DEFAULT_START_DATE);
+
+        // Get all the passwordHistoryList where startDate is greater than SMALLER_START_DATE
+        defaultPasswordHistoryShouldBeFound("startDate.greaterThan=" + SMALLER_START_DATE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate equals to DEFAULT_END_DATE
+        defaultPasswordHistoryShouldBeFound("endDate.equals=" + DEFAULT_END_DATE);
+
+        // Get all the passwordHistoryList where endDate equals to UPDATED_END_DATE
+        defaultPasswordHistoryShouldNotBeFound("endDate.equals=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate not equals to DEFAULT_END_DATE
+        defaultPasswordHistoryShouldNotBeFound("endDate.notEquals=" + DEFAULT_END_DATE);
+
+        // Get all the passwordHistoryList where endDate not equals to UPDATED_END_DATE
+        defaultPasswordHistoryShouldBeFound("endDate.notEquals=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate in DEFAULT_END_DATE or UPDATED_END_DATE
+        defaultPasswordHistoryShouldBeFound("endDate.in=" + DEFAULT_END_DATE + "," + UPDATED_END_DATE);
+
+        // Get all the passwordHistoryList where endDate equals to UPDATED_END_DATE
+        defaultPasswordHistoryShouldNotBeFound("endDate.in=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate is not null
+        defaultPasswordHistoryShouldBeFound("endDate.specified=true");
+
+        // Get all the passwordHistoryList where endDate is null
+        defaultPasswordHistoryShouldNotBeFound("endDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate is greater than or equal to DEFAULT_END_DATE
+        defaultPasswordHistoryShouldBeFound("endDate.greaterThanOrEqual=" + DEFAULT_END_DATE);
+
+        // Get all the passwordHistoryList where endDate is greater than or equal to UPDATED_END_DATE
+        defaultPasswordHistoryShouldNotBeFound("endDate.greaterThanOrEqual=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate is less than or equal to DEFAULT_END_DATE
+        defaultPasswordHistoryShouldBeFound("endDate.lessThanOrEqual=" + DEFAULT_END_DATE);
+
+        // Get all the passwordHistoryList where endDate is less than or equal to SMALLER_END_DATE
+        defaultPasswordHistoryShouldNotBeFound("endDate.lessThanOrEqual=" + SMALLER_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate is less than DEFAULT_END_DATE
+        defaultPasswordHistoryShouldNotBeFound("endDate.lessThan=" + DEFAULT_END_DATE);
+
+        // Get all the passwordHistoryList where endDate is less than UPDATED_END_DATE
+        defaultPasswordHistoryShouldBeFound("endDate.lessThan=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByEndDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where endDate is greater than DEFAULT_END_DATE
+        defaultPasswordHistoryShouldNotBeFound("endDate.greaterThan=" + DEFAULT_END_DATE);
+
+        // Get all the passwordHistoryList where endDate is greater than SMALLER_END_DATE
+        defaultPasswordHistoryShouldBeFound("endDate.greaterThan=" + SMALLER_END_DATE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where status equals to DEFAULT_STATUS
+        defaultPasswordHistoryShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the passwordHistoryList where status equals to UPDATED_STATUS
+        defaultPasswordHistoryShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where status not equals to DEFAULT_STATUS
+        defaultPasswordHistoryShouldNotBeFound("status.notEquals=" + DEFAULT_STATUS);
+
+        // Get all the passwordHistoryList where status not equals to UPDATED_STATUS
+        defaultPasswordHistoryShouldBeFound("status.notEquals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultPasswordHistoryShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the passwordHistoryList where status equals to UPDATED_STATUS
+        defaultPasswordHistoryShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPasswordHistoriesByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        passwordHistoryRepository.saveAndFlush(passwordHistory);
+
+        // Get all the passwordHistoryList where status is not null
+        defaultPasswordHistoryShouldBeFound("status.specified=true");
+
+        // Get all the passwordHistoryList where status is null
+        defaultPasswordHistoryShouldNotBeFound("status.specified=false");
+    }
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultPasswordHistoryShouldBeFound(String filter) throws Exception {
+        restPasswordHistoryMockMvc.perform(get("/api/password-histories?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(passwordHistory.getId().intValue())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD)))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(sameInstant(DEFAULT_END_DATE))))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+
+        // Check, that the count call also returns 1
+        restPasswordHistoryMockMvc.perform(get("/api/password-histories/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultPasswordHistoryShouldNotBeFound(String filter) throws Exception {
+        restPasswordHistoryMockMvc.perform(get("/api/password-histories?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restPasswordHistoryMockMvc.perform(get("/api/password-histories/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
     @Test
     @Transactional
     public void getNonExistingPasswordHistory() throws Exception {
@@ -177,7 +585,7 @@ public class PasswordHistoryResourceIT {
     @Transactional
     public void updatePasswordHistory() throws Exception {
         // Initialize the database
-        passwordHistoryRepository.saveAndFlush(passwordHistory);
+        passwordHistoryService.save(passwordHistory);
 
         int databaseSizeBeforeUpdate = passwordHistoryRepository.findAll().size();
 
@@ -226,7 +634,7 @@ public class PasswordHistoryResourceIT {
     @Transactional
     public void deletePasswordHistory() throws Exception {
         // Initialize the database
-        passwordHistoryRepository.saveAndFlush(passwordHistory);
+        passwordHistoryService.save(passwordHistory);
 
         int databaseSizeBeforeDelete = passwordHistoryRepository.findAll().size();
 

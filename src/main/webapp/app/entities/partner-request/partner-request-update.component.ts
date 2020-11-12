@@ -45,7 +45,7 @@ export class PartnerRequestUpdateComponent implements OnInit {
       this.updateForm(partnerRequest);
 
       this.applicationUserService
-        .query({ filter: 'partnerrequest-is-null' })
+        .query({ 'partnerRequestId.specified': 'false' })
         .pipe(
           map((res: HttpResponse<IApplicationUser[]>) => {
             return res.body || [];

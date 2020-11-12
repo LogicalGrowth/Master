@@ -61,14 +61,14 @@
     },
     {
       "fieldName": "coordX",
-      "fieldType": "Long",
+      "fieldType": "Double",
       "fieldValidateRules": [
         "required"
       ]
     },
     {
       "fieldName": "coordY",
-      "fieldType": "Long",
+      "fieldType": "Double",
       "fieldValidateRules": [
         "required"
       ]
@@ -79,28 +79,29 @@
       "fieldValidateRules": [
         "required"
       ]
+    },
+    {
+      "fieldName": "number",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "currencyType",
+      "fieldType": "Currency",
+      "fieldValues": "USD,CRC",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-one",
-      "otherEntityName": "proyectAccount",
-      "otherEntityRelationshipName": "proyect",
-      "relationshipName": "account",
-      "otherEntityField": "id",
-      "ownerSide": true
-    },
-    {
       "relationshipType": "one-to-many",
-      "otherEntityName": "image",
+      "otherEntityName": "resource",
       "otherEntityRelationshipName": "proyect",
       "relationshipName": "image"
-    },
-    {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "donationHistory",
-      "otherEntityRelationshipName": "proyect",
-      "relationshipName": "donation"
     },
     {
       "relationshipType": "one-to-many",
@@ -170,8 +171,8 @@
   "entityTableName": "proyect",
   "dto": "no",
   "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,

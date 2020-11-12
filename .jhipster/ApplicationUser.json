@@ -69,12 +69,6 @@
     },
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "donationHistory",
-      "otherEntityRelationshipName": "applicationUser",
-      "relationshipName": "donation"
-    },
-    {
-      "relationshipType": "one-to-many",
       "otherEntityName": "notification",
       "otherEntityRelationshipName": "applicationUser",
       "relationshipName": "notification"
@@ -96,8 +90,8 @@
   "entityTableName": "application_user",
   "dto": "no",
   "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
   "fluentMethods": true,
   "readOnly": false,
   "embedded": false,

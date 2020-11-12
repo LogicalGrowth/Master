@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ExclusiveContentRepository extends JpaRepository<ExclusiveContent, Long> {
+public interface ExclusiveContentRepository extends JpaRepository<ExclusiveContent, Long>, JpaSpecificationExecutor<ExclusiveContent> {
 }

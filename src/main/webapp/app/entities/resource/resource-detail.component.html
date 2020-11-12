@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="resource">
+            <h2><span jhiTranslate="fun4FundApp.resource.detail.title">Resource</span> {{ resource.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.resource.url">Url</span></dt>
+                <dd>
+                    <span>{{ resource.url }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.resource.type">Type</span></dt>
+                <dd>
+                    <span>{{ resource.type }}</span>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.resource.proyect">Proyect</span></dt>
+                <dd>
+                    <div *ngIf="resource.proyect">
+                        <a [routerLink]="['/proyect', resource.proyect?.id, 'view']">{{ resource.proyect?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.resource.prize">Prize</span></dt>
+                <dd>
+                    <div *ngIf="resource.prize">
+                        <a [routerLink]="['/prize', resource.prize?.id, 'view']">{{ resource.prize?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/resource', resource.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

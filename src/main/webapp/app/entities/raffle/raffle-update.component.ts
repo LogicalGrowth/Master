@@ -59,7 +59,7 @@ export class RaffleUpdateComponent implements OnInit {
       this.updateForm(raffle);
 
       this.prizeService
-        .query({ filter: 'raffle-is-null' })
+        .query({ 'raffleId.specified': 'false' })
         .pipe(
           map((res: HttpResponse<IPrize[]>) => {
             return res.body || [];

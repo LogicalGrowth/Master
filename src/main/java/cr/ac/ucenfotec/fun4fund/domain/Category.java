@@ -41,7 +41,7 @@ public class Category implements Serializable {
 
     @OneToOne
     @JoinColumn(unique = true)
-    private Image image;
+    private Resource image;
 
     @OneToMany(mappedBy = "category")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -95,17 +95,17 @@ public class Category implements Serializable {
         this.status = status;
     }
 
-    public Image getImage() {
+    public Resource getImage() {
         return image;
     }
 
-    public Category image(Image image) {
-        this.image = image;
+    public Category image(Resource resource) {
+        this.image = resource;
         return this;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setImage(Resource resource) {
+        this.image = resource;
     }
 
     public Set<Proyect> getProyects() {

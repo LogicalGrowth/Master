@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AppLogRepository extends JpaRepository<AppLog, Long> {
+public interface AppLogRepository extends JpaRepository<AppLog, Long>, JpaSpecificationExecutor<AppLog> {
 }

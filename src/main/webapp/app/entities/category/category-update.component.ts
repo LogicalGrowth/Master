@@ -8,8 +8,8 @@ import { map } from 'rxjs/operators';
 
 import { ICategory, Category } from 'app/shared/model/category.model';
 import { CategoryService } from './category.service';
-import { IImage } from 'app/shared/model/image.model';
-import { ImageService } from 'app/entities/image/image.service';
+import { IResource } from 'app/shared/model/resource.model';
+import { ResourceService } from 'app/entities/resource/resource.service';
 
 @Component({
   selector: 'jhi-category-update',
@@ -18,7 +18,7 @@ import { ImageService } from 'app/entities/image/image.service';
 })
 export class CategoryUpdateComponent implements OnInit {
   isSaving = false;
-  images: IImage[] = [];
+  images: IResource[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -30,7 +30,7 @@ export class CategoryUpdateComponent implements OnInit {
 
   constructor(
     protected categoryService: CategoryService,
-    protected imageService: ImageService,
+    protected resourceService: ResourceService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -39,25 +39,25 @@ export class CategoryUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ category }) => {
       this.updateForm(category);
 
-      this.imageService
-        .query({ filter: 'category-is-null' })
+      this.resourceService
+        .query({ 'categoryId.specified': 'false' })
         .pipe(
-          map((res: HttpResponse<IImage[]>) => {
+          map((res: HttpResponse<IResource[]>) => {
             return res.body || [];
           })
         )
-        .subscribe((resBody: IImage[]) => {
+        .subscribe((resBody: IResource[]) => {
           if (!category.image || !category.image.id) {
             this.images = resBody;
           } else {
-            this.imageService
+            this.resourceService
               .find(category.image.id)
               .pipe(
-                map((subRes: HttpResponse<IImage>) => {
+                map((subRes: HttpResponse<IResource>) => {
                   return subRes.body ? [subRes.body].concat(resBody) : resBody;
                 })
               )
-              .subscribe((concatRes: IImage[]) => (this.images = concatRes));
+              .subscribe((concatRes: IResource[]) => (this.images = concatRes));
           }
         });
     });
@@ -114,7 +114,7 @@ export class CategoryUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  trackById(index: number, item: IImage): any {
+  trackById(index: number, item: IResource): any {
     return item.id;
   }
 }

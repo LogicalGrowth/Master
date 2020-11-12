@@ -18,6 +18,7 @@ type SelectableEntity = IPrize | IProyect;
 @Component({
   selector: 'jhi-exclusive-content-update',
   templateUrl: './exclusive-content-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ExclusiveContentUpdateComponent implements OnInit {
   isSaving = false;
@@ -27,7 +28,7 @@ export class ExclusiveContentUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     price: [null, [Validators.required, Validators.min(0)]],
-    stock: [null, [Validators.min(1)]],
+    stock: [null, [Validators.min(0)]],
     state: [null, [Validators.required]],
     prize: [],
     proyect: [],
@@ -46,7 +47,7 @@ export class ExclusiveContentUpdateComponent implements OnInit {
       this.updateForm(exclusiveContent);
 
       this.prizeService
-        .query({ filter: 'exclusivecontent-is-null' })
+        .query({ 'exclusiveContentId.specified': 'false' })
         .pipe(
           map((res: HttpResponse<IPrize[]>) => {
             return res.body || [];

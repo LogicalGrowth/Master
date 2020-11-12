@@ -11,6 +11,7 @@ import { ExclusiveContentService } from '../exclusive-content/exclusive-content.
 import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
 import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -31,6 +32,7 @@ export class ProyectDetailComponent implements OnInit {
   exclusiveContents?: IExclusiveContent[];
   account!: User;
   isProjectOwner!: Boolean;
+  daysCreated: any;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -63,6 +65,7 @@ export class ProyectDetailComponent implements OnInit {
       this.hasMarker = true;
       this.percentile = (100 * proyect.collected) / proyect.goalAmount;
       this.rating = (100 * proyect.rating) / 5;
+      this.daysCreated = moment().diff(proyect.creationDate, 'days');
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });

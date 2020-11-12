@@ -1,10 +1,9 @@
 import { Route } from '@angular/router';
-
-import { RegisterComponent } from './register.component';
+import { RegisterWizardComponent } from '../register-wizard/register-wizard.component';
 
 export const registerRoute: Route = {
-  path: 'register',
-  component: RegisterComponent,
+  path: 'register-wizard',
+  component: RegisterWizardComponent,
   data: {
     authorities: [],
     pageTitle: 'register.title',

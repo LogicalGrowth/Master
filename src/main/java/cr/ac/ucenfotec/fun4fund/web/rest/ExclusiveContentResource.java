@@ -1,6 +1,7 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ActivityStatus;
 import cr.ac.ucenfotec.fun4fund.service.ExclusiveContentService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.ExclusiveContentCriteria;
@@ -76,6 +77,9 @@ public class ExclusiveContentResource {
         log.debug("REST request to update ExclusiveContent : {}", exclusiveContent);
         if (exclusiveContent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if(exclusiveContent.getStock() == 0) {
+            exclusiveContent.setState(ActivityStatus.DISABLED);
         }
         ExclusiveContent result = exclusiveContentService.save(exclusiveContent);
         return ResponseEntity.ok()

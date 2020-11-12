@@ -37,6 +37,10 @@ export class PaymentMethodService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  findAllByUser(id: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IPaymentMethod[]>(`${this.resourceUrl}/byUser/${id}`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

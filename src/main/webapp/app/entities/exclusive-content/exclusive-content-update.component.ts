@@ -18,6 +18,7 @@ type SelectableEntity = IPrize | IProyect;
 @Component({
   selector: 'jhi-exclusive-content-update',
   templateUrl: './exclusive-content-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ExclusiveContentUpdateComponent implements OnInit {
   isSaving = false;

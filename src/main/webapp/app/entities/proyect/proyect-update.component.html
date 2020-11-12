@@ -6,7 +6,7 @@
         <div class="card">
           <jhi-alert-error></jhi-alert-error>
           <div class="card-header ">
-            <h4 class="card-title">Register Form</h4>
+            <h4 class="card-title">Proyecto</h4>
           </div>
           <div class="card-body">
             <div class="form-group has-label" [hidden]="!editForm.get('id')!.value">
@@ -70,7 +70,10 @@
                   El campo tiene que ser mayor a un $1.
                 </small>
                 <small class="form-text text-danger" [hidden]="!editForm.get('goalAmount')?.errors?.number">
-                  El campo debe ser un numero.
+                  El campo debe ser un número.
+                </small>
+                <small class="form-text text-danger" [hidden]="!editForm.get('goalAmount')?.errors?.pattern">
+                  El campo debe ser un número.
                 </small>
               </div>
             </div>
@@ -88,14 +91,16 @@
             </div>
 
             <div class="form-group has-label">
-              <label for="field_goalAmount" class="control-label">Número de cuenta</label>
+              <label for="field_number" class="control-label">Número de cuenta</label>
               <span class="star">*</span>
               <input type="text" class="form-control" name="number" id="field_number" formControlName="number">
               <div
                 *ngIf="editForm.get('number')!.invalid && (editForm.get('number')!.dirty || editForm.get('number')!.touched)">
-                <small class="form-text text-danger" *ngIf="editForm.get('number')?.errors?.required"
-                  jhiTranslate="entity.validation.required">
-                  This field is required.
+                <small class="form-text text-danger" *ngIf="editForm.get('number')?.errors?.required">
+                  Este campo es requerido.
+                </small>
+                <small class="form-text text-danger" *ngIf="editForm.get('number')?.errors?.pattern">
+                  El campo no cumple el formato.
                 </small>
               </div>
             </div>
@@ -105,14 +110,13 @@
               <span class="star">*</span>
               <select class="form-control custom-select custom-select-lg" name="currencyType"
                 formControlName="currencyType" id="field_currencyType">
-                <option value="USD">{{ 'fun4FundApp.Currency.USD' | translate }}</option>
-                <option value="CRC">{{ 'fun4FundApp.Currency.CRC' | translate }}</option>
+                <option value="USD">USD</option>
+                <option value="CRC">CRC</option>
               </select>
               <div
                 *ngIf="editForm.get('currencyType')!.invalid && (editForm.get('currencyType')!.dirty || editForm.get('currencyType')!.touched)">
-                <small class="form-text text-danger" *ngIf="editForm.get('currencyType')?.errors?.required"
-                  jhiTranslate="entity.validation.required">
-                  This field is required.
+                <small class="form-text text-danger" *ngIf="editForm.get('currencyType')?.errors?.required">
+                  Este campo es requerido.
                 </small>
               </div>
             </div>
@@ -129,13 +133,13 @@
               <marker [position]="position" *ngIf="hasMarker"></marker>
             </ngui-map>
           </div>
-          <div>
+          <div class="col-lg-5">
             <button type="button" id="cancel-save" class="btn btn-warning" (click)="previousState()">
-              <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+              <span>Cancel</span>
             </button>
 
             <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-              <fa-icon icon="save"></fa-icon>&nbsp;<span>Guardar</span>
+              <span>Guardar</span>
             </button>
           </div>
         </div>

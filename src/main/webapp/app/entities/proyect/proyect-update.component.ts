@@ -22,6 +22,7 @@ type SelectableEntity = IApplicationUser | ICategory;
 })
 export class ProyectUpdateComponent implements OnInit {
   isSaving = false;
+  regexIbanCrc = /CR[a-zA-Z0-9]{2}\s?([0-9]{4}\s?){4}([0-9]{2})\s?/;
   applicationusers: IApplicationUser[] = [];
   categories: ICategory[] = [];
   hasMarker = false;
@@ -32,11 +33,11 @@ export class ProyectUpdateComponent implements OnInit {
     name: [null, [Validators.required, Validators.maxLength(30)]],
     description: [null, [Validators.required, Validators.maxLength(300)]],
     idType: [null, [Validators.required]],
-    goalAmount: [null, [Validators.required, Validators.min(1)]],
+    goalAmount: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
     coordX: [[Validators.required]],
     coordY: [],
     fee: [],
-    number: [null, [Validators.required]],
+    number: [null, Validators.compose([Validators.required, Validators.pattern(this.regexIbanCrc)])],
     currencyType: [null, [Validators.required]],
     category: [null, [Validators.required]],
   });

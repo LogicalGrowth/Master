@@ -6,9 +6,9 @@ import * as boostrap from 'bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ImageService } from 'app/entities/image/image.service';
-import { IImage, Image } from 'app/shared/model/image.model';
 import { IProyect } from 'app/shared/model/proyect.model';
+import { ResourceService } from 'app/entities/resource/resource.service';
+import { IResource, Resource } from 'app/shared/model/resource.model';
 
 @Component({
   selector: 'jhi-proyect-image-update',
@@ -23,12 +23,13 @@ export class ProyectImageUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     url: [null, [Validators.required, Validators.maxLength(255)]],
+    type: [null, [Validators.required, Validators.maxLength(255)]],
   });
 
   constructor(
     private proyectService: ProyectService,
     private spinner: NgxSpinnerService,
-    private imageService: ImageService,
+    private resourceService: ResourceService,
     private fb: FormBuilder
   ) {}
 
@@ -71,18 +72,19 @@ export class ProyectImageUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const image = this.createFromForm();
-    this.subscribeToSaveResponse(this.imageService.create(image));
+    this.subscribeToSaveResponse(this.resourceService.create(image));
   }
 
-  private createFromForm(): IImage {
+  private createFromForm(): IResource {
     return {
-      ...new Image(),
+      ...new Resource(),
       url: this.editForm.get(['url'])!.value,
+      type: this.editForm.get(['type'])!.value,
       proyect: this.proyect,
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IImage>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IResource>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
@@ -91,6 +93,7 @@ export class ProyectImageUpdateComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     $('#field_url').val('');
+    $('#type').val('');
     this.isSaving = false;
   }
 

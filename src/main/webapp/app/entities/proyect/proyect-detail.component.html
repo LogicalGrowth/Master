@@ -1,4 +1,4 @@
-<div class="row" *ngIf="proyect">
+<div *ngIf="proyect">
     <div class="col-lg-12 card-testimonial">
         <div class="card">
             <div class="card-header">
@@ -13,238 +13,246 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-8">
-        <img src="http://res.cloudinary.com/barnesnoble/image/upload/v1604828586/gwiydfej4tdaqammaz4p.png">
-        <div class="d-flex flex-row col-lg-12">
-            <div class="p-2">
-                <img src="{{proyect.category?.image?.url}}" alt="Categoría" width="30" class="rounded mx-auto d-block">
-                <p>{{ proyect.category?.name }}</p>
-            </div>
-            <div class="p-2">
-                <jhi-icon buttonCssClass="btn-facebook" iconCssClass="fa fa-facebook-f">
-                </jhi-icon>
-            </div>
-            <div class="p-2">
-                <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="col-lg-12">
-            <jhi-progress-bar progressBarClass="progress-bar-danger" minValue="0" maxValue="{{proyect.goalAmount}}"
-                percentile="{{percentile}}" currentValue="{{proyect.collected}}">
-            </jhi-progress-bar>
-        </div>
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-4">
-                        <h4 class="mb-auto my-auto">
-                            <span>${{ proyect.collected }}</span>
-                        </h4>
-                        <dt><span>El monto meta es ${{ proyect.goalAmount }}</span></dt>
+    <div class="container col-lg-11">
+        <div class="row">
+            <div class="col-lg-8">
+                <img src="http://res.cloudinary.com/barnesnoble/image/upload/v1604828586/gwiydfej4tdaqammaz4p.png">
+                <div class="d-flex flex-row col-lg-12">
+                    <div class="p-2">
+                        <img src="{{proyect.category?.image?.url}}" alt="Categoría" width="30"
+                            class="rounded mx-auto d-block">
+                        <p>{{ proyect.category?.name }}</p>
                     </div>
-
-                    <div class="mb-4">
-                        <h4 class="mb-auto my-auto">
-                            <span>{{ daysCreated }}</span>
-                        </h4>
-                        <dt><span>Días transcurridos.</span></dt>
+                    <div class="p-2">
+                        <jhi-icon buttonCssClass="btn-facebook" iconCssClass="fa fa-facebook-f">
+                        </jhi-icon>
                     </div>
-
-                    <div class="mb-4">
-                        <h4 class="mb-auto my-auto">
-                            <span>{{ proyect.lastUpdated | date:'medium' }}</span>
-                        </h4>
-                        <dt><span>Última actualización.</span></dt>
+                    <div class="p-2">
+                        <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
+                    </div>
+                    <div class="p-2">
+                        <button type="button" [routerLink]="['/proyect', proyect.id, 'edit']" class="btn btn-primary">
+                            <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+                        </button>
                     </div>
                 </div>
-                <div class="card-body pt-1">
-                    <h5 class="card-title">Se parte de este sueño</h5>
-                    <button class="btn btn-warning col-md-12">
-                        <span class="btn-label">
-                            <i class="nc-icon nc-money-coins"></i>
-                        </span>
-                        Hacer una donación
-                    </button>
-                    <button class="btn btn-info col-md-12">
-                        <span class="btn-label">
-                            <i class="nc-icon nc-circle-10"></i>
-                        </span>
-                        Hacerce socio
-                    </button>
+            </div>
+            <div class="col-lg-4">
+                <jhi-progress-bar progressBarClass="progress-bar-danger" minValue="0" maxValue="{{proyect.goalAmount}}"
+                    percentile="{{percentile}}" currentValue="{{proyect.collected}}">
+                </jhi-progress-bar>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h4 class="mb-auto my-auto">
+                                <span>${{ proyect.collected }}</span>
+                            </h4>
+                            <dt><span>El monto meta es ${{ proyect.goalAmount }}</span></dt>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4 class="mb-auto my-auto">
+                                <span>{{ daysCreated }}</span>
+                            </h4>
+                            <dt><span>Días transcurridos.</span></dt>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4 class="mb-auto my-auto">
+                                <span>{{ proyect.lastUpdated | date:'medium' }}</span>
+                            </h4>
+                            <dt><span>Última actualización.</span></dt>
+                        </div>
+                    </div>
+                    <div class="card-body pt-1">
+                        <h5 class="card-title">Se parte de este sueño</h5>
+                        <button class="btn btn-warning col-md-12">
+                            <span class="btn-label">
+                                <i class="nc-icon nc-money-coins"></i>
+                            </span>
+                            Hacer una donación
+                        </button>
+                        <button class="btn btn-info col-md-12">
+                            <span class="btn-label">
+                                <i class="nc-icon nc-circle-10"></i>
+                            </span>
+                            Hacerce socio
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card ">
+                    <div class="card-header ">
+                        <h4 class='card-title'>Localización del proyecto</h4>
+                    </div>
+                    <div class="card-body ">
+                        <ngui-map zoom="7" center="9.7489,-83.7534">
+                            <marker [position]="position" *ngIf="hasMarker"></marker>
+                        </ngui-map>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="card card-tasks">
+                    <div class="card-header ">
+                        <h4 class="card-title">Top 5 de donadores del proyecto</h4>
+                    </div>
+                    <div class="card-body ">
+                        <div class="table-full-width table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr *ngFor="let donor of donors;">
+                                        <td class="img-row">
+                                            <div class="img-wrapper">
+                                                <img src="{{donor[1].internalUser.imageUrl}}" class="img-raised" />
+                                            </div>
+                                        </td>
+                                        <td class="text-left col-md-12">{{ donor[1].internalUser.firstName }}
+                                            {{ donor[1].internalUser.lastName }}
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="donors && !donors.length">
+                                        <td class="text-left col-md-12">No hay donadores en el proyecto
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div>
-            <button type="button" [routerLink]="['/proyect', proyect.id, 'edit']" class="btn btn-primary">
-                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
-            </button>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card ">
-            <div class="card-header ">
-                <h4 class='card-title'>Localización del proyecto</h4>
-            </div>
-            <div class="card-body ">
-                <ngui-map zoom="7" center="9.7489,-83.7534">
-                    <marker [position]="position" *ngIf="hasMarker"></marker>
-                </ngui-map>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 text-center">
-        <div class="card card-tasks">
-            <div class="card-header ">
-                <h4 class="card-title">Top 5 de donadores del proyecto</h4>
-            </div>
-            <div class="card-body ">
-                <div class="table-full-width table-responsive">
-                    <table class="table">
-                        <tbody>
-                            <tr *ngFor="let donor of donors;">
-                                <td class="img-row">
-                                    <div class="img-wrapper">
-                                        <img src="{{donor[1].internalUser.imageUrl}}" class="img-raised" />
+        <div class="row">
+            <div class="col-md-12 ml-auto mr-auto">
+                <div class="card-body ">
+                    <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#link7" role="tablist">
+                                <i class="now-ui-icons objects_umbrella-13"></i> Descripción
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#link8" role="tablist">
+                                <i class="now-ui-icons shopping_shop"></i>Califiaciones
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#link9" role="tablist">
+                                <i class="now-ui-icons ui-2_settings-90"></i> Checkpoints
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#link10" role="tablist">
+                                <i class="now-ui-icons shopping_shop"></i> Contenido exclusivo
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content tab-space tab-subcategories">
+                        <div class="tab-pane active" id="link7">
+                            Collaboratively administrate empowered markets via plug-and-play networks. Dynamically
+                            procrastinate B2C users after installed base benefits.
+                            <br>
+                            <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                        </div>
+                        <div class="tab-pane" id="link8">
+                            <div class="container-fluid">
+                                <div class="header text-center">
+                                    <h3 class="title">Comentarios y calificaciones</h3>
+                                </div>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-lg-4 col-md-5 col-sm-8" *ngFor="let review of reviews;">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">
+                                                    <div class="stars-outer little-stars">
+                                                        <div class="stars-inner" style="width:{{review.rating*100/5}}%">
+                                                        </div>
+                                                    </div>
+                                                </h4>
+                                                <p class="card-text">{{ review.message }}</p>
+                                                <p class="card-text">
+                                                    <small class="text-muted">{{ review.user }}</small>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </td>
-                                <td class="text-left col-md-12">{{ donor[1].internalUser.firstName }}
-                                    {{ donor[1].internalUser.lastName }}
-                                </td>
-                            </tr>
-                            <tr *ngIf="donors && !donors.length">
-                                <td class="text-left col-md-12">No hay donadores en el proyecto
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <div class="col-lg-4 col-md-5 col-sm-8" *ngIf="!reviews.length">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <p class="card-text">No hay comentarios ni calificaciones.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="link9">
+                            <div class="col-md-12">
+                                <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple">
+                                </jhi-timeline>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="link10">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title"> Contenido exclusivo </h4>
+                                        </div>
+
+                                        <jhi-alert></jhi-alert>
+
+                                        <div class="alert alert-warning" id="no-result"
+                                            *ngIf="exclusiveContents?.length === 0">
+                                            <span>No hay elementos</span>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="table-responsive" id="entities"
+                                                *ngIf="exclusiveContents && exclusiveContents.length > 0">
+                                                <table class="table">
+                                                    <thead class="text-primary">
+                                                        <th scope="col"><span>Nombre</span></th>
+                                                        <th scope="col"><span>Precio</span></th>
+                                                        <th scope="col"><span>Disponibles</span></th>
+                                                        <th scope="col" class="text-center" *ngIf="isProjectOwner">
+                                                            <span>Acciones</span></th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let exclusiveContent of exclusiveContents">
+                                                            <td>
+                                                                <div *ngIf="exclusiveContent.prize">
+                                                                    <a
+                                                                        [routerLink]="['/prize', exclusiveContent.prize?.id, 'view']">{{ exclusiveContent.prize?.name }}</a>
+                                                                </div>
+                                                            </td>
+                                                            <td>${{ exclusiveContent.price }}</td>
+                                                            <td>{{ exclusiveContent.stock }}</td>
+                                                            <td class="text-right">
+                                                                <div class="btn-group" *ngIf="isProjectOwner">
+                                                                    <jhi-icon-button type="info" label=""
+                                                                        icon="nc-zoom-split"
+                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
+                                                                    </jhi-icon-button>
+                                                                    <jhi-icon-button type="success" label=""
+                                                                        icon="nc-ruler-pencil"
+                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
+                                                                    </jhi-icon-button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-8 ml-auto mr-auto">
-      <div class="card card-plain card-subcategories">
-        <div class="card-header ">
-          <h4 class="card-title text-center">Page Subcategories</h4>
-          <br />
-        </div>
-        <div class="card-body ">
-          <!--
-                              color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
-                          -->
-          <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#link7" role="tablist">
-                <i class="now-ui-icons objects_umbrella-13"></i> Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#link8" role="tablist">
-                <i class="now-ui-icons shopping_shop"></i> Reviews
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#link9" role="tablist">
-                <i class="now-ui-icons ui-2_settings-90"></i> Settings
-              </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#link10" role="tablist">
-                  <i class="now-ui-icons shopping_shop"></i> Contenido exclusivo
-                </a>
-              </li>
-          </ul>
-          <div class="tab-content tab-space tab-subcategories">
-            <div class="tab-pane active" id="link7">
-              Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
-              <br>
-              <br> Dramatically visualize customer directed convergence without revolutionary ROI.
-            </div>
-            <div class="tab-pane" id="link8">
-                <div class="col-md-6" *ngFor="let review of reviews;">
-                    <div class="card card-testimonial">
-                        <div class="card-body ">
-                            <div class="icon icon-primary">
-                                <i class="fa fa-quote-right"></i>
-                            </div>
-                            <p class="card-description">
-                                {{ review.message }}
-                            </p>
-                        </div>
-                        <div class="card-footer ">
-                            <h4 class="card-title">{{ review.user }}</h4>
-                            <div class="card-avatar">
-                                <div class="stars-outer little-stars">
-                                    <div class="stars-inner" style="width:{{review.rating*100/5}}%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane" id="link9">
-                <div class="col-md-6">
-                    <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple"></jhi-timeline>
-                </div>
-            </div>
-            <div class="tab-pane" id="link10">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title"> Contenido exclusivo </h4>
-                            </div>
-                
-                            <jhi-alert></jhi-alert>
-                
-                            <div class="alert alert-warning" id="no-result" *ngIf="exclusiveContents?.length === 0">
-                                <span>No hay elementos</span>
-                            </div>
-                
-                            <div class="card-body">
-                                <div class="table-responsive" id="entities" *ngIf="exclusiveContents && exclusiveContents.length > 0">
-                                    <table class="table">
-                                        <thead class="text-primary">
-                                            <th scope="col"><span>Nombre</span></th>
-                                            <th scope="col"><span>Precio</span></th>
-                                            <th scope="col"><span>Disponibles</span></th>
-                                            <th scope="col" class="text-center" *ngIf="isProjectOwner"><span>Acciones</span></th>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let exclusiveContent of exclusiveContents">
-                                                <td>
-                                                    <div *ngIf="exclusiveContent.prize">
-                                                        <a
-                                                            [routerLink]="['/prize', exclusiveContent.prize?.id, 'view']">{{ exclusiveContent.prize?.name }}</a>
-                                                    </div>
-                                                </td>
-                                                <td>${{ exclusiveContent.price }}</td>
-                                                <td>{{ exclusiveContent.stock }}</td>
-                                                <td class="text-right">
-                                                    <div class="btn-group" *ngIf="isProjectOwner">
-                                                        <jhi-icon-button type="info" label="" icon="nc-zoom-split"
-                                                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
-                                                        </jhi-icon-button>
-                                                        <jhi-icon-button type="success" label="" icon="nc-ruler-pencil"
-                                                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
-                                                        </jhi-icon-button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>

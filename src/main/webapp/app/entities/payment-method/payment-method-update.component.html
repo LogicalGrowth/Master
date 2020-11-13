@@ -19,7 +19,7 @@
                     formControlName="cardNumber" (keyup)="validateCard($event)"/>
                     <div *ngIf="editForm.get('cardNumber')!.invalid && (editForm.get('cardNumber')!.dirty || editForm.get('cardNumber')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('cardNumber')?.errors?.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('cardNumber')?.errors?.required">
                         Este campo es requerido.
                         </small>
                         <small class="form-text text-danger"

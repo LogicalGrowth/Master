@@ -9,6 +9,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { SliderBarComponent } from './slider-bar/slider-bar.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
+import { CloudinaryComponent } from './cloudinary/cloudinary.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
     SliderBarComponent,
     TimelineComponent,
     VerticalTabsComponent,
+    CloudinaryComponent,
   ],
   imports: [CommonModule],
   exports: [
@@ -33,6 +35,7 @@ import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
     SliderBarComponent,
     TimelineComponent,
     VerticalTabsComponent,
+    CloudinaryComponent,
   ],
 })
 export class ComponentsModule {}

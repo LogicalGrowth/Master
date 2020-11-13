@@ -1,13 +1,11 @@
-<div>
+<div class="row">
     <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
     <div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
         <span>No hay categorías registradas</span>
     </div>
 
-    <button class="btn btn-primary float-right create-category" [routerLink]="['/category/new']">
-        <span>Crear</span>
-    </button>
+    <button class="btn btn-primary float-right create-category" [routerLink]="['/category/new']">Crear</button>
 </div>
 
 <div class="main-content">

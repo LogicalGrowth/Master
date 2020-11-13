@@ -11,6 +11,8 @@ import { IPaymentMethod, PaymentMethod } from 'app/shared/model/payment-method.m
 import { PaymentMethodService } from './payment-method.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
+import { AccountService } from 'app/core/auth/account.service';
+import { User } from 'app/core/user/user.model';
 
 @Component({
   selector: 'jhi-payment-method-update',
@@ -23,6 +25,10 @@ export class PaymentMethodUpdateComponent implements OnInit {
   isValid = true;
   cardTypeImage = '';
   showCardImage = false;
+  todayDate = new Date();
+  type = '';
+  account!: User;
+  favorite = false;
   editForm = this.fb.group({
     id: [],
     cardNumber: [null, [Validators.required, Validators.minLength(14), Validators.maxLength(19)]],
@@ -38,10 +44,17 @@ export class PaymentMethodUpdateComponent implements OnInit {
     protected paymentMethodService: PaymentMethodService,
     protected applicationUserService: ApplicationUserService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+      }
+    });
+
     this.activatedRoute.data.subscribe(({ paymentMethod }) => {
       if (!paymentMethod.id) {
         const today = moment().startOf('day');
@@ -62,8 +75,8 @@ export class PaymentMethodUpdateComponent implements OnInit {
       expirationDate: paymentMethod.expirationDate ? paymentMethod.expirationDate.format(DATE_TIME_FORMAT) : null,
       type: paymentMethod.type,
       cvc: paymentMethod.cvc,
-      favorite: paymentMethod.favorite,
-      owner: paymentMethod.owner,
+      favorite: this.favorite,
+      owner: this.account.id,
     });
   }
 
@@ -92,8 +105,8 @@ export class PaymentMethodUpdateComponent implements OnInit {
         : undefined,
       type: this.editForm.get(['type'])!.value,
       cvc: this.editForm.get(['cvc'])!.value,
-      favorite: this.editForm.get(['favorite'])!.value,
-      owner: this.editForm.get(['owner'])!.value,
+      favorite: this.favorite,
+      owner: this.account.id,
     };
   }
 
@@ -125,7 +138,9 @@ export class PaymentMethodUpdateComponent implements OnInit {
       if (imgSrc !== '') {
         this.cardTypeImage = imgSrc;
         this.showCardImage = true;
+        this.isValid = true;
       } else {
+        this.isValid = false;
         this.cardTypeImage = '';
         this.showCardImage = false;
       }
@@ -177,13 +192,38 @@ export class PaymentMethodUpdateComponent implements OnInit {
 
   setCardImage(cardType: string): any {
     if (cardType === 'Visa') {
+      this.type = 'VISA';
       return '../../../content/images/CardTypes/Visa.png';
     } else if (cardType === 'American') {
+      this.type = 'EXPRESS';
       return '../../../content/images/CardTypes/Express.png';
     } else if (cardType === 'Mastercard') {
+      this.type = 'MASTERCARD';
       return '../../../content/images/CardTypes/Mastercard.png';
     }
 
     return '';
+  }
+
+  isDateValid(date: any): any {
+    if (date == null || date.value == null) {
+      return false;
+    }
+    const dateValue = new Date(date.value);
+
+    if (this.todayDate.getMonth() >= dateValue.getMonth() + 1) {
+      if (this.todayDate.getFullYear() >= dateValue.getFullYear()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  isValidCvc(cvc: any): any {
+    if (cvc.value == null || cvc.value.length < 3 || cvc.value.length > 4 || cvc.value.length === 0) {
+      return false;
+    }
+    return true;
   }
 }

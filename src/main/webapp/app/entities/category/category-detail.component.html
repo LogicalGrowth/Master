@@ -2,50 +2,46 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div *ngIf="category">
-                    <div class="card">
-                        <form name="editForm" role="form" novalidate>
-                            <div class="card-header ">
-                                <h4 class="card-title">Categoría</h4>
+                <div class="card">
+                    <div *ngIf="category">
+                        <div class="card-header ">
+                            <h4 class="card-title">Categoría</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-control-label" for="field_name">Nombre</label>
+                                <input type="text" class="form-control" name="name" id="field_name" value="{{ category.name }}" readonly/>
                             </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label class="form-control-label" for="field_name">Nombre</label>
-                                    <input type="text" class="form-control" name="name" id="field_name" formControlName="name" value="{{category.name}}" readonly/>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-control-label" for="field_description">Descripción</label>
-                                    <input type="text" class="form-control" name="description" id="field_description" formControlName="description" value="{{category.description}}" readonly/>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-control-label" for="field_status">Estado</label>
-                                    <input type="text" class="form-control" name="status" id="field_status" formControlName="status" value="{{category.status}}" readonly/>
-                                </div>
-								
-                                <div class="form-group">
-                                    <label class="form-control-label" for="field_image">Imagen</label>
-                                    <select class="form-control" id="field_image" name="image" formControlName="image">
-                                        <option [ngValue]="null"></option>
-                                    </select>
-                                </div>
+ht
+                            <div class="form-group">
+                                <label class="form-control-label" for="field_description">Descripción</label>
+                                <input type="text" class="form-control" name="description" id="field_description" value="{{ category.description }}" readonly/>
                             </div>
 
-                            <div class="card-footer text-right">
-                                <button type="submit"
-                                        (click)="previousState()"
-                                        class="btn btn-default">
-                                    <span>Regresar</span>
-                                </button>
-
-                                <button type="button"
-                                        [routerLink]="['/category', category.id, 'edit']"
-                                        class="btn btn-primary">
-                                    <span>Editar</span>
-                                </button>
+                            <div class="form-group">
+                                <label class="form-control-label" for="field_status">Estado</label>
+                                <input type="text" class="form-control" name="status" id="field_status" value="{{ category.status }}" readonly/>
                             </div>
-                        </form>
+
+                            <dl class="row-md jh-entity-details">
+                                <dd>
+                                    <div *ngIf="category.image">
+                                        <a [routerLink]="['/image', category.image?.id, 'view']">{{ category.image?.id }}</a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="card-footer text-right">
+                            <button type="submit"
+                                    (click)="previousState()"
+                                    class="btn btn-info"> Atrás
+                            </button>
+                            <button type="button"
+                                    [routerLink]="['/category', category.id, 'edit']"
+                                    class="btn btn-primary"> Editar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

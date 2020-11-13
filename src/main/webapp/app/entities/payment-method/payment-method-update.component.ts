@@ -28,6 +28,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
   todayDate = new Date();
   type = '';
   account!: User;
+  idUser = '';
   favorite = false;
   editForm = this.fb.group({
     id: [],
@@ -52,6 +53,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
     this.accountService.identity().subscribe(account => {
       if (account) {
         this.account = account;
+        this.idUser = this.account.id;
       }
     });
 
@@ -75,8 +77,8 @@ export class PaymentMethodUpdateComponent implements OnInit {
       expirationDate: paymentMethod.expirationDate ? paymentMethod.expirationDate.format(DATE_TIME_FORMAT) : null,
       type: paymentMethod.type,
       cvc: paymentMethod.cvc,
-      favorite: this.favorite,
-      owner: this.account.id,
+      favorite: paymentMethod.favorite,
+      owner: paymentMethod.owner,
     });
   }
 
@@ -106,7 +108,9 @@ export class PaymentMethodUpdateComponent implements OnInit {
       type: this.editForm.get(['type'])!.value,
       cvc: this.editForm.get(['cvc'])!.value,
       favorite: this.favorite,
-      owner: this.account.id,
+      owner: {
+        id: this.editForm.get(['owner'])!.value,
+      },
     };
   }
 

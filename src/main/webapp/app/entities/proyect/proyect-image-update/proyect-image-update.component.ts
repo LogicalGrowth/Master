@@ -54,6 +54,10 @@ export class ProyectImageUpdateComponent implements OnInit {
     fr.readAsDataURL(this.imagen);
   }
 
+  showImage(data: any): void {
+    alert(data);
+  }
+
   onUpload(): void {
     this.spinner.show();
     this.proyectService.uploadImage(this.imagen, window.sessionStorage.proyect).subscribe(

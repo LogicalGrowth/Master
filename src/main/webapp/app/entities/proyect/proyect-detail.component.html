@@ -17,55 +17,29 @@
         <div class="row">
             <div class="col-lg-8">
                 <img src="http://res.cloudinary.com/barnesnoble/image/upload/v1604828586/gwiydfej4tdaqammaz4p.png">
-                <div class="d-flex flex-row col-lg-12">
-                    <div class="p-2">
-                        <img src="{{proyect.category?.image?.url}}" alt="Categoría" width="30"
-                            class="rounded mx-auto d-block">
-                        <p>{{ proyect.category?.name }}</p>
-                    </div>
-                    <div class="p-2">
-                        <jhi-icon buttonCssClass="btn-facebook" iconCssClass="fa fa-facebook-f">
-                        </jhi-icon>
-                    </div>
-                    <div class="p-2">
-                        <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
-                    </div>
-                    <div class="p-2">
-                        <button type="button" [routerLink]="['/proyect', proyect.id, 'edit']" class="btn btn-primary">
-                            <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
-                        </button>
-                    </div>
-                </div>
             </div>
             <div class="col-lg-4">
-                <jhi-progress-bar progressBarClass="progress-bar-danger" minValue="0" maxValue="{{proyect.goalAmount}}"
-                    percentile="{{percentile}}" currentValue="{{proyect.collected}}">
-                </jhi-progress-bar>
                 <div class="card">
-                    <div class="card-body">
-                        <div class="mb-4">
-                            <h4 class="mb-auto my-auto">
-                                <span>${{ proyect.collected }}</span>
-                            </h4>
-                            <dt><span>El monto meta es ${{ proyect.goalAmount }}</span></dt>
+                    <jhi-progress-bar progressBarClass="progress-bar-danger" minValue="0"
+                        maxValue="{{proyect.goalAmount}}" percentile="{{percentile}}"
+                        currentValue="{{proyect.collected}}">
+                    </jhi-progress-bar>
+                    <div class="card-body col-md-11 ml-auto mr-auto text-center">
+                        <div class="col-lg-12 mb-3">
+                            <span>{{ proyect.collected | currency:'USD':'symbol':'4.2-2' }} recaudado de
+                                {{ proyect.goalAmount | currency:'USD':'symbol':'4.2-2' }}</span>
                         </div>
 
-                        <div class="mb-4">
-                            <h4 class="mb-auto my-auto">
-                                <span>{{ daysCreated }}</span>
-                            </h4>
-                            <dt><span>Días transcurridos.</span></dt>
+                        <div class="col-lg-12 mb-3">
+                            <span>{{ daysCreated }} días transcurridos desde creación.</span>
                         </div>
 
-                        <div class="mb-4">
-                            <h4 class="mb-auto my-auto">
-                                <span>{{ proyect.lastUpdated | date:'medium' }}</span>
-                            </h4>
-                            <dt><span>Última actualización.</span></dt>
+                        <div class="col-lg-12 mb-3">
+                            <span>{{ updatedDays }} días desde la última actualización.</span>
                         </div>
                     </div>
                     <div class="card-body pt-1">
-                        <h5 class="card-title">Se parte de este sueño</h5>
+                        <h5 class="card-title text-center">¡Se parte de este sueño!</h5>
                         <button class="btn btn-warning col-md-12">
                             <span class="btn-label">
                                 <i class="nc-icon nc-money-coins"></i>
@@ -79,15 +53,36 @@
                             Hacerce socio
                         </button>
                     </div>
+                    <div class="d-flex flex-row col-lg-12 justify-content-center">
+                        <div class="p-2  text-center">
+                            <i class="nc-icon nc-alert-circle-i"></i>
+                            <p>{{ proyect.category?.name }}</p>
+                        </div>
+                        <div class="p-2">
+                            <jhi-icon buttonCssClass="btn-facebook" iconCssClass="fa fa-facebook-f">
+                            </jhi-icon>
+                        </div>
+                        <div class="p-2">
+                            <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
+                        </div>
+                        <div class="p-2" *ngIf="isProjectOwner">
+                            <button type="button" [routerLink]="['/proyect', proyect.id, 'edit']"
+                                class="btn btn-primary">
+                                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="row mt-5">
             <div class="col-lg-6">
                 <div class="card ">
                     <div class="card-header ">
                         <h4 class='card-title'>Localización del proyecto</h4>
                     </div>
                     <div class="card-body ">
-                        <ngui-map zoom="7" center="9.7489,-83.7534">
+                        <ngui-map zoom="13" center="9.7489,-83.7534">
                             <marker [position]="position" *ngIf="hasMarker"></marker>
                         </ngui-map>
                     </div>
@@ -113,8 +108,7 @@
                                         </td>
                                     </tr>
                                     <tr class="alert alert-warning" id="no-result" *ngIf="donors && !donors.length">
-                                        <td class="text-left col-md-12"></td>
-                                        No hay donadores en el proyecto
+                                        <td class="text-left col-md-12">No hay donadores en el proyecto
                                         </td>
                                     </tr>
                                 </tbody>
@@ -135,7 +129,7 @@
                         </li>
                         <li class="nav-item" *ngIf="reviews && reviews.length !== 0">
                             <a class="nav-link" data-toggle="tab" href="#link8" role="tablist">
-                                <i class="now-ui-icons shopping_shop"></i>Califiaciones
+                                <i class="now-ui-icons shopping_shop"></i>Calificaciones
                             </a>
                         </li>
                         <li class="nav-item">
@@ -178,7 +172,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-5 col-sm-8" *ngIf="!reviews.length">
+                                    <div class="col-lg-4 col-md-5 col-sm-8" *ngIf="reviews && !reviews.length">
                                         <div class="card">
                                             <div class="card-body">
                                                 <p class="card-text">No hay comentarios ni calificaciones.</p>

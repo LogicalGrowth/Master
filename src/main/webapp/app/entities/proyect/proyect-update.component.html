@@ -38,7 +38,7 @@
               <div
                 *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
                 <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors?.required">
-                  El campo es requerido.
+                  Este campo es requerido.
                 </small>
                 <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors?.maxlength">
                   El campo no puede ser mayor a 300 caracteres.
@@ -64,7 +64,7 @@
               <div
                 *ngIf="editForm.get('goalAmount')!.invalid && (editForm.get('goalAmount')!.dirty || editForm.get('goalAmount')!.touched)">
                 <small class="form-text text-danger" *ngIf="editForm.get('goalAmount')?.errors?.required">
-                  El campo es requerido.
+                  Este campo es requerido.
                 </small>
                 <small class="form-text text-danger" *ngIf="editForm.get('goalAmount')?.errors?.min">
                   El campo tiene que ser mayor a un $1.

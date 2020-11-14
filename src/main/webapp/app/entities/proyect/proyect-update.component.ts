@@ -84,8 +84,7 @@ export class ProyectUpdateComponent implements OnInit {
   }
 
   goToAddImage(data: any): void {
-    window.sessionStorage.proyect = data.body.id;
-    this.router.navigate(['/proyect/image/new']);
+    this.router.navigate(['/proyect/' + data.body.id + '/image/new']);
   }
 
   previousState(): void {

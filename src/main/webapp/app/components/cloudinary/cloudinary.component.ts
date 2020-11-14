@@ -71,7 +71,9 @@ export class CloudinaryComponent implements OnInit {
     this.uploader.onCompleteItem = (item: any, response: string) => {
       this.progressBar.set(96, 'Verificando imágen.', false);
       this.progressBar.set(100, 'Imágen guardada.', false);
-      this.okCallback(JSON.parse(response));
+      setTimeout(() => {
+        this.okCallback(JSON.parse(response));
+      }, 1000);
     };
     this.initProgressBar();
   }

@@ -103,6 +103,18 @@ public class ExclusiveContentResource {
         if(exclusiveContent.getStock() == 0) {
             exclusiveContent.setState(ActivityStatus.DISABLED);
         }
+
+        Prize prize = exclusiveContent.getPrize();
+        Set<Resource> images = prize.getImages();
+
+        Prize temp = prizeService.save(prize);
+
+        for (Object image:images.toArray()) {
+            Resource img = (Resource)image;
+            img.setPrize(temp);
+            resourceService.save((Resource) image);
+        };
+
         ExclusiveContent result = exclusiveContentService.save(exclusiveContent);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exclusiveContent.getId().toString()))

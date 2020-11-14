@@ -12,7 +12,7 @@ import { IPrize, Prize } from 'app/shared/model/prize.model';
 import { PrizeService } from 'app/entities/prize/prize.service';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from 'app/entities/proyect/proyect.service';
-import { Resource } from 'app/shared/model/resource.model';
+import { IResource, Resource } from 'app/shared/model/resource.model';
 
 type SelectableEntity = IPrize | IProyect;
 
@@ -22,25 +22,25 @@ type SelectableEntity = IPrize | IProyect;
   styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ExclusiveContentUpdateComponent implements OnInit {
+  creating = true;
   isSaving = false;
   prizes: IPrize[] = [];
   proyects: IProyect[] = [];
   proyect?: IProyect | null;
+  images: IResource[] = [];
+  prize?: IPrize | null;
 
-  editForm = this.fb.group(
-    {
-      id: [],
-      image: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      description: [null, [Validators.required]],
-      price: [null, [Validators.required, Validators.min(0)]],
-      stock: [null, [Validators.min(0)]],
-      state: [null, [Validators.required]],
-      prize: [],
-      proyect: [],
-    },
-    { updateOn: 'submit' }
-  );
+  editForm = this.fb.group({
+    id: [],
+    image: [null, [Validators.required]],
+    name: [null, [Validators.required]],
+    description: [null, [Validators.required]],
+    price: [null, [Validators.required, Validators.min(0)]],
+    stock: [null, [Validators.required, Validators.min(0)]],
+    state: [null, [Validators.required]],
+    prize: [],
+    proyect: [],
+  });
 
   constructor(
     protected exclusiveContentService: ExclusiveContentService,
@@ -53,7 +53,11 @@ export class ExclusiveContentUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ exclusiveContent }) => {
       if (exclusiveContent) {
+        this.creating = false;
         this.updateForm(exclusiveContent);
+        this.prize = exclusiveContent.prize;
+        this.images = exclusiveContent.images;
+        this.proyect = exclusiveContent.proyect;
 
         this.prizeService
           .query({ 'exclusiveContentId.specified': 'false' })
@@ -94,11 +98,14 @@ export class ExclusiveContentUpdateComponent implements OnInit {
   updateForm(exclusiveContent: IExclusiveContent): void {
     this.editForm.patchValue({
       id: exclusiveContent.id,
+      image: exclusiveContent.prize?.images,
+      name: exclusiveContent.prize?.name,
+      description: exclusiveContent.prize?.description,
       price: exclusiveContent.price,
       stock: exclusiveContent.stock,
       state: exclusiveContent.state,
       prize: exclusiveContent.prize,
-      proyect: exclusiveContent.proyect,
+      proyect: exclusiveContent.proyect?.id,
     });
   }
 
@@ -108,7 +115,12 @@ export class ExclusiveContentUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const exclusiveContent = this.createFromForm();
+    let exclusiveContent: IExclusiveContent;
+    if (this.creating) {
+      exclusiveContent = this.createFromForm();
+    } else {
+      exclusiveContent = this.updateFromForm();
+    }
     if (exclusiveContent.id !== undefined) {
       this.subscribeToSaveResponse(this.exclusiveContentService.update(exclusiveContent));
     } else {
@@ -140,6 +152,33 @@ export class ExclusiveContentUpdateComponent implements OnInit {
       state: this.editForm.get(['state'])!.value,
       prize: newPrize,
       proyect: this.editForm.get(['proyect'])!.value,
+    };
+  }
+
+  private updateFromForm(): IExclusiveContent {
+    const newPrize = {
+      ...new Prize(),
+      id: this.prize?.id,
+      name: this.editForm.get(['name'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      images: [
+        {
+          ...new Resource(),
+          id: 14,
+          url: this.editForm.get(['image'])!.value,
+          type: 'image',
+        },
+      ],
+    };
+
+    return {
+      ...new ExclusiveContent(),
+      id: this.editForm.get(['id'])!.value,
+      price: this.editForm.get(['price'])!.value,
+      stock: this.editForm.get(['stock'])!.value,
+      state: this.editForm.get(['state'])!.value,
+      prize: newPrize,
+      proyect: this.proyect!,
     };
   }
 

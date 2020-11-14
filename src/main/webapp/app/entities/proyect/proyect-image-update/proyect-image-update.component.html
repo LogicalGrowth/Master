@@ -1,72 +1,94 @@
 <jhi-alert></jhi-alert>
 
-<div class="container">
-    <h1>Agregar contenido media para la galería</h1>
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#firsttab" data-toggle="tab">Cargar imágenes</a></li>
-        <li><a href="#secondtab" data-toggle="tab">Videos o 3D Tour</a></li>
+<div class="main-content">
+    <ul class="nav nav-tabs d-flex justify-content-center">
+        <li class="active"><a class="color-dark" href="#firsttab" data-toggle="tab">Cargar imágenes</a></li>
+        <li><a class="color-dark" href="#secondtab" data-toggle="tab">Videos o 3D Tour</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="firsttab">
-            <form (ngSubmit)="onUpload()" novalidate enctype="multipart/form-data">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="imagen" #imagenInputFile
-                        (change)="onFileChange($event)" accept="image/png, image/jpeg, image/gif">
-                    <label class="custom-file-label" for="imagen">Elige una imagen</label>
-                </div>
-                <div *ngIf="imagen" class="mt-5">
-                    <h5>Vista Previa:</h5>
-                    <div>
-                        <img class="image-thumbnail" style="max-width: 100px" [src]="imagenMin">
+            <div class="main-content d-flex justify-content-center">
+                <div class="col-md-6">
+                    <div class="card ">
+                        <div class="container-fluid">
+                            <h4 class="card-title">Agregar imágenes</h4>
+                        </div>
+                        <div class="container-fluid">
+                            <form (ngSubmit)="onUpload()" novalidate enctype="multipart/form-data">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="imagen" #imagenInputFile
+                                        (change)="onFileChange($event)" accept="image/png, image/jpeg, image/gif">
+                                    <label class="custom-file-label" for="imagen">Elige una imagen</label>
+                                </div>
+                                <div *ngIf="imagen" class="mt-5">
+                                    <h5>Vista Previa:</h5>
+                                    <div>
+                                        <img class="image-thumbnail" style="max-width: 100px" [src]="imagenMin">
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex justify-content-between my-3">
+                                    <button type="submit" class="btn btn-primary" [disabled]="!imagen"><i
+                                            class="fa fa-upload"></i> Subir</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group d-flex justify-content-between my-3">
-                    <button type="submit" class="btn btn-outline-success" [disabled]="!imagen"><i
-                            class="fa fa-upload"></i> Subir</button>
-                </div>
-            </form>
+            </div>
         </div>
         <div class="tab-pane" id="secondtab">
-            <div class="main-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card ">
-                            <div class="card-header ">
-                                <h4 class="card-title">Videos o 3D Tour</h4>
-                            </div>
-                            <div class="card-body ">
-                                <jhi-alert-error></jhi-alert-error>
-                                <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"
-                                    class="form-horizontal">
-                                    <div class="row">
-                                        <label class="col-sm-2 col-form-label" for="field_name">URL de video</label>
-                                        <div class="col-sm-10">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="url" id="field_url"
-                                                    formControlName="url">
-                                                <div
-                                                    *ngIf="editForm.get('url')!.invalid && (editForm.get('url')!.dirty || editForm.get('url')!.touched)">
-                                                    <small class="form-text text-danger"
-                                                        *ngIf="editForm.get('url')?.errors?.required">
-                                                        Campo es requerido.
-                                                    </small>
-                                                    <small class="form-text text-danger"
-                                                        *ngIf="editForm.get('url')?.errors?.maxlength">
-                                                        El nombre no puede ser mayor a 255 caracteres.
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </div>
+            <div class="main-content d-flex justify-content-center">
+                <div class="col-md-6">
+                    <div class="card ">
+                        <div class="container-fluid">
+                            <h4 class="card-title">Agregar videos o 3D Tour</h4>
+                        </div>
+
+                        <div class="card-body ">
+                            <jhi-alert-error></jhi-alert-error>
+                            <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"
+                                class="form-horizontal">
+                                <div class="form-group has-label">
+                                    <label for="field_name" class="control-label">URL del contenido</label>
+                                    <span class="star">*</span>
+                                    <input type="text" class="form-control" name="url" id="field_url"
+                                        formControlName="url">
+                                    <div
+                                        *ngIf="editForm.get('url')!.invalid && (editForm.get('url')!.dirty || editForm.get('url')!.touched)">
+                                        <small class="form-text text-danger"
+                                            *ngIf="editForm.get('url')?.errors?.required">
+                                            Campo es requerido.
+                                        </small>
+                                        <small class="form-text text-danger"
+                                            *ngIf="editForm.get('url')?.errors?.maxlength">
+                                            El nombre no puede ser mayor a 255 caracteres.
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group has-label">
+                                    <label for="type" class="control-label">Tipo contenido</label>
+                                    <span class="star">*</span>
+                                    <select class="form-control custom-select custom-select-lg" name="type"
+                                        formControlName="type" id="type">
+                                        <option value="Youtube">Youtube</option>
+                                        <option value="3DTour">3DTour</option>
+                                    </select>
+                                    <div
+                                        *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+                                        <small class="form-text text-danger"
+                                            *ngIf="editForm.get('type')?.errors?.required">
+                                            Campo requerido.
+                                        </small>
                                     </div>
 
                                     <div>
                                         <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
-                                            class="btn btn-primary">
-                                            <fa-icon icon="save"></fa-icon>&nbsp;<span>Guardar</span>
+                                            class="btn btn-primary"><span>Guardar</span>
                                         </button>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

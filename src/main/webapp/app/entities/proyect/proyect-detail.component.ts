@@ -23,6 +23,7 @@ export class ProyectDetailComponent implements OnInit {
   reviews: any;
   ratings = [1, 2, 3, 4, 5];
   position: any[] = [];
+  mapCenter: any;
   hasMarker = false;
   percentile: any;
   rating: any;
@@ -63,6 +64,10 @@ export class ProyectDetailComponent implements OnInit {
       this.proyect = proyect;
       this.position.push(proyect.coordY);
       this.position.push(proyect.coordX);
+      this.mapCenter = {
+        lat: proyect.coordY,
+        lng: proyect.coordX,
+      };
       this.hasMarker = true;
       this.percentile = (100 * proyect.collected) / proyect.goalAmount;
       this.rating = (100 * proyect.rating) / 5;

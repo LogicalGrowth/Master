@@ -6,6 +6,8 @@
             </div>
             <div class="card-body">
                 <p class="col-lg-8 ml-auto mr-auto mb-1">{{ proyect.description }}
+                    <br>
+                    Proyecto {{ proyect.idType === 'NONPROFIT' ? 'sin fines de lucro': 'con fines de lucro' }}
                 </p>
                 <div class="stars-outer">
                     <div class="stars-inner" style="width:{{rating}}%"></div>
@@ -82,7 +84,7 @@
                         <h4 class='card-title'>Localización del proyecto</h4>
                     </div>
                     <div class="card-body ">
-                        <ngui-map zoom="13" center="9.7489,-83.7534">
+                        <ngui-map zoom="13" [center]="mapCenter">
                             <marker [position]="position" *ngIf="hasMarker"></marker>
                         </ngui-map>
                     </div>
@@ -123,18 +125,13 @@
                 <div class="card-body ">
                     <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#link7" role="tablist">
-                                <i class="now-ui-icons objects_umbrella-13"></i> Descripción
+                            <a class="nav-link active" data-toggle="tab" href="#link8" role="tablist">
+                                <i class="now-ui-icons ui-2_settings-90"></i> Checkpoints
                             </a>
                         </li>
                         <li class="nav-item" *ngIf="reviews && reviews.length !== 0">
-                            <a class="nav-link" data-toggle="tab" href="#link8" role="tablist">
-                                <i class="now-ui-icons shopping_shop"></i>Calificaciones
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#link9" role="tablist">
-                                <i class="now-ui-icons ui-2_settings-90"></i> Checkpoints
+                                <i class="now-ui-icons shopping_shop"></i>Calificaciones
                             </a>
                         </li>
                         <li class="nav-item">
@@ -144,13 +141,13 @@
                         </li>
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
-                        <div class="tab-pane active" id="link7">
-                            Collaboratively administrate empowered markets via plug-and-play networks. Dynamically
-                            procrastinate B2C users after installed base benefits.
-                            <br>
-                            <br> Dramatically visualize customer directed convergence without revolutionary ROI.
+                        <div class="tab-pane active" id="link8">
+                            <div class="col-md-12">
+                                <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple">
+                                </jhi-timeline>
+                            </div>
                         </div>
-                        <div class="tab-pane" id="link8">
+                        <div class="tab-pane" id="link9">
                             <div class="container-fluid">
                                 <div class="header text-center">
                                     <h3 class="title">Comentarios y calificaciones</h3>
@@ -180,12 +177,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="link9">
-                            <div class="col-md-12">
-                                <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple">
-                                </jhi-timeline>
                             </div>
                         </div>
                         <div class="tab-pane" id="link10">

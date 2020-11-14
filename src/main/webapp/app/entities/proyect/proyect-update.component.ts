@@ -117,6 +117,7 @@ export class ProyectUpdateComponent implements OnInit {
       number: this.editForm.get(['number'])!.value,
       currencyType: this.editForm.get(['currencyType'])!.value,
       category: this.editForm.get(['category'])!.value,
+      collected: 0,
     };
   }
 

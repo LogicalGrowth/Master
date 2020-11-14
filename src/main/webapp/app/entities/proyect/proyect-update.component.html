@@ -9,7 +9,7 @@
             <h4 class="card-title">Proyecto</h4>
           </div>
           <div class="card-body">
-            <div class="form-group has-label" [hidden]="!editForm.get('id')!.value">
+            <div class="form-group has-label" [hidden]="true">
               <label for="id" class="control-label">Id</label>
               <span class="star">*</span>
               <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly>
@@ -46,7 +46,7 @@
               </div>
             </div>
 
-            <div class="form-group has-label">
+            <div class="form-group has-label" [hidden]="editForm.get('id')!.value">
               <label for="field_idType" class="control-label">Tipo de proyecto</label>
               <span class="star">*</span>
               <select class="form-control custom-select custom-select-lg" name="idType" formControlName="idType"
@@ -56,7 +56,7 @@
               </select>
             </div>
 
-            <div class="form-group has-label">
+            <div class="form-group has-label" [hidden]="editForm.get('id')!.value">
               <label for="field_goalAmount" class="control-label">Monto objectivo</label>
               <span class="star">*</span>
               <input type="text" class="form-control" name="goalAmount" id="field_goalAmount"
@@ -141,6 +141,9 @@
             <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
               <span>Guardar</span>
             </button>
+            <p class="card-text">
+              <small class="text-muted">La comisión que se va cobrar es {{ proyectFee }}%</small>
+            </p>
           </div>
         </div>
       </div>

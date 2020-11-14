@@ -4,16 +4,19 @@
     <div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
         <span>No hay categorías registradas</span>
     </div>
-
-    <button class="btn btn-primary float-right create-category" [routerLink]="['/category/new']">Crear</button>
 </div>
 
 <div class="main-content">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Categorías</h4>
+                    <h4 class="card-title d-inline">Categorías</h4>
+                    <div class="pull-right" >
+                        <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/category/new']">
+                            <i class="nc-icon nc-simple-add"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

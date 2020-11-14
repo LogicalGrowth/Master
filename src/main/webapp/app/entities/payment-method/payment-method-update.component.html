@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
-    <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-payment-method-heading" jhiTranslate="fun4FundApp.paymentMethod.home.createOrEditLabel">Create or edit a Payment Method</h2>
+    <div class="col-5 mt-5 containerPaymenthMethod">
+        <form class="formPaymenthMethod" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-payment-method-heading" >Registrar método de pago</h2>
 
             <div>
                 <jhi-alert-error></jhi-alert-error>
@@ -11,101 +11,94 @@
                     <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.cardNumber" for="field_cardNumber">Card Number</label>
+                <div class="form-group has-label">
+                    <label class="control-label" for="">Número de tarjeta:
+                        <span class="star">*</span>
+                    </label>
                     <input type="text" class="form-control" name="cardNumber" id="field_cardNumber"
-                           formControlName="cardNumber"/>
+                    formControlName="cardNumber" (keyup)="validateCard($event)"/>
                     <div *ngIf="editForm.get('cardNumber')!.invalid && (editForm.get('cardNumber')!.dirty || editForm.get('cardNumber')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('cardNumber')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               *ngIf="editForm.get('cardNumber')?.errors?.required">
+                        Este campo es requerido.
                         </small>
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('cardNumber')?.errors?.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 14 }">
-                        This field is required to be at least 14 characters.
+                        Debe ingresar al menos 14 caracteres.
                         </small>
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('cardNumber')?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 19 }">
-                        This field cannot be longer than 19 characters.
+                        Debe ingresar menos 19 caracteres.
                         </small>
+                        <small class="form-text text-danger"
+                        *ngIf="!isValid">
+                        Tarjeta invalida.
+                         </small>
                     </div>
+                    <img class="img-payment-cards" src="{{cardTypeImage}}" *ngIf="showCardImage" />
                 </div>
 
+
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.cardOwner" for="field_cardOwner">Card Owner</label>
+                    <label class="form-control-label"for="field_cardOwner">Nombre de la tarjeta: *</label>
                     <input type="text" class="form-control" name="cardOwner" id="field_cardOwner"
                            formControlName="cardOwner"/>
                     <div *ngIf="editForm.get('cardOwner')!.invalid && (editForm.get('cardOwner')!.dirty || editForm.get('cardOwner')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('cardOwner')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               *ngIf="editForm.get('cardOwner')?.errors?.required">
+                        Este campo es requerido.
                         </small>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.expirationDate" for="field_expirationDate">Expiration Date</label>
+                    <label class="form-control-label" for="field_expirationDate">Fecha de vencimiento</label>
                     <div class="d-flex">
-                        <input id="field_expirationDate" type="datetime-local" class="form-control" name="expirationDate" formControlName="expirationDate" placeholder="YYYY-MM-DD HH:mm"/>
+                        <input id="field_expirationDate" type="month" class="form-control" name="expirationDate" formControlName="expirationDate" placeholder="YYYY-MM-DD HH:mm"/>
                     </div>
-                    <div *ngIf="editForm.get('expirationDate')!.invalid && (editForm.get('expirationDate')!.dirty || editForm.get('expirationDate')!.touched)">
+                    <div *ngIf=" editForm.get('expirationDate')!.dirty || (editForm.get('expirationDate')!.touched)">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('expirationDate')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               *ngIf="editForm.get('expirationDate')?.errors?.required">
+                        Este campo es requerido.
                         </small>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.get('expirationDate')?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
-                            This field should be a date and time.
+                               *ngIf="!isDateValid(editForm.get('expirationDate'))" >
+                        Fecha invalida.
                         </small>
                     </div>
                 </div>
 
-                <div class="form-group">
+
+                <div class="form-group hidden">
                     <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.type" for="field_type">Type</label>
-                    <select class="form-control" name="type" formControlName="type" id="field_type">
+                    <select class="form-control" name="type" formControlName="type" id="field_type" [(ngModel)]="type">
                         <option value="VISA">{{ 'fun4FundApp.CardType.VISA' | translate }}</option>
                         <option value="MASTERCARD">{{ 'fun4FundApp.CardType.MASTERCARD' | translate }}</option>
                         <option value="EXPRESS">{{ 'fun4FundApp.CardType.EXPRESS' | translate }}</option>
                     </select>
-                    <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.cvc" for="field_cvc">Cvc</label>
+                    <label class="form-control-label" for="field_cvc">CVC</label>
                     <input type="text" class="form-control" name="cvc" id="field_cvc"
                            formControlName="cvc"/>
-                    <div *ngIf="editForm.get('cvc')!.invalid && (editForm.get('cvc')!.dirty || editForm.get('cvc')!.touched)">
+                    <div *ngIf=" editForm.get('cvc')!.dirty || editForm.get('cvc')!.touched">
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('cvc')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               *ngIf="!isValidCvc(editForm.get('cvc'))">
+                        CVC invalido.
                         </small>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.favorite" for="field_favorite">Favorite</label>
-                    <input type="checkbox" class="form-control" name="favorite" id="field_favorite"
-                           formControlName="favorite"/>
-                    <div *ngIf="editForm.get('favorite')!.invalid && (editForm.get('favorite')!.dirty || editForm.get('favorite')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('favorite')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
 
-                <div class="form-group">
+                <div class="form-group hidden">
                     <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.owner" for="field_owner">Owner</label>
-                    <select class="form-control" id="field_owner" name="owner" formControlName="owner">
+                    <select class="form-control" id="field_owner" name="owner" formControlName="owner" [(ngModel)]="idUser">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="applicationUserOption.id === editForm.get('owner')!.value?.id ? editForm.get('owner')!.value : applicationUserOption" *ngFor="let applicationUserOption of applicationusers; trackBy: trackById">{{ applicationUserOption.id }}</option>
                     </select>
                 </div>
+           
             </div>
 
             <div>
@@ -113,7 +106,7 @@
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
 
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || !isValidCvc(editForm.get('cvc')) || !isDateValid(editForm.get('expirationDate'))" class="btn btn-primary">
                     <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>

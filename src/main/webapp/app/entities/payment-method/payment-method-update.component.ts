@@ -11,15 +11,25 @@ import { IPaymentMethod, PaymentMethod } from 'app/shared/model/payment-method.m
 import { PaymentMethodService } from './payment-method.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
+import { AccountService } from 'app/core/auth/account.service';
+import { User } from 'app/core/user/user.model';
 
 @Component({
   selector: 'jhi-payment-method-update',
   templateUrl: './payment-method-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss', './payment-method.scss'],
 })
 export class PaymentMethodUpdateComponent implements OnInit {
   isSaving = false;
   applicationusers: IApplicationUser[] = [];
-
+  isValid = true;
+  cardTypeImage = '';
+  showCardImage = false;
+  todayDate = new Date();
+  type = '';
+  account!: User;
+  idUser = '';
+  favorite = false;
   editForm = this.fb.group({
     id: [],
     cardNumber: [null, [Validators.required, Validators.minLength(14), Validators.maxLength(19)]],
@@ -35,10 +45,18 @@ export class PaymentMethodUpdateComponent implements OnInit {
     protected paymentMethodService: PaymentMethodService,
     protected applicationUserService: ApplicationUserService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+        this.idUser = this.account.id;
+      }
+    });
+
     this.activatedRoute.data.subscribe(({ paymentMethod }) => {
       if (!paymentMethod.id) {
         const today = moment().startOf('day');
@@ -89,8 +107,10 @@ export class PaymentMethodUpdateComponent implements OnInit {
         : undefined,
       type: this.editForm.get(['type'])!.value,
       cvc: this.editForm.get(['cvc'])!.value,
-      favorite: this.editForm.get(['favorite'])!.value,
-      owner: this.editForm.get(['owner'])!.value,
+      favorite: this.favorite,
+      owner: {
+        id: this.editForm.get(['owner'])!.value,
+      },
     };
   }
 
@@ -112,5 +132,102 @@ export class PaymentMethodUpdateComponent implements OnInit {
 
   trackById(index: number, item: IApplicationUser): any {
     return item.id;
+  }
+
+  validateCard(x: any): any {
+    if (this.validateCreditCardNumber(x.target.value)) {
+      const type = this.cardType(x.target.value);
+      const imgSrc = this.setCardImage(type);
+
+      if (imgSrc !== '') {
+        this.cardTypeImage = imgSrc;
+        this.showCardImage = true;
+        this.isValid = true;
+      } else {
+        this.isValid = false;
+        this.cardTypeImage = '';
+        this.showCardImage = false;
+      }
+    } else {
+      this.isValid = false;
+      this.cardTypeImage = '';
+      this.showCardImage = false;
+    }
+  }
+
+  validateCreditCardNumber(cardNumber: string): any {
+    cardNumber = cardNumber.split(' ').join('');
+    if (Number(cardNumber) <= 0 || !/\d{15,16}(~W[a-zA-Z])*$/.test(cardNumber) || cardNumber.length > 16) {
+      return false;
+    }
+    const carray = [];
+    for (let i = 0; i < cardNumber.length; i++) {
+      carray[carray.length] = cardNumber.charCodeAt(i) - 48;
+    }
+    carray.reverse(); // luhn approaches number from the end
+    let sum = 0;
+    for (let i = 0; i < carray.length; i++) {
+      let tmp = carray[i];
+      if (i % 2 !== 0) {
+        tmp *= 2;
+        if (tmp > 9) {
+          tmp -= 9;
+        }
+      }
+      sum += tmp;
+    }
+    return sum % 10 === 0;
+  }
+
+  cardType(cardNumber: string): any {
+    cardNumber = cardNumber.split(' ').join('');
+    const o = {
+      Visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+      Mastercard: /^5[1-5][0-9]{14}$/,
+      American: /^3[47]\d{13,14}$/,
+    };
+    for (const k in o) {
+      if (o[k].test(cardNumber)) {
+        return k;
+      }
+    }
+    return null;
+  }
+
+  setCardImage(cardType: string): any {
+    if (cardType === 'Visa') {
+      this.type = 'VISA';
+      return '../../../content/images/CardTypes/Visa.png';
+    } else if (cardType === 'American') {
+      this.type = 'EXPRESS';
+      return '../../../content/images/CardTypes/Express.png';
+    } else if (cardType === 'Mastercard') {
+      this.type = 'MASTERCARD';
+      return '../../../content/images/CardTypes/Mastercard.png';
+    }
+
+    return '';
+  }
+
+  isDateValid(date: any): any {
+    if (date == null || date.value == null) {
+      return false;
+    }
+    const dateValue = new Date(date.value);
+
+    if (this.todayDate.getMonth() >= dateValue.getMonth() + 1) {
+      if (this.todayDate.getFullYear() >= dateValue.getFullYear()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  isValidCvc(cvc: any): any {
+    if (cvc.value == null || cvc.value.length < 3 || cvc.value.length > 4 || cvc.value.length === 0) {
+      return false;
+    }
+    return true;
   }
 }

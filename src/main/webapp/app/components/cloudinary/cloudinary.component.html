@@ -3,12 +3,20 @@
     <div class="card-body">
         <div class="form_group">
             <div class="form_controls">
-                <div class="upload_button_holder">
+                <div class="upload_button_holder d-flex justify-content-center">
                     <label class="upload_button" for="fileupload">Cargar</label>
                     <input type="file" id="fileupload" #fileInput ng2FileSelect [style.display]="'none'"
                         [uploader]="uploader" (change)="fileInput.value=''" multiple />
                 </div>
             </div>
+        </div>
+        <div id="progress-bar">
+            <div class="progress progress-striped progress-success" value="1" max="100">
+                <div class="progress">
+                    <span class="progress-bar" style="width: 0%;">0%</span>
+                </div>
+            </div>
+            <div class="progress-info">No hay imágen.</div>
         </div>
     </div>
 </div>

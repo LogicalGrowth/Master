@@ -1,6 +1,11 @@
 <div id="direct_upload" ng2FileDrop [uploader]="uploader" (fileOver)="fileOverBase($event)" [ngClass]="{'nv-file-over': hasBaseDropZoneOver}">
-<   <div class="card-body">
+    <div class="card-body">
         <div class="form_group">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%">
+                    Cargando imagen...
+                </div>
+            </div>
             <div class="form_controls">
                 <div class="upload_button_holder">
                     <label class="upload_button" for="fileupload">Cargar</label>

@@ -11,6 +11,7 @@ import { ExclusiveContentService } from '../exclusive-content/exclusive-content.
 import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
 import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -22,6 +23,7 @@ export class ProyectDetailComponent implements OnInit {
   reviews: any;
   ratings = [1, 2, 3, 4, 5];
   position: any[] = [];
+  mapCenter: any;
   hasMarker = false;
   percentile: any;
   rating: any;
@@ -31,6 +33,8 @@ export class ProyectDetailComponent implements OnInit {
   exclusiveContents?: IExclusiveContent[];
   account!: User;
   isProjectOwner!: Boolean;
+  daysCreated: any;
+  updatedDays: any;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -60,9 +64,15 @@ export class ProyectDetailComponent implements OnInit {
       this.proyect = proyect;
       this.position.push(proyect.coordY);
       this.position.push(proyect.coordX);
+      this.mapCenter = {
+        lat: proyect.coordY,
+        lng: proyect.coordX,
+      };
       this.hasMarker = true;
       this.percentile = (100 * proyect.collected) / proyect.goalAmount;
       this.rating = (100 * proyect.rating) / 5;
+      this.daysCreated = moment().diff(proyect.creationDate, 'days');
+      this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });

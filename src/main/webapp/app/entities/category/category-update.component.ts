@@ -14,10 +14,12 @@ import { ResourceService } from 'app/entities/resource/resource.service';
 @Component({
   selector: 'jhi-category-update',
   templateUrl: './category-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class CategoryUpdateComponent implements OnInit {
   isSaving = false;
   images: IResource[] = [];
+  imageSrc = '';
 
   editForm = this.fb.group({
     id: [],
@@ -86,7 +88,7 @@ export class CategoryUpdateComponent implements OnInit {
     }
   }
 
-  private createFromForm(): ICategory {
+  private createFromForm(url = ''): ICategory {
     return {
       ...new Category(),
       id: this.editForm.get(['id'])!.value,
@@ -115,5 +117,11 @@ export class CategoryUpdateComponent implements OnInit {
 
   trackById(index: number, item: IResource): any {
     return item.id;
+  }
+
+  saveImage(data: any): void {
+    const image = this.createFromForm(data.secure_url);
+    this.imageSrc = data.secure_url;
+    this.subscribeToSaveResponse(this.resourceService.create(image));
   }
 }

@@ -5,7 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { DATE_TIME_FORMAT, MONTH_YEAR_FORMAT } from 'app/shared/constants/input.constants';
 
 import { IPaymentMethod, PaymentMethod } from 'app/shared/model/payment-method.model';
 import { PaymentMethodService } from './payment-method.service';
@@ -23,6 +23,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
   isSaving = false;
   applicationusers: IApplicationUser[] = [];
   isValid = true;
+  isError = false;
   cardTypeImage = '';
   showCardImage = false;
   todayDate = new Date();
@@ -64,7 +65,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
       }
 
       this.updateForm(paymentMethod);
-
+      this.type = paymentMethod.type;
       this.applicationUserService.query().subscribe((res: HttpResponse<IApplicationUser[]>) => (this.applicationusers = res.body || []));
     });
   }
@@ -74,7 +75,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
       id: paymentMethod.id,
       cardNumber: paymentMethod.cardNumber,
       cardOwner: paymentMethod.cardOwner,
-      expirationDate: paymentMethod.expirationDate ? paymentMethod.expirationDate.format(DATE_TIME_FORMAT) : null,
+      expirationDate: paymentMethod.expirationDate ? paymentMethod.expirationDate.format(MONTH_YEAR_FORMAT) : null,
       type: paymentMethod.type,
       cvc: paymentMethod.cvc,
       favorite: paymentMethod.favorite,
@@ -248,7 +249,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
   }
 
   validateString(str: any): any {
-    const regex = /^[a-zA-Z]+$/;
+    const regex = /^[ a-zA-ZÀ-ÿ\u00f1\u00d1]*$/g;
 
     if (regex.exec(str) === null) {
       return false;

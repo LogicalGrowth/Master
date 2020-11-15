@@ -1,17 +1,24 @@
 <div class="row justify-content-center">
     <div class="col-5 mt-5 containerPaymenthMethod">
         <form class="formPaymenthMethod" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-payment-method-heading" >Registrar método de pago</h2>
+            <div [hidden]="!editForm.get('id')!.value">
+                <h2 id="jhi-payment-method-heading" >Modificar método de pago</h2>
+            </div>
+            
+            <div [hidden]="editForm.get('id')!.value">
+                <h2 id="jhi-payment-method-heading" >Registrar método de pago</h2>
+            </div>
+
 
             <div>
                 <jhi-alert-error></jhi-alert-error>
 
-                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                <div class="form-group hidden" [hidden]="!editForm.get('id')!.value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                 </div>
 
-                <div class="form-group has-label">
+                <div class="form-group has-label" [hidden]="editForm.get('id')!.value">
                     <label class="control-label" for="">Número de tarjeta:
                         <span class="star">*</span>
                     </label>
@@ -82,7 +89,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [hidden]="editForm.get('id')!.value">
                     <label class="form-control-label" for="field_cvc">CVC</label>
                     <input type="text" class="form-control" name="cvc" id="field_cvc"
                            formControlName="cvc"/>
@@ -107,11 +114,16 @@
 
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
                 </button>
 
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || !isValidCvc(editForm.get('cvc')) || !isDateValid(editForm.get('expirationDate')) || !validateString(editForm.get('cardOwner'))" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                <button  [hidden]="editForm.get('id')!.value" type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || !isValidCvc(editForm.get('cvc')) || !isDateValid(editForm.get('expirationDate')) || !validateName(editForm.get('cardOwner'))" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span >Guardar</span>
+                </button>
+
+                
+                <button [hidden]="!editForm.get('id')!.value" type="submit" id="save-entity" [disabled]=" editForm.invalid ||!isDateValid(editForm.get('expirationDate')) || !validateName(editForm.get('cardOwner'))" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span >Guardar</span>
                 </button>
             </div>
         </form>

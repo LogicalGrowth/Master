@@ -135,18 +135,20 @@ export class PaymentMethodUpdateComponent implements OnInit {
   }
 
   validateCard(x: any): any {
-    if (this.validateCreditCardNumber(x.target.value)) {
-      const type = this.cardType(x.target.value);
-      const imgSrc = this.setCardImage(type);
+    if (this.validateNumber(x.target.value) === true) {
+      if (this.validateCreditCardNumber(x.target.value)) {
+        const type = this.cardType(x.target.value);
+        const imgSrc = this.setCardImage(type);
 
-      if (imgSrc !== '') {
-        this.cardTypeImage = imgSrc;
-        this.showCardImage = true;
-        this.isValid = true;
-      } else {
-        this.isValid = false;
-        this.cardTypeImage = '';
-        this.showCardImage = false;
+        if (imgSrc !== '') {
+          this.cardTypeImage = imgSrc;
+          this.showCardImage = true;
+          this.isValid = true;
+        } else {
+          this.isValid = false;
+          this.cardTypeImage = '';
+          this.showCardImage = false;
+        }
       }
     } else {
       this.isValid = false;
@@ -225,9 +227,36 @@ export class PaymentMethodUpdateComponent implements OnInit {
   }
 
   isValidCvc(cvc: any): any {
-    if (cvc.value == null || cvc.value.length < 3 || cvc.value.length > 4 || cvc.value.length === 0) {
+    if (
+      cvc.value == null ||
+      cvc.value.length < 3 ||
+      cvc.value.length > 4 ||
+      cvc.value.length === 0 ||
+      this.validateString(cvc.value) === true
+    ) {
       return false;
     }
     return true;
+  }
+
+  validateNumber(str: any): any {
+    const regex = /^[0-9]+$/;
+    if (regex.exec(str) === null) {
+      return false;
+    }
+    return true;
+  }
+
+  validateString(str: any): any {
+    const regex = /^[a-zA-Z]+$/;
+
+    if (regex.exec(str) === null) {
+      return false;
+    }
+    return true;
+  }
+
+  validateName(str: any): any {
+    return this.validateString(str.value);
   }
 }

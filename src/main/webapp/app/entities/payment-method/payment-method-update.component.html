@@ -17,21 +17,21 @@
                     </label>
                     <input type="text" class="form-control" name="cardNumber" id="field_cardNumber"
                     formControlName="cardNumber" (keyup)="validateCard($event)"/>
-                    <div *ngIf="editForm.get('cardNumber')!.invalid && (editForm.get('cardNumber')!.dirty || editForm.get('cardNumber')!.touched)">
+                    <div *ngIf="editForm.get('cardNumber')!.dirty || editForm.get('cardNumber')!.touched">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('cardNumber')?.errors?.required">
                         Este campo es requerido.
                         </small>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('cardNumber')?.errors?.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 14 }">
+                               *ngIf="editForm.get('cardNumber')?.errors?.minlength">
                         Debe ingresar al menos 14 caracteres.
                         </small>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('cardNumber')?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 19 }">
+                               *ngIf="editForm.get('cardNumber')?.errors?.maxlength">
                         Debe ingresar menos 19 caracteres.
                         </small>
                         <small class="form-text text-danger"
-                        *ngIf="!isValid">
+                        *ngIf="isValid === false">
                         Tarjeta invalida.
                          </small>
                     </div>
@@ -43,11 +43,15 @@
                     <label class="form-control-label"for="field_cardOwner">Nombre de la tarjeta: *</label>
                     <input type="text" class="form-control" name="cardOwner" id="field_cardOwner"
                            formControlName="cardOwner"/>
-                    <div *ngIf="editForm.get('cardOwner')!.invalid && (editForm.get('cardOwner')!.dirty || editForm.get('cardOwner')!.touched)">
+                    <div *ngIf="editForm.get('cardOwner')!.dirty || editForm.get('cardOwner')!.touched">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('cardOwner')?.errors?.required">
                         Este campo es requerido.
                         </small>
+                        <small class="form-text text-danger"
+                        *ngIf="validateName(editForm.get('cardOwner')) === false" >
+                        Por favor ingrese solo letras.
+                 </small>
                     </div>
                 </div>
 
@@ -106,7 +110,7 @@
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
 
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || !isValidCvc(editForm.get('cvc')) || !isDateValid(editForm.get('expirationDate'))" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || !isValidCvc(editForm.get('cvc')) || !isDateValid(editForm.get('expirationDate')) || !validateString(editForm.get('cardOwner'))" class="btn btn-primary">
                     <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>

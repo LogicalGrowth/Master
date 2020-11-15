@@ -82,7 +82,7 @@ export const proyectRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: 'image/new',
+    path: ':id/image/new',
     component: ProyectImageUpdateComponent,
     resolve: {
       proyect: ProyectResolve,

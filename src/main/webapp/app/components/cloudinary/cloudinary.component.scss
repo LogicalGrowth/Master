@@ -73,3 +73,17 @@
   -o-transition: width 0.6s ease;
   transition: width 0.6s ease;
 }
+
+#progress-bar {
+  width: 100%;
+}
+.progress {
+  height: 25px;
+  width: 100%;
+  background-color: #e6e6e6;
+}
+
+.progress-info {
+  color: #000;
+  text-align: center;
+}

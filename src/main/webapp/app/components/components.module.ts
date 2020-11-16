@@ -13,6 +13,8 @@ import { CloudinaryComponent } from './cloudinary/cloudinary.component';
 import { CloudinaryModule } from '@cloudinary/angular-5.x';
 import * as cloudinary from 'cloudinary-core';
 import { FileUploadModule } from 'ng2-file-upload';
+import { CarouselComponent } from './carousel/carousel.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -26,12 +28,14 @@ import { FileUploadModule } from 'ng2-file-upload';
     TimelineComponent,
     VerticalTabsComponent,
     CloudinaryComponent,
+    CarouselComponent,
   ],
   imports: [
     CommonModule,
     // eslint-disable-next-line @typescript-eslint/camelcase
     CloudinaryModule.forRoot(cloudinary, { cloud_name: 'barnesnoble', upload_preset: 'cq8ymdc5' }),
     FileUploadModule,
+    NgbModule,
   ],
   exports: [
     SmallCardComponent,
@@ -44,6 +48,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     TimelineComponent,
     VerticalTabsComponent,
     CloudinaryComponent,
+    CarouselComponent,
   ],
 })
 export class ComponentsModule {}

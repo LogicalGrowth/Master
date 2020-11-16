@@ -7,9 +7,10 @@ import { ExclusiveContentDetailComponent } from './exclusive-content-detail.comp
 import { ExclusiveContentUpdateComponent } from './exclusive-content-update.component';
 import { ExclusiveContentDeleteDialogComponent } from './exclusive-content-delete-dialog.component';
 import { exclusiveContentRoute } from './exclusive-content.route';
+import { ComponentsModule } from 'app/components/components.module';
 
 @NgModule({
-  imports: [Fun4FundSharedModule, RouterModule.forChild(exclusiveContentRoute)],
+  imports: [Fun4FundSharedModule, ComponentsModule, RouterModule.forChild(exclusiveContentRoute)],
   declarations: [
     ExclusiveContentComponent,
     ExclusiveContentDetailComponent,

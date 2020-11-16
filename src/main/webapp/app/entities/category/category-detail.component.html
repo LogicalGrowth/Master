@@ -23,13 +23,15 @@
                                 <input type="text" class="form-control" name="status" id="field_status" value="{{ category.status == 'DISABLED' ? 'Inactivo' : 'Activo'}}" readonly/>
                             </div>
 
-                            <dl class="row-md jh-entity-details">
-                                <dd>
-                                    <div *ngIf="category.image">
-                                        <a [routerLink]="['/image', category.image?.id, 'view']">{{ category.image?.id }}</a>
-                                    </div>
-                                </dd>
-                            </dl>
+                            <div class="form-group">
+                                <label class="form-control-label">Imagen</label>
+                                <div *ngIf="category.image" class="w-50 p-3">
+                                    <img src="{{category.image?.url}}">
+                                </div>
+                                <div *ngIf="!category.image">
+                                    <p>No hay ninguna imagen asociada.</p>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card-footer text-right">

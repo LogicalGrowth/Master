@@ -184,10 +184,13 @@
                                 <div class="col-lg-8">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h4 class="card-title"> Contenido exclusivo </h4>
+                                            <h4 class="card-title d-inline"> Contenido exclusivo </h4>
+                                            <div class="pull-right" *ngIf="isProjectOwner">
+                                                <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/exclusive-content', proyect!.id, 'new']">
+                                                  <i class="nc-icon nc-simple-add"></i>
+                                                </button>
+                                            </div>
                                         </div>
-
-                                        <jhi-alert></jhi-alert>
 
                                         <div class="alert alert-warning" id="no-result"
                                             *ngIf="exclusiveContents?.length === 0">
@@ -217,14 +220,14 @@
                                                             <td>{{ exclusiveContent.stock }}</td>
                                                             <td class="text-right">
                                                                 <div class="btn-group" *ngIf="isProjectOwner">
-                                                                    <jhi-icon-button type="info" label=""
-                                                                        icon="nc-zoom-split"
+                                                                    <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                         [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
-                                                                    </jhi-icon-button>
-                                                                    <jhi-icon-button type="success" label=""
-                                                                        icon="nc-ruler-pencil"
-                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
-                                                                    </jhi-icon-button>
+                                                                    <i class="fa fa-eye"></i>
+                                                                    </button>
+                                                                    <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
+                                                                        <i class="fa fa-edit"></i>
+                                                                    </button>
                                                                 </div>
                                                             </td>
                                                         </tr>

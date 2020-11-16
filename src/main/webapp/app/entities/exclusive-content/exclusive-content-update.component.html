@@ -1,93 +1,137 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-exclusive-content-heading" >Crear o editar Contenido Exclusivo</h2>
+<div class="main-content mt-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 ml-auto mr-auto">
+                <div class="card">
+                    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
 
-            <div>
-                <jhi-alert-error></jhi-alert-error>
+                        <div class="card-header">
+                            <h4 class="card-title">Contenido Exclusivo</h4>
+                        </div>
 
-                <div class="form-group" [hidden]="!editForm.get('id')!.value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
-                </div>
+                        <div class="d-flex justify-content-center">
+                            <jhi-carousel [items]="images"></jhi-carousel>
+                        </div>
+                        
+                        <div class="card-body">
 
-                <div class="form-group">
-                    <label class="form-control-label" for="field_price">Precio</label>
-                    <input type="number" class="form-control" name="price" id="field_price"
-                           formControlName="price"/>
-                    <div *ngIf="editForm.get('price')!.invalid && (editForm.get('price')!.dirty || editForm.get('price')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('price')?.errors?.required" jhiTranslate="entity.validation.required">
-                        Este campo es requerido.
-                        </small>
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('price')?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
-                            This field should be at least 0.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('price')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_image">Imagen</label>
+                                <input type="text" class="form-control" name="image" id="field_image"
+                                    formControlName="image" />
+                                <div
+                                    *ngIf="editForm.get('image')!.invalid && (editForm.get('image')!.dirty || editForm.get('image')!.touched)">
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('image')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" for="field_stock">Cantidad</label>
-                    <input type="number" class="form-control" name="stock" id="field_stock"
-                           formControlName="stock"/>
-                    <div *ngIf="editForm.get('stock')!.invalid && (editForm.get('stock')!.dirty || editForm.get('stock')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('stock')?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
-                            This field should be at least 0.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('stock')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_name">Nombre:
+                                    <span class="star">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="name" id="field_name"
+                                    formControlName="name" />
+                                <div
+                                    *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                                    <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.exclusiveContent.state" for="field_state">State</label>
-                    <select class="form-control" name="state" formControlName="state" id="field_state">
-                        <option value="ENABLED">{{ 'fun4FundApp.ActivityStatus.ENABLED' | translate }}</option>
-                        <option value="DISABLED">{{ 'fun4FundApp.ActivityStatus.DISABLED' | translate }}</option>
-                        <option value="FINISHED">{{ 'fun4FundApp.ActivityStatus.FINISHED' | translate }}</option>
-                    </select>
-                    <div *ngIf="editForm.get('state')!.invalid && (editForm.get('state')!.dirty || editForm.get('state')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('state')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_description">Descripción:
+                                    <span class="star">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="description" id="field_description"
+                                    formControlName="description" />
+                                <div
+                                    *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('description')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.exclusiveContent.prize" for="field_prize">Prize</label>
-                    <select class="form-control" id="field_prize" name="prize" formControlName="prize">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="prizeOption.id === editForm.get('prize')!.value?.id ? editForm.get('prize')!.value : prizeOption" *ngFor="let prizeOption of prizes; trackBy: trackById">{{ prizeOption.id }}</option>
-                    </select>
-                </div>
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_price">Precio:
+                                    <span class="star">*</span>
+                                </label>
+                                <input type="number" class="form-control" name="price" id="field_price"
+                                    formControlName="price" />
+                                <div
+                                    *ngIf="editForm.get('price')!.invalid && (editForm.get('price')!.dirty || editForm.get('price')!.touched)">
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('price')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                    <small class="form-text text-danger" *ngIf="editForm.get('price')?.errors?.min">
+                                        Este campo debe ser mayor a 0.
+                                    </small>
+                                    <small class="form-text text-danger"
+                                        [hidden]="!editForm.get('price')?.errors?.number">
+                                        Este campo debe ser un número.
+                                    </small>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.exclusiveContent.proyect" for="field_proyect">Proyect</label>
-                    <select class="form-control" id="field_proyect" name="proyect" formControlName="proyect">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="proyectOption.id === editForm.get('proyect')!.value?.id ? editForm.get('proyect')!.value : proyectOption" *ngFor="let proyectOption of proyects; trackBy: trackById">{{ proyectOption.id }}</option>
-                    </select>
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_stock">Cantidad:
+                                    <span class="star">*</span>
+                                </label>
+                                <input type="number" class="form-control" name="stock" id="field_stock"
+                                    formControlName="stock" />
+                                <div
+                                    *ngIf="editForm.get('stock')!.invalid && (editForm.get('stock')!.dirty || editForm.get('stock')!.touched)">
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('stock')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                    <small class="form-text text-danger" *ngIf="editForm.get('stock')?.errors?.min">
+                                        Este campo debe ser mayor a 0.
+                                    </small>
+                                    <small class="form-text text-danger"
+                                        [hidden]="!editForm.get('stock')?.errors?.number">
+                                        Este campo debe ser un número.
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_state">Estado</label>
+                                <select class="form-control" name="state" formControlName="state" id="field_state">
+                                    <option value="ENABLED">Habilitado
+                                    </option>
+                                    <option value="DISABLED">Deshabilitado
+                                    </option>
+                                </select>
+                                <div
+                                    *ngIf="editForm.get('state')!.invalid && (editForm.get('state')!.dirty || editForm.get('state')!.touched)">
+                                    <small class="form-text text-danger" *ngIf="editForm.get('state')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer text-right">
+                            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                                Cancelar
+                            </button>
+
+                            <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
+                                class="btn btn-primary">
+                                Registrar
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
             </div>
-
-            <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-                </button>
-
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>

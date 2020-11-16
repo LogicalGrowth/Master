@@ -8,10 +8,12 @@ import { map } from 'rxjs/operators';
 
 import { IExclusiveContent, ExclusiveContent } from 'app/shared/model/exclusive-content.model';
 import { ExclusiveContentService } from './exclusive-content.service';
-import { IPrize } from 'app/shared/model/prize.model';
+import { ResourceService } from 'app/entities//resource/resource.service';
+import { IPrize, Prize } from 'app/shared/model/prize.model';
 import { PrizeService } from 'app/entities/prize/prize.service';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from 'app/entities/proyect/proyect.service';
+import { IResource, Resource } from 'app/shared/model/resource.model';
 
 type SelectableEntity = IPrize | IProyect;
 
@@ -21,14 +23,20 @@ type SelectableEntity = IPrize | IProyect;
   styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ExclusiveContentUpdateComponent implements OnInit {
+  creating = true;
   isSaving = false;
   prizes: IPrize[] = [];
-  proyects: IProyect[] = [];
+  proyect?: IProyect | null;
+  images?: IResource[];
+  prize?: IPrize | null;
 
   editForm = this.fb.group({
     id: [],
+    image: [null, [Validators.required]],
+    name: [null, [Validators.required]],
+    description: [null, [Validators.required]],
     price: [null, [Validators.required, Validators.min(0)]],
-    stock: [null, [Validators.min(0)]],
+    stock: [null, [Validators.required, Validators.min(0)]],
     state: [null, [Validators.required]],
     prize: [],
     proyect: [],
@@ -36,50 +44,81 @@ export class ExclusiveContentUpdateComponent implements OnInit {
 
   constructor(
     protected exclusiveContentService: ExclusiveContentService,
+    protected resourceService: ResourceService,
     protected prizeService: PrizeService,
     protected proyectService: ProyectService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
+  getImages(exclusiveContentId: number): any {
+    this.resourceService
+      .query({ 'prizeId.equals': exclusiveContentId })
+      .pipe(
+        map((res: HttpResponse<IResource[]>) => {
+          return res.body || [];
+        })
+      )
+      .subscribe((resBody: IResource[]) => {
+        this.images = resBody;
+      });
+  }
+
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ exclusiveContent }) => {
-      this.updateForm(exclusiveContent);
+      if (exclusiveContent) {
+        this.creating = false;
+        this.updateForm(exclusiveContent);
+        this.prize = exclusiveContent.prize;
+        this.proyect = exclusiveContent.proyect;
 
-      this.prizeService
-        .query({ 'exclusiveContentId.specified': 'false' })
-        .pipe(
-          map((res: HttpResponse<IPrize[]>) => {
-            return res.body || [];
-          })
-        )
-        .subscribe((resBody: IPrize[]) => {
-          if (!exclusiveContent.prize || !exclusiveContent.prize.id) {
-            this.prizes = resBody;
-          } else {
-            this.prizeService
-              .find(exclusiveContent.prize.id)
-              .pipe(
-                map((subRes: HttpResponse<IPrize>) => {
-                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                })
-              )
-              .subscribe((concatRes: IPrize[]) => (this.prizes = concatRes));
-          }
-        });
-
-      this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+        this.prizeService
+          .query({ 'exclusiveContentId.specified': 'false' })
+          .pipe(
+            map((res: HttpResponse<IPrize[]>) => {
+              return res.body || [];
+            })
+          )
+          .subscribe((resBody: IPrize[]) => {
+            if (!exclusiveContent.prize || !exclusiveContent.prize.id) {
+              this.prizes = resBody;
+            } else {
+              this.prizeService
+                .find(exclusiveContent.prize.id)
+                .pipe(
+                  map((subRes: HttpResponse<IPrize>) => {
+                    return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                  })
+                )
+                .subscribe((concatRes: IPrize[]) => (this.prizes = concatRes));
+            }
+          });
+      }
     });
+
+    this.activatedRoute.data.subscribe(({ currentProyect }) => {
+      if (currentProyect) {
+        this.editForm.patchValue({
+          id: undefined,
+          proyect: currentProyect,
+        });
+      }
+    });
+
+    this.getImages(this.prize?.id as number);
   }
 
   updateForm(exclusiveContent: IExclusiveContent): void {
     this.editForm.patchValue({
       id: exclusiveContent.id,
+      image: exclusiveContent.prize?.images,
+      name: exclusiveContent.prize?.name,
+      description: exclusiveContent.prize?.description,
       price: exclusiveContent.price,
       stock: exclusiveContent.stock,
       state: exclusiveContent.state,
       prize: exclusiveContent.prize,
-      proyect: exclusiveContent.proyect,
+      proyect: exclusiveContent.proyect?.id,
     });
   }
 
@@ -89,7 +128,12 @@ export class ExclusiveContentUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const exclusiveContent = this.createFromForm();
+    let exclusiveContent: IExclusiveContent;
+    if (this.creating) {
+      exclusiveContent = this.createFromForm();
+    } else {
+      exclusiveContent = this.updateFromForm();
+    }
     if (exclusiveContent.id !== undefined) {
       this.subscribeToSaveResponse(this.exclusiveContentService.update(exclusiveContent));
     } else {
@@ -98,14 +142,56 @@ export class ExclusiveContentUpdateComponent implements OnInit {
   }
 
   private createFromForm(): IExclusiveContent {
+    const newPrize = {
+      ...new Prize(),
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      images: [
+        {
+          ...new Resource(),
+          id: this.editForm.get(['id'])!.value,
+          url: this.editForm.get(['image'])!.value,
+          type: 'image',
+        },
+      ],
+    };
+
     return {
       ...new ExclusiveContent(),
       id: this.editForm.get(['id'])!.value,
       price: this.editForm.get(['price'])!.value,
       stock: this.editForm.get(['stock'])!.value,
       state: this.editForm.get(['state'])!.value,
-      prize: this.editForm.get(['prize'])!.value,
+      prize: newPrize,
       proyect: this.editForm.get(['proyect'])!.value,
+    };
+  }
+
+  private updateFromForm(): IExclusiveContent {
+    const newPrize = {
+      ...new Prize(),
+      id: this.prize?.id,
+      name: this.editForm.get(['name'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      images: [
+        {
+          ...new Resource(),
+          id: 14,
+          url: this.editForm.get(['image'])!.value,
+          type: 'image',
+        },
+      ],
+    };
+
+    return {
+      ...new ExclusiveContent(),
+      id: this.editForm.get(['id'])!.value,
+      price: this.editForm.get(['price'])!.value,
+      stock: this.editForm.get(['stock'])!.value,
+      state: this.editForm.get(['state'])!.value,
+      prize: newPrize,
+      proyect: this.proyect!,
     };
   }
 

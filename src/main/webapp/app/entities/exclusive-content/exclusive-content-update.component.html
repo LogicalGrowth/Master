@@ -9,14 +9,11 @@
                             <h4 class="card-title">Contenido Exclusivo</h4>
                         </div>
 
+                        <div class="d-flex justify-content-center">
+                            <jhi-carousel [items]="images"></jhi-carousel>
+                        </div>
+                        
                         <div class="card-body">
-                            <jhi-alert-error></jhi-alert-error>
-
-                            <div class="form-group has-label" [hidden]="!editForm.get('id')!.value">
-                                <label for="id" jhiTranslate="global.field.id">ID</label>
-                                <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                                    readonly />
-                            </div>
 
                             <div class="form-group has-label">
                                 <label class="form-control-label" for="field_image">Imagen</label>

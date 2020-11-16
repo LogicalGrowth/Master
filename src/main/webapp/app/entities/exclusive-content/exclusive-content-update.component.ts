@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 
 import { IExclusiveContent, ExclusiveContent } from 'app/shared/model/exclusive-content.model';
 import { ExclusiveContentService } from './exclusive-content.service';
+import { ResourceService } from 'app/entities//resource/resource.service';
 import { IPrize, Prize } from 'app/shared/model/prize.model';
 import { PrizeService } from 'app/entities/prize/prize.service';
 import { IProyect } from 'app/shared/model/proyect.model';
@@ -25,9 +26,8 @@ export class ExclusiveContentUpdateComponent implements OnInit {
   creating = true;
   isSaving = false;
   prizes: IPrize[] = [];
-  proyects: IProyect[] = [];
   proyect?: IProyect | null;
-  images: IResource[] = [];
+  images?: IResource[];
   prize?: IPrize | null;
 
   editForm = this.fb.group({
@@ -44,11 +44,25 @@ export class ExclusiveContentUpdateComponent implements OnInit {
 
   constructor(
     protected exclusiveContentService: ExclusiveContentService,
+    protected resourceService: ResourceService,
     protected prizeService: PrizeService,
     protected proyectService: ProyectService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
+
+  getImages(exclusiveContentId: number): any {
+    this.resourceService
+      .query({ 'prizeId.equals': exclusiveContentId })
+      .pipe(
+        map((res: HttpResponse<IResource[]>) => {
+          return res.body || [];
+        })
+      )
+      .subscribe((resBody: IResource[]) => {
+        this.images = resBody;
+      });
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ exclusiveContent }) => {
@@ -56,7 +70,6 @@ export class ExclusiveContentUpdateComponent implements OnInit {
         this.creating = false;
         this.updateForm(exclusiveContent);
         this.prize = exclusiveContent.prize;
-        this.images = exclusiveContent.images;
         this.proyect = exclusiveContent.proyect;
 
         this.prizeService
@@ -80,8 +93,6 @@ export class ExclusiveContentUpdateComponent implements OnInit {
                 .subscribe((concatRes: IPrize[]) => (this.prizes = concatRes));
             }
           });
-
-        this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
       }
     });
 
@@ -93,6 +104,8 @@ export class ExclusiveContentUpdateComponent implements OnInit {
         });
       }
     });
+
+    this.getImages(this.prize?.id as number);
   }
 
   updateForm(exclusiveContent: IExclusiveContent): void {

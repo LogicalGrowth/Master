@@ -26,13 +26,13 @@ export class ExclusiveContentUpdateComponent implements OnInit {
   creating = true;
   isSaving = false;
   prizes: IPrize[] = [];
-  proyect?: IProyect | null;
-  images?: IResource[];
+  proyect?: IProyect;
+  images: IResource[] = [];
   prize?: IPrize | null;
+  imageSrc = '';
 
   editForm = this.fb.group({
     id: [],
-    image: [null, [Validators.required]],
     name: [null, [Validators.required]],
     description: [null, [Validators.required]],
     price: [null, [Validators.required, Validators.min(0)]],
@@ -52,16 +52,17 @@ export class ExclusiveContentUpdateComponent implements OnInit {
   ) {}
 
   getImages(exclusiveContentId: number): any {
-    this.resourceService
-      .query({ 'prizeId.equals': exclusiveContentId })
-      .pipe(
-        map((res: HttpResponse<IResource[]>) => {
-          return res.body || [];
-        })
-      )
-      .subscribe((resBody: IResource[]) => {
-        this.images = resBody;
-      });
+    if (exclusiveContentId)
+      this.resourceService
+        .query({ 'prizeId.equals': exclusiveContentId })
+        .pipe(
+          map((res: HttpResponse<IResource[]>) => {
+            return res.body || [];
+          })
+        )
+        .subscribe((resBody: IResource[]) => {
+          this.images = resBody;
+        });
   }
 
   ngOnInit(): void {
@@ -147,14 +148,7 @@ export class ExclusiveContentUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
-      images: [
-        {
-          ...new Resource(),
-          id: this.editForm.get(['id'])!.value,
-          url: this.editForm.get(['image'])!.value,
-          type: 'image',
-        },
-      ],
+      images: this.images,
     };
 
     return {
@@ -174,14 +168,7 @@ export class ExclusiveContentUpdateComponent implements OnInit {
       id: this.prize?.id,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
-      images: [
-        {
-          ...new Resource(),
-          id: 14,
-          url: this.editForm.get(['image'])!.value,
-          type: 'image',
-        },
-      ],
+      images: this.images,
     };
 
     return {
@@ -213,5 +200,19 @@ export class ExclusiveContentUpdateComponent implements OnInit {
 
   trackById(index: number, item: SelectableEntity): any {
     return item.id;
+  }
+
+  saveImage(data: any): void {
+    this.imageSrc = data.secure_url;
+    const newResource = {
+      ...new Resource(),
+      id: undefined,
+      url: data.secure_url,
+      type: 'image',
+      proyect: undefined,
+      prize: undefined,
+    };
+
+    this.images?.push(newResource);
   }
 }

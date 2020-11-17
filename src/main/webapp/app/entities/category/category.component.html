@@ -1,12 +1,14 @@
-<div class="row">
-    <jhi-alert-error></jhi-alert-error>
-    <jhi-alert></jhi-alert>
-    <div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
-        <span>No hay categorías registradas</span>
-    </div>
-</div>
-
 <div class="main-content">
+    <div class="container-fluid">
+        <div class="col-md-6 justify-content-md-center">
+            <jhi-alert-error></jhi-alert-error>
+            <jhi-alert></jhi-alert>
+            <div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
+                <span>No hay categorías registradas</span>
+            </div>
+        </div>
+    </div>
+
     <div class="row justify-content-md-center">
         <div class="col-md-10">
             <div class="card">

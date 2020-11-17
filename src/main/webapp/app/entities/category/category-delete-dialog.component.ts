@@ -7,6 +7,7 @@ import { CategoryService } from './category.service';
 
 @Component({
   templateUrl: './category-delete-dialog.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class CategoryDeleteDialogComponent {
   category?: ICategory;

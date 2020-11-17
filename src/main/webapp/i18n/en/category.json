@@ -2,25 +2,25 @@
   "fun4FundApp": {
     "category": {
       "home": {
-        "title": "Categories",
-        "createLabel": "Create a new Category",
+        "title": "Categorías",
+        "createLabel": "Crear",
         "createOrEditLabel": "Create or edit a Category",
-        "notFound": "No Categories found"
+        "notFound": "No hay categorías registradas"
       },
-      "created": "A new Category is created with identifier {{ param }}",
-      "updated": "A Category is updated with identifier {{ param }}",
-      "deleted": "A Category is deleted with identifier {{ param }}",
+      "created": "Categoría creada exitosamente",
+      "updated": "Categoría actualizada exitosamente",
+      "deleted": "Categoría eliminada exitosamente",
       "delete": {
-        "question": "Are you sure you want to delete Category {{ id }}?"
+        "question": "¿Desea eliminar esta categoría?"
       },
       "detail": {
-        "title": "Category"
+        "title": "Categoría"
       },
-      "name": "Name",
-      "description": "Description",
-      "status": "Status",
-      "image": "Image",
-      "proyect": "Proyect"
+      "name": "Nombre",
+      "description": "Descripción",
+      "status": "Estado",
+      "image": "Imagen",
+      "proyect": "Proyecto"
     }
   }
 }

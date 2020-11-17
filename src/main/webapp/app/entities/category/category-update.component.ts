@@ -88,14 +88,14 @@ export class CategoryUpdateComponent implements OnInit {
     }
   }
 
-  private createFromForm(url = ''): ICategory {
+  private createFromForm(): ICategory {
     return {
       ...new Category(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
       status: this.editForm.get(['status'])!.value,
-      image: this.resourceToSave ?? this.editForm.get(['image_id'])!.value,
+      image: this.resourceToSave ?? this.editForm.get(['image_id'])?.value,
     };
   }
 

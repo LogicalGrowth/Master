@@ -76,6 +76,7 @@ public class ExclusiveContentResource {
         for (Object image:images.toArray()) {
             Resource img = (Resource)image;
             img.setPrize(temp);
+            img.setType("image");
             resourceService.save((Resource) image);
         };
 
@@ -105,15 +106,8 @@ public class ExclusiveContentResource {
         }
 
         Prize prize = exclusiveContent.getPrize();
-        Set<Resource> images = prize.getImages();
 
         Prize temp = prizeService.save(prize);
-
-        for (Object image:images.toArray()) {
-            Resource img = (Resource)image;
-            img.setPrize(temp);
-            resourceService.save((Resource) image);
-        };
 
         ExclusiveContent result = exclusiveContentService.save(exclusiveContent);
         return ResponseEntity.ok()

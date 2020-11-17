@@ -15,6 +15,7 @@ import * as cloudinary from 'cloudinary-core';
 import { FileUploadModule } from 'ng2-file-upload';
 import { CarouselComponent } from './carousel/carousel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StatePipe } from './state.pipe';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     VerticalTabsComponent,
     CloudinaryComponent,
     CarouselComponent,
+    StatePipe,
   ],
   imports: [
     CommonModule,
@@ -49,6 +51,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     VerticalTabsComponent,
     CloudinaryComponent,
     CarouselComponent,
+    StatePipe,
   ],
 })
 export class ComponentsModule {}

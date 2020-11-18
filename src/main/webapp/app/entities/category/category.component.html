@@ -26,15 +26,17 @@
                             <thead class="text-primary">
                                 <th>Nombre</th>
                                 <th>Descripción</th>
-                                <th>Estado</th>
-                                <th></th>
+                                <th *ngIf="isProjectOwner">Estado</th>
+                                <th *ngIf="isProjectOwner">
+                                    <span>Acciones</span>
+                                </th>
                             </thead>
                             <tbody>
                             <tr *ngFor="let category of categories ;trackBy: trackId">
                                 <td><a [routerLink]="['/category', category.id, 'view']">{{ category.name }}</a></td>
                                 <td>{{ category.description }}</td>
-                                <td>{{ category.status == "ENABLED" ? "Activo" : "Inactivo" }}</td>
-                                <td class="text-right">
+                                <td *ngIf="isProjectOwner">{{ category.status == "ENABLED" ? "Activo" : "Inactivo" }}</td>
+                                <td class="text-right" *ngIf="isProjectOwner">
                                     <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                             [routerLink]="['/category', category.id, 'view']">
                                         <i class="fa fa-eye"></i>

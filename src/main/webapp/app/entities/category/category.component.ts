@@ -7,6 +7,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from './category.service';
 import { CategoryDeleteDialogComponent } from './category-delete-dialog.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { ApplicationUserService } from '../application-user/application-user.service';
+import { User } from '../../core/user/user.model';
 
 @Component({
   selector: 'jhi-category',
@@ -16,8 +19,16 @@ import { CategoryDeleteDialogComponent } from './category-delete-dialog.componen
 export class CategoryComponent implements OnInit, OnDestroy {
   categories?: ICategory[];
   eventSubscriber?: Subscription;
+  isProjectOwner!: Boolean;
+  account!: User;
 
-  constructor(protected categoryService: CategoryService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
+  constructor(
+    protected categoryService: CategoryService,
+    protected eventManager: JhiEventManager,
+    protected modalService: NgbModal,
+    private accountService: AccountService,
+    private applicationUserService: ApplicationUserService
+  ) {}
 
   loadAll(): void {
     this.categoryService.query().subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
@@ -26,6 +37,15 @@ export class CategoryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadAll();
     this.registerChangeInCategories();
+
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+        this.applicationUserService.find(this.account.id).subscribe(applicationUser => {
+          this.isProjectOwner = applicationUser.body?.admin ? true : false;
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {

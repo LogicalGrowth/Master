@@ -7,14 +7,18 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
 import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'jhi-proyect',
   templateUrl: './proyect.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss', 'project.scss'],
 })
 export class ProyectComponent implements OnInit, OnDestroy {
   proyects?: IProyect[];
   eventSubscriber?: Subscription;
+  updatedDays: any;
+  percentile: any;
 
   constructor(protected proyectService: ProyectService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
 
@@ -45,5 +49,15 @@ export class ProyectComponent implements OnInit, OnDestroy {
   delete(proyect: IProyect): void {
     const modalRef = this.modalService.open(ProyectDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.proyect = proyect;
+  }
+
+  getLastUpdate(item: IProyect): any {
+    return moment().diff(item.lastUpdated, 'days');
+  }
+
+  getPercentile(item: IProyect): any {
+    if (item.collected && item.goalAmount) {
+      return (100 * item.collected) / item.goalAmount;
+    }
   }
 }

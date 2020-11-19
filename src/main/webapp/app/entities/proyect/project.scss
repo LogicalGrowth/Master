@@ -1,0 +1,32 @@
+.category-type {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  padding: 2px 12px 1px;
+  border-radius: 9px;
+  background: linear-gradient(45deg, rgba(10, 127, 175, 0.7), rgba(81, 203, 206, 0.4) 100%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.creator-name {
+  font-size: 14px;
+  color: gray;
+  margin-top: -1em;
+}
+
+.updated-date {
+  font-size: 14px;
+  color: gray;
+}
+
+.proyect-card {
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+
+.proyect-card:hover {
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+}

@@ -51,7 +51,12 @@
                                 <div *ngIf="imageSrc" class="w-50 p-3">
                                     <img src="{{imageSrc}}">
                                 </div>
-                                <jhi-cloudinary [okCallback]="saveImage.bind(this)"></jhi-cloudinary>
+                                <div *ngIf="editForm.get('image')!.value" class="w-50 p-3">
+                                    <img src="{{editForm.get('image')!.value?.url}}">
+                                </div>
+                                <div *ngIf="!editForm.get('image')!.value">
+                                    <jhi-cloudinary [okCallback]="saveImage.bind(this)"></jhi-cloudinary>
+                                </div>
 							</div>
                         </div>
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,7 +7,7 @@ import { map } from 'rxjs/operators';
 
 import { ICategory, Category } from 'app/shared/model/category.model';
 import { CategoryService } from './category.service';
-import { IResource } from 'app/shared/model/resource.model';
+import { IResource, Resource } from 'app/shared/model/resource.model';
 import { ResourceService } from 'app/entities/resource/resource.service';
 
 @Component({
@@ -20,6 +19,7 @@ export class CategoryUpdateComponent implements OnInit {
   isSaving = false;
   images: IResource[] = [];
   imageSrc = '';
+  resourceToSave: IResource | undefined;
 
   editForm = this.fb.group({
     id: [],
@@ -95,7 +95,15 @@ export class CategoryUpdateComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
       status: this.editForm.get(['status'])!.value,
-      image: this.editForm.get(['image'])!.value,
+      image: this.resourceToSave ?? this.editForm.get(['image_id'])!.value,
+    };
+  }
+
+  private createFromFormResource(url = '', type = ''): IResource {
+    return {
+      ...new Resource(),
+      url: url ? url : this.editForm.get(['url'])!.value,
+      type: type ? type : this.editForm.get(['type'])!.value,
     };
   }
 
@@ -104,6 +112,12 @@ export class CategoryUpdateComponent implements OnInit {
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
+  }
+
+  protected subscribeToSaveResponseResource(result: Observable<HttpResponse<IResource>>): void {
+    result.subscribe(resp => {
+      this.resourceToSave = resp.body ? resp.body : undefined;
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -120,8 +134,8 @@ export class CategoryUpdateComponent implements OnInit {
   }
 
   saveImage(data: any): void {
-    const image = this.createFromForm(data.secure_url);
+    const image = this.createFromFormResource(data.secure_url, 'Image');
+    this.subscribeToSaveResponseResource(this.resourceService.create(image));
     this.imageSrc = data.secure_url;
-    this.subscribeToSaveResponse(this.resourceService.create(image));
   }
 }

@@ -202,10 +202,11 @@
                                                 *ngIf="exclusiveContents && exclusiveContents.length > 0">
                                                 <table class="table">
                                                     <thead class="text-primary">
-                                                        <th scope="col"><span>Nombre</span></th>
-                                                        <th scope="col"><span>Precio</span></th>
-                                                        <th scope="col"><span>Disponibles</span></th>
-                                                        <th scope="col" class="text-center" *ngIf="isProjectOwner">
+                                                        <th><span>Producto</span></th>
+                                                        <th><span>Precio</span></th>
+                                                        <th><span>Disponibles</span></th>
+                                                        <th *ngIf="isProjectOwner"><span>Estado</span></th>
+                                                        <th class="text-center" *ngIf="isProjectOwner">
                                                             <span>Acciones</span></th>
                                                     </thead>
                                                     <tbody>
@@ -216,19 +217,18 @@
                                                                         [routerLink]="['/prize', exclusiveContent.prize?.id, 'view']">{{ exclusiveContent.prize?.name }}</a>
                                                                 </div>
                                                             </td>
-                                                            <td>${{ exclusiveContent.price }}</td>
+                                                            <td>{{ exclusiveContent.price | currency:'USD':'symbol'}}</td>
                                                             <td>{{ exclusiveContent.stock }}</td>
-                                                            <td class="text-right">
-                                                                <div class="btn-group" *ngIf="isProjectOwner">
-                                                                    <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
-                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
-                                                                    <i class="fa fa-eye"></i>
-                                                                    </button>
-                                                                    <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
-                                                                        <i class="fa fa-edit"></i>
-                                                                    </button>
-                                                                </div>
+                                                            <td *ngIf="isProjectOwner">{{ exclusiveContent.state | state}}</td>
+                                                            <td class="text-right" *ngIf="isProjectOwner">
+                                                                <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                                    [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
+                                                                <i class="fa fa-eye"></i>
+                                                                </button>
+                                                                <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
+                                                                    <i class="fa fa-edit"></i>
+                                                                </button>
                                                             </td>
                                                         </tr>
                                                     </tbody>

@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
 import * as $ from 'jquery';
@@ -10,6 +10,15 @@ import 'jquery-validation';
 import 'bootstrap';
 import 'twitter-bootstrap-wizard';
 import 'bootstrap-select';
+import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
+import { UserService } from 'app/core/user/user.service';
+import { IApplicationUser, ApplicationUser } from 'app/shared/model/application-user.model';
+import { IdType } from 'app/shared/model/enumerations/id-type.model';
+import { Observable } from 'rxjs';
+import { ICategory } from 'app/shared/model/category.model';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import * as moment from 'moment';
+import { User } from 'app/core/user/user.model';
 
 declare let swal: any;
 
@@ -20,9 +29,6 @@ interface FileReaderEvent extends Event {
   target: FileReaderEventTarget;
   getMessage(): string;
 }
-interface JQuery {
-  printArea(): void;
-}
 
 @Component({
   selector: 'jhi-register',
@@ -31,10 +37,12 @@ interface JQuery {
 })
 export class RegisterWizardComponent implements AfterViewInit {
   @ViewChild('login', { static: false })
+  isSaving = false;
   login?: ElementRef;
   focus: any;
   focus1: any;
   focus2: any;
+  focus3: any;
   files: any;
 
   doNotMatch = false;
@@ -44,25 +52,23 @@ export class RegisterWizardComponent implements AfterViewInit {
   success = false;
 
   registerForm = this.fb.group({
-    login: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(50),
-        Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
-      ],
-    ],
-    email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    firstname: [],
+    lastname: [],
+    email: [],
+    password: [],
+    identify: [null, [Validators.required]],
+    phone: [null, [Validators.required]],
+    admin: [],
+    birthdate: [null, [Validators.required]],
   });
 
   constructor(
     private languageService: JhiLanguageService,
     private loginModalService: LoginModalService,
     private registerService: RegisterService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private loginApplicationUser: ApplicationUserService,
+    private userApplication: UserService
   ) {}
 
   readURL(input: any): void {
@@ -91,6 +97,15 @@ export class RegisterWizardComponent implements AfterViewInit {
         tickIcon: 'nc-check-2',
       });
     }
+
+    $.validator.addMethod('checkphonenumber', function (value): any {
+      return /[0-9]/.test(value);
+    });
+
+    $.validator.addMethod('checkpassword', function (value): any {
+      return /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{6,64})/.test(value);
+    });
+
     // Code for the Validator
     const $validator = $('.card-wizard form').validate({
       rules: {
@@ -105,18 +120,24 @@ export class RegisterWizardComponent implements AfterViewInit {
         email: {
           required: true,
           minlength: 3,
+          email: true,
         },
         identify: {
           required: true,
-          minlength: 3,
+          minlength: 13,
           maxlength: 13,
         },
         password: {
           required: true,
           minlength: 6,
+          checkpassword: true,
+        },
+        phone: {
+          required: true,
+          minlength: 8,
+          checkphonenumber: true,
         },
       },
-
       highlight(element: any): void {
         $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
       },
@@ -127,6 +148,7 @@ export class RegisterWizardComponent implements AfterViewInit {
         $(element).append(error);
       },
     });
+
     // Wizard Initialization
     const wizardCard = $('.card-wizard') as any;
     wizardCard.bootstrapWizard({
@@ -263,12 +285,6 @@ export class RegisterWizardComponent implements AfterViewInit {
 
         $current = index + 1;
 
-        // if($current == 1 || (mobile_device == true && (index % 2 == 0) )){
-        //     move_distance -= 8;
-        // } else if($current == total_steps || (mobile_device == true && (index % 2 == 1))){
-        //     move_distance += 8;
-        // }
-
         if (mobileDevice) {
           const x: any = index / 2;
           verticalLevel = parseInt(x, 10);
@@ -316,6 +332,56 @@ export class RegisterWizardComponent implements AfterViewInit {
     });
 
     $('.set-full-height').css('height', 'auto');
+  }
+
+  saveAplicationUser(): void {
+    this.isSaving = true;
+    const userApplicationFormObj = this.mappingDataFromForm();
+    if (userApplicationFormObj.id !== undefined) {
+      this.subscribeToSaveResponse(this.loginApplicationUser.update(userApplicationFormObj));
+    } else {
+      this.subscribeToSaveResponse(this.loginApplicationUser.create(userApplicationFormObj));
+    }
+  }
+
+  saveUser(): void {}
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<ICategory>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveSuccess(): void {
+    this.isSaving = false;
+    this.previousState();
+  }
+
+  protected onSaveError(): void {
+    this.isSaving = false;
+  }
+
+  previousState(): void {
+    window.history.back();
+  }
+
+  private mappingDataFromForm(): IApplicationUser {
+    return {
+      ...new ApplicationUser(),
+      identification: this.registerForm.get(['identify'])!.value,
+      phoneNumber: this.registerForm.get(['phone'])!.value,
+      admin: false,
+      idType: IdType.IDENTIFICATION,
+      birthDate: moment(this.registerForm.get(['birthdate'])!.value, DATE_TIME_FORMAT),
+      internalUser: {
+        email: this.registerForm.get(['email'])!.value,
+        firstName: this.registerForm.get(['firstname'])!.value,
+        lastName: this.registerForm.get(['lastname'])!.value,
+        activated: false,
+        login: this.registerForm.get(['email'])!.value,
+      },
+    };
   }
 
   register(): void {

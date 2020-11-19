@@ -4,7 +4,7 @@
       <!--      Wizard container        -->
       <div class="wizard-container">
         <div class="card card-wizard" data-color="primary" id="wizardProfile">
-          <form action="" method="">
+          <form action="" method="" (ngSubmit)="saveAplicationUser()" [formGroup]="registerForm">
             <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
             <div class="card-header text-center">
               <h3 class="card-title">
@@ -20,12 +20,12 @@
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#account" data-toggle="tab" role="tab" aria-controls="account" aria-selected="true">
-                      <i class="nc-icon nc-touch-id"></i> Favoritos
+                      <i class="nc-icon nc-single-02"></i> Asignar categoría
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#address" data-toggle="tab" role="tab" aria-controls="address" aria-selected="true">
-                      <i class="nc-icon nc-pin-3"></i> Extras
+                      <i class="nc-icon nc-pin-3"></i> Finalización
                     </a>
                   </li>
                 </ul>
@@ -36,7 +36,7 @@
                 <div class="tab-pane show active" id="about">
                   <h5 class="info-text"> Comencemos con la Información básica personal</h5>
                   <div class="row justify-content-center">
-                    <div class="col-sm-4">
+                    <div class="col-sm-8">
                       <div class="picture-container">
                         <div class="picture">
                           <img src="/content/images/default-avatar.png" class="picture-src" id="wizardPicturePreview" title="" />
@@ -47,114 +47,42 @@
                     </div>
                     <div class="col-sm-6">
                       <div class="input-group" [ngClass]="{'input-group-focus':focus===true}">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="nc-icon nc-single-02"></i></span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="First Name (required)" name="firstname" (focus)="focus=true" (blur)="focus=false" />
-                        <input type="text" class="form-control" placeholder="Cédula (required)" name="identify" (focus)="focus=true" (blur)="focus=false" />
+                        <input type="text" class="form-control" formControlName="firstname" placeholder="Nombre (required)" name="firstname" (focus)="focus=true" (blur)="focus=false" />
+                        <input type="text" class="form-control" formControlName="identify" placeholder="Cédula (required)" name="identify" (focus)="focus=true" (blur)="focus=false" />
                       </div>
                       <div class="input-group" [ngClass]="{'input-group-focus':focus1===true}">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="nc-icon nc-circle-10"></i></span>
-                        </div>
-                        <input type="text" placeholder="Last Name (required)" class="form-control" name="lastname" (focus)="focus1=true" (blur)="focus1=false" />
+                        <input type="text" placeholder="Apellido (required)" class="form-control" formControlName="lastname" name="lastname" (focus)="focus1=true" (blur)="focus1=false" />
+                        <input type="tel" id="phone" name="phone" formControlName="phone" placeholder="8455-3535" pattern="[0-9]{4}-[0-9]{4}">
                       </div>
                     </div>
-                    <div class="col-lg-10 mt-3">
-                      <div class="input-group" [ngClass]="{'input-group-focus':focus2===true}">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="nc-icon nc-send"></i></span>
-                        </div>
-                        <input type="email" placeholder="Email (required)" class="form-control" name="email" (focus)="focus2=true" (blur)="focus2=false" />
-                        <input type="password" placeholder="password (required)" class="form-control" name="password" (focus)="focus2=true" (blur)="focus2=false" />
-                        <label for="isadmin"><input type="checkbox" placeholder="Admin" class="form-control" name="Admin" (focus)="focus2=true" (blur)="focus2=false" />Admin</label>
-                        <label for="birthdate">Fecha Nacimiento:<input type="date" name="birthdate"></label>
+                    <div class="col-lg-10 mt-3">  
+                        <div class="input-group" [ngClass]="{'input-group-focus':focus2===true}">
+                        <input type="email" placeholder="Email (required)" class="form-control" formControlName="email"  name="email" (focus)="focus2=true" (blur)="focus2=false" />
+                        <input type="password" pattern="[a-zA-Z]+" placeholder="Contraseña (required)" class="form-control" formControlName="password" name="password" (focus)="focus2=true" (blur)="focus2=false" />
                       </div>
+                    </div>
+                    <div class="col-lg-8 mt-3"> 
+                        <div class="input-group" [ngClass]="{'input-group-focus':focus3===true}">                        
+                        <label for="isadmin"><input type="checkbox" placeholder="admin" class="form-control" name="admin" formControlName="admin" (focus)="focus3=true" (blur)="focus3=false" />Marcar como administrador</label>
+                        <label for="birthdate" (focus)="focus3=true" (blur)="focus3=false">Fecha Nacimiento:<input type="datetime-local" formControlName="birthdate" name="birthdate" ></label>
+                        </div>
                     </div>
                   </div>
                 </div>
                 <div class="tab-pane" id="account">
-                  <h5 class="info-text"> What are you doing? (checkboxes) </h5>
-                  <div class="row justify-content-center">
-                    <div class="col-lg-10">
-                      <div class="row">
-                        <div class="col-sm-4">
-                          <div class="choice" data-toggle="wizard-checkbox">
-                            <input type="checkbox" name="jobb" value="Design">
-                            <div class="icon">
-                              <i class="nc-icon nc-ruler-pencil"></i>
-                            </div>
-                            <h6>Design</h6>
-                          </div>
-                        </div>
-                        <div class="col-sm-4">
-                          <div class="choice" data-toggle="wizard-checkbox">
-                            <input type="checkbox" name="jobb" value="Code">
-                            <div class="icon">
-                              <i class="nc-icon nc-laptop"></i>
-                            </div>
-                            <h6>Code</h6>
-                          </div>
-                        </div>
-                        <div class="col-sm-4">
-                          <div class="choice" data-toggle="wizard-checkbox">
-                            <input type="checkbox" name="jobb" value="Develop">
-                            <div class="icon">
-                              <i class="nc-icon nc-atom"></i>
-                            </div>
-                            <h6>Develop</h6>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <h5 class="info-text"> Asignar categorías </h5>
                 </div>
                 <div class="tab-pane" id="address">
                   <div class="row justify-content-center">
                     <div class="col-sm-12">
-                      <h5 class="info-text"> Are you living in a nice area? </h5>
-                    </div>
-                    <div class="col-sm-7">
-                      <div class="form-group">
-                        <label>Street Name</label>
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="form-group">
-                        <label>Street No.</label>
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-sm-5">
-                      <div class="form-group">
-                        <label>City</label>
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-sm-5">
-                      <div class="form-group select-wizard">
-                        <label>Country</label>
-                        <select class="selectpicker" data-size="7" data-style="btn btn-primary btn-round" title="Single Select">
-                          <option value="Afghanistan"> Afghanistan </option>
-                          <option value="Albania"> Albania </option>
-                          <option value="Algeria"> Algeria </option>
-                          <option value="American Samoa"> American Samoa </option>
-                          <option value="Andorra"> Andorra </option>
-                          <option value="Angola"> Angola </option>
-                          <option value="Anguilla"> Anguilla </option>
-                          <option value="Antarctica"> Antarctica </option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+                      <h5 class="info-text"> Gracias por completar el registro</h5>
                 </div>
               </div>
             </div>
             <div class="card-footer">
               <div class="pull-right">
                 <input type='button' class='btn btn-next btn-fill btn-rose btn-wd' name='next' value='Siguiente' />
-                <input type='button' class='btn btn-finish btn-fill btn-rose btn-wd' name='finish' value='Finalizar' />
+                <input type="submit" class='btn btn-finish btn-fill btn-rose btn-wd' name='finish' value='Finalizar' />
               </div>
               <div class="pull-left">
                 <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Anterior' />

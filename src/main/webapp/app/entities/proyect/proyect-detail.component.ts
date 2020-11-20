@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { IResource } from 'app/shared/model/resource.model';
 import { ResourceService } from '../resource/resource.service';
 import { AuctionService } from '../auction/auction.service';
+import { ICheckpoint } from 'app/shared/model/checkpoint.model';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -85,6 +86,37 @@ export class ProyectDetailComponent implements OnInit {
     }
   }
 
+  pushCardsCheckpoints(data: any): void {
+    if (data.body) {
+      let i = 0;
+      for (const checkpoint of data.body) {
+        i++;
+        const obj = {
+          inverted: true,
+          type: 'success',
+          icon: 'nc-icon nc-sun-fog-29',
+          subTitle: 'Checkpoint ' + i,
+          body: checkpoint.message,
+        };
+        this.cards.push(obj);
+      }
+    }
+  }
+
+  loadCheckPoints(projectId: number): void {
+    if (this.proyect != null) {
+      if (this.isProjectOwner) {
+        this.checkPointService
+          .query({ 'proyectId.equals': projectId })
+          .subscribe((res: HttpResponse<ICheckpoint[]>) => this.pushCardsCheckpoints(res));
+      } else {
+        this.checkPointService.findByProyectId(projectId, this.percentile).subscribe(data => {
+          this.pushCardsCheckpoints(data);
+        });
+      }
+    }
+  }
+
   ngOnInit(): void {
     const style = document.createElement('style');
     style.innerHTML = this.css;
@@ -111,22 +143,6 @@ export class ProyectDetailComponent implements OnInit {
       this.paymentService.findTopDonations(proyect.id).subscribe(data => {
         this.donors = data.body;
       });
-      this.checkPointService.findByProyectId(proyect.id, this.percentile).subscribe(data => {
-        if (data.body) {
-          let i = 0;
-          for (const checkpoint of data.body) {
-            i++;
-            const obj = {
-              inverted: true,
-              type: 'success',
-              icon: 'nc-icon nc-sun-fog-29',
-              subTitle: 'Checkpoint ' + i,
-              body: checkpoint.message,
-            };
-            this.cards.push(obj);
-          }
-        }
-      });
     });
 
     this.accountService.identity().subscribe(account => {
@@ -139,5 +155,6 @@ export class ProyectDetailComponent implements OnInit {
 
     this.loadExclusiveContent(this.proyect?.id as number);
     this.loadAuction(this.proyect?.id as number);
+    this.loadCheckPoints(this.proyect?.id as number);
   }
 }

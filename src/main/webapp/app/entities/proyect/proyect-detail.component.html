@@ -153,6 +153,11 @@
                     <div class="tab-content tab-space tab-subcategories">
                         <div class="tab-pane active" id="link8">
                             <div class="col-md-12">
+                                <div class="pull-right" *ngIf="isProjectOwner">
+                                    <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/checkpoint', proyect!.id, 'new']">
+                                      <i class="nc-icon nc-simple-add"></i>
+                                    </button>
+                                </div>
                                 <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple">
                                 </jhi-timeline>
                             </div>

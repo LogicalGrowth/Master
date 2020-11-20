@@ -13,6 +13,7 @@ import { ProyectService } from 'app/entities/proyect/proyect.service';
 @Component({
   selector: 'jhi-checkpoint-update',
   templateUrl: './checkpoint-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class CheckpointUpdateComponent implements OnInit {
   isSaving = false;
@@ -22,7 +23,7 @@ export class CheckpointUpdateComponent implements OnInit {
     id: [],
     completitionPercentage: [null, [Validators.required]],
     message: [null, [Validators.required]],
-    completed: [null, [Validators.required]],
+    completed: [],
     proyect: [],
   });
 
@@ -35,9 +36,20 @@ export class CheckpointUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ checkpoint }) => {
-      this.updateForm(checkpoint);
+      if (checkpoint) {
+        this.updateForm(checkpoint);
 
-      this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+        this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+      }
+    });
+
+    this.activatedRoute.data.subscribe(({ currentProyect }) => {
+      if (currentProyect) {
+        this.editForm.patchValue({
+          id: undefined,
+          proyect: currentProyect,
+        });
+      }
     });
   }
 
@@ -71,7 +83,7 @@ export class CheckpointUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       completitionPercentage: this.editForm.get(['completitionPercentage'])!.value,
       message: this.editForm.get(['message'])!.value,
-      completed: this.editForm.get(['completed'])!.value,
+      completed: false,
       proyect: this.editForm.get(['proyect'])!.value,
     };
   }

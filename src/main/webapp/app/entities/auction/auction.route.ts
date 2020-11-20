@@ -11,6 +11,8 @@ import { AuctionService } from './auction.service';
 import { AuctionComponent } from './auction.component';
 import { AuctionDetailComponent } from './auction-detail.component';
 import { AuctionUpdateComponent } from './auction-update.component';
+import { ExclusiveContentUpdateComponent } from '../exclusive-content/exclusive-content-update.component';
+import { ProyectResolve } from '../proyect/proyect.route';
 
 @Injectable({ providedIn: 'root' })
 export class AuctionResolve implements Resolve<IAuction> {
@@ -77,6 +79,18 @@ export const auctionRoute: Routes = [
     data: {
       authorities: [Authority.USER],
       pageTitle: 'fun4FundApp.auction.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/new',
+    component: AuctionUpdateComponent,
+    resolve: {
+      currentProyect: ProyectResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'fun4FundApp.exclusiveContent.home.title',
     },
     canActivate: [UserRouteAccessService],
   },

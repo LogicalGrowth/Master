@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IExclusiveContent } from 'app/shared/model/exclusive-content.model';
+import { IAuction } from 'app/shared/model/auction.model';
 
 import { IProyect } from 'app/shared/model/proyect.model';
 import { CheckpointService } from '../checkpoint/checkpoint.service';
@@ -14,6 +15,7 @@ import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.mo
 import * as moment from 'moment';
 import { IResource } from 'app/shared/model/resource.model';
 import { ResourceService } from '../resource/resource.service';
+import { AuctionService } from '../auction/auction.service';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -33,6 +35,7 @@ export class ProyectDetailComponent implements OnInit {
   checkpoints: any;
   cards: any[] = [];
   exclusiveContents?: IExclusiveContent[];
+  auctions?: IAuction[];
   account!: User;
   isProjectOwner!: Boolean;
   daysCreated: any;
@@ -49,6 +52,7 @@ export class ProyectDetailComponent implements OnInit {
     private paymentService: PaymentService,
     private checkPointService: CheckpointService,
     protected exclusiveContentService: ExclusiveContentService,
+    protected auctionService: AuctionService,
     private accountService: AccountService,
     private resourceService: ResourceService
   ) {}
@@ -63,6 +67,20 @@ export class ProyectDetailComponent implements OnInit {
         this.exclusiveContentService
           .query({ 'proyectId.equals': projectId, 'stock.greaterThan': 1, 'state.equals': ActivityStatus.ENABLED })
           .subscribe((res: HttpResponse<IExclusiveContent[]>) => (this.exclusiveContents = res.body || []));
+      }
+    }
+  }
+
+  loadAuction(projectId: number): void {
+    if (this.proyect != null) {
+      if (this.isProjectOwner) {
+        this.auctionService
+          .query({ 'proyectId.equals': projectId })
+          .subscribe((res: HttpResponse<IAuction[]>) => (this.auctions = res.body || []));
+      } else {
+        this.auctionService
+          .query({ 'proyectId.equals': projectId, 'state.equals': ActivityStatus.ENABLED })
+          .subscribe((res: HttpResponse<IAuction[]>) => (this.auctions = res.body || []));
       }
     }
   }
@@ -120,5 +138,6 @@ export class ProyectDetailComponent implements OnInit {
     this.isProjectOwner = this.account.id === this.proyect?.owner?.id ? true : false;
 
     this.loadExclusiveContent(this.proyect?.id as number);
+    this.loadAuction(this.proyect?.id as number);
   }
 }

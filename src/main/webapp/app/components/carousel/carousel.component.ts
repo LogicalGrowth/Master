@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { IResource } from 'app/shared/model/resource.model';
 
@@ -18,7 +17,7 @@ export class CarouselComponent implements OnInit {
 
   config: NgbCarouselConfig;
 
-  constructor(config: NgbCarouselConfig, private sanitizer: DomSanitizer) {
+  constructor(config: NgbCarouselConfig) {
     this.config = config;
   }
 

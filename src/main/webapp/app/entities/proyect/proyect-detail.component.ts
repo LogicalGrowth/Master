@@ -97,6 +97,8 @@ export class ProyectDetailComponent implements OnInit {
           icon: 'nc-icon nc-sun-fog-29',
           subTitle: 'Checkpoint ' + i,
           body: checkpoint.message,
+          isOwner: this.isProjectOwner,
+          routerLink: '/checkpoint/' + checkpoint.id + '/edit',
         };
         this.cards.push(obj);
       }

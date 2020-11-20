@@ -208,7 +208,7 @@ export class ExclusiveContentUpdateComponent implements OnInit {
       ...new Resource(),
       id: undefined,
       url: data.secure_url,
-      type: 'image',
+      type: 'Image',
       proyect: undefined,
       prize: undefined,
     };

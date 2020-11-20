@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { IResource } from 'app/shared/model/resource.model';
 
@@ -9,13 +10,26 @@ import { IResource } from 'app/shared/model/resource.model';
 })
 export class CarouselComponent implements OnInit {
   @Input() items?: IResource[];
+  @Input() interval = 0;
+  @Input() keyboard?: boolean;
+  @Input() width: any;
+  @Input() height: any;
+  firstTimeLoad = true;
 
-  constructor(config: NgbCarouselConfig) {
-    config.interval = 4000;
-    config.wrap = true;
-    config.keyboard = false;
-    config.pauseOnHover = false;
+  config: NgbCarouselConfig;
+
+  constructor(config: NgbCarouselConfig, private sanitizer: DomSanitizer) {
+    this.config = config;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.config.wrap = true;
+    this.config.keyboard = this.keyboard ? this.keyboard : false;
+    this.config.pauseOnHover = false;
+  }
+
+  GetVideoId(url: string | undefined): string {
+    const urlParmas = new URL(url || '');
+    return urlParmas.searchParams.get('v') || '';
+  }
 }

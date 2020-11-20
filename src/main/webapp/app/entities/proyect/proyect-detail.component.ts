@@ -12,6 +12,8 @@ import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
 import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
 import * as moment from 'moment';
+import { IResource } from 'app/shared/model/resource.model';
+import { ResourceService } from '../resource/resource.service';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -35,6 +37,11 @@ export class ProyectDetailComponent implements OnInit {
   isProjectOwner!: Boolean;
   daysCreated: any;
   updatedDays: any;
+  items?: IResource[];
+  css = `#gallery iframe{
+    width: 100% !important;
+    height: 31vw !important;
+  }`;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -42,7 +49,8 @@ export class ProyectDetailComponent implements OnInit {
     private paymentService: PaymentService,
     private checkPointService: CheckpointService,
     protected exclusiveContentService: ExclusiveContentService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private resourceService: ResourceService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -60,6 +68,9 @@ export class ProyectDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const style = document.createElement('style');
+    style.innerHTML = this.css;
+    document.head.appendChild(style);
     this.activatedRoute.data.subscribe(({ proyect }) => {
       this.proyect = proyect;
       this.position.push(proyect.coordY);
@@ -76,6 +87,9 @@ export class ProyectDetailComponent implements OnInit {
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });
+      this.resourceService
+        .query({ 'proyectId.equals': proyect.id })
+        .subscribe((res: HttpResponse<IResource[]>) => (this.items = res.body || []));
       this.paymentService.findTopDonations(proyect.id).subscribe(data => {
         this.donors = data.body;
       });

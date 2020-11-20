@@ -16,6 +16,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CarouselComponent } from './carousel/carousel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StatePipe } from './state.pipe';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { StatePipe } from './state.pipe';
     // eslint-disable-next-line @typescript-eslint/camelcase
     CloudinaryModule.forRoot(cloudinary, { cloud_name: 'barnesnoble', upload_preset: 'cq8ymdc5' }),
     FileUploadModule,
+    YouTubePlayerModule,
     NgbModule,
   ],
   exports: [

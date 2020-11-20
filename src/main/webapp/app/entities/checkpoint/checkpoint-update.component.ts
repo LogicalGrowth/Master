@@ -21,7 +21,7 @@ export class CheckpointUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    completitionPercentage: [null, [Validators.required]],
+    completitionPercentage: [null, [Validators.required, Validators.min(1), Validators.max(100), Validators.pattern('^[0-9]*$')]],
     message: [null, [Validators.required]],
     completed: [],
     proyect: [],

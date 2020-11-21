@@ -8,11 +8,11 @@
         "notFound": "No hay proyectos registrados"
       },
       "imagen": {
-        "created": "Imagen creada exitosamente"
+        "created": "Imagen creada exitosamente."
       },
-      "created": "Proyecto creado existosamente",
-      "updated": "Proyecto actualizado existosamente",
-      "deleted": "Proyecto borrado existosamente",
+      "created": "Proyecto creado existosamente.",
+      "updated": "Proyecto actualizado existosamente.",
+      "deleted": "Proyecto borrado existosamente.",
       "delete": {
         "question": "¿Desea eliminar este proyecto?"
       },

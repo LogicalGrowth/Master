@@ -1,0 +1,47 @@
+<div class="sidebar" data-color="brown" data-active-color="success">
+  <div class="logo" (click)="sidebarToggle()">
+    <a class="simple-text logo-mini">
+      <div class="logo-image-small">
+        <img src="../../content/images/logo-jhipster.png">
+      </div>
+    </a>
+
+    <a href="https://www.creative-tim.com" class="simple-text logo-normal">
+      Fun4Fund
+    </a>
+  </div>
+
+  <div class="sidebar-wrapper">
+
+    <ul class="nav">
+
+      <li routerLinkActive="active" *ngFor="let menuitem of menuItems">
+        <!--If is a single link-->
+        <a [routerLink]="[menuitem.path]" *ngIf="menuitem.type === 'link'">
+          <i class="{{menuitem.icontype}}"></i>
+          <p>{{menuitem.title}}</p>
+        </a>
+        <!--If it have a submenu-->
+        <a data-toggle="collapse" *ngIf="menuitem.type === 'sub'" (click)="collapseNavbar(menuitem.collapse)">
+          <i class="{{menuitem.icontype}}"></i>
+          <p>{{menuitem.title}}<b class="caret"></b></p>
+        </a>
+
+        <!--Display the submenu items-->
+        <div id="{{menuitem.collapse}}" class="collapse" [ngClass]="{'show': menuitem.show}"
+          *ngIf="menuitem.type === 'sub'">
+          <ul class="nav">
+            <li routerLinkActive="active" *ngFor="let childitem of menuitem.children">
+              <a [routerLink]="[menuitem.path, childitem.path]">
+                <span class="sidebar-mini-icon">{{childitem.ab}}</span>
+                <span class="sidebar-normal">{{childitem.title}}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</div>

@@ -2,22 +2,22 @@
   "fun4FundApp": {
     "proyect": {
       "home": {
-        "title": "Proyects",
+        "title": "Proyecto",
         "createLabel": "Create a new Proyect",
         "createOrEditLabel": "Create or edit a Proyect",
-        "notFound": "No Proyects found"
+        "notFound": "No hay proyectos registrados"
       },
       "imagen": {
-        "created": "Una imagen fue creada con el id {{ param }}"
+        "created": "Imagen creada exitosamente."
       },
-      "created": "Un nuevo proyecto fue creado con el id {{ param }}",
-      "updated": "A Proyect is updated with identifier {{ param }}",
-      "deleted": "A Proyect is deleted with identifier {{ param }}",
+      "created": "Proyecto creado existosamente.",
+      "updated": "Proyecto actualizado existosamente.",
+      "deleted": "Proyecto borrado existosamente.",
       "delete": {
-        "question": "Are you sure you want to delete Proyect {{ id }}?"
+        "question": "¿Desea eliminar este proyecto?"
       },
       "detail": {
-        "title": "Proyect"
+        "title": "Proyecto"
       },
       "name": "Name",
       "description": "Description",

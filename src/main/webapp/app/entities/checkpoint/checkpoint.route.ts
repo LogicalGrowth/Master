@@ -11,6 +11,7 @@ import { CheckpointService } from './checkpoint.service';
 import { CheckpointComponent } from './checkpoint.component';
 import { CheckpointDetailComponent } from './checkpoint-detail.component';
 import { CheckpointUpdateComponent } from './checkpoint-update.component';
+import { ProyectResolve } from '../proyect/proyect.route';
 
 @Injectable({ providedIn: 'root' })
 export class CheckpointResolve implements Resolve<ICheckpoint> {
@@ -57,10 +58,10 @@ export const checkpointRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: 'new',
+    path: ':id/new',
     component: CheckpointUpdateComponent,
     resolve: {
-      checkpoint: CheckpointResolve,
+      currentProyect: ProyectResolve,
     },
     data: {
       authorities: [Authority.USER],

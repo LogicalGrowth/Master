@@ -1,6 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
+import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
+import cr.ac.ucenfotec.fun4fund.service.ApplicationUserService;
+import cr.ac.ucenfotec.fun4fund.service.MailService;
 import cr.ac.ucenfotec.fun4fund.service.PaymentService;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
 import org.springframework.data.domain.Page;
@@ -44,11 +48,17 @@ public class PaymentResource {
 
     private final PaymentRepository paymentRepository;
 
+    private final MailService mailService;
+
+    private final ApplicationUserService applicationUserService;
+
     public PaymentResource(PaymentService paymentService, PaymentQueryService paymentQueryService,
-                           PaymentRepository paymentRepository) {
+                           PaymentRepository paymentRepository, MailService mailService, ApplicationUserService applicationUserService) {
         this.paymentService = paymentService;
         this.paymentQueryService = paymentQueryService;
         this.paymentRepository = paymentRepository;
+        this.mailService = mailService;
+        this.applicationUserService = applicationUserService;
     }
 
     /**
@@ -64,7 +74,28 @@ public class PaymentResource {
         if (payment.getId() != null) {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        Optional<ApplicationUser> applicationUser = applicationUserService.findOne(payment.getApplicationUser().getId());
+
+        String type = "";
+
+        if(payment.getType() == ProductType.AUCTION){
+            type = "la puja de " + payment.getAmount() + "de la subasta en el proyecto " + payment.getProyect().getName();
+        } else if(payment.getType() == ProductType.DONATION){
+            type = "la donación de " + payment.getAmount() +" al proyecto " + payment.getProyect().getName();
+        }else if(payment.getType() == ProductType.EXCLUSIVE_CONTENT){
+            type = "la compra de contenido exlusivo en el proyecto " + payment.getProyect().getName() + "monto final: " + payment.getAmount();
+        }else if(payment.getType() == ProductType.PARTNERSHIP){
+            type = "";
+        }else if(payment.getType() == ProductType.RAFFLE){
+            type = "participar en la rifa del proyecto " + payment.getProyect().getName()+ "el monto final fue de: " + payment.getAmount();
+        }
+        String subject = "Recibdo de pago";
+
+        String content = "Muchas gracias por " + type;
+        mailService.sendEmail(applicationUser.get().getInternalUser().getEmail(),subject,content,false,true);
         Payment result = paymentService.save(payment);
+
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);

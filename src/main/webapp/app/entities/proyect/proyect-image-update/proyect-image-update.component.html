@@ -8,7 +8,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#secondtab" role="tablist">
-                <i class="now-ui-icons shopping_shop"></i>Agregar Videos o 3D Tour
+                <i class="now-ui-icons shopping_shop"></i>Agregar Videos
             </a>
         </li>
     </ul>
@@ -34,7 +34,7 @@
                 <div class="col-md-6">
                     <div class="card ">
                         <div class="container-fluid">
-                            <h4 class="card-title">Agregar videos o 3D Tour</h4>
+                            <h4 class="card-title">Agregar videos</h4>
                         </div>
 
                         <div class="card-body ">
@@ -65,7 +65,6 @@
                                     <select class="form-control custom-select custom-select-lg" name="type"
                                         formControlName="type" id="type">
                                         <option value="Youtube">Youtube</option>
-                                        <option value="3DTour">3DTour</option>
                                     </select>
                                     <div
                                         *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">

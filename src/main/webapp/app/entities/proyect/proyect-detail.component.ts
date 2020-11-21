@@ -13,7 +13,10 @@ import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
 import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
 import * as moment from 'moment';
+import { IResource } from 'app/shared/model/resource.model';
+import { ResourceService } from '../resource/resource.service';
 import { AuctionService } from '../auction/auction.service';
+import { ICheckpoint } from 'app/shared/model/checkpoint.model';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -38,6 +41,11 @@ export class ProyectDetailComponent implements OnInit {
   isProjectOwner!: Boolean;
   daysCreated: any;
   updatedDays: any;
+  items?: IResource[];
+  css = `#gallery iframe{
+    width: 100% !important;
+    height: 31vw !important;
+  }`;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -46,7 +54,8 @@ export class ProyectDetailComponent implements OnInit {
     private checkPointService: CheckpointService,
     protected exclusiveContentService: ExclusiveContentService,
     protected auctionService: AuctionService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private resourceService: ResourceService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -77,7 +86,43 @@ export class ProyectDetailComponent implements OnInit {
     }
   }
 
+  pushCardsCheckpoints(data: any): void {
+    if (data.body) {
+      let i = 0;
+      for (const checkpoint of data.body) {
+        i++;
+        const obj = {
+          inverted: true,
+          type: 'success',
+          icon: 'nc-icon nc-sun-fog-29',
+          subTitle: 'Checkpoint ' + i,
+          body: checkpoint.message,
+          isOwner: this.isProjectOwner,
+          routerLink: '/checkpoint/' + checkpoint.id + '/edit',
+        };
+        this.cards.push(obj);
+      }
+    }
+  }
+
+  loadCheckPoints(projectId: number): void {
+    if (this.proyect != null) {
+      if (this.isProjectOwner) {
+        this.checkPointService
+          .query({ 'proyectId.equals': projectId })
+          .subscribe((res: HttpResponse<ICheckpoint[]>) => this.pushCardsCheckpoints(res));
+      } else {
+        this.checkPointService.findByProyectId(projectId, this.percentile).subscribe(data => {
+          this.pushCardsCheckpoints(data);
+        });
+      }
+    }
+  }
+
   ngOnInit(): void {
+    const style = document.createElement('style');
+    style.innerHTML = this.css;
+    document.head.appendChild(style);
     this.activatedRoute.data.subscribe(({ proyect }) => {
       this.proyect = proyect;
       this.position.push(proyect.coordY);
@@ -94,24 +139,11 @@ export class ProyectDetailComponent implements OnInit {
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });
+      this.resourceService
+        .query({ 'proyectId.equals': proyect.id })
+        .subscribe((res: HttpResponse<IResource[]>) => (this.items = res.body || []));
       this.paymentService.findTopDonations(proyect.id).subscribe(data => {
         this.donors = data.body;
-      });
-      this.checkPointService.findByProyectId(proyect.id, this.percentile).subscribe(data => {
-        if (data.body) {
-          let i = 0;
-          for (const checkpoint of data.body) {
-            i++;
-            const obj = {
-              inverted: true,
-              type: 'success',
-              icon: 'nc-icon nc-sun-fog-29',
-              subTitle: 'Checkpoint ' + i,
-              body: checkpoint.message,
-            };
-            this.cards.push(obj);
-          }
-        }
       });
     });
 
@@ -125,5 +157,6 @@ export class ProyectDetailComponent implements OnInit {
 
     this.loadExclusiveContent(this.proyect?.id as number);
     this.loadAuction(this.proyect?.id as number);
+    this.loadCheckPoints(this.proyect?.id as number);
   }
 }

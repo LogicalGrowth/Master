@@ -1,10 +1,14 @@
-<div class='container-fluid'>  
-    <div class='col-md-12'>  
-        <ngb-carousel>   
-            <ng-template ngbSlide *ngFor="let item of items">  
-                <img src={{item.url}} alt="No hay imágenes dispobiles" style="width:300px;height:200px;">
+<div class='container-fluid'>
+    <div class='col-md-12'>
+        <ngb-carousel [interval]="interval">
+            <ng-template ngbSlide *ngFor="let item of items">
+                <img *ngIf="item.type === '' || item.type === 'Image' || item.type === 'image'" src={{item.url}} alt="No hay imágenes dispobiles"
+                    style="width:{{width}};height:{{height}};">
+                <div *ngIf="item.type === 'Youtube'">
+                    <youtube-player videoId="{{GetVideoId(item.url)}}">
+                    </youtube-player>
+                </div>
             </ng-template>
-        </ngb-carousel>  
-    </div>  
-  
+        </ngb-carousel>
+    </div>
 </div>

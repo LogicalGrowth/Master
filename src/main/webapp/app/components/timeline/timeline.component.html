@@ -12,6 +12,12 @@
             <i class="{{card.icon}}"></i>
           </div>
           <div class="timeline-panel">
+            <div class="pull-right">
+              <button *ngIf="card.isOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                (click)="editItem(card.routerLink)">
+                <i class="fa fa-edit"></i>
+              </button>
+            </div>
             <div class="timeline-heading">
               <span class="badge badge-pill badge-{{card.type}}">{{card.subTitle}}</span>
             </div>

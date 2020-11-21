@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
@@ -33,6 +33,8 @@ export class ProyectUpdateComponent implements OnInit {
   updateProyect: any;
   isUpdate = false;
   proyectFee: any;
+  goal: any;
+  collected: any;
 
   editForm = this.fb.group({
     id: [],
@@ -43,6 +45,7 @@ export class ProyectUpdateComponent implements OnInit {
     coordX: [[Validators.required]],
     coordY: [],
     fee: [],
+    collected: [],
     number: [null, Validators.compose([Validators.required, Validators.pattern(this.regexIbanCrc)])],
     currencyType: [null, [Validators.required]],
     category: [null, [Validators.required]],
@@ -92,10 +95,13 @@ export class ProyectUpdateComponent implements OnInit {
       idType: proyect.idType,
       goalAmount: proyect.goalAmount,
       fee: 0,
+      collected: proyect.collected,
       number: proyect.number,
       currencyType: proyect.currencyType,
       category: proyect.category,
     });
+    this.goal = proyect.goalAmount;
+    this.collected = proyect.collected;
     this.position = {
       lat: proyect.coordY,
       lng: proyect.coordX,

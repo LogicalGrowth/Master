@@ -11,6 +11,7 @@ import { ApplicationUserDeleteDialogComponent } from './application-user-delete-
 @Component({
   selector: 'jhi-application-user',
   templateUrl: './application-user.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ApplicationUserComponent implements OnInit, OnDestroy {
   applicationUsers?: IApplicationUser[];

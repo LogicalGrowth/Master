@@ -18,6 +18,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StatePipe } from './state.pipe';
 import { PaypalButtonComponent } from './paypal-button/paypal-button.component';
 import { ShowPaymentMethodsComponent } from './show-payment-methods/show-payment-methods.component';
+import { YouTubePlayerModule } from '@angular/youtube-player';
+
 @NgModule({
   declarations: [
     SmallCardComponent,
@@ -40,6 +42,7 @@ import { ShowPaymentMethodsComponent } from './show-payment-methods/show-payment
     // eslint-disable-next-line @typescript-eslint/camelcase
     CloudinaryModule.forRoot(cloudinary, { cloud_name: 'barnesnoble', upload_preset: 'cq8ymdc5' }),
     FileUploadModule,
+    YouTubePlayerModule,
     NgbModule,
   ],
   exports: [

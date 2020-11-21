@@ -1,3 +1,4 @@
+<jhi-alert></jhi-alert>
 <div *ngIf="proyect">
     <div class="col-lg-12 card-testimonial">
         <div class="card">
@@ -17,8 +18,11 @@
     </div>
     <div class="container col-lg-11">
         <div class="row">
-            <div class="col-lg-8">
-                <img src="http://res.cloudinary.com/barnesnoble/image/upload/v1604828586/gwiydfej4tdaqammaz4p.png">
+            <div class="col-lg-8" id="gallery">
+                <jhi-carousel [items]="items" [interval]="0" [keyboard]="true" width="100%" height="31vw"></jhi-carousel>
+                <div *ngIf="items && items.length === 0">
+                    <img src="../../../content/images/noimagen.jpg" alt="No hay imágenes" style="width:100%;height:28vw;">
+                </div>
             </div>
             <div class="col-lg-4">
                 <div class="card">
@@ -57,7 +61,8 @@
                     </div>
                     <div class="d-flex flex-row col-lg-12 justify-content-center">
                         <div class="p-2  text-center">
-                            <i class="nc-icon nc-alert-circle-i"></i>
+                            <jhi-icon buttonCssClass="btn" iconCssClass="nc-icon nc-alert-circle-i">
+                            </jhi-icon>
                             <p>{{ proyect.category?.name }}</p>
                         </div>
                         <div class="p-2">
@@ -136,13 +141,23 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#link10" role="tablist">
-                                <i class="now-ui-icons shopping_shop"></i> Contenido exclusivo
+                                <i class="now-ui-icons shopping_shop"></i>Contenido exclusivo
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#link11" role="tablist">
+                                <i class="now-ui-icons shopping_shop"></i>Subastas
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
                         <div class="tab-pane active" id="link8">
                             <div class="col-md-12">
+                                <div class="pull-right" *ngIf="isProjectOwner">
+                                    <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/checkpoint', proyect!.id, 'new']">
+                                      <i class="nc-icon nc-simple-add"></i>
+                                    </button>
+                                </div>
                                 <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple">
                                 </jhi-timeline>
                             </div>
@@ -220,7 +235,7 @@
                                                             <td>{{ exclusiveContent.price | currency:'USD':'symbol'}}</td>
                                                             <td>{{ exclusiveContent.stock }}</td>
                                                             <td *ngIf="isProjectOwner">{{ exclusiveContent.state | state}}</td>
-                                                            <td class="text-right" *ngIf="isProjectOwner">
+                                                            <td class="text-center" *ngIf="isProjectOwner">
                                                                 <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                     [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
                                                                 <i class="fa fa-eye"></i>
@@ -231,6 +246,61 @@
                                                                 </button>
                                                             </td>
                                                         </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="link11">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title d-inline">Subastas</h4>
+                                            <div class="pull-right" *ngIf="isProjectOwner">
+                                                <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/auction', proyect!.id, 'new']">
+                                                    <i class="nc-icon nc-simple-add"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="alert alert-warning" id="no-result-auction"
+                                             *ngIf="auctions?.length === 0">
+                                            <span>No hay elementos</span>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="table-responsive" id="auctions"
+                                                 *ngIf="auctions && auctions.length > 0">
+                                                <table class="table">
+                                                    <thead class="text-primary">
+                                                    <th><span>Initial Bid</span></th>
+                                                    <th><span>Expiration Bid</span></th>
+                                                    <th><span>Winning Bid</span></th>
+                                                    <th *ngIf="isProjectOwner"><span>Estado</span></th>
+                                                    <th class="text-center" *ngIf="isProjectOwner">
+                                                        <span>Acciones</span></th>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr *ngFor="let auction of auctions">
+                                                        <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
+                                                        <td>{{ auction.expirationDate | date }}</td>
+                                                        <td>{{ auction.winningBid | currency:'USD':'symbol'}}</td>
+                                                        <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
+                                                        <td class="text-center" *ngIf="isProjectOwner">
+                                                            <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                                    [routerLink]="['/auction', auction.id, 'view']">
+                                                                <i class="fa fa-eye"></i>
+                                                            </button>
+                                                            <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                    [routerLink]="['/auction', auction.id, 'edit']">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
                                                     </tbody>
                                                 </table>
                                             </div>

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-timeline',
@@ -9,7 +10,11 @@ export class TimelineComponent implements OnInit {
   @Input() title: any;
   @Input() timelineClass: any = '';
   @Input() cards: any;
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  editItem(url: any): void {
+    this.router.navigate([url]);
+  }
 }

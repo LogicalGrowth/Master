@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IExclusiveContent } from 'app/shared/model/exclusive-content.model';
+import { IAuction } from 'app/shared/model/auction.model';
 
 import { IProyect } from 'app/shared/model/proyect.model';
 import { CheckpointService } from '../checkpoint/checkpoint.service';
@@ -11,6 +12,8 @@ import { ExclusiveContentService } from '../exclusive-content/exclusive-content.
 import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
 import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
+import * as moment from 'moment';
+import { AuctionService } from '../auction/auction.service';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -22,6 +25,7 @@ export class ProyectDetailComponent implements OnInit {
   reviews: any;
   ratings = [1, 2, 3, 4, 5];
   position: any[] = [];
+  mapCenter: any;
   hasMarker = false;
   percentile: any;
   rating: any;
@@ -29,8 +33,11 @@ export class ProyectDetailComponent implements OnInit {
   checkpoints: any;
   cards: any[] = [];
   exclusiveContents?: IExclusiveContent[];
+  auctions?: IAuction[];
   account!: User;
   isProjectOwner!: Boolean;
+  daysCreated: any;
+  updatedDays: any;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -38,6 +45,7 @@ export class ProyectDetailComponent implements OnInit {
     private paymentService: PaymentService,
     private checkPointService: CheckpointService,
     protected exclusiveContentService: ExclusiveContentService,
+    protected auctionService: AuctionService,
     private accountService: AccountService
   ) {}
 
@@ -55,14 +63,34 @@ export class ProyectDetailComponent implements OnInit {
     }
   }
 
+  loadAuction(projectId: number): void {
+    if (this.proyect != null) {
+      if (this.isProjectOwner) {
+        this.auctionService
+          .query({ 'proyectId.equals': projectId })
+          .subscribe((res: HttpResponse<IAuction[]>) => (this.auctions = res.body || []));
+      } else {
+        this.auctionService
+          .query({ 'proyectId.equals': projectId, 'state.equals': ActivityStatus.ENABLED })
+          .subscribe((res: HttpResponse<IAuction[]>) => (this.auctions = res.body || []));
+      }
+    }
+  }
+
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ proyect }) => {
       this.proyect = proyect;
       this.position.push(proyect.coordY);
       this.position.push(proyect.coordX);
+      this.mapCenter = {
+        lat: proyect.coordY,
+        lng: proyect.coordX,
+      };
       this.hasMarker = true;
       this.percentile = (100 * proyect.collected) / proyect.goalAmount;
       this.rating = (100 * proyect.rating) / 5;
+      this.daysCreated = moment().diff(proyect.creationDate, 'days');
+      this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });
@@ -96,5 +124,6 @@ export class ProyectDetailComponent implements OnInit {
     this.isProjectOwner = this.account.id === this.proyect?.owner?.id ? true : false;
 
     this.loadExclusiveContent(this.proyect?.id as number);
+    this.loadAuction(this.proyect?.id as number);
   }
 }

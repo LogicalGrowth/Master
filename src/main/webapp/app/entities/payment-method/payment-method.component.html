@@ -1,73 +1,71 @@
-<div class="card-body white">
-  <h2 id="page-heading">
-    <span>Métodos de pago</span>
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title d-inline">Métodos de pago</h4>
+        <div class="pull-right">
+          <button    id="jh-create-entity"
+          class="btn btn-primary float-right jh-create-entity create-payment-method"
+          [routerLink]="['/payment-method/new']">
+            <i class="nc-icon nc-simple-add"></i>
+          </button>
+      </div>
+      </div>
+    
+      <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
+          <span class="notFoundCard">No has agregado ningun método de pago</span>
+        </div>
+    
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="text-primary">
+              <th class="text-left">Favorito</th>
+              <th class="text-center">Tipo de tarjeta</th>
+              <th class="text-center">Número de tarjeta</th>
+              <th class="text-center">Dueño de la tarjeta</th>
+              <th class="text-center">Fecha de vencimiento</th>
+              <th class="text-center">Acciones</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let paymentMethod of paymentMethods; trackBy: trackId">
+                  <td>
+                    <!--      <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" checked>
+                                  <span class="form-check-sign"></span>
+                                </label>
+                              </div> -->
+                    <button class="btn btn-round">
+                      <i class="fa fa-heart"></i>
+                    </button>
+                  </td>
+        
+                  <td class="text-center">
+                    <img class="img-payment-cards" src="{{ paymentMethod.typeImage }}" alt="{{ paymentMethod.type }}" />
+                  </td>
+                  <td class="text-center">***********{{ paymentMethod.cardNumber! | slice: 12:19 }}</td>
+                  <td class="text-center">{{ paymentMethod.cardOwner }}</td>
+                  <td class="text-center">{{ paymentMethod.expirationDate | date: 'MM/yy' }}</td>
+        
+                  <td class="text-center">
+                    <div class="btn-group">
 
-    <button
-      id="jh-create-entity"
-      class="btn btn-primary float-right jh-create-entity create-payment-method"
-      [routerLink]="['/payment-method/new']"
-    >
-      <fa-icon icon="plus"></fa-icon>
-      <span> Agregar nueva tarjeta </span>
-    </button>
-  </h2>
-
-  <jhi-alert-error></jhi-alert-error>
-
-  <jhi-alert></jhi-alert>
-
-  <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
-    <span class="notFoundCard">No has agregado ningun método de pago</span>
-  </div>
-
-  <div class="table-responsive" id="entities" *ngIf="paymentMethods && paymentMethods.length > 0">
-    <table class="table">
-      <thead class="text-primary">
-        <th class="text-left">Favorito</th>
-        <th class="text-center">Tipo de tarjeta</th>
-        <th class="text-center">Número de tarjeta</th>
-        <th class="text-center">Dueño de la tarjeta</th>
-        <th class="text-center">Fecha de vencimiento</th>
-        <th class="text-center">Acciones</th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let paymentMethod of paymentMethods; trackBy: trackId">
-          <td>
-            <!--      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked>
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div> -->
-            <button class="btn btn-round">
-              <i class="fa fa-heart"></i>
-            </button>
-          </td>
-
-          <td class="text-center">
-            <img class="img-payment-cards" src="{{ paymentMethod.typeImage }}" alt="{{ paymentMethod.type }}" />
-          </td>
-          <td class="text-center">***********{{ paymentMethod.cardNumber! | slice: 12:19 }}</td>
-          <td class="text-center">{{ paymentMethod.cardOwner }}</td>
-          <td class="text-center">{{ paymentMethod.expirationDate | date: 'MM/yy' }}</td>
-
-          <td class="text-center">
-            <div class="btn-group">
-              <button type="submit" [routerLink]="['/payment-method', paymentMethod.id, 'edit']" class="btn btn-primary btn-sm">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Editar</span>
-              </button>
-
-              <button type="submit" (click)="delete(paymentMethod)" class="btn btn-danger btn-sm">
-                <i class="fa fa-times"></i>
-                <span class="d-none d-md-inline">Eliminar</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div></div>
+                      
+                      <button type="submit" [routerLink]="['/payment-method', paymentMethod.id, 'edit']" class="btn btn-success btn-icon btn-sm ">
+                        <i class="fa fa-edit"></i>
+                      </button>
+               
+                      <button  type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm " (click)="delete(paymentMethod)">
+                        <i class="fa fa-times"></i>
+                      </button>   
+                    </div>
+                  </td>
+                </tr>  
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -11,6 +11,7 @@ import { CategoryDeleteDialogComponent } from './category-delete-dialog.componen
 @Component({
   selector: 'jhi-category',
   templateUrl: './category.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class CategoryComponent implements OnInit, OnDestroy {
   categories?: ICategory[];

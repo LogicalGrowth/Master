@@ -1,8 +1,12 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent;
+import cr.ac.ucenfotec.fun4fund.domain.Prize;
+import cr.ac.ucenfotec.fun4fund.domain.Resource;
 import cr.ac.ucenfotec.fun4fund.domain.enumeration.ActivityStatus;
 import cr.ac.ucenfotec.fun4fund.service.ExclusiveContentService;
+import cr.ac.ucenfotec.fun4fund.service.PrizeService;
+import cr.ac.ucenfotec.fun4fund.service.ResourceService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.ExclusiveContentCriteria;
 import cr.ac.ucenfotec.fun4fund.service.ExclusiveContentQueryService;
@@ -20,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent}.
@@ -39,9 +44,15 @@ public class ExclusiveContentResource {
 
     private final ExclusiveContentQueryService exclusiveContentQueryService;
 
-    public ExclusiveContentResource(ExclusiveContentService exclusiveContentService, ExclusiveContentQueryService exclusiveContentQueryService) {
+    private final ResourceService resourceService;
+
+    private final PrizeService prizeService;
+
+    public ExclusiveContentResource(ExclusiveContentService exclusiveContentService, ExclusiveContentQueryService exclusiveContentQueryService, ResourceService resourceService, PrizeService prizeService) {
         this.exclusiveContentService = exclusiveContentService;
         this.exclusiveContentQueryService = exclusiveContentQueryService;
+        this.resourceService = resourceService;
+        this.prizeService = prizeService;
     }
 
     /**
@@ -57,6 +68,18 @@ public class ExclusiveContentResource {
         if (exclusiveContent.getId() != null) {
             throw new BadRequestAlertException("A new exclusiveContent cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Prize prize = exclusiveContent.getPrize();
+        Set<Resource> images = prize.getImages();
+
+        Prize temp = prizeService.save(prize);
+
+        for (Object image:images.toArray()) {
+            Resource img = (Resource)image;
+            img.setPrize(temp);
+            img.setType("image");
+            resourceService.save((Resource) image);
+        };
+
         ExclusiveContent result = exclusiveContentService.save(exclusiveContent);
         return ResponseEntity.created(new URI("/api/exclusive-contents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -81,6 +104,11 @@ public class ExclusiveContentResource {
         if(exclusiveContent.getStock() == 0) {
             exclusiveContent.setState(ActivityStatus.DISABLED);
         }
+
+        Prize prize = exclusiveContent.getPrize();
+
+        Prize temp = prizeService.save(prize);
+
         ExclusiveContent result = exclusiveContentService.save(exclusiveContent);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exclusiveContent.getId().toString()))

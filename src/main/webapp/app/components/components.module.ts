@@ -9,6 +9,13 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { SliderBarComponent } from './slider-bar/slider-bar.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
+import { CloudinaryComponent } from './cloudinary/cloudinary.component';
+import { CloudinaryModule } from '@cloudinary/angular-5.x';
+import * as cloudinary from 'cloudinary-core';
+import { FileUploadModule } from 'ng2-file-upload';
+import { CarouselComponent } from './carousel/carousel.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StatePipe } from './state.pipe';
 
 @NgModule({
   declarations: [
@@ -21,8 +28,17 @@ import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
     SliderBarComponent,
     TimelineComponent,
     VerticalTabsComponent,
+    CloudinaryComponent,
+    CarouselComponent,
+    StatePipe,
   ],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    CloudinaryModule.forRoot(cloudinary, { cloud_name: 'barnesnoble', upload_preset: 'cq8ymdc5' }),
+    FileUploadModule,
+    NgbModule,
+  ],
   exports: [
     SmallCardComponent,
     NotificationComponent,
@@ -33,6 +49,9 @@ import { VerticalTabsComponent } from './vertical-tabs/vertical-tabs.component';
     SliderBarComponent,
     TimelineComponent,
     VerticalTabsComponent,
+    CloudinaryComponent,
+    CarouselComponent,
+    StatePipe,
   ],
 })
 export class ComponentsModule {}

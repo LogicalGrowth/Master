@@ -12,6 +12,8 @@ import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from 'app/entities/category/category.service';
+import { FeeService } from '../fee/fee.service';
+import { IFee } from 'app/shared/model/fee.model';
 
 type SelectableEntity = IApplicationUser | ICategory;
 
@@ -22,21 +24,26 @@ type SelectableEntity = IApplicationUser | ICategory;
 })
 export class ProyectUpdateComponent implements OnInit {
   isSaving = false;
+  regexIbanCrc = /CR[a-zA-Z0-9]{2}\s?([0-9]{4}\s?){4}([0-9]{2})\s?/;
   applicationusers: IApplicationUser[] = [];
   categories: ICategory[] = [];
+  fee: IFee[] = [];
   hasMarker = false;
-  position: any[] = [];
+  position: any;
+  updateProyect: any;
+  isUpdate = false;
+  proyectFee: any;
 
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required, Validators.maxLength(30)]],
     description: [null, [Validators.required, Validators.maxLength(300)]],
     idType: [null, [Validators.required]],
-    goalAmount: [null, [Validators.required, Validators.min(1)]],
+    goalAmount: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
     coordX: [[Validators.required]],
     coordY: [],
     fee: [],
-    number: [null, [Validators.required]],
+    number: [null, Validators.compose([Validators.required, Validators.pattern(this.regexIbanCrc)])],
     currencyType: [null, [Validators.required]],
     category: [null, [Validators.required]],
   });
@@ -45,6 +52,7 @@ export class ProyectUpdateComponent implements OnInit {
     protected proyectService: ProyectService,
     protected applicationUserService: ApplicationUserService,
     protected categoryService: CategoryService,
+    protected feeService: FeeService,
     protected activatedRoute: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder
@@ -59,10 +67,20 @@ export class ProyectUpdateComponent implements OnInit {
       }
 
       this.updateForm(proyect);
+      this.updateProyect = proyect;
 
       this.applicationUserService.query().subscribe((res: HttpResponse<IApplicationUser[]>) => (this.applicationusers = res.body || []));
 
       this.categoryService.query().subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
+
+      this.feeService.query({ page: 1, size: 1 }).subscribe((res: HttpResponse<IFee[]>) => {
+        this.fee = res.body || [];
+        if (!proyect.id) {
+          this.proyectFee = this.fee[0].percentage;
+        } else {
+          this.proyectFee = proyect.fee;
+        }
+      });
     });
   }
 
@@ -73,18 +91,20 @@ export class ProyectUpdateComponent implements OnInit {
       description: proyect.description,
       idType: proyect.idType,
       goalAmount: proyect.goalAmount,
-      coordX: this.position[1],
-      coordY: this.position[0],
       fee: 0,
       number: proyect.number,
       currencyType: proyect.currencyType,
       category: proyect.category,
     });
+    this.position = {
+      lat: proyect.coordY,
+      lng: proyect.coordX,
+    };
+    this.hasMarker = true;
   }
 
   goToAddImage(data: any): void {
-    window.sessionStorage.proyect = data.body.id;
-    this.router.navigate(['/proyect/image/new']);
+    this.router.navigate(['/proyect/' + data.body.id + '/image/new']);
   }
 
   previousState(): void {
@@ -95,8 +115,19 @@ export class ProyectUpdateComponent implements OnInit {
     this.isSaving = true;
     const proyect = this.createFromForm();
     if (proyect.id !== undefined) {
+      proyect.collected = this.updateProyect.collected;
+      proyect.rating = this.updateProyect.rating;
+      proyect.owner = this.updateProyect.owner;
+      proyect.applicationUser = this.updateProyect.applicationUser;
+      proyect.creationDate = this.updateProyect.creationDate;
+      proyect.fee = this.updateProyect.fee;
+      this.isUpdate = true;
       this.subscribeToSaveResponse(this.proyectService.update(proyect));
     } else {
+      proyect.collected = 0;
+      proyect.rating = 0;
+      proyect.creationDate = moment();
+      proyect.fee = this.fee[0].percentage;
       this.subscribeToSaveResponse(this.proyectService.create(proyect));
     }
   }
@@ -109,9 +140,9 @@ export class ProyectUpdateComponent implements OnInit {
       description: this.editForm.get(['description'])!.value,
       idType: this.editForm.get(['idType'])!.value,
       goalAmount: this.editForm.get(['goalAmount'])!.value,
-      creationDate: moment(),
-      coordX: this.position[1],
-      coordY: this.position[0] || 0,
+      lastUpdated: moment(),
+      coordX: this.position.lng,
+      coordY: this.position.lat || 0,
       fee: 0,
       number: this.editForm.get(['number'])!.value,
       currencyType: this.editForm.get(['currencyType'])!.value,
@@ -128,7 +159,11 @@ export class ProyectUpdateComponent implements OnInit {
 
   protected onSaveSuccess(data: any): void {
     this.isSaving = false;
-    this.goToAddImage(data);
+    if (!this.isUpdate) {
+      this.goToAddImage(data);
+      return;
+    }
+    this.previousState();
   }
 
   protected onSaveError(): void {
@@ -140,8 +175,10 @@ export class ProyectUpdateComponent implements OnInit {
   }
 
   onMapClick($event: any): void {
-    this.position.push($event.latLng.lat());
-    this.position.push($event.latLng.lng());
+    this.position = {
+      lat: $event.latLng.lat(),
+      lng: $event.latLng.lng(),
+    };
     this.hasMarker = true;
   }
 }

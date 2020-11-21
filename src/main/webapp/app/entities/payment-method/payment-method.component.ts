@@ -19,7 +19,6 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
   eventSubscriber?: Subscription;
   data?: IPaymentMethod[];
   account!: User;
-
   constructor(
     protected paymentMethodService: PaymentMethodService,
     protected eventManager: JhiEventManager,
@@ -77,7 +76,7 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInPaymentMethods(): void {
-    this.eventSubscriber = this.eventManager.subscribe('paymentMethodListModification', () => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('paymentMethodListModification', () => this.loadPaymentMethods(this.account.id));
   }
 
   delete(paymentMethod: IPaymentMethod): void {

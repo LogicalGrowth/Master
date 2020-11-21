@@ -2,8 +2,10 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Image;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.Resource;
 import cr.ac.ucenfotec.fun4fund.repository.ImageRepository;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
+import cr.ac.ucenfotec.fun4fund.repository.ResourceRepository;
 import cr.ac.ucenfotec.fun4fund.service.CloudinaryService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.HeaderUtil;
@@ -32,7 +34,7 @@ public class CloudinaryController {
     CloudinaryService cloudinaryService;
 
     @Autowired
-    ImageRepository imageRepository;
+    ResourceRepository resourceRepository;
 
     @Autowired
     ProyectRepository proyectRepository;
@@ -47,11 +49,12 @@ public class CloudinaryController {
             throw new BadRequestAlertException("No ha subido una imagen", ENTITY_NAME, "idexists");
         }
         Map result = cloudinaryService.upload(multipartFile);
-        Image image = new Image();
+        Resource image = new Resource();
+        image.setType("Image");
         image.setUrl((String)result.get("url"));
         Proyect proyect = proyectRepository.findById(id).get();
         image.setProyect(proyect);
-        imageRepository.save(image);
+        resourceRepository.save(image);
         return ResponseEntity.created(new URI("/api/proyects/" + image.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, image.getId().toString()))
             .body(result);

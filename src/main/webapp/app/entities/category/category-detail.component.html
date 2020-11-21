@@ -1,44 +1,52 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="category">
-            <h2><span jhiTranslate="fun4FundApp.category.detail.title">Category</span> {{ category.id }}</h2>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div *ngIf="category">
+                        <div class="card-header ">
+                            <h4 class="card-title">Categoría</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-control-label" for="field_name">Nombre</label>
+                                <input type="text" class="form-control" name="name" id="field_name" value="{{ category.name }}" readonly/>
+                            </div>
 
-            <hr>
+                            <div class="form-group">
+                                <label class="form-control-label" for="field_description">Descripción</label>
+                                <input type="text" class="form-control" name="description" id="field_description" value="{{ category.description }}" readonly/>
+                            </div>
 
-            <jhi-alert-error></jhi-alert-error>
+                            <div class="form-group">
+                                <label class="form-control-label" for="field_status">Estado</label>
+                                <input type="text" class="form-control" name="status" id="field_status" value="{{ category.status == 'DISABLED' ? 'Inactivo' : 'Activo'}}" readonly/>
+                            </div>
 
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="fun4FundApp.category.name">Name</span></dt>
-                <dd>
-                    <span>{{ category.name }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.category.description">Description</span></dt>
-                <dd>
-                    <span>{{ category.description }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.category.status">Status</span></dt>
-                <dd>
-                    <span jhiTranslate="{{ 'fun4FundApp.CategoryStatus.' + category.status }}">{{ category.status }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.category.image">Image</span></dt>
-                <dd>
-                    <div *ngIf="category.image">
-                        <a [routerLink]="['/resource', category.image?.id, 'view']">{{ category.image?.id }}</a>
+                            <div class="form-group">
+                                <label class="form-control-label">Imagen</label>
+                                <div *ngIf="category.image" class="w-50 p-3">
+                                    <img src="{{category.image?.url}}">
+                                </div>
+                                <div *ngIf="!category.image">
+                                    <p>No hay ninguna imagen asociada.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer text-right">
+                            <button type="submit"
+                                    (click)="previousState()"
+                                    class="btn btn-info"> Atrás
+                            </button>
+                            <button type="button"
+                                    [routerLink]="['/category', category.id, 'edit']"
+                                    class="btn btn-primary"> Editar
+                            </button>
+                        </div>
                     </div>
-                </dd>
-            </dl>
-
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
-                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-            </button>
-
-            <button type="button"
-                    [routerLink]="['/category', category.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-            </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

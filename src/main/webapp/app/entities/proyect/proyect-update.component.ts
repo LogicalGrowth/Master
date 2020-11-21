@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
@@ -16,6 +16,12 @@ import { FeeService } from '../fee/fee.service';
 import { IFee } from 'app/shared/model/fee.model';
 
 type SelectableEntity = IApplicationUser | ICategory;
+
+const MyAwesomeRangeValidator: ValidatorFn = (fg: any) => {
+  const start = fg.get('collected').value || 0;
+  const end = fg.get('goalAmount').value || 0;
+  return start !== null && end !== null && start < end ? null : { range: true };
+};
 
 @Component({
   selector: 'jhi-proyect-update',
@@ -36,20 +42,23 @@ export class ProyectUpdateComponent implements OnInit {
   goal: any;
   collected: any;
 
-  editForm = this.fb.group({
-    id: [],
-    name: [null, [Validators.required, Validators.maxLength(30)]],
-    description: [null, [Validators.required, Validators.maxLength(300)]],
-    idType: [null, [Validators.required]],
-    goalAmount: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
-    coordX: [[Validators.required]],
-    coordY: [],
-    fee: [],
-    collected: [],
-    number: [null, Validators.compose([Validators.required, Validators.pattern(this.regexIbanCrc)])],
-    currencyType: [null, [Validators.required]],
-    category: [null, [Validators.required]],
-  });
+  editForm = this.fb.group(
+    {
+      id: [],
+      name: [null, [Validators.required, Validators.maxLength(30)]],
+      description: [null, [Validators.required, Validators.maxLength(300)]],
+      idType: [null, [Validators.required]],
+      goalAmount: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
+      coordX: [[Validators.required]],
+      coordY: [],
+      fee: [],
+      collected: [],
+      number: [null, Validators.compose([Validators.required, Validators.pattern(this.regexIbanCrc)])],
+      currencyType: [null, [Validators.required]],
+      category: [null, [Validators.required]],
+    },
+    { validator: MyAwesomeRangeValidator }
+  );
 
   constructor(
     protected proyectService: ProyectService,

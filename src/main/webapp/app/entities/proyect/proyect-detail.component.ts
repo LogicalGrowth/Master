@@ -17,6 +17,8 @@ import { IResource } from 'app/shared/model/resource.model';
 import { ResourceService } from '../resource/resource.service';
 import { AuctionService } from '../auction/auction.service';
 import { ICheckpoint } from 'app/shared/model/checkpoint.model';
+import { ApplicationUserService } from '../application-user/application-user.service';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -46,6 +48,7 @@ export class ProyectDetailComponent implements OnInit {
     width: 100% !important;
     height: 31vw !important;
   }`;
+  applicationUser?: IApplicationUser[];
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -55,7 +58,8 @@ export class ProyectDetailComponent implements OnInit {
     protected exclusiveContentService: ExclusiveContentService,
     protected auctionService: AuctionService,
     private accountService: AccountService,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    private applicationUserService: ApplicationUserService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -150,10 +154,15 @@ export class ProyectDetailComponent implements OnInit {
     this.accountService.identity().subscribe(account => {
       if (account) {
         this.account = account;
+
+        this.applicationUserService
+          .query({ 'internalUserId.equals': this.account.id })
+          .subscribe((res: HttpResponse<IApplicationUser[]>) => {
+            this.applicationUser = res.body || [];
+            this.isProjectOwner = this.applicationUser[0].id === this.proyect?.owner?.id ? true : false;
+          });
       }
     });
-
-    this.isProjectOwner = this.account.id === this.proyect?.owner?.id ? true : false;
 
     this.loadExclusiveContent(this.proyect?.id as number);
     this.loadAuction(this.proyect?.id as number);

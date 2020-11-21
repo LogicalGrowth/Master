@@ -22,44 +22,42 @@
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="text-primary">
-                                <th scope="col" ><span jhiTranslate="fun4FundApp.applicationUser.identification">Identification</span></th>
-                                <th scope="col" ><span jhiTranslate="fun4FundApp.applicationUser.idType">Id Type</span></th>
-                                <th scope="col" ><span jhiTranslate="fun4FundApp.applicationUser.birthDate">Birth Date</span></th>
-                                <th scope="col" ><span jhiTranslate="fun4FundApp.applicationUser.phoneNumber">Phone Number</span></th>
-                                <th scope="col" ><span jhiTranslate="fun4FundApp.applicationUser.admin">Admin</span></th>
-                                <th scope="col" ><span jhiTranslate="fun4FundApp.applicationUser.internalUser">Internal User</span></th>
+                                <th scope="col" ><span>Cédula</span></th>
+                                <th scope="col" ><span>Nombre</span></th>
+                                <th scope="col" ><span>Apellido</span></th>
+                                <th scope="col" ><span>Email</span></th>
+                                <th scope="col" ><span>Teléfono</span></th>
+                                <th scope="col" ><span>Tipo de usuario</span></th>
+                                <th scope="col" ><span>Estado</span></th>
                                 <th scope="col"></th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let applicationUser of applicationUsers ;trackBy: trackId">
                                     <td>{{ applicationUser.identification }}</td>
-                                    <td jhiTranslate="{{ 'fun4FundApp.IdType.' + applicationUser.idType }}">{{ applicationUser.idType }}</td>
-                                    <td>{{ applicationUser.birthDate | date:'medium' }}</td>
+                                    <td>{{ applicationUser.internalUser?.firstName }}</td>
+                                    <td>{{ applicationUser.internalUser?.lastName }}</td>
+                                    <td>{{ applicationUser.internalUser?.email }}</td>
                                     <td>{{ applicationUser.phoneNumber }}</td>
-                                    <td>{{ applicationUser.admin }}</td>
-                                    <td>
-                                        {{ applicationUser.internalUser?.id }}
-                                    </td>
+                                    <td>{{ applicationUser.admin ? 'Administrador' : 'Usuario' }}</td>
+                                    <td>{{ applicationUser.internalUser?.activated ? 'Activo' : 'Inactivo' }}</td>
                                     <td class="text-right">
                                         <div class="btn-group">
                                             <button type="submit"
+                                                    rel="tooltip"
                                                     [routerLink]="['/application-user', applicationUser.id, 'view']"
                                                     class="btn btn-info btn-sm">
                                                 <fa-icon icon="eye"></fa-icon>
-                                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                                             </button>
-                
                                             <button type="submit"
+                                                    rel="tooltip"
                                                     [routerLink]="['/application-user', applicationUser.id, 'edit']"
                                                     class="btn btn-primary btn-sm">
                                                 <fa-icon icon="pencil-alt"></fa-icon>
-                                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                                             </button>
-                
                                             <button type="submit" (click)="delete(applicationUser)"
+                                                    rel="tooltip"
                                                     class="btn btn-danger btn-sm">
                                                 <fa-icon icon="times"></fa-icon>
-                                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                                             </button>
                                         </div>
                                     </td>

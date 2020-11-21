@@ -1,28 +1,17 @@
 <div class="container bcontent">
     <h2 id="page-heading">Proyectos</h2>
-    <div class="col-sm-2">
-        <h5 class="section-subheading text-muted">{{proyects?.length}} resultados</h5>
-    </div>
-
-    <div class="pull-right">
-        <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/proyect/new']">
-            <i class="nc-icon nc-simple-add"></i>
-        </button>
+    <div class="row subheader-section">
+        <div class="col-sm-2">
+            <h5 class="section-subheading text-muted">{{proyects?.length}} resultados</h5>
+        </div>
+        <div class="col-sm-8"></div>
+        <div class="col-sm-2">
+            <jhi-simple-button type="warning" label="Iniciar proyecto" [routerLink]="['/proyect/new']"></jhi-simple-button>
+        </div>
     </div>
 
     <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
-
-    <div class="d-flex justify-content-center px-5">
-        <div class="search">
-            <input type="text" class="search-input" placeholder="Buscar..." name="">
-            <a href="#" class="search-icon">
-                <i class="fa fa-search"></i>
-            </a>
-        </div>
-    </div>
-
-    <br/><br/>
 
     <div class="alert alert-warning" id="no-result" *ngIf="proyects?.length === 0">
         <span>Estamos trabajando en encontrar proyectos. Por favor regrese pronto.</span>
@@ -30,7 +19,7 @@
     <div class="card proyect-card" *ngFor="let proyect of proyects ;trackBy: trackId">
         <div class="row no-gutters">
             <div class="col-sm-3">
-                <img class="card-img" src="https://images.unsplash.com/photo-1567664910455-331af21955d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=125">
+                <img class="card-img" src="../../../content/images/noimagen.jpg" alt="No hay imágenes">
                 <p class="category-type">{{proyect.category?.name}}</p>
             </div>
             <div class="col-sm-6">
@@ -58,7 +47,7 @@
                                       currentValue="{{ proyect.collected }}}">
                     </jhi-progress-bar>
 
-                    <p class="card-text text-right updated-date">Última actualización: Hace {{getLastUpdate(proyect)}} días</p>
+                    <p class="card-text text-right updated-date">Última actualización: {{getLastUpdate(proyect) | lastUpdate}} </p>
 
                     <div class="pull-right">
                         <a [routerLink]="['/proyect', proyect.id, 'view']" class="btn btn-primary pull-center">Ver proyecto</a>

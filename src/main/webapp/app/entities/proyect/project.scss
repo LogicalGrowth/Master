@@ -4,7 +4,7 @@
   left: 4px;
   padding: 2px 12px 1px;
   border-radius: 9px;
-  background: linear-gradient(45deg, rgba(10, 127, 175, 0.7), rgba(81, 203, 206, 0.4) 100%);
+  background: #6bd098;
   color: #fff;
   font-size: 0.8rem;
   font-weight: 600;
@@ -23,7 +23,6 @@
 }
 
 .proyect-card {
-  cursor: pointer;
   transition: box-shadow 0.3s;
 }
 
@@ -86,4 +85,8 @@
 
 .search-icon:hover {
   color: #fff !important;
+}
+
+.subheader-section {
+  margin-top: -26px;
 }

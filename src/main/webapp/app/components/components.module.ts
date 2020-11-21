@@ -16,6 +16,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CarouselComponent } from './carousel/carousel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StatePipe } from './state.pipe';
+import { LastUpdatePipe } from './lastUpdate.pipe';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     CloudinaryComponent,
     CarouselComponent,
     StatePipe,
+    LastUpdatePipe,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     CloudinaryComponent,
     CarouselComponent,
     StatePipe,
+    LastUpdatePipe,
   ],
 })
 export class ComponentsModule {}

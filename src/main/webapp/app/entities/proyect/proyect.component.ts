@@ -9,8 +9,9 @@ import { ProyectService } from './proyect.service';
 import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component';
 import * as moment from 'moment';
 import { User } from '../../core/user/user.model';
-import { AuctionService } from '../auction/auction.service';
 import { AccountService } from '../../core/auth/account.service';
+import { IResource } from '../../shared/model/resource.model';
+import { ResourceService } from '../resource/resource.service';
 
 @Component({
   selector: 'jhi-proyect',
@@ -24,12 +25,14 @@ export class ProyectComponent implements OnInit, OnDestroy {
   percentile: any;
   isProjectOwner!: Boolean;
   account!: User;
+  resource?: IResource[];
 
   constructor(
     protected proyectService: ProyectService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private resourceService: ResourceService
   ) {}
 
   loadAll(): void {

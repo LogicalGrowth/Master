@@ -32,8 +32,8 @@
                     </jhi-progress-bar>
                     <div class="card-body col-md-11 ml-auto mr-auto text-center">
                         <div class="col-lg-12 mb-3">
-                            <span>{{ proyect.collected | currency:'USD':'symbol':'4.2-2' }} recaudado de
-                                {{ proyect.goalAmount | currency:'USD':'symbol':'4.2-2' }}</span>
+                            <span>{{ proyect.collected| currency:proyect.currencyType:'symbol':'1.2-2' }} recaudado de
+                                {{ proyect.goalAmount| currency:proyect.currencyType:'symbol':'1.2-2'}}</span>
                         </div>
 
                         <div class="col-lg-12 mb-3">

@@ -99,7 +99,7 @@ export class ProyectDetailComponent implements OnInit {
           inverted: true,
           type: 'success',
           icon: 'nc-icon nc-sun-fog-29',
-          subTitle: 'Checkpoint ' + i,
+          subTitle: 'Checkpoint ' + i + ' de ' + checkpoint.completitionPercentage + '%',
           body: checkpoint.message,
           isOwner: this.isProjectOwner,
           routerLink: '/checkpoint/' + checkpoint.id + '/edit',

@@ -1,7 +1,12 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
+import cr.ac.ucenfotec.fun4fund.domain.User;
+import cr.ac.ucenfotec.fun4fund.security.AuthoritiesConstants;
 import cr.ac.ucenfotec.fun4fund.service.ApplicationUserService;
+import cr.ac.ucenfotec.fun4fund.service.MailService;
+import cr.ac.ucenfotec.fun4fund.service.UserService;
+import cr.ac.ucenfotec.fun4fund.service.dto.UserDTO;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.ApplicationUserCriteria;
 import cr.ac.ucenfotec.fun4fund.service.ApplicationUserQueryService;
@@ -12,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,14 +39,16 @@ public class ApplicationUserResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-
     private final ApplicationUserService applicationUserService;
-
+    private final UserService userService;
     private final ApplicationUserQueryService applicationUserQueryService;
+    private final MailService mailService;
 
-    public ApplicationUserResource(ApplicationUserService applicationUserService, ApplicationUserQueryService applicationUserQueryService) {
+    public ApplicationUserResource(ApplicationUserService applicationUserService, UserService userService, ApplicationUserQueryService applicationUserQueryService, MailService mailService) {
         this.applicationUserService = applicationUserService;
+        this.userService = userService;
         this.applicationUserQueryService = applicationUserQueryService;
+        this.mailService = mailService;
     }
 
     /**
@@ -51,12 +59,21 @@ public class ApplicationUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/application-users")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ANONYMOUS + "\")")
     public ResponseEntity<ApplicationUser> createApplicationUser(@Valid @RequestBody ApplicationUser applicationUser) throws URISyntaxException {
+        String subject = "Correo de confirmación del registro de usuario";
+        String content = "Gracias por la suscripción";
         log.debug("REST request to save ApplicationUser : {}", applicationUser);
         if (applicationUser.getId() != null) {
             throw new BadRequestAlertException("A new applicationUser cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        User user = applicationUser.getInternalUser();
+        UserDTO userDTO = new UserDTO(user);
+        User newUser = userService.createUser(userDTO);
+        Long jhisperUserId = newUser.getId();
+        applicationUser.getInternalUser().setId(jhisperUserId);
         ApplicationUser result = applicationUserService.save(applicationUser);
+        mailService.sendEmail(applicationUser.getInternalUser().getEmail(),subject,content,false,true);
         return ResponseEntity.created(new URI("/api/application-users/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);

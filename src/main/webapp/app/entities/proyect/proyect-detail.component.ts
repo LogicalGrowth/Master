@@ -160,12 +160,12 @@ export class ProyectDetailComponent implements OnInit {
           .subscribe((res: HttpResponse<IApplicationUser[]>) => {
             this.applicationUser = res.body || [];
             this.isProjectOwner = this.applicationUser[0].id === this.proyect?.owner?.id ? true : false;
+            this.loadCheckPoints(this.proyect?.id as number);
           });
       }
     });
 
     this.loadExclusiveContent(this.proyect?.id as number);
     this.loadAuction(this.proyect?.id as number);
-    this.loadCheckPoints(this.proyect?.id as number);
   }
 }

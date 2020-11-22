@@ -133,13 +133,12 @@
               <marker [position]="position" *ngIf="hasMarker"></marker>
             </ngui-map>
           </div>
-          <div class="col-lg-5">
-            <button type="button" id="cancel-save" class="btn btn-warning" (click)="previousState()">
-              <span>Cancel</span>
-            </button>
-
+          <div class="card-footer text-right">
             <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
               <span>Guardar</span>
+            </button>
+            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+              <span>Atrás</span>
             </button>
             <p class="card-text">
               <small class="text-muted">La comisión que se va cobrar es {{ proyectFee }}%</small>

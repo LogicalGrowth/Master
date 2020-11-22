@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { ResourceService } from 'app/entities/resource/resource.service';
 import { IResource, Resource } from 'app/shared/model/resource.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-proyect-image-update',
@@ -15,22 +15,29 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./proyect-image-update.component.scss', '../../../../content/scss/paper-dashboard.scss'],
 })
 export class ProyectImageUpdateComponent implements OnInit {
-  imagen: any;
-  imagenMin: any;
   isSaving = false;
   proyect: IProyect | undefined;
+  images: IResource[] = [];
+  regexYoutube = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
   editForm = this.fb.group({
-    url: [null, [Validators.required, Validators.maxLength(255)]],
-    type: [null, [Validators.required, Validators.maxLength(255)]],
+    url: [null, Validators.compose([Validators.required, Validators.maxLength(255), Validators.pattern(this.regexYoutube)])],
   });
 
-  constructor(protected activatedRoute: ActivatedRoute, private resourceService: ResourceService, private fb: FormBuilder) {}
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    private resourceService: ResourceService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     boostrap.Alert;
     this.activatedRoute.data.subscribe(({ proyect }) => {
       this.proyect = proyect;
+      this.resourceService
+        .query({ 'proyectId.equals': proyect.id })
+        .subscribe((res: HttpResponse<IResource[]>) => (this.images = res.body || []));
     });
   }
 
@@ -41,8 +48,12 @@ export class ProyectImageUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const image = this.createFromForm();
+    const image = this.createFromForm('', 'Youtube');
     this.subscribeToSaveResponse(this.resourceService.create(image));
+  }
+
+  goToProyect(): void {
+    this.router.navigate(['/proyect/' + this.proyect?.id + '/view']);
   }
 
   private createFromForm(url = '', type = ''): IResource {
@@ -56,12 +67,13 @@ export class ProyectImageUpdateComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IResource>>): void {
     result.subscribe(
-      () => this.onSaveSuccess(),
+      e => this.onSaveSuccess(e),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(e: HttpResponse<IResource>): void {
+    this.images.push(e.body!);
     $('#field_url').val('');
     $('#type').val('');
     this.isSaving = false;

@@ -9,7 +9,6 @@ import { ResourceService } from 'app/entities/resource/resource.service';
 import { IResource, Resource } from 'app/shared/model/resource.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProyectService } from '../proyect.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'jhi-proyect-image-update',

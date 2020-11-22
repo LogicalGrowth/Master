@@ -1,0 +1,49 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <form #f="ngForm" novalidate name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"
+        class="form-horizontal row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="card-header ">
+              <h4 class="card-title">Cuenta de banco</h4>
+            </div>
+            <div class="card-body">
+
+              <div class="form-group has-label" [hidden]="true">
+                <label for="id" class="control-label">Id</label>
+                <span class="star">*</span>
+                <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly>
+              </div>
+  
+              <div class="form-group has-label">
+                <label for="field_number" class="control-label">Número de cuenta</label>
+                <span class="star">*</span>
+                <input type="text" class="form-control" name="number" id="field_number" formControlName="number">
+                <div
+                  *ngIf="editForm.get('number')!.invalid && (editForm.get('number')!.dirty || editForm.get('number')!.touched)">
+                  <small class="form-text text-danger" *ngIf="editForm.get('number')?.errors?.required">
+                    Este campo es requerido.
+                  </small>
+                  <small class="form-text text-danger" *ngIf="editForm.get('number')?.errors?.pattern">
+                    El campo no cumple el formato.
+                  </small>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="col-lg-5">
+                <button type="button" id="cancel-save" class="btn btn-warning" (click)="previousState()">
+                  <span>Cancel</span>
+                </button>
+    
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                  <span>Guardar</span>
+                </button>
+             </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

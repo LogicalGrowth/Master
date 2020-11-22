@@ -99,7 +99,7 @@ export class ProyectDetailComponent implements OnInit {
           inverted: true,
           type: 'success',
           icon: 'nc-icon nc-sun-fog-29',
-          subTitle: 'Checkpoint ' + i,
+          subTitle: 'Checkpoint ' + i + ' de ' + checkpoint.completitionPercentage + '%',
           body: checkpoint.message,
           isOwner: this.isProjectOwner,
           routerLink: '/checkpoint/' + checkpoint.id + '/edit',
@@ -139,7 +139,9 @@ export class ProyectDetailComponent implements OnInit {
       this.percentile = (100 * proyect.collected) / proyect.goalAmount;
       this.rating = (100 * proyect.rating) / 5;
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
+      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : +this.daysCreated + ' días transcurridos ';
       this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
+      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : +this.daysCreated + ' días transcurridos ';
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });
@@ -160,12 +162,12 @@ export class ProyectDetailComponent implements OnInit {
           .subscribe((res: HttpResponse<IApplicationUser[]>) => {
             this.applicationUser = res.body || [];
             this.isProjectOwner = this.applicationUser[0].id === this.proyect?.owner?.id ? true : false;
+            this.loadCheckPoints(this.proyect?.id as number);
           });
       }
     });
 
     this.loadExclusiveContent(this.proyect?.id as number);
     this.loadAuction(this.proyect?.id as number);
-    this.loadCheckPoints(this.proyect?.id as number);
   }
 }

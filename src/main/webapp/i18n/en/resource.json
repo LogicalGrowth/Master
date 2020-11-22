@@ -7,7 +7,7 @@
         "createOrEditLabel": "Create or edit a Resource",
         "notFound": "No Resources found"
       },
-      "created": "Un nuevo recurso fue creado con el id {{ param }}",
+      "created": "Un nuevo recurso creado.",
       "updated": "A Resource is updated with identifier {{ param }}",
       "deleted": "A Resource is deleted with identifier {{ param }}",
       "delete": {

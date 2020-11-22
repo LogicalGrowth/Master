@@ -2,8 +2,9 @@ package cr.ac.ucenfotec.fun4fund.repository;
 
 import cr.ac.ucenfotec.fun4fund.domain.Checkpoint;
 
-import cr.ac.ucenfotec.fun4fund.domain.Review;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +14,6 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CheckpointRepository extends JpaRepository<Checkpoint, Long>, JpaSpecificationExecutor<Checkpoint> {
-    List<Checkpoint> findByProyectIdAndCompletitionPercentageLessThanEqual(Long proyectId, Double completitionPercentage);
+public interface CheckpointRepository extends JpaRepository<Checkpoint, Long>, JpaSpecificationExecutor<Checkpoint>, PagingAndSortingRepository<Checkpoint, Long> {
+    List<Checkpoint> findByProyectIdAndCompletitionPercentageLessThanEqual(Long proyectId, Double completitionPercentage, Sort sort);
 }

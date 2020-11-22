@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,7 @@ public class ProyectService {
      */
     public Proyect save(Proyect proyect) {
         log.debug("Request to save Proyect : {}", proyect);
+        updateDate(proyect);
         return proyectRepository.save(proyect);
     }
 
@@ -70,4 +72,18 @@ public class ProyectService {
         log.debug("Request to delete Proyect : {}", id);
         proyectRepository.deleteById(id);
     }
+
+    public Proyect updateDate(Proyect proyect) {
+        log.debug("Request to update date Proyect : {}", proyect);
+        if(proyect.getId() != null){
+            Optional<Proyect> getProyect = findOne(proyect.getId());
+            if (getProyect.isPresent()){
+                Proyect updateProyect = getProyect.get();
+                updateProyect.setLastUpdated(ZonedDateTime.now());
+                return proyectRepository.save(updateProyect);
+            }
+        }
+        return new Proyect();
+    }
+
 }

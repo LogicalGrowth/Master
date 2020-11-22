@@ -76,4 +76,16 @@ export class PaymentService {
       .get<IPayment>(`${this.resourceUrl}/proyect/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
+
+  createWithoutFormat(payment: IPayment): Observable<EntityResponseType> {
+    const copy = this.convertData(payment);
+    return this.http
+      .post<IPayment>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  protected convertData(payment: IPayment): IPayment {
+    const copy: IPayment = Object.assign({}, payment);
+    return copy;
+  }
 }

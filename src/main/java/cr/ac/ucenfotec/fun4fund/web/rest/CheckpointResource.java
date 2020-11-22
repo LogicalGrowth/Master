@@ -99,7 +99,7 @@ public class CheckpointResource {
     @GetMapping("/checkpoints")
     public ResponseEntity<List<Checkpoint>> getAllCheckpoints(CheckpointCriteria criteria) {
         log.debug("REST request to get Checkpoints by criteria: {}", criteria);
-        List<Checkpoint> entityList = checkpointQueryService.findByCriteria(criteria);
+        List<Checkpoint> entityList = checkpointQueryService.findByCriteria(criteria, Sort.by("completitionPercentage").ascending());
         return ResponseEntity.ok().body(entityList);
     }
 

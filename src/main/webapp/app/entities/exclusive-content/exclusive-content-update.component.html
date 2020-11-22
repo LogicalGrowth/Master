@@ -112,12 +112,12 @@
 
                         <div class="card-footer text-right">
                             <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                                Cancelar
+                                Atrás
                             </button>
 
-                            <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
+                            <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || images.length < 1"
                                 class="btn btn-primary">
-                                Registrar
+                                Guardar
                             </button>
                         </div>
 

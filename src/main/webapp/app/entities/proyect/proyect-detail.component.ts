@@ -139,7 +139,9 @@ export class ProyectDetailComponent implements OnInit {
       this.percentile = (100 * proyect.collected) / proyect.goalAmount;
       this.rating = (100 * proyect.rating) / 5;
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
+      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : +this.daysCreated + ' días transcurridos ';
       this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
+      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : +this.daysCreated + ' días transcurridos ';
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });

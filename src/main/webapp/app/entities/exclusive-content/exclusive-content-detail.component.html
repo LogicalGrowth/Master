@@ -1,50 +1,53 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <div *ngIf="exclusiveContent">
-            <h2><span jhiTranslate="fun4FundApp.exclusiveContent.detail.title">Exclusive Content</span> {{ exclusiveContent.id }}</h2>
+<div class="main-content mt-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 ml-auto mr-auto">
+                <div class="card" *ngIf="exclusiveContent">
 
-            <hr>
-
-            <jhi-alert-error></jhi-alert-error>
-
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.price">Price</span></dt>
-                <dd>
-                    <span>{{ exclusiveContent.price }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.stock">Stock</span></dt>
-                <dd>
-                    <span>{{ exclusiveContent.stock }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.state">State</span></dt>
-                <dd>
-                    <span jhiTranslate="{{ 'fun4FundApp.ActivityStatus.' + exclusiveContent.state }}">{{ exclusiveContent.state }}</span>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.prize">Prize</span></dt>
-                <dd>
-                    <div *ngIf="exclusiveContent.prize">
-                        <a [routerLink]="['/prize', exclusiveContent.prize?.id, 'view']">{{ exclusiveContent.prize?.id }}</a>
+                    <div class="card-header">
+                        <h4 class="card-title">Contenido Exclusivo</h4>
                     </div>
-                </dd>
-                <dt><span jhiTranslate="fun4FundApp.exclusiveContent.proyect">Proyect</span></dt>
-                <dd>
-                    <div *ngIf="exclusiveContent.proyect">
-                        <a [routerLink]="['/proyect', exclusiveContent.proyect?.id, 'view']">{{ exclusiveContent.proyect?.id }}</a>
+
+                    <div class="d-flex justify-content-center">
+                        <jhi-carousel [items]="images" [interval]="4000" [keyboard]="false" width="300px" height="200px"></jhi-carousel>
                     </div>
-                </dd>
-            </dl>
 
-            <button type="submit"
-                    (click)="previousState()"
-                    class="btn btn-info">
-                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-            </button>
+                    <div class="card-body">
 
-            <button type="button"
-                    [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']"
-                    class="btn btn-primary">
-                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-            </button>
+                        <dt><span>Nombre:</span></dt>
+                        <dd>
+                            <span>{{ prize?.name }}</span>
+                        </dd>
+                        <dt><span>Descripción:</span></dt>
+                        <dd>
+                            <span>{{ prize?.description }}</span>
+                        </dd>
+                        <dt><span>Precio:</span></dt>
+                        <dd>
+                            <span>{{ exclusiveContent.price }}</span>
+                        </dd>
+                        <dt><span>Cantidad:</span></dt>
+                        <dd>
+                            <span>{{ exclusiveContent.stock }}</span>
+                        </dd>
+
+                    </div>
+
+                    <div class="card-footer text-right">
+                        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                            Atrás
+                        </button>
+
+                        <button type="button"
+                            *ngIf="isProjectOwner"
+                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']"
+                            class="btn btn-primary">
+                            Editar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

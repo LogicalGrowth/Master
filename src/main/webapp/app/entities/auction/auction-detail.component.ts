@@ -6,6 +6,7 @@ import { IAuction } from 'app/shared/model/auction.model';
 @Component({
   selector: 'jhi-auction-detail',
   templateUrl: './auction-detail.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class AuctionDetailComponent implements OnInit {
   auction: IAuction | null = null;

@@ -277,17 +277,21 @@
                                                  *ngIf="auctions && auctions.length > 0">
                                                 <table class="table">
                                                     <thead class="text-primary">
-                                                    <th><span>Initial Bid</span></th>
-                                                    <th><span>Expiration Bid</span></th>
-                                                    <th><span>Winning Bid</span></th>
+                                                    <th><span>Nombre</span></th>
+                                                    <th><span>Descripción</span></th>
+                                                    <th><span>Fecha de expiración</span></th>
+                                                    <th><span>Monto Inicial</span></th>
+                                                    <th><span>Puja ganadora</span></th>
                                                     <th *ngIf="isProjectOwner"><span>Estado</span></th>
                                                     <th class="text-center" *ngIf="isProjectOwner">
                                                         <span>Acciones</span></th>
                                                     </thead>
                                                     <tbody>
                                                     <tr *ngFor="let auction of auctions">
-                                                        <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
+                                                        <td>{{ auction.prize?.name }}</td>
+                                                        <td>{{ auction.prize?.description }}</td>
                                                         <td>{{ auction.expirationDate | date }}</td>
+                                                        <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
                                                         <td>{{ auction.winningBid | currency:'USD':'symbol'}}</td>
                                                         <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
                                                         <td class="text-center" *ngIf="isProjectOwner">

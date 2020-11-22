@@ -7,9 +7,10 @@ import { AuctionDetailComponent } from './auction-detail.component';
 import { AuctionUpdateComponent } from './auction-update.component';
 import { AuctionDeleteDialogComponent } from './auction-delete-dialog.component';
 import { auctionRoute } from './auction.route';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
-  imports: [Fun4FundSharedModule, RouterModule.forChild(auctionRoute)],
+  imports: [Fun4FundSharedModule, RouterModule.forChild(auctionRoute), ComponentsModule],
   declarations: [AuctionComponent, AuctionDetailComponent, AuctionUpdateComponent, AuctionDeleteDialogComponent],
   entryComponents: [AuctionDeleteDialogComponent],
 })

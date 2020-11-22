@@ -11,7 +11,6 @@ import { AuctionService } from './auction.service';
 import { AuctionComponent } from './auction.component';
 import { AuctionDetailComponent } from './auction-detail.component';
 import { AuctionUpdateComponent } from './auction-update.component';
-import { ExclusiveContentUpdateComponent } from '../exclusive-content/exclusive-content-update.component';
 import { ProyectResolve } from '../proyect/proyect.route';
 
 @Injectable({ providedIn: 'root' })

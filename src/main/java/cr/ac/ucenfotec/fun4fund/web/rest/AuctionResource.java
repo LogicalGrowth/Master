@@ -1,7 +1,11 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Auction;
+import cr.ac.ucenfotec.fun4fund.domain.Prize;
+import cr.ac.ucenfotec.fun4fund.domain.Resource;
 import cr.ac.ucenfotec.fun4fund.service.AuctionService;
+import cr.ac.ucenfotec.fun4fund.service.PrizeService;
+import cr.ac.ucenfotec.fun4fund.service.ResourceService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.AuctionCriteria;
 import cr.ac.ucenfotec.fun4fund.service.AuctionQueryService;
@@ -19,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link cr.ac.ucenfotec.fun4fund.domain.Auction}.
@@ -35,12 +40,15 @@ public class AuctionResource {
     private String applicationName;
 
     private final AuctionService auctionService;
-
     private final AuctionQueryService auctionQueryService;
+    private final ResourceService resourceService;
+    private final PrizeService prizeService;
 
-    public AuctionResource(AuctionService auctionService, AuctionQueryService auctionQueryService) {
+    public AuctionResource(AuctionService auctionService, AuctionQueryService auctionQueryService, ResourceService resourceService, PrizeService prizeService) {
         this.auctionService = auctionService;
         this.auctionQueryService = auctionQueryService;
+        this.resourceService =  resourceService;
+        this.prizeService = prizeService;
     }
 
     /**
@@ -56,6 +64,18 @@ public class AuctionResource {
         if (auction.getId() != null) {
             throw new BadRequestAlertException("A new auction cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Prize prize = auction.getPrize();
+        Set<Resource> images = prize.getImages();
+
+        Prize temp = prizeService.save(prize);
+
+        for (Object image:images.toArray()) {
+            Resource img = (Resource)image;
+            img.setPrize(temp);
+            img.setType("image");
+            resourceService.save((Resource) image);
+        };
+
         Auction result = auctionService.save(auction);
         return ResponseEntity.created(new URI("/api/auctions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

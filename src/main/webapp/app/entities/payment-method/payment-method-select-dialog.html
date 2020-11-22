@@ -1,0 +1,99 @@
+<form name="deleteForm" (ngSubmit)="confirmDelete(paymentMethod?.id!)">
+  <div class="modal-header--paymentMethod">
+    <h4 class="modal-title">Seleccione un método de pago</h4>
+
+    <button type="button" class="close paymentClose" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+  <div class="stepsSection">
+      <div>1</div>
+      <div>2</div>
+  </div>
+  <div class="modal-body">
+
+    <div class="modal-body--paymentMethod">
+    <div class="cardsPaymentMethods">
+
+          <div  class="card" style="width: 320px;" *ngFor="let paymentMethod of paymentMethods;" id="{{paymentMethod.id}}">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 align-self-center cardImage">
+                    <img src="{{ paymentMethod.typeImage }}" />
+                </div>
+                <div class="col-sm-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ paymentMethod.cardOwner }}</h5>
+                        <p class="card-text">
+                          ***********{{ paymentMethod.cardNumber! | slice: 12:19 }}
+                        </p>
+                        <p class="card-text">
+                          {{ paymentMethod.expirationDate | date: 'MM/yy' }}
+                        </p>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        
+
+        <div  class="card" style="width: 320px;" *ngFor="let paymentMethod of paymentMethods;" id="{{paymentMethod.id}}">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 align-self-center cardImage">
+                    <img src="{{ paymentMethod.typeImage }}" />
+                </div>
+                <div class="col-sm-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ paymentMethod.cardOwner }}</h5>
+                        <p class="card-text">
+                          ***********{{ paymentMethod.cardNumber! | slice: 12:19 }}
+                        </p>
+                        <p class="card-text">
+                          {{ paymentMethod.expirationDate | date: 'MM/yy' }}
+                        </p>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        
+    
+
+        </div>
+
+        <div class="card flex-wrap" style="width: 600px;" *ngIf="paymentMethods?.length === 0">
+            <div class="row justify-content-center">
+                <h3>Usted no posee metodos de pago</h3>
+                <button    id="jh-create-entity"
+                class="btn btn-primary float-right jh-create-entity create-payment-method"
+                [routerLink]="['/payment-method/new']">
+                  <i class="nc-icon nc-simple-add"></i>
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+     
+    </div>
+
+    <div class="modal-body-paymentInfo">
+      <div class="">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="https://placeholdit.imgix.net/~text?txtsize=38&txt=400%C3%97400&w=400&h=400" class="w-100" />
+          </div>
+          <div class="col-md-8 px-3">
+            <div class="card-block px-3">
+              <p>Info</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-danger">
+      <fa-icon icon="times"></fa-icon>&nbsp;<span>Siguiente</span>
+    </button>
+  </div>
+</form>

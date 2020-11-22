@@ -1,0 +1,38 @@
+.modal-header--paymentMethod {
+  display: flex;
+  justify-content: space-between;
+}
+
+.paymentClose {
+  margin-right: 2rem;
+}
+
+.modal-title {
+  margin-left: 2rem;
+}
+
+.stepsSection {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.hidden {
+  display: none;
+}
+
+.cardsPaymentMethods {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.cardImage img {
+  width: 80px;
+  margin-left: 4rem;
+}
+
+.cardImage {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}

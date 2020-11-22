@@ -10,7 +10,9 @@ import * as moment from 'moment';
 import { IProyect } from '../../shared/model/proyect.model';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PaymentMethodSelectDialogComponent } from 'app/entities/payment-method/payment-method-select-dialog';
+import { IPaymentMethod } from 'app/shared/model/payment-method.model';
 @Component({
   selector: 'jhi-paypal-button',
   templateUrl: './paypal-button.component.html',
@@ -30,7 +32,12 @@ export class PaypalButtonComponent implements OnInit {
   projectIdFormat?: number;
   productTypeFormat?: IPayment;
 
-  constructor(paypalElement: ElementRef, protected paymentService: PaymentService, private accountService: AccountService) {
+  constructor(
+    paypalElement: ElementRef,
+    protected paymentService: PaymentService,
+    private accountService: AccountService,
+    protected modalService: NgbModal
+  ) {
     // Initialization inside the constructor
     this.paypalElement = paypalElement;
     this.description = '';
@@ -49,6 +56,9 @@ export class PaypalButtonComponent implements OnInit {
     });
     paypal
       .Buttons({
+        style: {
+          layout: 'horizontal',
+        },
         createOrder: (data: any, actions: any) => {
           return actions.order.create({
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -90,5 +100,11 @@ export class PaypalButtonComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
     result.subscribe();
+  }
+
+  delete(): void {
+    const modalRef = this.modalService.open(PaymentMethodSelectDialogComponent, { size: 'lg', backdrop: 'static' });
+    const payment = this.createPayment(moment());
+    modalRef.componentInstance.payment = payment;
   }
 }

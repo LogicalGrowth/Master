@@ -8,6 +8,8 @@ import { IProyect } from 'app/shared/model/proyect.model';
 import { ResourceService } from 'app/entities/resource/resource.service';
 import { IResource, Resource } from 'app/shared/model/resource.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProyectService } from '../proyect.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'jhi-proyect-image-update',
@@ -18,6 +20,7 @@ export class ProyectImageUpdateComponent implements OnInit {
   isSaving = false;
   proyect: IProyect | undefined;
   images: IResource[] = [];
+  youtube: IResource[] = [];
   regexYoutube = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
   editForm = this.fb.group({
@@ -27,6 +30,7 @@ export class ProyectImageUpdateComponent implements OnInit {
   constructor(
     protected activatedRoute: ActivatedRoute,
     private resourceService: ResourceService,
+    private proyectService: ProyectService,
     private fb: FormBuilder,
     private router: Router
   ) {}
@@ -36,8 +40,11 @@ export class ProyectImageUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ proyect }) => {
       this.proyect = proyect;
       this.resourceService
-        .query({ 'proyectId.equals': proyect.id })
+        .query({ 'proyectId.equals': proyect.id, 'type.equals': 'Image' })
         .subscribe((res: HttpResponse<IResource[]>) => (this.images = res.body || []));
+      this.resourceService
+        .query({ 'proyectId.equals': proyect.id, 'type.equals': 'Youtube' })
+        .subscribe((res: HttpResponse<IResource[]>) => (this.youtube = res.body || []));
     });
   }
 
@@ -73,9 +80,13 @@ export class ProyectImageUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(e: HttpResponse<IResource>): void {
-    this.images.push(e.body!);
+    if (e.body?.type === 'Image') {
+      this.images.push(e.body);
+    } else {
+      this.youtube.push(e.body!);
+    }
+
     $('#field_url').val('');
-    $('#type').val('');
     this.isSaving = false;
   }
 

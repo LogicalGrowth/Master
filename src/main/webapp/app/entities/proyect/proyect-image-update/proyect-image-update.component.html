@@ -49,6 +49,9 @@
                             <jhi-alert-error></jhi-alert-error>
                             <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"
                                 class="form-horizontal">
+                                <div class="d-flex justify-content-center">
+                                    <jhi-carousel [items]="youtube" [interval]="4000" [keyboard]="false" width="300px" height="200px"></jhi-carousel>
+                                </div>
                                 <div class="form-group has-label">
                                     <label for="field_name" class="control-label">URL del contenido</label>
                                     <span class="star">*</span>
@@ -70,11 +73,11 @@
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">
-                                    <button type="button" id="cancel-save" class="btn btn-secondary" (click)="goToProyect()">
-                                        <span>Ir al proyecto</span>
-                                    </button>
                                     <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
                                         class="btn btn-primary"><span>Guardar</span>
+                                    </button>
+                                    <button type="button" id="cancel-save" class="btn btn-secondary" (click)="goToProyect()">
+                                        <span>Ir al proyecto</span>
                                     </button>
                                 </div>
                             </form>

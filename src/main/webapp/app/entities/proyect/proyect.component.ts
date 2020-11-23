@@ -12,6 +12,8 @@ import { User } from '../../core/user/user.model';
 import { AccountService } from '../../core/auth/account.service';
 import { IResource } from '../../shared/model/resource.model';
 import { ResourceService } from '../resource/resource.service';
+import { IApplicationUser } from '../../shared/model/application-user.model';
+import { ApplicationUserService } from '../application-user/application-user.service';
 
 @Component({
   selector: 'jhi-proyect',
@@ -26,13 +28,15 @@ export class ProyectComponent implements OnInit, OnDestroy {
   isProjectOwner!: Boolean;
   account!: User;
   resource?: IResource[];
+  applicationUser?: IApplicationUser[];
 
   constructor(
     protected proyectService: ProyectService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
     private accountService: AccountService,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    private applicationUserService: ApplicationUserService
   ) {}
 
   loadAll(): void {
@@ -47,6 +51,10 @@ export class ProyectComponent implements OnInit, OnDestroy {
       if (account) {
         this.account = account;
       }
+
+      this.applicationUserService.query({ 'internalUserId.equals': this.account.id }).subscribe((res: HttpResponse<IApplicationUser[]>) => {
+        this.applicationUser = res.body || [];
+      });
     });
   }
 
@@ -81,6 +89,6 @@ export class ProyectComponent implements OnInit, OnDestroy {
   }
 
   isProjectAdmin(item: IProyect): boolean {
-    return this.account.id === item?.owner?.id ? true : false;
+    return (this.isProjectOwner = this.applicationUser && this.applicationUser[0].id === item.owner?.id ? true : false);
   }
 }

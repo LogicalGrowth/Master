@@ -27,7 +27,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="field_expirationDate">Fecha límite</label>
-                                <input type="text" class="form-control" name="name" id="field_expirationDate" value="{{ auction.expirationDate | date }}" readonly/>
+                                <input type="text" class="form-control" name="name" id="field_expirationDate" value="{{ auction.expirationDate | date:'DD-MM-YYYY HH:mm' }}" readonly/>
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="field_state">Estado</label>

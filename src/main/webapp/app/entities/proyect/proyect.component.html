@@ -19,7 +19,12 @@
     <div class="card proyect-card" *ngFor="let proyect of proyects ;trackBy: trackId">
         <div class="row no-gutters">
             <div class="col-sm-3">
-                <img class="card-img" src="../../../content/images/noimagen.jpg" alt="No hay imágenes">
+                <div *ngIf="proyect.images && proyect.images.length > 0; else noImage">
+                    <img class="card-img" src="{{proyect.images[0].url}}">
+                </div>
+                <ng-template #noImage>
+                    <img class="card-img" src="../../../content/images/noimagen.jpg" alt="No hay imágenes">
+                </ng-template>
                 <p class="category-type">{{proyect.category?.name}}</p>
             </div>
             <div class="col-sm-6">

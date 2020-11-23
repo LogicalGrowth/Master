@@ -12,7 +12,7 @@ export class LastUpdatePipe implements PipeTransform {
         break;
       }
       default: {
-        output = 'Hace ' + value + ' horas';
+        output = 'Hace ' + value + ' días';
         break;
       }
     }

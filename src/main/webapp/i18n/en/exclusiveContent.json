@@ -2,19 +2,19 @@
   "fun4FundApp": {
     "exclusiveContent": {
       "home": {
-        "title": "Exclusive Contents",
+        "title": "Contenido exclusivo",
         "createLabel": "Create a new Exclusive Content",
         "createOrEditLabel": "Create or edit a Exclusive Content",
         "notFound": "No Exclusive Contents found"
       },
-      "created": "A new Exclusive Content is created with identifier {{ param }}",
-      "updated": "A Exclusive Content is updated with identifier {{ param }}",
-      "deleted": "A Exclusive Content is deleted with identifier {{ param }}",
+      "created": "Contenido exclusivo creado exitosamente.",
+      "updated": "Contenido exclusivo actualizado exitósamente.",
+      "deleted": "Contenido exclusivo borrado exitósamente.",
       "delete": {
         "question": "Are you sure you want to delete Exclusive Content {{ id }}?"
       },
       "detail": {
-        "title": "Exclusive Content"
+        "title": "Contenido exclusivo"
       },
       "price": "Price",
       "stock": "Stock",

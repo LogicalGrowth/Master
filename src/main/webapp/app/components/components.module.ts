@@ -17,6 +17,7 @@ import { CarouselComponent } from './carousel/carousel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StatePipe } from './state.pipe';
 import { LastUpdatePipe } from './lastUpdate.pipe';
+import { PaypalButtonComponent } from './paypal-button/paypal-button.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     CarouselComponent,
     StatePipe,
     LastUpdatePipe,
+    PaypalButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -57,6 +59,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     CarouselComponent,
     StatePipe,
     LastUpdatePipe,
+    PaypalButtonComponent,
   ],
 })
 export class ComponentsModule {}

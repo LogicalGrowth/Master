@@ -102,6 +102,17 @@ export class AuctionUpdateComponent implements OnInit {
           });
       }
     });
+
+    this.activatedRoute.data.subscribe(({ currentProyect }) => {
+      if (currentProyect) {
+        this.editForm.patchValue({
+          id: undefined,
+          proyect: currentProyect,
+        });
+      }
+    });
+
+    this.getImages(this.prize?.id as number);
   }
 
   updateForm(auction: IAuction): void {
@@ -111,11 +122,9 @@ export class AuctionUpdateComponent implements OnInit {
       name: auction.prize?.name,
       description: auction.prize?.description,
       initialBid: auction.initialBid,
-      winningBid: auction.winningBid,
       expirationDate: auction.expirationDate ? auction.expirationDate.format(DATE_TIME_FORMAT) : null,
       state: auction.state,
       prize: auction.prize,
-      winner: auction.winner,
       proyect: auction.proyect,
     });
   }
@@ -174,13 +183,11 @@ export class AuctionUpdateComponent implements OnInit {
       ...new Auction(),
       id: this.editForm.get(['id'])!.value,
       initialBid: this.editForm.get(['initialBid'])!.value,
-      winningBid: this.editForm.get(['winningBid'])!.value,
       expirationDate: this.editForm.get(['expirationDate'])!.value
         ? moment(this.editForm.get(['expirationDate'])!.value, DATE_TIME_FORMAT)
         : undefined,
       state: this.editForm.get(['state'])!.value,
       prize: newPrize,
-      winner: this.editForm.get(['winner'])!.value,
       proyect: this.proyect!,
     };
   }

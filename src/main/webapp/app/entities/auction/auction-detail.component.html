@@ -7,6 +7,11 @@
                         <div class="card-header ">
                             <h4 class="card-title">Subasta</h4>
                         </div>
+
+                        <div class="d-flex justify-content-center">
+                            <jhi-carousel [items]="images" [interval]="4000" [keyboard]="false" width="300px" height="200px"></jhi-carousel>
+                        </div>
+
                         <div class="card-body">
                             <div class="form-group">
                                 <label class="form-control-label" for="field_initalBid">Nombre</label>
@@ -33,7 +38,7 @@
                         <div class="card-footer text-right">
                             <button type="submit"
                                     (click)="previousState()"
-                                    class="btn btn-info"> Atrás
+                                    class="btn btn-default"> Atrás
                             </button>
                             <button type="button"
                                     [routerLink]="['/auction', auction.id, 'edit']"

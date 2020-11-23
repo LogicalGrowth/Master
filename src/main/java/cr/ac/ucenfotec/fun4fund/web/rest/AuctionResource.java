@@ -97,6 +97,10 @@ public class AuctionResource {
         if (auction.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+
+        Prize prize = auction.getPrize();
+        prizeService.save(prize);
+
         Auction result = auctionService.save(auction);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, auction.getId().toString()))

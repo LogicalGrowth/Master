@@ -53,6 +53,7 @@ export class PaymentMethodService {
   }
 
   protected convertDateFromClient(paymentMethod: IPaymentMethod): IPaymentMethod {
+    delete paymentMethod.typeImage;
     const copy: IPaymentMethod = Object.assign({}, paymentMethod, {
       expirationDate:
         paymentMethod.expirationDate && paymentMethod.expirationDate.isValid() ? paymentMethod.expirationDate.toJSON() : undefined,
@@ -74,5 +75,18 @@ export class PaymentMethodService {
       });
     }
     return res;
+  }
+
+  updateWithoutFormat(paymentMethod: IPaymentMethod): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(paymentMethod);
+    return this.http
+      .put<IPaymentMethod>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  protected convertData(paymentMethod: IPaymentMethod): IPaymentMethod {
+    delete paymentMethod.typeImage;
+    const copy: IPaymentMethod = Object.assign({}, paymentMethod);
+    return copy;
   }
 }

@@ -9,7 +9,6 @@
                 <h2 id="jhi-payment-method-heading" >Registrar método de pago</h2>
             </div>
 
-
             <div>
                 <jhi-alert-error></jhi-alert-error>
 
@@ -42,7 +41,7 @@
                         Tarjeta invalida.
                          </small>
                     </div>
-                    <img class="img-payment-cards" src="{{cardTypeImage}}" *ngIf="showCardImage" />
+                    <img class="img-payment-cards" src="{{cardTypeImage}}" *ngIf="showCardImage" style="margin-top: 0.8rem;"/>
                 </div>
 
 
@@ -63,7 +62,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" for="field_expirationDate">Fecha de vencimiento</label>
+                    <label class="form-control-label" for="field_expirationDate">Fecha de vencimiento: *</label>
                     <div class="d-flex">
                         <input id="field_expirationDate" type="month" class="form-control" name="expirationDate" formControlName="expirationDate" placeholder="YYYY-MM-DD HH:mm"/>
                     </div>
@@ -90,7 +89,7 @@
                 </div>
 
                 <div class="form-group" [hidden]="editForm.get('id')!.value">
-                    <label class="form-control-label" for="field_cvc">CVC</label>
+                    <label class="form-control-label" for="field_cvc">CVC: *</label>
                     <input type="text" class="form-control" name="cvc" id="field_cvc"
                            formControlName="cvc"/>
                     <div *ngIf=" editForm.get('cvc')!.dirty || editForm.get('cvc')!.touched">
@@ -112,18 +111,18 @@
            
             </div>
 
-            <div>
+            <div class="text-right">
                 <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
+                    <span>Atras</span>
                 </button>
 
                 <button  [hidden]="editForm.get('id')!.value" type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || !isValidCvc(editForm.get('cvc')) || !isDateValid(editForm.get('expirationDate')) || !validateName(editForm.get('cardOwner'))" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span >Guardar</span>
+                    <span>Guardar</span>
                 </button>
 
                 
                 <button [hidden]="!editForm.get('id')!.value" type="submit" id="save-entity" [disabled]=" editForm.invalid ||!isDateValid(editForm.get('expirationDate')) || !validateName(editForm.get('cardOwner'))" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span >Guardar</span>
+                    <span>Guardar</span>
                 </button>
             </div>
         </form>

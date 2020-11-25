@@ -102,9 +102,10 @@ export class PaypalButtonComponent implements OnInit {
     result.subscribe();
   }
 
-  delete(): void {
+  paymentMethods(): void {
     const modalRef = this.modalService.open(PaymentMethodSelectDialogComponent, { size: 'lg', backdrop: 'static' });
     const payment = this.createPayment(moment());
     modalRef.componentInstance.payment = payment;
+    modalRef.componentInstance.description = this.description;
   }
 }

@@ -6,13 +6,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT, MONTH_YEAR_FORMAT } from 'app/shared/constants/input.constants';
-
 import { IPaymentMethod, PaymentMethod } from 'app/shared/model/payment-method.model';
 import { PaymentMethodService } from './payment-method.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'jhi-payment-method-update',
@@ -93,6 +93,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
     if (paymentMethod.id !== undefined) {
       this.subscribeToSaveResponse(this.paymentMethodService.update(paymentMethod));
     } else {
+      paymentMethod.cvc = this.encryptCode(paymentMethod.cvc);
       this.subscribeToSaveResponse(this.paymentMethodService.create(paymentMethod));
     }
   }
@@ -259,5 +260,9 @@ export class PaymentMethodUpdateComponent implements OnInit {
 
   validateName(str: any): any {
     return this.validateString(str.value);
+  }
+
+  encryptCode(cvc: any): string {
+    return CryptoJS.SHA256(cvc).toString();
   }
 }

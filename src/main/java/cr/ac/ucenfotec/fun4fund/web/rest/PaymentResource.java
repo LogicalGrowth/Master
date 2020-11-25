@@ -86,27 +86,30 @@ public class PaymentResource {
         String type = "";
 
         if(payment.getType() == ProductType.AUCTION){
-            type = "la puja de " + payment.getAmount() + "de la subasta en el proyecto " + payment.getProyect().getName();
+            type = "la puja de " + payment.getAmount() + "de la subasta en el proyecto " + proyect.getName();
         } else if(payment.getType() == ProductType.DONATION){
-            type = "la donación de " + payment.getAmount() +" al proyecto " + payment.getProyect().getName();
+            type = "la donación de " + payment.getAmount() +" al proyecto " + proyect.getName();
         }else if(payment.getType() == ProductType.EXCLUSIVE_CONTENT){
-            type = "la compra de contenido exlusivo en el proyecto " + payment.getProyect().getName() + "monto final: " + payment.getAmount();
+            type = "la compra de contenido exlusivo en el proyecto " + proyect.getName() + "monto final: " + payment.getAmount();
         }else if(payment.getType() == ProductType.PARTNERSHIP){
             type = "";
         }else if(payment.getType() == ProductType.RAFFLE){
-            type = "participar en la rifa del proyecto " + payment.getProyect().getName()+ "el monto final fue de: " + payment.getAmount();
+            type = "participar en la rifa del proyecto " + proyect.getName()+ "el monto final fue de: " + payment.getAmount();
         }
         String subject = "Recibido de pago";
 
         String content = "Muchas gracias por " + type;
         mailService.sendEmail(applicationUser.get().getInternalUser().getEmail(),subject,content,false,true);
-        Payment result = paymentService.save(payment);
+
 
         Proyect proyectResult = proyectService.save(proyect);
+        Payment result = paymentService.save(payment);
+
+
         //Guardar aquí fee
 
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, content))
             .body(result);
     }
 

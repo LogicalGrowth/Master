@@ -8,8 +8,8 @@
         "notFound": "No Exclusive Contents found"
       },
       "created": "Contenido exclusivo creado exitosamente.",
-      "updated": "Contenido exclusivo actualizado exitósamente.",
-      "deleted": "Contenido exclusivo borrado exitósamente.",
+      "updated": "Contenido exclusivo actualizado exitosamente.",
+      "deleted": "Contenido exclusivo borrado exitosamente.",
       "delete": {
         "question": "Are you sure you want to delete Exclusive Content {{ id }}?"
       },

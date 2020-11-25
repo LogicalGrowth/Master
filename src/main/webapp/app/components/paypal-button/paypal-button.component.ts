@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { DonationModalService } from 'app/entities/proyect/donation/donationModal.service';
 
 @Component({
   selector: 'jhi-paypal-button',
@@ -34,7 +35,8 @@ export class PaypalButtonComponent implements OnInit {
     paypalElement: ElementRef,
     protected paymentService: PaymentService,
     private accountService: AccountService,
-    private applicationUserService: ApplicationUserService
+    private applicationUserService: ApplicationUserService,
+    private donationModalService: DonationModalService
   ) {
     // Initialization inside the constructor
     this.paypalElement = paypalElement;
@@ -97,6 +99,8 @@ export class PaypalButtonComponent implements OnInit {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
-    result.subscribe();
+    result.subscribe(() => {
+      this.donationModalService.close();
+    });
   }
 }

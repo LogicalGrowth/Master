@@ -2,8 +2,8 @@
     <div class='col-md-12'>
         <ngb-carousel [interval]="interval">
             <ng-template ngbSlide *ngFor="let item of items">
-                <img *ngIf="item.type === '' || item.type === 'Image' || item.type === 'image'" src={{item.url}} alt="No hay imágenes dispobiles"
-                    style="width:{{width}};height:{{height}};">
+                <img *ngIf="item.type === '' || item.type === 'Image' || item.type === 'image'" src={{item.url}}
+                    style="width: {{width}}; height: {{height}}; max-height: 670px; max-width: 670px">
                 <div *ngIf="item.type === 'Youtube'">
                     <youtube-player videoId="{{GetVideoId(item.url)}}">
                     </youtube-player>

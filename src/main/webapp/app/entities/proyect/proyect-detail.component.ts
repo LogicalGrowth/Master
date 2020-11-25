@@ -25,7 +25,11 @@ import { DonationModalService } from './donation/donationModal.service';
 @Component({
   selector: 'jhi-proyect-detail',
   templateUrl: './proyect-detail.component.html',
-  styleUrls: ['../../../content/scss/paper-dashboard.scss', '../../../content/scss/paper-dashboard/rating/rating.scss'],
+  styleUrls: [
+    '../../../content/scss/paper-dashboard.scss',
+    '../../../content/scss/paper-dashboard/rating/rating.scss',
+    'proyecto-detail.scss',
+  ],
 })
 export class ProyectDetailComponent implements OnInit {
   proyect: IProyect | null = null;
@@ -142,7 +146,7 @@ export class ProyectDetailComponent implements OnInit {
         lng: proyect.coordX,
       };
       this.hasMarker = true;
-      this.percentile = (100 * proyect.collected) / proyect.goalAmount;
+      this.percentile = 75;
       this.rating = (100 * proyect.rating) / 5;
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
       this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : this.daysCreated + ' días transcurridos ';

@@ -19,6 +19,8 @@ import { AuctionService } from '../auction/auction.service';
 import { ICheckpoint } from 'app/shared/model/checkpoint.model';
 import { ApplicationUserService } from '../application-user/application-user.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { ProductType } from 'app/shared/model/enumerations/product-type.model';
+import { DonationModalService } from './donation/donationModal.service';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -49,6 +51,7 @@ export class ProyectDetailComponent implements OnInit {
     height: 31vw !important;
   }`;
   applicationUser?: IApplicationUser[];
+  productType?: ProductType;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -59,7 +62,8 @@ export class ProyectDetailComponent implements OnInit {
     protected auctionService: AuctionService,
     private accountService: AccountService,
     private resourceService: ResourceService,
-    private applicationUserService: ApplicationUserService
+    private applicationUserService: ApplicationUserService,
+    private donationModalService: DonationModalService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -99,7 +103,7 @@ export class ProyectDetailComponent implements OnInit {
           inverted: true,
           type: 'success',
           icon: 'nc-icon nc-sun-fog-29',
-          subTitle: 'Checkpoint ' + i,
+          subTitle: 'Checkpoint ' + i + ' de ' + checkpoint.completitionPercentage + '%',
           body: checkpoint.message,
           isOwner: this.isProjectOwner,
           routerLink: '/checkpoint/' + checkpoint.id + '/edit',
@@ -124,6 +128,8 @@ export class ProyectDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.productType = ProductType.DONATION;
+
     const style = document.createElement('style');
     style.innerHTML = this.css;
     document.head.appendChild(style);
@@ -139,7 +145,9 @@ export class ProyectDetailComponent implements OnInit {
       this.percentile = (100 * proyect.collected) / proyect.goalAmount;
       this.rating = (100 * proyect.rating) / 5;
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
+      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : this.daysCreated + ' días transcurridos ';
       this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
+      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : this.daysCreated + ' días transcurridos ';
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });
@@ -160,12 +168,16 @@ export class ProyectDetailComponent implements OnInit {
           .subscribe((res: HttpResponse<IApplicationUser[]>) => {
             this.applicationUser = res.body || [];
             this.isProjectOwner = this.applicationUser[0].id === this.proyect?.owner?.id ? true : false;
+            this.loadCheckPoints(this.proyect?.id as number);
           });
       }
     });
 
     this.loadExclusiveContent(this.proyect?.id as number);
     this.loadAuction(this.proyect?.id as number);
-    this.loadCheckPoints(this.proyect?.id as number);
+  }
+
+  donate(): void {
+    this.donationModalService.open(this.proyect!);
   }
 }

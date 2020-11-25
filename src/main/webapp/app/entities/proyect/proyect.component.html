@@ -1,103 +1,66 @@
-<div>
-    <h2 id="page-heading">
-        <span jhiTranslate="fun4FundApp.proyect.home.title">Proyects</span>
-
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-proyect" [routerLink]="['/proyect/new']">
-            <fa-icon icon="plus"></fa-icon>
-            <span  jhiTranslate="fun4FundApp.proyect.home.createLabel">
-            Create a new Proyect
-            </span>
-        </button>
-    </h2>
+<div class="container bcontent">
+    <h2 id="page-heading">Proyectos</h2>
+    <div class="row subheader-section">
+        <div class="col-sm-2">
+            <h5 class="section-subheading text-muted">{{proyects?.length}} resultados</h5>
+        </div>
+        <div class="col-sm-8"></div>
+        <div class="col-sm-2">
+            <jhi-simple-button type="warning" label="Iniciar proyecto" [routerLink]="['/proyect/new']"></jhi-simple-button>
+        </div>
+    </div>
 
     <jhi-alert-error></jhi-alert-error>
-
     <jhi-alert></jhi-alert>
 
     <div class="alert alert-warning" id="no-result" *ngIf="proyects?.length === 0">
-        <span jhiTranslate="fun4FundApp.proyect.home.notFound">No proyects found</span>
+        <span>Estamos trabajando en encontrar proyectos. Por favor regrese pronto.</span>
     </div>
+    <div class="card proyect-card" *ngFor="let proyect of proyects ;trackBy: trackId">
+        <div class="row no-gutters">
+            <div class="col-sm-3">
+                <div *ngIf="proyect.images && proyect.images.length > 0; else noImage">
+                    <img class="card-img" src="{{proyect.images[0].url}}">
+                </div>
+                <ng-template #noImage>
+                    <img class="card-img" src="../../../content/images/noimagen.jpg" alt="No hay imágenes">
+                </ng-template>
+                <p class="category-type">{{proyect.category?.name}}</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="card-body">
+                    <h5 class="card-title">{{proyect.name}}</h5>
+                    <p class="card-text creator-name">
+                        por {{ proyect.owner?.internalUser?.firstName }} {{ proyect.owner?.internalUser?.lastName }}
+                        | {{ proyect.creationDate | date:"MM/dd/yy" }}
+                    </p>
+                    <p class="card-text"> {{ (proyect.description) }}</p>
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width:94%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card-body">
+                    <p class="card-text text-right">
+                        {{ proyect.collected | currency:proyect.currencyType:'symbol':'4.2-2' }} de
+                        {{ proyect.goalAmount | currency:proyect.currencyType:'symbol':'4.2-2' }}
+                    </p>
 
-    <div class="table-responsive" id="entities" *ngIf="proyects && proyects.length > 0">
-        <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-                <tr>
-                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.name">Name</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.description">Description</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.idType">Id Type</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.goalAmount">Goal Amount</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.collected">Collected</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.rating">Rating</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.creationDate">Creation Date</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.lastUpdated">Last Updated</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.coordX">Coord X</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.coordY">Coord Y</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.fee">Fee</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.number">Number</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.currencyType">Currency Type</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.owner">Owner</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.applicationUser">Application User</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.proyect.category">Category</span></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let proyect of proyects ;trackBy: trackId">
-                    <td><a [routerLink]="['/proyect', proyect.id, 'view']">{{ proyect.id }}</a></td>
-                    <td>{{ proyect.name }}</td>
-                    <td>{{ proyect.description }}</td>
-                    <td jhiTranslate="{{ 'fun4FundApp.ProyectType.' + proyect.idType }}">{{ proyect.idType }}</td>
-                    <td>{{ proyect.goalAmount }}</td>
-                    <td>{{ proyect.collected }}</td>
-                    <td>{{ proyect.rating }}</td>
-                    <td>{{ proyect.creationDate | date:'medium' }}</td>
-                    <td>{{ proyect.lastUpdated | date:'medium' }}</td>
-                    <td>{{ proyect.coordX }}</td>
-                    <td>{{ proyect.coordY }}</td>
-                    <td>{{ proyect.fee }}</td>
-                    <td>{{ proyect.number }}</td>
-                    <td jhiTranslate="{{ 'fun4FundApp.Currency.' + proyect.currencyType }}">{{ proyect.currencyType }}</td>
-                    <td>
-                        <div *ngIf="proyect.owner">
-                            <a [routerLink]="['/application-user', proyect.owner?.id, 'view']" >{{ proyect.owner?.id }}</a>
-                        </div>
-                    </td>
-                    <td>
-                        <div *ngIf="proyect.applicationUser">
-                            <a [routerLink]="['/application-user', proyect.applicationUser?.id, 'view']" >{{ proyect.applicationUser?.id }}</a>
-                        </div>
-                    </td>
-                    <td>
-                        <div *ngIf="proyect.category">
-                            <a [routerLink]="['/category', proyect.category?.id, 'view']" >{{ proyect.category?.id }}</a>
-                        </div>
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <button type="submit"
-                                    [routerLink]="['/proyect', proyect.id, 'view']"
-                                    class="btn btn-info btn-sm">
-                                <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                            </button>
+                    <jhi-progress-bar progressBarClass="progress-bar-warning" minValue="0"
+                                      maxValue="{{proyect.goalAmount}}" percentile="{{getPercentile(proyect)}}"
+                                      currentValue="{{ proyect.collected }}}">
+                    </jhi-progress-bar>
 
-                            <button type="submit"
-                                    [routerLink]="['/proyect', proyect.id, 'edit']"
-                                    class="btn btn-primary btn-sm">
-                                <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                            </button>
+                    <p class="card-text text-right updated-date">Última actualización: {{getLastUpdate(proyect) | lastUpdate}} </p>
 
-                            <button type="submit" (click)="delete(proyect)"
-                                    class="btn btn-danger btn-sm">
-                                <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    <div class="pull-right">
+                        <a [routerLink]="['/proyect', proyect.id, 'view']" class="btn btn-primary pull-center">Ver proyecto</a>
+                        <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
+                        <jhi-icon *ngIf="isProjectAdmin(proyect)" buttonCssClass="btn-success" iconCssClass="fa fa-edit" [routerLink]="['/proyect', proyect.id, 'edit']"></jhi-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

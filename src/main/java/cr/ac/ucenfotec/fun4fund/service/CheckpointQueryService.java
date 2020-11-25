@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,10 +57,17 @@ public class CheckpointQueryService extends QueryService<Checkpoint> {
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<Checkpoint> findByCriteria(CheckpointCriteria criteria, Pageable page) {
+    public Page<Checkpoint> findByCriteria(CheckpointCriteria criteria, Pageable page, Sort sort) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Checkpoint> specification = createSpecification(criteria);
         return checkpointRepository.findAll(specification, page);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Checkpoint> findByCriteria(CheckpointCriteria criteria, Sort sort) {
+        log.debug("find by criteria : {}, page: {}", criteria, sort);
+        final Specification<Checkpoint> specification = createSpecification(criteria);
+        return checkpointRepository.findAll(specification, sort);
     }
 
     /**

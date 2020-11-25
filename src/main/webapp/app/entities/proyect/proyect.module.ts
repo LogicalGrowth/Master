@@ -11,6 +11,7 @@ import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component'
 import { proyectRoute } from './proyect.route';
 import { ComponentsModule } from 'app/components/components.module';
 import { ProyectImageUpdateComponent } from './proyect-image-update/proyect-image-update.component';
+import { DonationComponent } from './donation/donation.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ProyectImageUpdateComponent } from './proyect-image-update/proyect-imag
     ProyectUpdateComponent,
     ProyectDeleteDialogComponent,
     ProyectImageUpdateComponent,
+    DonationComponent,
   ],
   entryComponents: [ProyectDeleteDialogComponent],
 })

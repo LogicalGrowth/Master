@@ -84,6 +84,10 @@ import { RouterModule } from '@angular/router';
         path: 'password-history',
         loadChildren: () => import('./password-history/password-history.module').then(m => m.Fun4FundPasswordHistoryModule),
       },
+      {
+        path: 'config-system',
+        loadChildren: () => import('./config-system/config-system.module').then(m => m.Fun4FundConfigSystemModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

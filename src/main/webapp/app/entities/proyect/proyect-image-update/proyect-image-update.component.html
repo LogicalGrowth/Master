@@ -21,9 +21,17 @@
                             <h4 class="card-title">Agregar imágenes</h4>
                         </div>
                         <div class="card-body ">
+                            <div class="d-flex justify-content-center">
+                                <jhi-carousel [items]="images" [interval]="4000" [keyboard]="false" width="300px" height="200px"></jhi-carousel>
+                            </div>
                             <div class="form-group has-label">
                                 <jhi-cloudinary [okCallback]="saveImage.bind(this)"></jhi-cloudinary>
                             </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="goToProyect()">
+                                <span>Ir al proyecto</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -41,6 +49,9 @@
                             <jhi-alert-error></jhi-alert-error>
                             <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"
                                 class="form-horizontal">
+                                <div class="d-flex justify-content-center">
+                                    <jhi-carousel [items]="youtube" [interval]="4000" [keyboard]="false" width="300px" height="200px"></jhi-carousel>
+                                </div>
                                 <div class="form-group has-label">
                                     <label for="field_name" class="control-label">URL del contenido</label>
                                     <span class="star">*</span>
@@ -56,29 +67,18 @@
                                             *ngIf="editForm.get('url')?.errors?.maxlength">
                                             El nombre no puede ser mayor a 255 caracteres.
                                         </small>
+                                        <small class="form-text text-danger" *ngIf="editForm.get('number')?.errors?.pattern">
+                                            El campo no cumple el formato.
+                                          </small>
                                     </div>
                                 </div>
-
-                                <div class="form-group has-label">
-                                    <label for="type" class="control-label">Tipo contenido</label>
-                                    <span class="star">*</span>
-                                    <select class="form-control custom-select custom-select-lg" name="type"
-                                        formControlName="type" id="type">
-                                        <option value="Youtube">Youtube</option>
-                                    </select>
-                                    <div
-                                        *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
-                                        <small class="form-text text-danger"
-                                            *ngIf="editForm.get('type')?.errors?.required">
-                                            Campo requerido.
-                                        </small>
-                                    </div>
-
-                                    <div>
-                                        <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
-                                            class="btn btn-primary"><span>Guardar</span>
-                                        </button>
-                                    </div>
+                                <div class="card-footer text-right">
+                                    <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
+                                        class="btn btn-primary"><span>Guardar</span>
+                                    </button>
+                                    <button type="button" id="cancel-save" class="btn btn-secondary" (click)="goToProyect()">
+                                        <span>Ir al proyecto</span>
+                                    </button>
                                 </div>
                             </form>
                         </div>

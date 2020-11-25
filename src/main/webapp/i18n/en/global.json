@@ -27,6 +27,7 @@
         "appLog": "App Log",
         "recommendation": "Recommendation",
         "passwordHistory": "Password History",
+        "configSystem": "Config System",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

@@ -21,9 +21,12 @@ public class CheckpointService {
     private final Logger log = LoggerFactory.getLogger(CheckpointService.class);
 
     private final CheckpointRepository checkpointRepository;
+    private final ProyectService proyectService;
 
-    public CheckpointService(CheckpointRepository checkpointRepository) {
+    public CheckpointService(CheckpointRepository checkpointRepository,
+                             ProyectService proyectService) {
         this.checkpointRepository = checkpointRepository;
+        this.proyectService = proyectService;
     }
 
     /**
@@ -34,6 +37,7 @@ public class CheckpointService {
      */
     public Checkpoint save(Checkpoint checkpoint) {
         log.debug("Request to save Checkpoint : {}", checkpoint);
+        proyectService.updateDate(checkpoint.getProyect());
         return checkpointRepository.save(checkpoint);
     }
 

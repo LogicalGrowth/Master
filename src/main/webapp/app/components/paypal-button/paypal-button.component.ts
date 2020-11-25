@@ -6,13 +6,15 @@ declare let paypal: any;
 import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
-import * as moment from 'moment';
-import { IProyect } from '../../shared/model/proyect.model';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentMethodSelectDialogComponent } from 'app/entities/payment-method/payment-method-select-dialog';
 import { IPaymentMethod } from 'app/shared/model/payment-method.model';
+import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
+import * as moment from 'moment';
+
 @Component({
   selector: 'jhi-paypal-button',
   templateUrl: './paypal-button.component.html',
@@ -22,38 +24,45 @@ export class PaypalButtonComponent implements OnInit {
   @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
 
   @Input() description: string;
-  @Input() price: string;
+  @Input() amount: any | undefined;
   @Input() projectId: string;
   @Input() productType?: ProductType;
-  finalPrice = 0;
   paidFor = false;
   idUser = '';
   account!: User;
   projectIdFormat?: number;
   productTypeFormat?: IPayment;
+  applicationUser?: IApplicationUser[];
 
   constructor(
     paypalElement: ElementRef,
     protected paymentService: PaymentService,
     private accountService: AccountService,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    private applicationUserService: ApplicationUserService
   ) {
     // Initialization inside the constructor
     this.paypalElement = paypalElement;
     this.description = '';
-    this.price = '';
     this.projectId = '';
   }
 
   // tslint:disable-next-line: typedef
   ngOnInit() {
-    this.finalPrice = +this.price.replace(/,/, '.');
     this.projectIdFormat = parseInt(this.projectId, 10);
+
     this.accountService.identity().subscribe(account => {
       if (account) {
         this.account = account;
+
+        this.applicationUserService
+          .query({ 'internalUserId.equals': this.account.id })
+          .subscribe((res: HttpResponse<IApplicationUser[]>) => {
+            this.applicationUser = res.body || [];
+          });
       }
     });
+
     paypal
       .Buttons({
         style: {
@@ -65,10 +74,7 @@ export class PaypalButtonComponent implements OnInit {
             purchase_units: [
               {
                 description: this.description,
-                amount: {
-                  currencyCode: 'USD',
-                  value: this.finalPrice,
-                },
+                amount: this.amount,
               },
             ],
           });
@@ -87,8 +93,8 @@ export class PaypalButtonComponent implements OnInit {
   private createPayment(create_time: any): IPayment {
     return {
       ...new Payment(),
-      amount: this.finalPrice,
-      applicationUser: this.account,
+      amount: this.amount?.value,
+      applicationUser: this.applicationUser![0],
       proyect: {
         id: this.projectIdFormat,
       },

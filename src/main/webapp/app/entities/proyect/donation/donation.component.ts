@@ -24,11 +24,7 @@ export class DonationComponent implements AfterViewInit {
 
   constructor(public activeModal: NgbActiveModal) {}
 
-  ngAfterViewInit(): void {
-    if (this.username) {
-      this.username.nativeElement.focus();
-    }
-  }
+  ngAfterViewInit(): void {}
 
   setAmount(amount: number): void {
     this.data.value = amount;

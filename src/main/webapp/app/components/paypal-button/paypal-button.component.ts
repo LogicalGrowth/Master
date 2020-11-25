@@ -14,6 +14,7 @@ import { IPaymentMethod } from 'app/shared/model/payment-method.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import * as moment from 'moment';
+import { DonationModalService } from 'app/entities/proyect/donation/donationModal.service';
 
 @Component({
   selector: 'jhi-paypal-button',
@@ -39,7 +40,8 @@ export class PaypalButtonComponent implements OnInit {
     protected paymentService: PaymentService,
     private accountService: AccountService,
     protected modalService: NgbModal,
-    private applicationUserService: ApplicationUserService
+    private applicationUserService: ApplicationUserService,
+    private donationModalService: DonationModalService
   ) {
     // Initialization inside the constructor
     this.paypalElement = paypalElement;
@@ -105,7 +107,9 @@ export class PaypalButtonComponent implements OnInit {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
-    result.subscribe();
+    result.subscribe(() => {
+      this.donationModalService.close();
+    });
   }
 
   paymentMethods(): void {

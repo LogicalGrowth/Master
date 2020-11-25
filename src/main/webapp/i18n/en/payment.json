@@ -7,7 +7,7 @@
         "createOrEditLabel": "Create or edit a Payment",
         "notFound": "No Payments found"
       },
-      "created": "A new Payment is created with identifier {{ param }}",
+      "created": "{{ param }}.",
       "updated": "A Payment is updated with identifier {{ param }}",
       "deleted": "A Payment is deleted with identifier {{ param }}",
       "delete": {

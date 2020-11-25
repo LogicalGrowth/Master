@@ -20,4 +20,9 @@ export class DonationModalService {
     modalRef.componentInstance.proyect = proyect;
     modalRef.result.finally(() => (this.isOpen = false));
   }
+
+  close(): void {
+    this.isOpen = false;
+    this.modalService.dismissAll();
+  }
 }

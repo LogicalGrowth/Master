@@ -102,7 +102,7 @@ public class PaymentResource {
         mailService.sendEmail(applicationUser.get().getInternalUser().getEmail(),subject,content,false,true);
         Payment result = paymentService.save(payment);
 
-        proyectService.save(proyect);
+        Proyect proyectResult = proyectService.save(proyect);
         //Guardar aquí fee
 
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))

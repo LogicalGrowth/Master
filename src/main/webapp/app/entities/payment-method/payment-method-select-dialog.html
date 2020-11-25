@@ -1,33 +1,60 @@
 <form name="selectPaymentForm">
-  <div class="modal-header--paymentMethod" style="margin-bottom: 2rem;">
-    <h4 class="modal-title" [hidden]="hidePayment" >Seleccione un método de pago</h4>
-    <h4 class="modal-title" [hidden]="!invoice" >Factura</h4>
+  <div class="modal-header--paymentMethod" style="margin-bottom: 2rem">
+    <h4 class="modal-title" [hidden]="hidePayment">Seleccione un método de pago</h4>
+    <h4 class="modal-title" [hidden]="!invoice">Factura</h4>
 
     <button type="button" class="close paymentClose" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
   </div>
   <div class="stepsSection">
-    <div class="step1 stepActive"> <img class="stepImage" src="{{ number1 }}" alt=""></div>
-    <div class="step2"> <img class="stepImage" src="{{ number2 }}" alt=""></div>
+    <div class="step1 stepActive"><img class="stepImage" src="{{ number1 }}" alt="" /></div>
+    <div class="step2"><img class="stepImage" src="{{ number2 }}" alt="" /></div>
   </div>
   <div class="modal-body">
     <div class="modal-body--paymentMethod">
       <div class="cardsPaymentMethods">
-        <div
-          class="card paymentCard hvr-sweep-to-right"
-          style="width: 320px"
-          *ngFor="let paymentMethod of paymentMethods;"
-          id="{{paymentMethod.id}}"
-          (click)="addPaymentMethod($event)"
-        >
-          <div class="row justify-content-center">
-            <div class="col-sm-4 align-self-center cardImage">
-              <img src="{{ paymentMethod.typeImage }}" />
+        <div *ngFor="let paymentMethod of paymentMethods;">
+          <div
+            class="card paymentCard hvr-sweep-to-right"
+            style="width: 320px"
+            id="{{paymentMethod.id}}"
+            (click)="addPaymentMethod($event)"
+            *ngIf="paymentMethod.favorite === false"
+          >
+            <div class="row justify-content-center">
+              <div class="col-sm-4 align-self-center cardImage">
+                <img src="{{ paymentMethod.typeImage }}" />
+              </div>
+              <div class="col-sm-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ paymentMethod.cardOwner }}</h5>
+                  <p class="card-text">***********{{ paymentMethod.cardNumber! | slice: 12:19 }}</p>
+                  <p class="card-text">{{ paymentMethod.expirationDate | date: 'MM/yy' }}</p>
+                </div>
+              </div>
             </div>
-            <div class="col-sm-8">
-              <div class="card-body">
-                <h5 class="card-title">{{ paymentMethod.cardOwner }}</h5>
-                <p class="card-text">***********{{ paymentMethod.cardNumber! | slice: 12:19 }}</p>
-                <p class="card-text">{{ paymentMethod.expirationDate | date: 'MM/yy' }}</p>
+          </div>
+        </div>
+        <div *ngFor="let paymentMethod of paymentMethods;">
+          <div
+            class="card paymentCard hvr-sweep-to-right selected"
+            style="width: 320px"
+            id="{{paymentMethod.id}}"
+            (click)="addPaymentMethod($event)"
+            *ngIf="paymentMethod.favorite === true"
+          >
+            <div class="row justify-content-center">
+              <div class="col-sm-4 align-self-center cardImage">
+                <img src="{{ paymentMethod.typeImage }}" />
+              </div>
+              <div class="col-sm-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ paymentMethod.cardOwner }}</h5>
+                  <p class="card-text">***********{{ paymentMethod.cardNumber! | slice: 12:19 }}</p>
+                  <p class="card-text">{{ paymentMethod.expirationDate | date: 'MM/yy' }}</p>
+                  <a class="like heart" id="{{paymentMethod.id}}">
+                    <i class="fa fa-heart" aria-hidden="true" id="{{paymentMethod.id}}"></i>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -50,42 +77,47 @@
   </div>
 
   <div class="modal-body-loading" [hidden]="!loading">
-    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 
   <div class="modal-body-paymentInfo">
-    <div class="card">
+    <div>
       <div class="invoiceCard">
         <div class="logoInvoiceContainer">
-          <img class="logoInvoice" src="../../../content/images/logo.png" />   
+          <img class="logoInvoice" src="../../../content/images/logo.png" />
         </div>
-        
+
         <h5 class="card-title invoiceTitle">Hola, {{ name }}</h5>
-     
-        <h5 style="flex: 1 0 100%; margin-left: 2rem;">{{proyect?.name}}</h5>
+
+        <h5 style="flex: 1 0 100%; margin-left: 2rem">{{proyect?.name}}</h5>
         <p class="invoiceDescription">{{ description }}</p>
-         <div
-        class="invoiceCardSelected"
-        id="{{paymentMethod?.id}}"
-      >
-        <div class="row justify-content-center" style="width: 100%;">
-          <div class="col-sm-4 align-self-center cardImage">
-            <img src="{{ paymentMethod?.typeImage }}" />
-          </div>
-          <div class="col-sm-8">
-            <div class="card-body">
-              <h5 class="card-title">{{ paymentMethod?.cardOwner }}</h5>
-              <p class="card-text">***********{{ paymentMethod?.cardNumber! | slice: 12:19 }}</p>
-              <p class="card-text">{{ paymentMethod?.expirationDate | date: 'MM/yy' }}</p>
+        <div class="invoiceCardSelected" id="{{paymentMethod?.id}}">
+          <div class="row justify-content-center" style="width: 100%">
+            <div class="col-sm-4 align-self-center cardImage">
+              <img src="{{ paymentMethod?.typeImage }}" />
+            </div>
+            <div class="col-sm-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ paymentMethod?.cardOwner }}</h5>
+                <p class="card-text">***********{{ paymentMethod?.cardNumber! | slice: 12:19 }}</p>
+                <p class="card-text">{{ paymentMethod?.expirationDate | date: 'MM/yy' }}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
         <p class="finalAmount">Total a pagar: ${{ payment?.amount }}</p>
       </div>
     </div>
   </div>
-
 
   <div class="modal-footer">
     <div style="margin-top: 1rem">
@@ -97,8 +129,7 @@
         <span>Siguiente</span>
       </button>
 
-
-      <button type="button" id="cancel-save" class="btn btn-secondary"  [hidden]="!invoice"  (click)="back()">
+      <button type="button" id="cancel-save" class="btn btn-secondary" [hidden]="!invoice" (click)="back()">
         <span>Volver</span>
       </button>
 

@@ -12,6 +12,8 @@ import { IProyect } from '../../shared/model/proyect.model';
 import { ProyectService } from '../proyect/proyect.service';
 import { PaymentService } from '../payment/payment.service';
 import { Observable } from 'rxjs';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { ApplicationUserService } from '../application-user/application-user.service';
 
 @Component({
   templateUrl: './payment-method-select-dialog.html',
@@ -32,6 +34,7 @@ export class PaymentMethodSelectDialogComponent implements OnInit {
   name = '';
   description = '';
   proyect: any;
+  applicationUser?: IApplicationUser[];
 
   constructor(
     protected paymentMethodService: PaymentMethodService,
@@ -39,7 +42,8 @@ export class PaymentMethodSelectDialogComponent implements OnInit {
     protected eventManager: JhiEventManager,
     private accountService: AccountService,
     private proyectService: ProyectService,
-    protected paymentService: PaymentService
+    protected paymentService: PaymentService,
+    protected applicationUserService: ApplicationUserService
   ) {}
 
   ngOnInit(): void {
@@ -47,26 +51,31 @@ export class PaymentMethodSelectDialogComponent implements OnInit {
       if (account) {
         this.account = account;
         this.name = account.firstName;
+        this.applicationUserService
+          .query({ 'internalUserId.equals': this.account.id })
+          .subscribe((res: HttpResponse<IApplicationUser[]>) => {
+            this.applicationUser = res.body || [];
+            this.loadPaymentMethods();
+          });
       }
     });
 
-    this.loadPaymentMethods(this.account.id);
     const paymentInfo = document.querySelector('.modal-body-paymentInfo');
     paymentInfo?.classList.add('hidden');
   }
 
-  loadPaymentMethods(userId: number): void {
-    if (userId != null) {
-      this.paymentMethodService.query({ 'ownerId.equals': userId }).subscribe((res: HttpResponse<IPaymentMethod[]>) => {
+  loadPaymentMethods(): void {
+    if (this.applicationUser != null) {
+      this.paymentMethodService.query({ 'ownerId.equals': this.applicationUser[0].id }).subscribe((res: HttpResponse<IPaymentMethod[]>) => {
         this.paymentMethods = res.body || [];
         this.setImageType();
       });
+    }
 
-      if (this.payment?.proyect?.id) {
-        this.proyectService.find(this.payment.proyect.id).subscribe(e => {
-          this.proyect = e.body;
-        });
-      }
+    if (this.payment?.proyect?.id) {
+      this.proyectService.find(this.payment.proyect.id).subscribe(e => {
+        this.proyect = e.body;
+      });
     }
   }
 

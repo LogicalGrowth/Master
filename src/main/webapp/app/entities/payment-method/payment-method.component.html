@@ -30,16 +30,23 @@
             </thead>
             <tbody>
               <tr *ngFor="let paymentMethod of paymentMethods; trackBy: trackId">
-                  <td>
+                  <td class="text-center">
                     <!--      <div class="form-check">
                                 <label class="form-check-label">
                                   <input class="form-check-input" type="checkbox" checked>
                                   <span class="form-check-sign"></span>
                                 </label>
                               </div> -->
-                    <button class="btn btn-round">
-                      <i class="fa fa-heart"></i>
-                    </button>
+
+
+                              <a class="like" (click)= like($event) id="{{paymentMethod.id}}" *ngIf="paymentMethod.favorite === false">
+                                <i class="fa fa-heart" aria-hidden="true" id="{{paymentMethod.id}}"></i>
+                            </a>
+
+                            <a class="like heart" (click)= like($event) id="{{paymentMethod.id}}" *ngIf="paymentMethod.favorite === true">
+                              <i class="fa fa-heart" aria-hidden="true" id="{{paymentMethod.id}}"></i>
+                          </a>
+                        
                   </td>
         
                   <td class="text-center">

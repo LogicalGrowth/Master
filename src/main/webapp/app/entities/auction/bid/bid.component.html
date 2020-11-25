@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <h4 class="modal-title d-inline">Realizar puja por {{ auction?.prize?.name }}</h4>
+
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')">
+        <span aria-hidden="true">x</span>
+    </button>
+</div>
+
+<div class="modal-body" *ngIf="favoritePaymentMethod!.length > 0">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <dt><span>Puja más alta:</span></dt>
+            <dd *ngIf="auction?.winningBid">
+                <span>{{ winningBid | currency:'USD':'symbol' }}</span>
+            </dd>
+        </div>
+
+        <div class="col-md-10">
+            <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+                <div class="form-group">
+                    <label class="form-control-label" for="field_bid">Monto</label>
+                    <input type="number" class="form-control" name="bid" id="field_bid" placeholder="{{ auction?.winningBid }}"
+                        formControlName="bid"/>
+                    <div *ngIf="editForm.get('bid')!.invalid && (editForm.get('bid')!.dirty || editForm.get('bid')!.touched)">
+                        <small class="form-text text-danger"
+                                *ngIf="editForm.get('bid')?.errors?.required">
+                            Este campo es requerido.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('bid')?.errors?.min">
+                            Este campo debe ser mayor a {{ winningBid }}.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('bid')?.errors?.number">
+                            Este campo debe ser un número.
+                        </small>
+                    </div>
+                </div>
+            </form>
+        </div>
+         
+        <div class="text-right">
+            <button type="button" id="cancel-save2" class="btn btn-default" (click)="activeModal.dismiss('closed')">Volver</button>
+            <button type="submit" id="save-entity2" [disabled]="editForm.invalid || isSaving || favoritePaymentMethod!.length < 1" class="btn btn-primary" (click)="save()">Participar</button>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-body" *ngIf="favoritePaymentMethod!.length < 1">
+    <div class="row justify-content-center">
+        <div class="alert alert-danger" role="alert">
+            ¡Debe registrar un método de pago como favorito para poder participar!
+        </div>
+    </div> 
+</div>

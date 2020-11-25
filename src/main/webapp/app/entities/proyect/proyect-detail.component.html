@@ -278,7 +278,7 @@
                                                     <th><span>Monto Inicial</span></th>
                                                     <th><span>Puja ganadora</span></th>
                                                     <th *ngIf="isProjectOwner"><span>Estado</span></th>
-                                                    <th class="text-center" *ngIf="isProjectOwner">
+                                                    <th class="text-center">
                                                         <span>Acciones</span></th>
                                                     </thead>
                                                     <tbody>
@@ -287,16 +287,22 @@
                                                         <td>{{ auction.prize?.description }}</td>
                                                         <td>{{ auction.expirationDate | date }}</td>
                                                         <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
-                                                        <td>{{ auction.winningBid | currency:'USD':'symbol'}}</td>
+                                                        <td>{{ auction.winningBid | currency:'USD':'symbol'}}
+                                                            <span *ngIf="auction.winner?.id == userId" class="badge badge-pill badge-success">Tú</span>
+                                                        </td>
                                                         <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
-                                                        <td class="text-center" *ngIf="isProjectOwner">
-                                                            <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                        <td class="text-center">
+                                                            <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                     [routerLink]="['/auction', auction.id, 'view']">
                                                                 <i class="fa fa-eye"></i>
                                                             </button>
-                                                            <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                            <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
                                                                     [routerLink]="['/auction', auction.id, 'edit']">
                                                                 <i class="fa fa-edit"></i>
+                                                            </button>
+                                                            <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                                (click)="bid(auction)" [disabled]="auction.winner?.id == userId">
+                                                                <i class="fa fa-gavel"></i>
                                                             </button>
                                                         </td>
                                                     </tr>

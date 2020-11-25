@@ -18,7 +18,7 @@ import { ResourceService } from 'app/entities/resource/resource.service';
 export class CategoryUpdateComponent implements OnInit {
   isSaving = false;
   images: IResource[] = [];
-  imageSrc = '';
+  imageSrc = null;
   resourceToSave: IResource | undefined;
 
   editForm = this.fb.group({

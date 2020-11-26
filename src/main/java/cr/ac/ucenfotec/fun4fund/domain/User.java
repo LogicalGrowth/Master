@@ -83,6 +83,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
+    @Column(name = "created_date")
+    private Instant createdDate = null;
+
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate = null;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -227,6 +233,28 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
+            ", createdDate='" + createdDate + '\'' +
+            ", lastModifiedDate='" + lastModifiedDate + '\'' +
             "}";
+    }
+
+    @Override
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    @Override
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    @Override
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    @Override
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 }

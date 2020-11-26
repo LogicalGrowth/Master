@@ -11,14 +11,13 @@ import 'bootstrap';
 import 'twitter-bootstrap-wizard';
 import 'bootstrap-select';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
-import { UserService } from 'app/core/user/user.service';
 import { IApplicationUser, ApplicationUser } from 'app/shared/model/application-user.model';
 import { IdType } from 'app/shared/model/enumerations/id-type.model';
 import { Observable } from 'rxjs';
 import { ICategory } from 'app/shared/model/category.model';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import * as moment from 'moment';
-import { User } from 'app/core/user/user.model';
+import { CategoryService } from 'app/entities/category/category.service';
 
 declare let swal: any;
 
@@ -44,7 +43,7 @@ export class RegisterWizardComponent implements AfterViewInit {
   focus2: any;
   focus3: any;
   files: any;
-
+  categories?: ICategory[];
   doNotMatch = false;
   error = false;
   errorEmailExists = false;
@@ -57,10 +56,12 @@ export class RegisterWizardComponent implements AfterViewInit {
     email: [],
     password: [],
     identify: [null, [Validators.required]],
-    phone: [null, [Validators.required]],
+    phone: [null],
     admin: [],
-    birthdate: [null, [Validators.required]],
+    birthdate: [null],
+    image: [],
   });
+  imageSrc: any;
 
   constructor(
     private languageService: JhiLanguageService,
@@ -68,7 +69,7 @@ export class RegisterWizardComponent implements AfterViewInit {
     private registerService: RegisterService,
     private fb: FormBuilder,
     private loginApplicationUser: ApplicationUserService,
-    private userApplication: UserService
+    private categoryService: CategoryService
   ) {}
 
   readURL(input: any): void {
@@ -82,8 +83,14 @@ export class RegisterWizardComponent implements AfterViewInit {
     }
   }
 
+  loadAll(): void {
+    this.categoryService.query().subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
+  }
+
   // eslint-disable-next-line @typescript-eslint/tslint/config
   ngOnInit(): void {
+    this.loadAll();
+
     if (this.login) {
       this.login.nativeElement.focus();
     }
@@ -138,6 +145,14 @@ export class RegisterWizardComponent implements AfterViewInit {
           checkphonenumber: true,
         },
       },
+      messages: {
+        email: {
+          required: 'this field is required',
+          minlength: 'this field must contain at least {0} characters',
+          digits: 'this field can only contain numbers',
+        },
+      },
+
       highlight(element: any): void {
         $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
       },
@@ -380,6 +395,7 @@ export class RegisterWizardComponent implements AfterViewInit {
         lastName: this.registerForm.get(['lastname'])!.value,
         activated: false,
         login: this.registerForm.get(['email'])!.value,
+        imageurl: this.imageSrc,
       },
     };
   }
@@ -488,5 +504,9 @@ export class RegisterWizardComponent implements AfterViewInit {
       };
       reader.readAsDataURL(input[0].files[0]);
     }
+  }
+
+  saveImage(data: any): void {
+    this.imageSrc = data.secure_url;
   }
 }

@@ -94,6 +94,9 @@ public class ApplicationUserResource {
         if (applicationUser.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        User user = applicationUser.getInternalUser();
+        UserDTO userDTO = new UserDTO(user);
+        userService.updateUser(userDTO);
         ApplicationUser result = applicationUserService.save(applicationUser);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, applicationUser.getId().toString()))

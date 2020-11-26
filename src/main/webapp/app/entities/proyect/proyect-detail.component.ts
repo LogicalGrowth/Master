@@ -22,6 +22,7 @@ import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 import { DonationModalService } from './donation/donationModal.service';
 import { BidModalService } from '../auction/bid/bidModal.service';
+import { PartnerRequestModalService } from './partner-request/partnerRequestModal.service';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -66,7 +67,8 @@ export class ProyectDetailComponent implements OnInit {
     private resourceService: ResourceService,
     private applicationUserService: ApplicationUserService,
     private donationModalService: DonationModalService,
-    private bidModalService: BidModalService
+    private bidModalService: BidModalService,
+    private partnerRequestModalService: PartnerRequestModalService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -186,5 +188,9 @@ export class ProyectDetailComponent implements OnInit {
 
   bid(auction: IAuction): void {
     this.bidModalService.open(auction);
+  }
+
+  partnerRequest(): void {
+    this.partnerRequestModalService.open(this.proyect!);
   }
 }

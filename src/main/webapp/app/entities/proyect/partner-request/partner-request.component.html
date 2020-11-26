@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h4 class="modal-title d-inline">Hacerse socio a {{proyect?.name}}</h4>
+
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')">
+        <span aria-hidden="true">x</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row justify-content-center">
+
+        <div class="col-md-10">
+            <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+                <div class="form-group has-label">
+                    <label class="form-control-label" for="amount">Cantidad a ofertar</label>
+                    <span class="star">*</span>
+                    <input type="number" class="form-control" name="amount" id="amount" formControlName="amount">
+                </div>
+
+            </form>
+        </div>
+
+
+                
+    </div>
+</div>

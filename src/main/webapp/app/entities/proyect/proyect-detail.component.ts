@@ -21,6 +21,7 @@ import { ApplicationUserService } from '../application-user/application-user.ser
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 import { DonationModalService } from './donation/donationModal.service';
+import { BidModalService } from '../auction/bid/bidModal.service';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -56,6 +57,7 @@ export class ProyectDetailComponent implements OnInit {
   }`;
   applicationUser?: IApplicationUser[];
   productType?: ProductType;
+  userId: any;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -67,7 +69,8 @@ export class ProyectDetailComponent implements OnInit {
     private accountService: AccountService,
     private resourceService: ResourceService,
     private applicationUserService: ApplicationUserService,
-    private donationModalService: DonationModalService
+    private donationModalService: DonationModalService,
+    private bidModalService: BidModalService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -171,17 +174,21 @@ export class ProyectDetailComponent implements OnInit {
           .query({ 'internalUserId.equals': this.account.id })
           .subscribe((res: HttpResponse<IApplicationUser[]>) => {
             this.applicationUser = res.body || [];
+            this.userId = this.applicationUser[0].id;
             this.isProjectOwner = this.applicationUser[0].id === this.proyect?.owner?.id ? true : false;
             this.loadCheckPoints(this.proyect?.id as number);
+            this.loadExclusiveContent(this.proyect?.id as number);
+            this.loadAuction(this.proyect?.id as number);
           });
       }
     });
-
-    this.loadExclusiveContent(this.proyect?.id as number);
-    this.loadAuction(this.proyect?.id as number);
   }
 
   donate(): void {
     this.donationModalService.open(this.proyect!);
+  }
+
+  bid(auction: IAuction): void {
+    this.bidModalService.open(auction);
   }
 }

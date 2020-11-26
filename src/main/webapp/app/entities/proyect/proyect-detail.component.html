@@ -256,41 +256,46 @@
                                                 <div class="table-responsive" id="auctions"
                                                      *ngIf="auctions && auctions.length > 0">
                                                     <table class="table">
-                                                        <thead class="text-primary">
-                                                        <th><span>Nombre</span></th>
-                                                        <th><span>Descripción</span></th>
-                                                        <th><span>Fecha de expiración</span></th>
-                                                        <th><span>Monto Inicial</span></th>
-                                                        <th><span>Puja ganadora</span></th>
-                                                        <th *ngIf="isProjectOwner"><span>Estado</span></th>
-                                                        <th class="text-center" *ngIf="isProjectOwner">
-                                                            <span>Acciones</span>
-                                                        </th>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr *ngFor="let auction of auctions">
-                                                            <td>{{ auction.prize?.name }}</td>
-                                                            <td>{{ auction.prize?.description }}</td>
-                                                            <td>{{ auction.expirationDate | date }}</td>
-                                                            <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
-                                                            <td>{{ auction.winningBid | currency:'USD':'symbol'}}</td>
-                                                            <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
-                                                            <td class="text-center" *ngIf="isProjectOwner">
-                                                                <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
-                                                                        [routerLink]="['/auction', auction.id, 'view']">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </button>
-                                                                <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                                        [routerLink]="['/auction', auction.id, 'edit']">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
+                                                    <thead class="text-primary">
+                                                    <th><span>Nombre</span></th>
+                                                    <th><span>Descripción</span></th>
+                                                    <th><span>Fecha de expiración</span></th>
+                                                    <th><span>Monto Inicial</span></th>
+                                                    <th><span>Puja ganadora</span></th>
+                                                    <th *ngIf="isProjectOwner"><span>Estado</span></th>
+                                                    <th class="text-center">
+                                                        <span>Acciones</span></th>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr *ngFor="let auction of auctions">
+                                                        <td>{{ auction.prize?.name }}</td>
+                                                        <td>{{ auction.prize?.description }}</td>
+                                                        <td>{{ auction.expirationDate | date }}</td>
+                                                        <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
+                                                        <td>{{ auction.winningBid | currency:'USD':'symbol'}}
+                                                            <span *ngIf="auction.winner?.id == userId" class="badge badge-pill badge-success">Tú</span>
+                                                        </td>
+                                                        <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
+                                                        <td class="text-center">
+                                                            <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                                    [routerLink]="['/auction', auction.id, 'view']">
+                                                                <i class="fa fa-eye"></i>
+                                                            </button>
+                                                            <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                    [disabled]="auction.winningBid" [routerLink]="['/auction', auction.id, 'edit']">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                            <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                                (click)="bid(auction)" [disabled]="auction.winner?.id == userId">
+                                                                <i class="fa fa-gavel"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                                 </div>
                                             </div>
-
+											
                                             <div class="col-md-10" *ngIf="auctions?.length === 0">
                                                 <div class="card">
                                                     <div class="card-body justify-content-center">
@@ -298,8 +303,7 @@
                                                         <p class="soft-name">Mantente conectado.</p>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+											</div>
                                     </div>
                                 </div>
                             </div>

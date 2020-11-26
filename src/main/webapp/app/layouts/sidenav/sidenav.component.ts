@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   shouldRun = true;
-
+  fixedTopGap = '56';
   public menuItems?: RouteInfo[];
 
   mobileQuery: MediaQueryList;

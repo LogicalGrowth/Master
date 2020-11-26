@@ -154,7 +154,7 @@ export class ProyectDetailComponent implements OnInit {
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
       this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : 'Hace ' + this.daysCreated + ' días ';
       this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
-      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : 'Hace ' + this.daysCreated + ' días ';
+      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : 'Hace ' + this.updatedDays + ' días ';
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });

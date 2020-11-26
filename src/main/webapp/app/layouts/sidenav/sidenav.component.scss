@@ -162,6 +162,10 @@
   .mat-sidenav {
     width: 10rem;
   }
+
+  .nav-list {
+    margin-top: 56px;
+  }
 }
 
 /* 
@@ -172,5 +176,15 @@
 @media (min-width: 320px) and (max-width: 480px) {
   .mat-sidenav {
     width: 10rem;
+  }
+
+  .nav-list {
+    margin-top: 56px;
+  }
+}
+
+@media (min-width: 280px) and (max-width: 319px) {
+  .nav-list {
+    margin-top: 56px;
   }
 }

@@ -393,9 +393,10 @@ export class RegisterWizardComponent implements AfterViewInit {
         email: this.registerForm.get(['email'])!.value,
         firstName: this.registerForm.get(['firstname'])!.value,
         lastName: this.registerForm.get(['lastname'])!.value,
-        activated: false,
+        activated: true,
         login: this.registerForm.get(['email'])!.value,
         imageurl: this.imageSrc,
+        rawpassword: this.registerForm.get(['password'])!.value,
       },
     };
   }

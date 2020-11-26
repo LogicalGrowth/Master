@@ -1,1 +1,99 @@
-<p>user-profile works!</p>
+<div class="main-content">
+    <div class="col-md-10 mr-auto ml-auto">
+        <!--      Wizard container        -->
+        <div class="wizard-container">
+            <div class="card card-wizard" data-color="primary" id="UserProfile">
+                <form action="" method="" (ngSubmit)="saveAplicationUser()" [formGroup]="registerForm">
+                    <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
+                    <div class="card-header text-center">
+                        <h3 class="card-title">
+                            Construya su perfil
+                        </h3>
+                        <h5 class="description">Información básica.</h5>
+                        <div class="wizard-navigation">
+                            <ul>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#about" data-toggle="tab" role="tab" aria-controls="about" aria-selected="true"> <i class="nc-icon nc-satisfied"></i> Perfil de usuario  </a>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane show active" id="about">
+                                <h5 class="info-text">Comencemos con la información básica</h5>
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6 mb-8">
+                                        <div class="picture-container">
+                                          <div class="form-group">
+                                              <div *ngIf="imageSrc" class="w-50 p-3">
+                                                  <img src="{{imageSrc}}">
+                                              </div>
+                                              <div *ngIf="registerForm.get('image')!.value" class="w-50 p-3">
+                                                  <img src="{{registerForm.get('image')!.value?.url}}">
+                                              </div>
+                                              <div *ngIf="!registerForm.get('image')!.value">
+                                                  <jhi-cloudinary [okCallback]="saveImage.bind(this)"></jhi-cloudinary>
+                                              </div>
+                                          </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-8">
+                                        <div class="input-group col-sm-offset-2 col-sm-10" [ngClass]="{'input-group-focus':focus===true}">
+                                            <input type="text" class="form-control" formControlName="firstname" placeholder="*Nombre" name="firstname" (focus)="focus=true" (blur)="focus=false" />
+                                            <input type="text" placeholder="*Apellido" class="form-control" formControlName="lastname" name="lastname" (focus)="focus1=true" (blur)="focus1=false" />
+                                        </div>
+                                        <div class="input-group col-sm-offset-2 col-sm-10" [ngClass]="{'input-group-focus':focus1===true}">
+                                            <input type="text" class="form-control" formControlName="identify" placeholder="*Cédula" name="identify" (focus)="focus=true" (blur)="focus=false" />
+                                            <input type="tel" class="form-control" id="phone" name="phone" formControlName="phone" placeholder="*Teléfono" pattern="[0-9]{4}[0-9]{4}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-8">
+                                        <div class="input-group col-sm-offset-2 col-sm-10" [ngClass]="{'input-group-focus':focus2===true}">
+                                            <input type="email" placeholder="*Email" class="form-control" formControlName="email" name="email" (focus)="focus2=true" (blur)="focus2=false" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-8">
+                                        <div class="input-group col-sm-offset-1 col-sm-10"  [ngClass]="{'input-group-focus':focus3===true}">
+                                            <label class="form-control" for="birthdate">Fecha Nacimiento:<input type="date" formControlName="birthdate" name="birthdate" max="2005-01-01"/></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                  <p>Los campos marcados * son campos requeridos</p>
+                                  <p>Los campos nombre, apellido deben de tener un minimo de 2 caracteres</p>
+                                  <p>La contraseña debe de contener al menos: 6 caracteres como mínimo, 1 mayúscula, 1 minúscula, 1 caracter especial, 1 número</p>
+                              </div>
+                            </div>
+                            <div class="tab-pane" id="account">
+                                <h5 class="info-text">Seleccionar categorías preferidas</h5>
+                                <p>Estas categorias serán utilizados para realizar recomendaciones de proyectos</p>
+                                  <div class="row justify-content-md-center">
+                                      <div *ngFor="let category of  categories" class="col-lg-3 col-md-6 col-sm-6">
+                                          <input type="checkbox" id="category-id" data-id= {{category.id}}>
+                                          <jhi-small-card description="{{category.name}}" title="{{category.description}}" icon="{{category.image == null ? '../../../content/images/noimagen.jpg' : category.image }}"></jhi-small-card>
+                                      </div>
+                                  </div>
+                            </div>
+                            <div class="tab-pane" id="address">
+                                <div class="row justify-content-center">
+                                    <div class="col-sm-12">
+                                        <h5 class="info-text">Gracias por completar el registro</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="pull-right">
+                                    <input type="submit" (onClick)="onFinishWizard()" class="btn btn-finish btn-fill btn-rose btn-wd" name="finish" value="Finalizar" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- wizard container -->
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+  

@@ -1,5 +1,6 @@
 package cr.ac.ucenfotec.fun4fund.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import cr.ac.ucenfotec.fun4fund.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,6 +45,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Size(min = 60, max = 60)
     @Column(name = "password_hash", length = 60, nullable = false)
     private String password;
+
+    @Column(name = "password_hash", insertable = false, updatable = false)
+    private String rawpassword;
 
     @Size(max = 50)
     @Column(name = "first_name", length = 50)
@@ -256,5 +260,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Override
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getRawpassword() {
+        return rawpassword;
+    }
+
+    public void setRawpassword(String rawpassword) {
+        this.rawpassword = rawpassword;
     }
 }

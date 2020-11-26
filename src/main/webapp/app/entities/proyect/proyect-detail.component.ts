@@ -26,7 +26,11 @@ import { BidModalService } from '../auction/bid/bidModal.service';
 @Component({
   selector: 'jhi-proyect-detail',
   templateUrl: './proyect-detail.component.html',
-  styleUrls: ['../../../content/scss/paper-dashboard.scss', '../../../content/scss/paper-dashboard/rating/rating.scss'],
+  styleUrls: [
+    '../../../content/scss/paper-dashboard.scss',
+    '../../../content/scss/paper-dashboard/rating/rating.scss',
+    'proyecto-detail.scss',
+  ],
 })
 export class ProyectDetailComponent implements OnInit {
   proyect: IProyect | null = null;
@@ -104,8 +108,8 @@ export class ProyectDetailComponent implements OnInit {
         i++;
         const obj = {
           inverted: true,
-          type: 'success',
-          icon: 'nc-icon nc-sun-fog-29',
+          type: 'info',
+          icon: 'nc-icon nc-check-2',
           subTitle: 'Checkpoint ' + i + ' de ' + checkpoint.completitionPercentage + '%',
           body: checkpoint.message,
           isOwner: this.isProjectOwner,
@@ -145,12 +149,12 @@ export class ProyectDetailComponent implements OnInit {
         lng: proyect.coordX,
       };
       this.hasMarker = true;
-      this.percentile = (100 * proyect.collected) / proyect.goalAmount;
+      this.percentile = Math.floor((100 * proyect.collected) / proyect.goalAmount);
       this.rating = (100 * proyect.rating) / 5;
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
-      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : this.daysCreated + ' días transcurridos ';
+      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : 'Hace ' + this.daysCreated + ' días ';
       this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
-      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : this.daysCreated + ' días transcurridos ';
+      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : 'Hace ' + this.updatedDays + ' días ';
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });

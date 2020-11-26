@@ -1,0 +1,48 @@
+.category-type {
+  background: #6bd098;
+  color: #fff;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 2px 12px;
+  border-radius: 100px;
+  position: relative;
+  top: -5px;
+}
+
+.project-type {
+  background: #51bcda !important;
+}
+
+.soft-name {
+  font-size: 15px;
+  color: gray;
+}
+
+.hard-name {
+  font-size: 20px;
+}
+
+.detail-title {
+  display: inline;
+  margin: 0 12px 0 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #2c2c2c;
+  max-width: calc(100% - 250px);
+}
+
+.project-subinfo {
+  margin-left: 0.1rem;
+}
+
+.pipe {
+  margin: -8px 0.2rem 0 0.2rem;
+}
+
+.services-content {
+  margin-right: 1.2rem;
+  cursor: pointer;
+}

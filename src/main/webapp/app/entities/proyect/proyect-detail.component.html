@@ -126,15 +126,24 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    <jhi-small-card description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
-                                    title="Sé el primero en ayudar"
-                                    icon="nc-bulb-63">
-                    </jhi-small-card>
+                    <div *ngIf="donors && !donors.length; ">
+                        <jhi-small-card description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
+                                        title="Sé el primero en ayudar"
+                                        icon="nc-bulb-63">
+                        </jhi-small-card>
+                    </div>
+
+                    <div *ngIf="donors && donors.length > 0">
+                        <jhi-small-card description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
+                                        title="Tu donación importa"
+                                        icon="nc-bulb-63">
+                        </jhi-small-card>
+                    </div>
+
                     <button class="btn btn-warning col-md-12" (click)=donate()>
                         <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
                     </button>
                 </div>
-
                 <div class="col-md-9">
                     <div class="card">
                         <div class="card-body">
@@ -295,7 +304,7 @@
                                                 </table>
                                                 </div>
                                             </div>
-											
+
                                             <div class="col-md-10" *ngIf="auctions?.length === 0">
                                                 <div class="card">
                                                     <div class="card-body justify-content-center">
@@ -311,9 +320,10 @@
                     </div>
                 </div>
             </div>
+            </div>
 
             <div class="card">
-                <div class="card-header ">
+                <div class="card-header">
                     <h4 class="card-title text-center">Conoce información adicional</h4>
                 </div>
                 <div class="card-body ">

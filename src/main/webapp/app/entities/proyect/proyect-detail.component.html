@@ -15,15 +15,15 @@
                         </div>
                         <div class="col-md-2">
                             <div class="stars-outer">
-                                <div class="stars-inner" style="width:97%"></div>
+                                <div class="stars-inner" style="width:{{reviews.rating*100/5}}%"></div>
                             </div>
                             <button type="button" *ngIf="isProjectOwner" [routerLink]="['/proyect', proyect.id, 'edit']"
                                     class="btn btn-primary">
-                                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                &nbsp;<span>Editar</span>
                             </button>
                         </div>
                     </div>
-
                     <div class="row project-subinfo">
                         <p class="category-type">{{proyect.category?.name}}</p>
                         <p class="pipe">|</p>
@@ -33,7 +33,6 @@
                 </div>
             </div>
         </div>
-
         <div class="">
             <div class="row">
                 <div class="col-md-8" id="gallery">
@@ -50,7 +49,6 @@
                                 <span  class="hard-name font-weight-bold text-info">{{ proyect.collected| currency:proyect.currencyType:'symbol':'1.2-2' }}</span>
                                 <span class="soft-name">recaudado de {{ proyect.goalAmount| currency:proyect.currencyType:'symbol':'1.2-2'}}</span>
                             </div>
-
                             <div class="progress">
                                 <div class="progress-bar progress-bar-striped bg-info" role="progressbar"
                                      style="width: {{percentile}}%" aria-valuemin="0" aria-valuemax="100">
@@ -62,7 +60,6 @@
                             <button class="btn btn-warning col-md-12" (click)=donate()>
                                 <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
                             </button>
-
                             <div *ngFor="let donor of donors;">
                                 <div class="row">
                                     <div class="col-md-1">
@@ -73,7 +70,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div *ngIf="donors && !donors.length">
                                 <div class="row">
                                     <div class="col-md-1">
@@ -87,20 +83,19 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card card card-stats">
                         <div class="card-body">
                             <div class="row justify-content-center">
                                 <h5 class="card-title text-center">Servicios adicionales</h5>
                             </div>
                             <div class="row justify-content-center">
-                                <div *ngIf="exclusiveContents?.length > 0" class="services-content">
+                                <div class="services-content">
                                     <div class="icon-big text-center icon-warning">
-                                        <i class="nc-icon nc-diamod text-primary"></i>
+                                        <i class="nc-icon nc-diamond text-primary"></i>
                                     </div>
                                     <p class="soft-name">Exclusividad ({{exclusiveContents?.length}})</p>
                                 </div>
-                                <div *ngIf="auctions?.length > 0" class="services-content">
+                                <div class="services-content">
                                     <div class="icon-big text-center icon-warning">
                                         <i class="nc-icon nc-trophy text-primary"></i>
                                     </div>
@@ -109,19 +104,17 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-row col-md-12 justify-content-center">
                                 <!--<div class="p-2">
-                                    <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
-                                </div>
+                                   <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
+                                   </div>
 
-                                <div class="p-2">
-                                    <jhi-icon buttonCssClass="btn-facebook" iconCsClass="fa fa-facebook-f">
-                                    </jhi-icon>
-                                </div>-->
-
+                                   <div class="p-2">
+                                   <jhi-icon buttonCssClass="btn-facebook" iconCsClass="fa fa-facebook-f">
+                                   </jhi-icon>
+                                   </div>-->
                                 <button class="btn btn-info col-md-12">
                                     <span class="btn-label"><i class="nc-icon nc-circle-10"></i></span> Hacerse socio
                                 </button>
@@ -131,164 +124,135 @@
                 </div>
             </div>
 
-            <div class="row mt-5">
-                <div class="col-lg-6">
-                    <div class="card ">
-                        <div class="card-header ">
-                            <h4 class='card-title'>Localización del proyecto</h4>
-                        </div>
-                        <div class="card-body ">
-                            <ngui-map zoom="13" [center]="mapCenter">
-                                <marker [position]="position" *ngIf="hasMarker"></marker>
-                            </ngui-map>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
-                <div class="col-md-12 ml-auto mr-auto">
-                    <div class="card-body ">
-                        <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#link8" role="tablist">
-                                    <i class="now-ui-icons ui-2_settings-90"></i> Checkpoints
-                                </a>
-                            </li>
-                            <li class="nav-item" *ngIf="reviews && reviews.length !== 0">
-                                <a class="nav-link" data-toggle="tab" href="#link9" role="tablist">
-                                    <i class="now-ui-icons shopping_shop"></i>Calificaciones
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#link10" role="tablist">
-                                    <i class="now-ui-icons shopping_shop"></i>Contenido exclusivo
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#link11" role="tablist">
-                                    <i class="now-ui-icons shopping_shop"></i>Subastas
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="tab-content tab-space tab-subcategories">
-                            <div class="tab-pane active" id="link8">
-                                <div class="col-md-12">
-                                    <div class="pull-right" *ngIf="isProjectOwner">
-                                        <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/checkpoint', proyect!.id, 'new']">
-                                          <i class="nc-icon nc-simple-add"></i>
-                                        </button>
-                                    </div>
-                                    <jhi-timeline title="Checkpoints" [cards]="cards" timelineClass="timeline-simple">
-                                    </jhi-timeline>
-                                </div>
+                <div class="col-md-3">
+                    <jhi-small-card description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
+                                    title="Sé el primero en ayudar"
+                                    icon="nc-bulb-63">
+                    </jhi-small-card>
+                    <button class="btn btn-warning col-md-12" (click)=donate()>
+                        <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
+                    </button>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <ul class="nav nav-pills nav-pills-primary nav-pills-icons" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#link9" role="tablist">
+                                            <i class="now-ui-icons shopping_shop"></i>Calificaciones
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#link10" role="tablist">
+                                            <i class="now-ui-icons shopping_shop"></i>Contenido exclusivo
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#link11" role="tablist">
+                                            <i class="now-ui-icons shopping_shop"></i>Subastas
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="tab-pane" id="link9">
-                                <div class="container-fluid">
-                                    <div class="header text-center">
-                                        <h3 class="title">Comentarios y calificaciones</h3>
-                                    </div>
-                                    <div class="row d-flex justify-content-center">
-                                        <div class="col-lg-4 col-md-5 col-sm-8" *ngFor="let review of reviews;">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h4 class="card-title">
-                                                        <div class="stars-outer little-stars">
-                                                            <div class="stars-inner" style="width:{{review.rating*100/5}}%">
-                                                            </div>
+                            <div class="row justify-content-center">
+                                <div class="tab-content tab-space tab-subcategories">
+                                    <div class="tab-pane active" id="link9">
+                                        <div class="container-fluid">
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-md-10" *ngFor="let review of reviews;">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h4 class="card-title">
+                                                                <div class="stars-outer little-stars">
+                                                                    <div class="stars-inner" style="width:{{review.rating*100/5}}%">
+                                                                    </div>
+                                                                </div>
+                                                            </h4>
+                                                            <p class="card-text">{{ review.message }}</p>
+                                                            <p class="card-text">
+                                                                <small class="text-muted">{{ review.user }}</small>
+                                                            </p>
                                                         </div>
-                                                    </h4>
-                                                    <p class="card-text">{{ review.message }}</p>
-                                                    <p class="card-text">
-                                                        <small class="text-muted">{{ review.user }}</small>
-                                                    </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-5 col-sm-8" *ngIf="reviews && !reviews.length">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <p class="card-text">No hay comentarios ni calificaciones.</p>
+                                                <div class="col-md-10" *ngIf="reviews && !reviews.length">
+                                                    <div class="card">
+                                                        <div class="card-body justify-content-center">
+                                                            <div class="stars-outer">
+                                                                <div class="stars-inner" style="width:{{reviews.rating*100/5}}%"></div>
+                                                            </div>
+                                                            <p class="card-text">Sé el primero en compartir palabras de aliento.</p>
+                                                            <button class="btn btn-info col-md-12">Agregar</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="link10">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-8">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h4 class="card-title d-inline"> Contenido exclusivo </h4>
-                                                <div class="pull-right" *ngIf="isProjectOwner">
+                                    <div class="tab-pane" id="link10">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-12">
+                                                <div class="text-center" *ngIf="isProjectOwner">
                                                     <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/exclusive-content', proyect!.id, 'new']">
-                                                      <i class="nc-icon nc-simple-add"></i>
+                                                        <i class="nc-icon nc-simple-add"></i>
                                                     </button>
                                                 </div>
-                                            </div>
 
-                                            <div class="alert alert-warning" id="no-result"
-                                                *ngIf="exclusiveContents?.length === 0">
-                                                <span>No hay elementos</span>
-                                            </div>
-
-                                            <div class="card-body">
                                                 <div class="table-responsive" id="entities"
-                                                    *ngIf="exclusiveContents && exclusiveContents.length > 0">
+                                                     *ngIf="exclusiveContents && exclusiveContents.length > 0">
                                                     <table class="table">
                                                         <thead class="text-primary">
-                                                            <th><span>Producto</span></th>
-                                                            <th><span>Precio</span></th>
-                                                            <th><span>Disponibles</span></th>
-                                                            <th *ngIf="isProjectOwner"><span>Estado</span></th>
-                                                            <th class="text-center">
-                                                                <span>Acciones</span></th>
+                                                        <th><span>Producto</span></th>
+                                                        <th><span>Precio</span></th>
+                                                        <th><span>Disponibles</span></th>
+                                                        <th *ngIf="isProjectOwner"><span>Estado</span></th>
+                                                        <th class="text-center">
+                                                            <span>Acciones</span>
+                                                        </th>
                                                         </thead>
                                                         <tbody>
-                                                            <tr *ngFor="let exclusiveContent of exclusiveContents">
-                                                                <td>{{ exclusiveContent.prize?.name }}</td>
-                                                                <td>{{ exclusiveContent.price | currency:'USD':'symbol'}}</td>
-                                                                <td>{{ exclusiveContent.stock }}</td>
-                                                                <td *ngIf="isProjectOwner">{{ exclusiveContent.state | state}}</td>
-                                                                <td class="text-center">
-                                                                    <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                        <tr *ngFor="let exclusiveContent of exclusiveContents">
+                                                            <td>{{ exclusiveContent.prize?.name }}</td>
+                                                            <td>{{ exclusiveContent.price | currency:'USD':'symbol'}}</td>
+                                                            <td>{{ exclusiveContent.stock }}</td>
+                                                            <td *ngIf="isProjectOwner">{{ exclusiveContent.state | state}}</td>
+                                                            <td class="text-center">
+                                                                <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                         [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
                                                                     <i class="fa fa-eye"></i>
-                                                                    </button>
-                                                                    <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
-                                                                        <i class="fa fa-edit"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
+                                                                </button>
+                                                                <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
+                                                                    <i class="fa fa-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-10" *ngIf="exclusiveContents?.length === 0">
+                                                <div class="card">
+                                                    <div class="card-body justify-content-center">
+                                                        <p class="card-text">No hay contenido exclusivo disponible.</p>
+                                                        <p class="soft-name">Mantente conectado.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="link11">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-8">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h4 class="card-title d-inline">Subastas</h4>
-                                                <div class="pull-right" *ngIf="isProjectOwner">
+                                    <div class="tab-pane" id="link11">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-12">
+                                                <div class="text-center" *ngIf="isProjectOwner">
                                                     <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/auction', proyect!.id, 'new']">
                                                         <i class="nc-icon nc-simple-add"></i>
                                                     </button>
                                                 </div>
-                                            </div>
-
-                                            <div class="alert alert-warning" id="no-result-auction"
-                                                 *ngIf="auctions?.length === 0">
-                                                <span>No hay elementos</span>
-                                            </div>
-
-                                            <div class="card-body">
                                                 <div class="table-responsive" id="auctions"
                                                      *ngIf="auctions && auctions.length > 0">
                                                     <table class="table">
@@ -300,7 +264,8 @@
                                                         <th><span>Puja ganadora</span></th>
                                                         <th *ngIf="isProjectOwner"><span>Estado</span></th>
                                                         <th class="text-center" *ngIf="isProjectOwner">
-                                                            <span>Acciones</span></th>
+                                                            <span>Acciones</span>
+                                                        </th>
                                                         </thead>
                                                         <tbody>
                                                         <tr *ngFor="let auction of auctions">
@@ -325,6 +290,15 @@
                                                     </table>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-10" *ngIf="auctions?.length === 0">
+                                                <div class="card">
+                                                    <div class="card-body justify-content-center">
+                                                        <p class="card-text">No hay subastas disponibles.</p>
+                                                        <p class="soft-name">Mantente conectado.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -334,15 +308,27 @@
                 </div>
             </div>
 
-            <div class="row justify-content-md-center">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <jhi-small-card description="Su apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
-                                    title="Sé el primero en ayudar"
-                                    icon="nc-bulb-63">
-                    </jhi-small-card>
-                    <button class="btn btn-warning col-md-12" (click)=donate()>
-                        <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
-                    </button>
+            <div class="card">
+                <div class="card-header ">
+                    <h4 class="card-title text-center">Conoce información adicional</h4>
+                </div>
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><b>{{proyect.name}}</b> está localizado en el siguiente punto:</p>
+                            <ngui-map zoom="13" [center]="mapCenter">
+                                <marker [position]="position" *ngIf="hasMarker"></marker>
+                            </ngui-map>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="text-center" *ngIf="isProjectOwner">
+                                <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/checkpoint', proyect!.id, 'new']">
+                                    <i class="nc-icon nc-simple-add"></i>
+                                </button>
+                            </div>
+                            <jhi-timeline [cards]="cards" timelineClass="timeline-simple" style="margin-top: -40px;"></jhi-timeline>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

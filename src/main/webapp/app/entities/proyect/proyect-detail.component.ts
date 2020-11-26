@@ -105,8 +105,8 @@ export class ProyectDetailComponent implements OnInit {
         i++;
         const obj = {
           inverted: true,
-          type: 'success',
-          icon: 'nc-icon nc-sun-fog-29',
+          type: 'info',
+          icon: 'nc-icon nc-check-2',
           subTitle: 'Checkpoint ' + i + ' de ' + checkpoint.completitionPercentage + '%',
           body: checkpoint.message,
           isOwner: this.isProjectOwner,
@@ -146,12 +146,12 @@ export class ProyectDetailComponent implements OnInit {
         lng: proyect.coordX,
       };
       this.hasMarker = true;
-      this.percentile = 75;
+      this.percentile = Math.floor((100 * proyect.collected) / proyect.goalAmount);
       this.rating = (100 * proyect.rating) / 5;
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
-      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : this.daysCreated + ' días transcurridos ';
+      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : 'Hace ' + this.daysCreated + ' días ';
       this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
-      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : this.daysCreated + ' días transcurridos ';
+      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : 'Hace ' + this.daysCreated + ' días ';
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });

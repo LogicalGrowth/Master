@@ -40,7 +40,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
   imports: [
     CommonModule,
     // eslint-disable-next-line @typescript-eslint/camelcase
-    CloudinaryModule.forRoot(cloudinary, { cloud_name: 'barnesnoble', upload_preset: 'cq8ymdc5' }),
+    CloudinaryModule.forRoot(cloudinary, { cloud_name: 'dbk8m5dcv', upload_preset: 'cq8ymdc5' }),
     FileUploadModule,
     YouTubePlayerModule,
     NgbModule,

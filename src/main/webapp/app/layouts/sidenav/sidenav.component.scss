@@ -38,7 +38,9 @@
 }
 
 .mat-sidenav {
-  width: 15%;
+  width: 10rem;
+  justify-content: center;
+  justify-self: center;
 }
 
 .nav-list {
@@ -136,7 +138,7 @@
 
 @media (min-width: 768px) and (max-width: 1024px) {
   .mat-sidenav {
-    width: 22%;
+    width: 10rem;
   }
 }
 
@@ -147,7 +149,7 @@
 
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
   .mat-sidenav {
-    width: 22%;
+    width: 10rem;
   }
 }
 
@@ -158,7 +160,7 @@
 
 @media (min-width: 481px) and (max-width: 767px) {
   .mat-sidenav {
-    width: 26%;
+    width: 10rem;
   }
 }
 
@@ -168,5 +170,7 @@
 */
 
 @media (min-width: 320px) and (max-width: 480px) {
-  /* CSS */
+  .mat-sidenav {
+    width: 10rem;
+  }
 }

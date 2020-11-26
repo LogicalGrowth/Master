@@ -173,12 +173,11 @@ export class ProyectDetailComponent implements OnInit {
             this.userId = this.applicationUser[0].id;
             this.isProjectOwner = this.applicationUser[0].id === this.proyect?.owner?.id ? true : false;
             this.loadCheckPoints(this.proyect?.id as number);
+            this.loadExclusiveContent(this.proyect?.id as number);
+            this.loadAuction(this.proyect?.id as number);
           });
       }
     });
-
-    this.loadExclusiveContent(this.proyect?.id as number);
-    this.loadAuction(this.proyect?.id as number);
   }
 
   donate(): void {

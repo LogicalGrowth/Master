@@ -3,16 +3,22 @@
     <button (click)="snav.toggle(); hideNav();" class="hamburgerButton">
       <i class="fa fa-bars iconHamburger"></i>
     </button>
-    <h1 class="example-app-name">Responsive App</h1>
+    <img src="../../../content/images/logo.png" style="width: 5rem;" alt="Logo de la aplicación">
+    <div class="right-content">
+      <a class="" id="" *ngSwitchCase="false" style="margin-right: 2rem;">
+        <i class="fa fa-user-circle"></i>
+        <span>Perfil</span>
+      </a>
+      <a class="" id="logout" (click)="logout()" *ngSwitchCase="true">
+        <span>Cerrar sesión</span>
+        <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
+      </a>
+      <a class="" id="login" (click)="login()" *ngSwitchCase="false">
+        <span>Iniciar sesión</span>
+        <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
+      </a>
+    </div>
 
-    <a class="" id="logout" (click)="logout()" *ngSwitchCase="true">
-      <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
-      <span>Sign out</span>
-    </a>
-    <a class="" id="login" (click)="login()" *ngSwitchCase="false">
-      <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
-      <span>Sign in</span>
-    </a>
   </mat-toolbar>
 
   <mat-sidenav-container class="example-sidenav-container"
@@ -21,13 +27,13 @@
                  [fixedInViewport]="mobileQuery.matches">
 
       <mat-nav-list *ngIf="isAdmin()">
-        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of adminNav">
+        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of adminNav" class="hvr-sweep-to-right">
           <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
           {{nav.name}}</a>
       </mat-nav-list>
 
       <mat-nav-list *ngIf="!isAdmin()">
-        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of userNav">
+        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of userNav" class="hvr-sweep-to-right">
           <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
           {{nav.name}}</a>
       </mat-nav-list>

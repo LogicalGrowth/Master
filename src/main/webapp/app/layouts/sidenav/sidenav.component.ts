@@ -82,4 +82,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.loginService.logout();
     this.router.navigate(['']);
   }
+
+  getImageUrl(): string {
+    return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
+  }
 }

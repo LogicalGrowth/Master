@@ -63,9 +63,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(problemSupport)
         .and()
             .headers()
-            .contentSecurityPolicy("default-src 'none'; frame-src 'none' data:; script-src 'none' https://storage.googleapis.com; style-src 'none'; img-src 'none' data:; font-src 'none' data:")
+            .contentSecurityPolicy("default-src 'self'; "
+                + " script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://maps.googleapis.com https://www.google-analytics.com https://connect.facebook.net ")
         .and()
-            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.UNSAFE_URL)
+            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
         .and()
             .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
         .and()

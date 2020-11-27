@@ -30,19 +30,19 @@
                  [fixedInViewport]="mobileQuery.matches">
 
       <mat-nav-list *ngIf="isAdmin() && isAuthenticated() ">
-        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of adminNav" class="hvr-sweep-to-right">
+        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of adminNav" class="hvr-sweep-to-right" (click)="snav.toggle(); hideNav();">
           <img class="navIcon" src="{{nav.icon}}"/>
           {{nav.name}}</a>
       </mat-nav-list>
 
       <mat-nav-list *ngIf="!isAdmin() && isAuthenticated()">
-        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of userNav" class="hvr-sweep-to-right">
+        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of userNav" class="hvr-sweep-to-right" (click)="snav.toggle(); hideNav();">
           <img class="navIcon" src="{{nav.icon}}"/>
           {{nav.name}}</a>
       </mat-nav-list>
 
       <mat-nav-list *ngIf="!isAuthenticated()">
-        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of notLoggedNav" class="hvr-sweep-to-right">
+        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of notLoggedNav" class="hvr-sweep-to-right" (click)="snav.toggle(); hideNav();">
           <img class="navIcon" src="{{nav.icon}}"/>
           {{nav.name}}</a>
       </mat-nav-list>

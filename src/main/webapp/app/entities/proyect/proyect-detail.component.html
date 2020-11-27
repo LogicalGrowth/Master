@@ -275,7 +275,7 @@
                                                     <tbody>
                                                     <tr *ngFor="let auction of auctions">
                                                         <td>{{ auction.prize?.name }}</td>
-                                                        <td>{{ auction.prize?.description }}</td>
+                                                        <td style="max-width: 20rem;">{{ auction.prize?.description }}</td>
                                                         <td>{{ auction.expirationDate | date }}</td>
                                                         <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
                                                         <td>{{ auction.winningBid | currency:'USD':'symbol'}}

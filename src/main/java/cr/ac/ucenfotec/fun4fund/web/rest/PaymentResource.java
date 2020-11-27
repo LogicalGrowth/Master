@@ -81,7 +81,7 @@ public class PaymentResource {
 
         Proyect proyect = proyectService.findOne(payment.getProyect().getId()).get();
 
-        Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getApplicationUser().getId());
+        //Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getApplicationUser().getId());
 
         Double fee = payment.getAmount() * proyect.getFee() / 100;
         proyect.setCollected(proyect.getCollected() + payment.getAmount() - fee);
@@ -95,7 +95,7 @@ public class PaymentResource {
 
             String msgSubject = "Donación recibida";
             String msg = "Ha recibido una donación de $" + payment.getAmount() +" en el proyecto " + proyect.getName() + ".";
-            mailService.sendEmail(proyectOwner.get().getInternalUser().getEmail(),msgSubject,msg,false,true);
+            //mailService.sendEmail(proyectOwner.get().getInternalUser().getEmail(),msgSubject,msg,false,true);
 
         }else if(payment.getType() == ProductType.EXCLUSIVE_CONTENT){
             type = "la compra de contenido exlusivo en el proyecto " + proyect.getName() + "monto final: $" + payment.getAmount();

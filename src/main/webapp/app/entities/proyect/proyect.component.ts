@@ -84,7 +84,7 @@ export class ProyectComponent implements OnInit, OnDestroy {
 
   getPercentile(item: IProyect): any {
     if (item.collected && item.goalAmount) {
-      return (100 * item.collected) / item.goalAmount;
+      return item.collected > 0 ? Math.floor((100 * item.collected) / item.goalAmount) + '%' : '';
     }
   }
 

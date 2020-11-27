@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaymentMethodSelectDialogComponent } from 'app/entities/payment-method/payment-method-select-dialog';
-import { IPaymentMethod } from 'app/shared/model/payment-method.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import * as moment from 'moment';

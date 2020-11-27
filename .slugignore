@@ -4,3 +4,4 @@
 *.jdl
 /test
 /spec
+/src/test

@@ -1,4 +1,6 @@
-<div class="main-content">
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
+<div class="main-content mt-5">
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -12,10 +14,10 @@
                                 <label class="form-control-label" for="field_name">Nombre</label>
                                 <span class="star">*</span>
                                 <input type="text" class="form-control" name="name" id="field_name"
-                                       formControlName="name"/>
-                                <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-                                    <small class="form-text text-danger"
-                                           *ngIf="editForm.get('name')?.errors?.required">
+                                    formControlName="name" />
+                                <div
+                                    *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                                    <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required">
                                         Este campo es requerido.
                                     </small>
                                 </div>
@@ -25,10 +27,11 @@
                                 <label class="form-control-label" for="field_description">Descripción</label>
                                 <span class="star">*</span>
                                 <input type="text" class="form-control" name="description" id="field_description"
-                                       formControlName="description"/>
-                                <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+                                    formControlName="description" />
+                                <div
+                                    *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
                                     <small class="form-text text-danger"
-                                           *ngIf="editForm.get('description')?.errors?.required">
+                                        *ngIf="editForm.get('description')?.errors?.required">
                                         Este campo es requerido
                                     </small>
                                 </div>
@@ -41,16 +44,17 @@
                                     <option value="ENABLED">Activo</option>
                                     <option value="DISABLED">Inactivo</option>
                                 </select>
-                                <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
+                                <div
+                                    *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
                                     <small class="form-text text-danger"
-                                           *ngIf="editForm.get('status')?.errors?.required">
+                                        *ngIf="editForm.get('status')?.errors?.required">
                                         Este campo es requerido
                                     </small>
                                 </div>
                             </div>
 
                             <div class="form-group">
-								<label class="form-control-label">Imagen</label>
+                                <label class="form-control-label">Imagen</label>
                                 <span class="star">*</span>
                                 <div *ngIf="imageSrc" class="w-50 p-3">
                                     <img src="{{imageSrc}}">
@@ -61,12 +65,15 @@
                                 <div *ngIf="!editForm.get('image')!.value">
                                     <jhi-cloudinary [okCallback]="saveImage.bind(this)"></jhi-cloudinary>
                                 </div>
-							</div>
+                            </div>
                         </div>
 
                         <div class="card-footer text-right">
-                            <button type="button" id="cancel-save2" class="btn btn-default" (click)="previousState()">Atrás</button>
-                            <button type="submit" id="save-entity2" [disabled]="editForm.invalid || isSaving || !imageSrc" class="btn btn-primary">Guardar</button>
+                            <button type="button" id="cancel-save2" class="btn btn-default"
+                                (click)="previousState()">Atrás</button>
+                            <button type="submit" id="save-entity2"
+                                [disabled]="editForm.invalid || isSaving || !imageSrc"
+                                class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
                 </div>

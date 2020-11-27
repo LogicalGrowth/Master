@@ -1,18 +1,16 @@
-<div class="row">
-    <jhi-alert-error></jhi-alert-error>
-    <jhi-alert></jhi-alert>
-    <div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
-        <span>No hay categorías registradas</span>
-    </div>
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
+<div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
+    <span>No hay categorías registradas</span>
 </div>
 
-<div class="main-content">
+<div class="main-content mt-5">
     <div class="row justify-content-md-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title d-inline">Categorías</h4>
-                    <div class="pull-right" >
+                    <div class="pull-right">
                         <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/category/new']">
                             <i class="nc-icon nc-simple-add"></i>
                         </button>
@@ -28,24 +26,25 @@
                                 <th>Acciones</th>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let category of categories ;trackBy: trackId">
-                                <td>{{ category.name }}</td>
-                                <td>{{ category.description }}</td>
-                                <td>{{ category.status == "ENABLED" ? "Activo" : "Inactivo" }}</td>
-                                <td>
-                                    <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                <tr *ngFor="let category of categories ;trackBy: trackId">
+                                    <td>{{ category.name }}</td>
+                                    <td>{{ category.description }}</td>
+                                    <td>{{ category.status == "ENABLED" ? "Activo" : "Inactivo" }}</td>
+                                    <td>
+                                        <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                             [routerLink]="['/category', category.id, 'view']">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                    <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
                                             [routerLink]="['/category', category.id, 'edit']">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm" (click)="delete(category)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm"
+                                            (click)="delete(category)">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -54,4 +53,3 @@
         </div>
     </div>
 </div>
-

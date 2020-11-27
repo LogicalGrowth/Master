@@ -2,13 +2,13 @@
   "fun4FundApp": {
     "configSystem": {
       "home": {
-        "title": "Config Systems",
+        "title": "Configuración del sistema",
         "createLabel": "Create a new Config System",
         "createOrEditLabel": "Create or edit a Config System",
         "notFound": "No Config Systems found"
       },
-      "created": "A new Config System is created with identifier {{ param }}",
-      "updated": "A Config System is updated with identifier {{ param }}",
+      "created": "Cuenta bancaria creada exitosamente.",
+      "updated": "Cuenta bancaria actualizada exitosamente.",
       "deleted": "A Config System is deleted with identifier {{ param }}",
       "delete": {
         "question": "Are you sure you want to delete Config System {{ id }}?"

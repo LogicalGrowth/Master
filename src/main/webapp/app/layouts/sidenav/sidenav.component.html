@@ -3,19 +3,22 @@
     <button (click)="snav.toggle(); hideNav();" class="hamburgerButton">
       <i class="fa fa-bars iconHamburger"></i>
     </button>
-    <img src="../../../content/images/logo.png" style="width: 5rem;" alt="Logo de la aplicación">
+    <a href="/">
+      <img src="../../../content/images/logo.png" style="width: 5rem;" alt="Logo de la aplicación">
+    </a>
+    
     <div class="right-content">
-      <a class="" id="" *ngSwitchCase="true" style="margin-right: 2rem;">
-        <i class="fa fa-user-circle"></i>
-        <span>Perfil</span>
+      <a href="/account/user-profile" *ngSwitchCase="true" style="margin-right: 2rem;" class="hvr-pulse-shrink">
+        <img src="../../../content/images/navIcons/user.png" style="width: 2rem;" alt="Logo de la aplicación">
       </a>
-      <a class="" id="logout" (click)="logout()" *ngSwitchCase="true">
-        <span>Cerrar sesión</span>
-        <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
-      </a>
-      <a class="" id="login" (click)="login()" *ngSwitchCase="false">
-        <span>Iniciar sesión</span>
-        <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
+
+        <a class="" id="logout" (click)="logout()" *ngSwitchCase="true" class="hvr-pulse-shrink">
+          <img src="../../../content/images/navIcons/logout.png" style="width: 2rem;" alt="Logout">
+        </a>
+
+
+      <a class="" id="login" (click)="login()" *ngSwitchCase="false" class="hvr-pulse-shrink">
+        <img src="../../../content/images/navIcons/login.png" style="width: 2rem;" alt="Login">
       </a>
     </div>
 
@@ -26,15 +29,21 @@
     <mat-sidenav #snav class="nav-list" [mode]="mobileQuery.matches ? 'over' : 'side'"
                  [fixedInViewport]="mobileQuery.matches">
 
-      <mat-nav-list *ngIf="isAdmin()">
+      <mat-nav-list *ngIf="isAdmin() && isAuthenticated() ">
         <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of adminNav" class="hvr-sweep-to-right">
-          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+          <img class="navIcon" src="{{nav.icon}}"/>
           {{nav.name}}</a>
       </mat-nav-list>
 
-      <mat-nav-list *ngIf="!isAdmin()">
+      <mat-nav-list *ngIf="!isAdmin() && isAuthenticated()">
         <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of userNav" class="hvr-sweep-to-right">
-          <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+          <img class="navIcon" src="{{nav.icon}}"/>
+          {{nav.name}}</a>
+      </mat-nav-list>
+
+      <mat-nav-list *ngIf="!isAuthenticated()">
+        <a mat-list-item [routerLink]="nav.route" *ngFor="let nav of notLoggedNav" class="hvr-sweep-to-right">
+          <img class="navIcon" src="{{nav.icon}}"/>
           {{nav.name}}</a>
       </mat-nav-list>
     </mat-sidenav>

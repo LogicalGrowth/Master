@@ -6,7 +6,6 @@ import { Authority } from '../../shared/constants/authority.constants';
 import { LoginModalService } from '../../core/login/login-modal.service';
 import { LoginService } from '../../core/login/login.service';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'jhi-sidenav',
   templateUrl: './sidenav.component.html',
@@ -14,20 +13,27 @@ import { Router } from '@angular/router';
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   shouldRun = true;
-  fixedTopGap = '56';
   public menuItems?: RouteInfo[];
 
   mobileQuery: MediaQueryList;
 
   adminNav = [
-    { name: 'Inicio', route: '/', icon: 'home' },
-    { name: 'Usuarios', route: '/application-user', icon: 'perm_contact_calendar' },
-    { name: 'Proyectos', route: '/proyect', icon: 'perm_contact_calendar' },
+    { name: 'Inicio', route: '/', icon: '../../../content/images/navIcons/house.png' },
+    { name: 'Usuarios', route: '/application-user', icon: '../../../content/images/navIcons/users.png' },
+    { name: 'Proyectos', route: '/proyect', icon: '../../../content/images/navIcons/project.png' },
+    { name: 'Cuenta bancaria', route: '/admin/bank-account', icon: '../../../content/images/navIcons/bankaccount.png' },
+    { name: 'Categorías', route: '/category', icon: '../../../content/images/navIcons/category.png' },
   ];
 
   userNav = [
-    { name: 'Inicio', route: '/', icon: 'home' },
-    { name: 'Recursos', route: '/resource', icon: 'perm_contact_calendar' },
+    { name: 'Inicio', route: '/', icon: '../../../content/images/navIcons/house.png' },
+    { name: 'Proyectos', route: '/proyect', icon: '../../../content/images/navIcons/project.png' },
+    { name: 'Pagos', route: '/payment-method', icon: '../../../content/images/navIcons/payment.png' },
+  ];
+
+  notLoggedNav = [
+    { name: 'Inicio', route: '/', icon: '../../../content/images/navIcons/house.png' },
+    { name: 'Proyectos', route: '/proyect', icon: '../../../content/images/navIcons/project.png' },
   ];
 
   private _mobileQueryListener: () => void;
@@ -81,6 +87,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   logout(): void {
     this.loginService.logout();
     this.router.navigate(['']);
+    location.reload();
   }
 
   getImageUrl(): string {

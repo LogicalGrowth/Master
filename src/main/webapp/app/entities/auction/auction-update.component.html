@@ -79,7 +79,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" [hidden]="!editForm.get('id')!.value">
                                 <label class="form-control-label" for="field_state">Estado</label>
                                 <select class="form-control" name="state" formControlName="state" id="field_state">
                                     <option value="ENABLED">Habilitado</option>

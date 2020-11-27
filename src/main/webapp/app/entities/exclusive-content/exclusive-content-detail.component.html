@@ -2,35 +2,43 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 ml-auto mr-auto">
-                <div class="card" *ngIf="exclusiveContent">
+                <div class="card card-user" *ngIf="exclusiveContent">
 
                     <div class="card-header">
                         <h4 class="card-title">Contenido Exclusivo</h4>
                     </div>
 
                     <div class="d-flex justify-content-center">
-                        <jhi-carousel [items]="images" [interval]="4000" [keyboard]="false" width="300px" height="200px"></jhi-carousel>
+                        <jhi-carousel [items]="images" [interval]="4000" [keyboard]="false" width="300px"
+                            height="200px"></jhi-carousel>
                     </div>
 
                     <div class="card-body">
+                        <div class="text-center">
+                            <h5 class="title">{{ prize?.name }}</h5>
+                        </div>
 
-                        <dt><span>Nombre:</span></dt>
-                        <dd>
-                            <span>{{ prize?.name }}</span>
-                        </dd>
-                        <dt><span>Descripción:</span></dt>
-                        <dd>
-                            <span>{{ prize?.description }}</span>
-                        </dd>
-                        <dt><span>Precio:</span></dt>
-                        <dd>
-                            <span>{{ exclusiveContent.price }}</span>
-                        </dd>
-                        <dt><span>Cantidad:</span></dt>
-                        <dd>
-                            <span>{{ exclusiveContent.stock }}</span>
-                        </dd>
+                        <p class="description text-center">
+                            {{ prize?.description }}
+                        </p>
 
+                        <div class="button-container">
+                            <div class="row">
+                              <div class="col-lg-3 col-md-6 col-6 ml-auto">
+                                <h4>{{ exclusiveContent.price | currency:'USD':'symbol' }}
+                                  <br>
+                                  <small>Precio</small>
+                                </h4>
+                              </div>
+                              <div class="col-lg-4 col-md-6 col-6 ml-auto mr-auto">
+                                <h4>{{ exclusiveContent.stock }}
+                                  <br>
+                                  <small>Disponibles</small>
+                                </h4>
+                              </div>
+                            </div>
+                          </div>
+                          <hr>
                     </div>
 
                     <div class="card-footer text-right">
@@ -38,10 +46,8 @@
                             Atrás
                         </button>
 
-                        <button type="button"
-                            *ngIf="isProjectOwner"
-                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']"
-                            class="btn btn-primary">
+                        <button type="button" *ngIf="isProjectOwner"
+                            [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']" class="btn btn-primary">
                             Editar
                         </button>
                     </div>

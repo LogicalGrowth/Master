@@ -5,9 +5,12 @@ import { IAuction } from 'app/shared/model/auction.model';
 import { IResource } from '../../shared/model/resource.model';
 import { map } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ResourceService } from '../resource/resource.service';
 import { IPrize } from '../../shared/model/prize.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { ApplicationUserService } from '../application-user/application-user.service';
+import { User } from 'app/core/user/user.model';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 
 @Component({
   selector: 'jhi-auction-detail',
@@ -18,8 +21,16 @@ export class AuctionDetailComponent implements OnInit {
   auction: IAuction | null = null;
   images: IResource[] = [];
   prize?: IPrize | null;
+  account!: User;
+  isProjectOwner!: Boolean;
+  applicationUser?: IApplicationUser[];
 
-  constructor(protected activatedRoute: ActivatedRoute, protected resourceService: ResourceService) {}
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    protected resourceService: ResourceService,
+    private accountService: AccountService,
+    private applicationUserService: ApplicationUserService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ auction }) => {
@@ -30,6 +41,19 @@ export class AuctionDetailComponent implements OnInit {
     });
 
     this.getImages(this.prize?.id as number);
+
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+
+        this.applicationUserService
+          .query({ 'internalUserId.equals': this.account.id })
+          .subscribe((res: HttpResponse<IApplicationUser[]>) => {
+            this.applicationUser = res.body || [];
+            this.isProjectOwner = this.applicationUser[0].id === this.auction?.proyect?.owner?.id ? true : false;
+          });
+      }
+    });
   }
 
   getImages(auctionId: number): any {

@@ -1,12 +1,11 @@
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="paymentMethod">
             <h2><span jhiTranslate="fun4FundApp.paymentMethod.detail.title">Payment Method</span> {{ paymentMethod.id }}</h2>
 
             <hr>
-
-            <jhi-alert-error></jhi-alert-error>
-
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="fun4FundApp.paymentMethod.cardNumber">Card Number</span></dt>
                 <dd>

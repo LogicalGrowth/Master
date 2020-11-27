@@ -120,7 +120,7 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
         newFavoritePaymentMethod.favorite = true;
         newFavoritePaymentMethod.owner = { id: this.applicationUser![0].id };
         this.subscribeToSaveResponse(this.paymentMethodService.update(newFavoritePaymentMethod));
-        this.loadPaymentMethods();
+        location.reload();
       }
     });
   }

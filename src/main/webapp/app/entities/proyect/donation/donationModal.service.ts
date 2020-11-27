@@ -24,5 +24,9 @@ export class DonationModalService {
   close(): void {
     this.isOpen = false;
     this.modalService.dismissAll();
+
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
   }
 }

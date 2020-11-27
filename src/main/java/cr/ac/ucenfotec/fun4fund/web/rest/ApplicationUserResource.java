@@ -64,11 +64,11 @@ public class ApplicationUserResource {
     public ResponseEntity<ApplicationUser> createApplicationUser(@Valid @RequestBody ApplicationUser applicationUser) throws URISyntaxException {
         String subject = "Correo de confirmación del registro de usuario";
         String content = "Gracias por la suscripción";
-        String template = "<subject>Employee information updated for {EmployeeName}</subject>\n" +
+        String template = "<subject>Gracias por la suscripción</subject>\n" +
             "<message>\n" +
-            "Hi {PaymasterName},<br/><br/>\n" +
-            "<b>{EmployeeName}</b> has updated position information in the project <b>{ProjectTitle}</b>.\n" +
-            "Follow the link below to view the employee's updated information.\n" +
+            "Hola,<br/><br/>\n" +
+            "<b>Este</b> correo es para agreadecerte por la suscripción <b>{ProjectTitle}</b>.\n" +
+            "Que disfrutes de las busquedas y las donaciones\n" +
             "<br/><br/>\n" +
             "<br/><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n" +
             "<tr>\n" +
@@ -81,8 +81,7 @@ public class ApplicationUserResource {
             "</td>\n" +
             "</tr>\n" +
             "</table><br/><br/>\n" +
-            "<br/>If you have any questions, you can reach us via <a href=\"#\">live chat</a>. We're here to help.<br/>\n" +
-            "<br/>The GreenSlate Team<br/><br/></message>";
+            "<br/>El equipo de Fun4Found<br/><br/></message>";
         log.debug("REST request to save ApplicationUser : {}", applicationUser);
         if (applicationUser.getId() != null) {
             throw new BadRequestAlertException("A new applicationUser cannot already have an ID", ENTITY_NAME, "idexists");

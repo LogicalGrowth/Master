@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { ICategory } from 'app/shared/model/category.model';
 import { JhiLanguageService } from 'ng-jhipster';
@@ -509,7 +509,7 @@ export class UserProfileComponent implements AfterViewInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/tslint/config
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     const input = $(this);
 
     if (input[0].files && input[0].files[0]) {

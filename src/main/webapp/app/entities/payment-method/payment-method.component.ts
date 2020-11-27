@@ -10,7 +10,7 @@ import { PaymentMethodDeleteDialogComponent } from './payment-method-delete-dial
 import { User } from 'app/core/user/user.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { ApplicationUserService } from '../application-user/application-user.service';
-import { ApplicationUser, IApplicationUser } from 'app/shared/model/application-user.model';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 @Component({
   selector: 'jhi-payment-method',
   templateUrl: './payment-method.component.html',

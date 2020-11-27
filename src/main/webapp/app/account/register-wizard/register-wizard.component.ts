@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
@@ -494,7 +494,7 @@ export class RegisterWizardComponent implements AfterViewInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/tslint/config
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     const input = $(this);
 
     if (input[0].files && input[0].files[0]) {

@@ -65,12 +65,12 @@
                         </div>
 
                         <div class="card-footer text-right">
+                            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                                <span>Atrás</span>
+                            </button>
                             <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
                                 class="btn btn-primary">
                                 <span>Guardar</span>
-                            </button>
-                            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                                <span>Atrás</span>
                             </button>
                         </div>
                     </form>

@@ -134,14 +134,14 @@
             </ngui-map>
           </div>
           <div class="card-footer text-right">
+              <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                  <span>Atrás</span>
+              </button>
             <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
               <span>Guardar</span>
             </button>
-            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-              <span>Atrás</span>
-            </button>
             <p class="card-text lead">
-              La comisión que se va cobrar es {{ proyectFee }}% 
+              La comisión que se va cobrar es {{ proyectFee }}%
             </p>
           </div>
         </div>

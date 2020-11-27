@@ -6,7 +6,7 @@
           <div class="card">
             <jhi-alert-error></jhi-alert-error>
             <div class="card-header ">
-              <h4 class="card-title">Cuenta de banco</h4>
+              <h4 class="card-title">Cuenta bancaria</h4>
             </div>
             <div class="card-body">
 
@@ -33,9 +33,9 @@
               
             </div>
             
-            <div class="col-lg-5">
-                <button type="button" id="cancel-save" class="btn btn-warning" (click)="previousState()">
-                  <span>Cancelar</span>
+            <div class="card-footer text-right">
+                <button type="button" id="cancel-save" class="btn btn-default" (click)="previousState()">
+                  <span>Atrás</span>
                 </button>
     
                 <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">

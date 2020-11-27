@@ -1,23 +1,20 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
+import { ICategory } from 'app/shared/model/category.model';
 import { JhiLanguageService } from 'ng-jhipster';
-import * as $ from 'jquery';
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/constants/error.constants';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { RegisterService } from '../register/register.service';
-import 'jquery-validation';
-import 'bootstrap';
-import 'twitter-bootstrap-wizard';
-import 'bootstrap-select';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
+import { CategoryService } from 'app/entities/category/category.service';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { IApplicationUser, ApplicationUser } from 'app/shared/model/application-user.model';
 import { IdType } from 'app/shared/model/enumerations/id-type.model';
-import { Observable } from 'rxjs';
-import { ICategory } from 'app/shared/model/category.model';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import * as moment from 'moment';
-import { CategoryService } from 'app/entities/category/category.service';
+import { DATE_TIME_FORMAT, DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE } from 'app/shared/constants/error.constants';
+import { AccountService } from 'app/core/auth/account.service';
+import { User } from 'app/core/user/user.model';
 
 declare let swal: any;
 
@@ -30,11 +27,11 @@ interface FileReaderEvent extends Event {
 }
 
 @Component({
-  selector: 'jhi-register',
-  templateUrl: './register-wizard.component.html',
+  selector: 'jhi-user-profile',
+  templateUrl: './user-profile.component.html',
   styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
-export class RegisterWizardComponent implements AfterViewInit {
+export class UserProfileComponent implements AfterViewInit {
   @ViewChild('login', { static: false })
   isSaving = false;
   login?: ElementRef;
@@ -49,6 +46,8 @@ export class RegisterWizardComponent implements AfterViewInit {
   errorEmailExists = false;
   errorUserExists = false;
   success = false;
+  account!: User;
+  applicationUser!: ApplicationUser[];
 
   registerForm = this.fb.group({
     firstname: [],
@@ -69,7 +68,8 @@ export class RegisterWizardComponent implements AfterViewInit {
     private registerService: RegisterService,
     private fb: FormBuilder,
     private loginApplicationUser: ApplicationUserService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private accountService: AccountService
   ) {}
 
   readURL(input: any): void {
@@ -133,11 +133,6 @@ export class RegisterWizardComponent implements AfterViewInit {
           required: true,
           minlength: 13,
           maxlength: 13,
-        },
-        password: {
-          required: true,
-          minlength: 6,
-          checkpassword: true,
         },
         phone: {
           required: true,
@@ -350,13 +345,8 @@ export class RegisterWizardComponent implements AfterViewInit {
   }
 
   saveAplicationUser(): void {
-    this.isSaving = true;
     const userApplicationFormObj = this.mappingDataFromForm();
-    if (userApplicationFormObj.id !== undefined) {
-      this.subscribeToSaveResponse(this.loginApplicationUser.update(userApplicationFormObj));
-    } else {
-      this.subscribeToSaveResponse(this.loginApplicationUser.create(userApplicationFormObj));
-    }
+    this.subscribeToSaveResponse(this.loginApplicationUser.update(userApplicationFormObj));
   }
 
   saveUser(): void {}
@@ -384,19 +374,20 @@ export class RegisterWizardComponent implements AfterViewInit {
   private mappingDataFromForm(): IApplicationUser {
     return {
       ...new ApplicationUser(),
+      id: this.applicationUser[0].id,
       identification: this.registerForm.get(['identify'])!.value,
       phoneNumber: this.registerForm.get(['phone'])!.value,
       admin: false,
       idType: IdType.IDENTIFICATION,
       birthDate: moment(this.registerForm.get(['birthdate'])!.value, DATE_TIME_FORMAT),
       internalUser: {
+        id: this.applicationUser[0].internalUser?.id,
         email: this.registerForm.get(['email'])!.value,
         firstName: this.registerForm.get(['firstname'])!.value,
         lastName: this.registerForm.get(['lastname'])!.value,
-        activated: true,
+        activated: false,
         login: this.registerForm.get(['email'])!.value,
         imageurl: this.imageSrc,
-        rawpassword: this.registerForm.get(['password'])!.value,
       },
     };
   }
@@ -439,7 +430,31 @@ export class RegisterWizardComponent implements AfterViewInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+  updateForm(aplicationUser: IApplicationUser): void {
+    this.registerForm.patchValue({
+      firstname: aplicationUser.internalUser?.firstName,
+      lastname: aplicationUser.internalUser?.lastName,
+      email: aplicationUser.internalUser?.email,
+      identify: aplicationUser.identification,
+      phone: aplicationUser.phoneNumber,
+      birthdate: aplicationUser.birthDate ? aplicationUser.birthDate.format(DATE_FORMAT) : null,
+      image: aplicationUser.internalUser?.imageurl,
+      password: aplicationUser.internalUser?.password,
+    });
+    this.imageSrc = aplicationUser.internalUser?.imageurl;
+  }
+
   ngAfterViewInit(): void {
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+        this.loginApplicationUser.query({ 'internalUserId.equals': this.account.id }).subscribe((res: HttpResponse<IApplicationUser[]>) => {
+          this.applicationUser = res.body || [];
+          this.updateForm(this.applicationUser[0]);
+        });
+      }
+    });
+
     $(window).resize(() => {
       $('.card-wizard').each((_, elementCard) => {
         const $wizard = $(elementCard);

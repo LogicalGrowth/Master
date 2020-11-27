@@ -1,5 +1,6 @@
 package cr.ac.ucenfotec.fun4fund.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import cr.ac.ucenfotec.fun4fund.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +46,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "password_hash", length = 60, nullable = false)
     private String password;
 
+    @Column(name = "password_hash", insertable = false, updatable = false)
+    private String rawpassword;
+
     @Size(max = 50)
     @Column(name = "first_name", length = 50)
     private String firstName;
@@ -82,6 +86,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "reset_date")
     private Instant resetDate = null;
+
+    @Column(name = "created_date")
+    private Instant createdDate = null;
+
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate = null;
 
     @JsonIgnore
     @ManyToMany
@@ -227,6 +237,36 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
+            ", createdDate='" + createdDate + '\'' +
+            ", lastModifiedDate='" + lastModifiedDate + '\'' +
             "}";
+    }
+
+    @Override
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    @Override
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    @Override
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    @Override
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getRawpassword() {
+        return rawpassword;
+    }
+
+    public void setRawpassword(String rawpassword) {
+        this.rawpassword = rawpassword;
     }
 }

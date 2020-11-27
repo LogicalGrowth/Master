@@ -14,6 +14,7 @@ import { PrizeService } from 'app/entities/prize/prize.service';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from 'app/entities/proyect/proyect.service';
 import { IResource, Resource } from 'app/shared/model/resource.model';
+import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
 
 type SelectableEntity = IPrize | IProyect;
 
@@ -37,7 +38,7 @@ export class ExclusiveContentUpdateComponent implements OnInit {
     description: [null, [Validators.required]],
     price: [null, [Validators.required, Validators.min(0)]],
     stock: [null, [Validators.required, Validators.min(0)]],
-    state: [null, [Validators.required]],
+    state: [],
     prize: [],
     proyect: [],
   });
@@ -156,7 +157,7 @@ export class ExclusiveContentUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       price: this.editForm.get(['price'])!.value,
       stock: this.editForm.get(['stock'])!.value,
-      state: this.editForm.get(['state'])!.value,
+      state: ActivityStatus.ENABLED,
       prize: newPrize,
       proyect: this.editForm.get(['proyect'])!.value,
     };

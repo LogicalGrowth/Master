@@ -283,7 +283,7 @@
                                                         </td>
                                                         <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
                                                         <td class="text-center">
-                                                            <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                            <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                     [routerLink]="['/auction', auction.id, 'view']">
                                                                 <i class="fa fa-eye"></i>
                                                             </button>
@@ -291,7 +291,7 @@
                                                                     [disabled]="auction.winningBid" [routerLink]="['/auction', auction.id, 'edit']">
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
-                                                            <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                            <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
                                                                 (click)="bid(auction)" [disabled]="auction.winner?.id == userId">
                                                                 <i class="fa fa-gavel"></i>
                                                             </button>

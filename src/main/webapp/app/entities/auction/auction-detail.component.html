@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-6 ml-auto mr-auto">
-                <div class="card" *ngIf="auction">
+                <div class="card card-user" *ngIf="auction">
 
                     <div class="card-header ">
                         <h4 class="card-title">Subasta</h4>
@@ -15,27 +15,41 @@
 
                     <div class="card-body">
 
-                        <dt><span>Nombre:</span></dt>
-                        <dd>
-                            <span>{{ auction.prize?.name }}</span>
-                        </dd>
-                        <dt><span>Descripción:</span></dt>
-                        <dd>
-                            <span>{{ auction.prize?.description }}</span>
-                        </dd>
-                        <dt><span>Monto inicial:</span></dt>
-                        <dd>
-                            <span>{{ auction.initialBid | currency:'USD':'symbol' }}</span>
-                        </dd>
-                        <dt><span>Fecha límite:</span></dt>
-                        <dd>
-                            <span>{{ auction.expirationDate | date:'DD-MM-YYYY HH:mm' }}</span>
-                        </dd>
-                        <dt><span>Estado:</span></dt>
-                        <dd>
-                            <span>{{ auction.state | state }}</span>
-                        </dd>
+                        <div class="text-center">
+                            <h5 class="title">{{ auction.prize?.name }}</h5>
+                        </div>
 
+                        <p class="description text-center">
+                            {{ auction.prize?.description }}
+                        </p>
+
+                        <div class="button-container">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 col-6 ml-auto">
+                                  <h4>{{ auction.initialBid | currency:'USD':'symbol' }}
+                                    <br>
+                                    <small>Monto inicial</small>
+                                  </h4>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-6 ml-auto mr-auto">
+                                  <h4>{{ auction.expirationDate | date:'DD-MM-YYYY HH:mm' }}
+                                    <br>
+                                    <small>Fecha límite</small>
+                                  </h4>
+                                </div>
+                                <div class="col-lg-3 mr-auto">
+                                    <h4 *ngIf="auction.winningBid">{{ auction.winningBid | currency:'USD':'symbol' }}
+                                      <br>
+                                      <small>Puja máxima</small>
+                                    </h4>
+                                    <h4 *ngIf="!auction.winningBid">No hay pujas
+                                        <br>
+                                        <small>Puja máxima</small>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                     </div>
 
                     <div class="card-footer text-right">

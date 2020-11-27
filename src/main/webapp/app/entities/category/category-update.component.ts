@@ -88,7 +88,7 @@ export class CategoryUpdateComponent implements OnInit {
     }
   }
 
-  private createFromForm(url = ''): ICategory {
+  private createFromForm(): ICategory {
     return {
       ...new Category(),
       id: this.editForm.get(['id'])!.value,

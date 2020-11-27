@@ -43,6 +43,12 @@ export class ApplicationUserComponent implements OnInit, OnDestroy {
     }
   }
 
+  setActive(applicationUser: IApplicationUser, isActivated: boolean): void {
+    if (applicationUser.internalUser) {
+      applicationUser.internalUser.activated = isActivated;
+    }
+    this.applicationUserService.update({ ...applicationUser }).subscribe(() => this.loadAll());
+  }
   trackId(index: number, item: IApplicationUser): number {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return item.id!;

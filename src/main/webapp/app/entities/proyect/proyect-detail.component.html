@@ -15,7 +15,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="stars-outer">
-                                <div class="stars-inner" style="width:{{reviews.rating*100/5}}%"></div>
+                                <div class="stars-inner" style="width:{{rating}}%"></div>
                             </div>
                             <button type="button" *ngIf="isProjectOwner" [routerLink]="['/proyect', proyect.id, 'edit']"
                                     class="btn btn-primary">

@@ -123,4 +123,8 @@ export class BidComponent implements OnInit {
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate([currentUrl]);
   }
+
+  close(): void {
+    this.bidModalService.close();
+  }
 }

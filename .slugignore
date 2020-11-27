@@ -1,0 +1,8 @@
+# Heres a comment
+*.psd
+*.pdf
+*.jpg
+*.png
+*.jdl
+/test
+/spec

@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import { DATE_TIME_FORMAT, MONTH_YEAR_FORMAT } from 'app/shared/constants/input.constants';
 import { IPaymentMethod, PaymentMethod } from 'app/shared/model/payment-method.model';
 import { PaymentMethodService } from './payment-method.service';
-import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { ApplicationUser, IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { User } from 'app/core/user/user.model';
@@ -41,6 +41,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
     favorite: [null, [Validators.required]],
     owner: [],
   });
+  applicationUser!: ApplicationUser[];
 
   constructor(
     protected paymentMethodService: PaymentMethodService,
@@ -54,7 +55,12 @@ export class PaymentMethodUpdateComponent implements OnInit {
     this.accountService.identity().subscribe(account => {
       if (account) {
         this.account = account;
-        this.idUser = this.account.id;
+
+        this.applicationUserService
+          .query({ 'internalUserId.equals': this.account.id })
+          .subscribe((res: HttpResponse<IApplicationUser[]>) => {
+            this.applicationUser = res.body || [];
+          });
       }
     });
 
@@ -111,7 +117,7 @@ export class PaymentMethodUpdateComponent implements OnInit {
       cvc: this.editForm.get(['cvc'])!.value,
       favorite: this.favorite,
       owner: {
-        id: this.editForm.get(['owner'])!.value,
+        id: this.applicationUser[0].id,
       },
     };
   }

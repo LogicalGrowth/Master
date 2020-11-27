@@ -89,6 +89,11 @@ export class PaymentMethodSelectDialogComponent implements OnInit {
         } else if (this.paymentMethods[i].type === 'EXPRESS') {
           this.paymentMethods[i].typeImage = '../../../content/images/CardTypes/Express.png';
         }
+
+        if (this.paymentMethods[i].favorite === true) {
+          this.selected = true;
+          this.paymentMethod = this.paymentMethods[i];
+        }
       }
     }
   }

@@ -1,5 +1,6 @@
 <jhi-alert></jhi-alert>
-<div class="main-content card-body">
+<jhi-alert-error></jhi-alert-error>
+<div class="main-content card-body mt-5">
     <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#firsttab" role="tablist">
@@ -46,7 +47,6 @@
                         </div>
 
                         <div class="card-body ">
-                            <jhi-alert-error></jhi-alert-error>
                             <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm"
                                 class="form-horizontal">
                                 <div class="d-flex justify-content-center">

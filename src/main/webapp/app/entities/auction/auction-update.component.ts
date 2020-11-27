@@ -10,29 +10,36 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 
 import { IAuction, Auction } from 'app/shared/model/auction.model';
 import { AuctionService } from './auction.service';
-import { IPrize } from 'app/shared/model/prize.model';
+import { IPrize, Prize } from 'app/shared/model/prize.model';
 import { PrizeService } from 'app/entities/prize/prize.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from 'app/entities/proyect/proyect.service';
+import { IResource, Resource } from '../../shared/model/resource.model';
+import { ResourceService } from '../resource/resource.service';
 
 type SelectableEntity = IPrize | IApplicationUser | IProyect;
 
 @Component({
   selector: 'jhi-auction-update',
   templateUrl: './auction-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class AuctionUpdateComponent implements OnInit {
+  creating = true;
   isSaving = false;
   prizes: IPrize[] = [];
-  winners: IApplicationUser[] = [];
-  proyects: IProyect[] = [];
+  proyect?: IProyect;
+  images: IResource[] = [];
+  prize?: IPrize | null;
+  imageSrc = '';
 
   editForm = this.fb.group({
     id: [],
+    name: [null, [Validators.required]],
+    description: [null, [Validators.required]],
     initialBid: [null, [Validators.required, Validators.min(0)]],
-    winningBid: [null, [Validators.min(0)]],
     expirationDate: [null, [Validators.required]],
     state: [null, [Validators.required]],
     prize: [],
@@ -46,75 +53,78 @@ export class AuctionUpdateComponent implements OnInit {
     protected applicationUserService: ApplicationUserService,
     protected proyectService: ProyectService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    protected resourceService: ResourceService
   ) {}
+
+  getImages(auctionId: number): any {
+    if (auctionId)
+      this.resourceService
+        .query({ 'prizeId.equals': auctionId })
+        .pipe(
+          map((res: HttpResponse<IResource[]>) => {
+            return res.body || [];
+          })
+        )
+        .subscribe((resBody: IResource[]) => {
+          this.images = resBody;
+        });
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ auction }) => {
-      if (!auction.id) {
-        const today = moment().startOf('day');
-        auction.expirationDate = today;
+      if (auction) {
+        this.creating = false;
+        this.updateForm(auction);
+        this.prize = auction.prize;
+        this.proyect = auction.proyect;
+
+        this.prizeService
+          .query({ 'auctionId.specified': 'false' })
+          .pipe(
+            map((res: HttpResponse<IPrize[]>) => {
+              return res.body || [];
+            })
+          )
+          .subscribe((resBody: IPrize[]) => {
+            if (!auction.prize || !auction.prize.id) {
+              this.prizes = resBody;
+            } else {
+              this.prizeService
+                .find(auction.prize.id)
+                .pipe(
+                  map((subRes: HttpResponse<IPrize>) => {
+                    return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                  })
+                )
+                .subscribe((concatRes: IPrize[]) => (this.prizes = concatRes));
+            }
+          });
       }
-
-      this.updateForm(auction);
-
-      this.prizeService
-        .query({ filter: 'auction-is-null' })
-        .pipe(
-          map((res: HttpResponse<IPrize[]>) => {
-            return res.body || [];
-          })
-        )
-        .subscribe((resBody: IPrize[]) => {
-          if (!auction.prize || !auction.prize.id) {
-            this.prizes = resBody;
-          } else {
-            this.prizeService
-              .find(auction.prize.id)
-              .pipe(
-                map((subRes: HttpResponse<IPrize>) => {
-                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                })
-              )
-              .subscribe((concatRes: IPrize[]) => (this.prizes = concatRes));
-          }
-        });
-
-      this.applicationUserService
-        .query({ filter: 'auction-is-null' })
-        .pipe(
-          map((res: HttpResponse<IApplicationUser[]>) => {
-            return res.body || [];
-          })
-        )
-        .subscribe((resBody: IApplicationUser[]) => {
-          if (!auction.winner || !auction.winner.id) {
-            this.winners = resBody;
-          } else {
-            this.applicationUserService
-              .find(auction.winner.id)
-              .pipe(
-                map((subRes: HttpResponse<IApplicationUser>) => {
-                  return subRes.body ? [subRes.body].concat(resBody) : resBody;
-                })
-              )
-              .subscribe((concatRes: IApplicationUser[]) => (this.winners = concatRes));
-          }
-        });
-
-      this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
     });
+
+    this.activatedRoute.data.subscribe(({ currentProyect }) => {
+      if (currentProyect) {
+        this.editForm.patchValue({
+          id: undefined,
+          proyect: currentProyect,
+        });
+      }
+    });
+
+    this.getImages(this.prize?.id as number);
   }
 
   updateForm(auction: IAuction): void {
     this.editForm.patchValue({
       id: auction.id,
+      image: auction.prize?.images,
+      name: auction.prize?.name,
+      description: auction.prize?.description,
       initialBid: auction.initialBid,
-      winningBid: auction.winningBid,
       expirationDate: auction.expirationDate ? auction.expirationDate.format(DATE_TIME_FORMAT) : null,
       state: auction.state,
       prize: auction.prize,
-      winner: auction.winner,
       proyect: auction.proyect,
     });
   }
@@ -125,8 +135,13 @@ export class AuctionUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const auction = this.createFromForm();
-    if (auction.id !== undefined) {
+    let auction: IAuction;
+    if (this.creating) {
+      auction = this.createFromForm();
+    } else {
+      auction = this.updateFromForm();
+    }
+    if (auction.id) {
       this.subscribeToSaveResponse(this.auctionService.update(auction));
     } else {
       this.subscribeToSaveResponse(this.auctionService.create(auction));
@@ -134,18 +149,46 @@ export class AuctionUpdateComponent implements OnInit {
   }
 
   private createFromForm(): IAuction {
+    const newPrize = {
+      ...new Prize(),
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      images: this.images,
+    };
+
     return {
       ...new Auction(),
       id: this.editForm.get(['id'])!.value,
       initialBid: this.editForm.get(['initialBid'])!.value,
-      winningBid: this.editForm.get(['winningBid'])!.value,
       expirationDate: this.editForm.get(['expirationDate'])!.value
         ? moment(this.editForm.get(['expirationDate'])!.value, DATE_TIME_FORMAT)
         : undefined,
       state: this.editForm.get(['state'])!.value,
-      prize: this.editForm.get(['prize'])!.value,
-      winner: this.editForm.get(['winner'])!.value,
+      prize: newPrize,
       proyect: this.editForm.get(['proyect'])!.value,
+    };
+  }
+
+  private updateFromForm(): IAuction {
+    const newPrize = {
+      ...new Prize(),
+      id: this.prize?.id,
+      name: this.editForm.get(['name'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      images: this.images,
+    };
+
+    return {
+      ...new Auction(),
+      id: this.editForm.get(['id'])!.value,
+      initialBid: this.editForm.get(['initialBid'])!.value,
+      expirationDate: this.editForm.get(['expirationDate'])!.value
+        ? moment(this.editForm.get(['expirationDate'])!.value, DATE_TIME_FORMAT)
+        : undefined,
+      state: this.editForm.get(['state'])!.value,
+      prize: newPrize,
+      proyect: this.proyect!,
     };
   }
 
@@ -167,5 +210,19 @@ export class AuctionUpdateComponent implements OnInit {
 
   trackById(index: number, item: SelectableEntity): any {
     return item.id;
+  }
+
+  saveImage(data: any): void {
+    this.imageSrc = data.secure_url;
+    const newResource = {
+      ...new Resource(),
+      id: undefined,
+      url: data.secure_url,
+      type: 'Image',
+      proyect: undefined,
+      prize: undefined,
+    };
+
+    this.images?.push(newResource);
   }
 }

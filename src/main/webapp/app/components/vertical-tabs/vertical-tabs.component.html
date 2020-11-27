@@ -1,0 +1,30 @@
+<div class="card">
+    <div class="card-header">
+        <h5>Vertical Tabs</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-4 col-md-5 col-sm-4 col-6">
+                <div class="nav-tabs-navigation vertical-navs">
+                    <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs flex-column nav-stacked" role="tablist">
+                            <li *ngFor="let titleTab of titleTabs; let i = index" class="nav-item {{i === 0 ? 'active' : ''}}">
+                                <a class="nav-link active" href="#{{titleTab}}" role="tab" data-toggle="tab">
+                                    {{titleTab}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-7 col-sm-8 col-6">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div *ngFor="let paragraph of paragraphs; let i = index" class="tab-pane {{i === 0 ? 'active' : ''}}" id="info">
+                        <p>{{paragraph}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

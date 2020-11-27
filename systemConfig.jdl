@@ -1,0 +1,6 @@
+entity ConfigSystem {
+	type String required
+    value String required
+}
+
+filter ConfigSystem

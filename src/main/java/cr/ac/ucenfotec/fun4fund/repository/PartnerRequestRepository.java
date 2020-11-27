@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PartnerRequestRepository extends JpaRepository<PartnerRequest, Long> {
+public interface PartnerRequestRepository extends JpaRepository<PartnerRequest, Long>, JpaSpecificationExecutor<PartnerRequest> {
 }

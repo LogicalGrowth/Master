@@ -7,15 +7,13 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
-        "image": "Image",
+        "resource": "Resource",
         "applicationUser": "Application User",
         "paymentMethod": "Payment Method",
         "proyect": "Proyect",
-        "proyectAccount": "Proyect Account",
         "category": "Category",
         "checkpoint": "Checkpoint",
         "review": "Review",
-        "donationHistory": "Donation History",
         "auction": "Auction",
         "raffle": "Raffle",
         "exclusiveContent": "Exclusive Content",
@@ -29,6 +27,7 @@
         "appLog": "App Log",
         "recommendation": "Recommendation",
         "passwordHistory": "Password History",
+        "configSystem": "Config System",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -147,7 +146,7 @@
     "internalServerError": "Internal server error",
     "server.not.reachable": "Server not reachable",
     "url.not.found": "Not found",
-    "NotNull": "Field {{ fieldName }} cannot be empty!",
+    "NotNull": "¡Campo {{ fieldName }} no puede estar vacío!",
     "Size": "Field {{ fieldName }} does not meet min/max size requirements!",
     "userexists": "Login name already used!",
     "emailexists": "Email is already in use!",
@@ -158,5 +157,5 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": "© 2020 - GoFundMe. Costa Rica."
 }

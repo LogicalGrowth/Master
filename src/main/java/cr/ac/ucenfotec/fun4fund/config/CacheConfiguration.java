@@ -48,18 +48,16 @@ public class CacheConfiguration {
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.User.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Authority.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.User.class.getName() + ".authorities");
-            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Image.class.getName());
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Resource.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".paymentMethods");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".proyects");
-            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".donations");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".notifications");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".payments");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".favorites");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.PaymentMethod.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".images");
-            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".donations");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".checkpoints");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".reviews");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".partners");
@@ -67,12 +65,10 @@ public class CacheConfiguration {
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".auctions");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".exclusiveContents");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".payments");
-            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ProyectAccount.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Category.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Category.class.getName() + ".proyects");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Checkpoint.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Review.class.getName());
-            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.DonationHistory.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Auction.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Raffle.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent.class.getName());
@@ -87,6 +83,7 @@ public class CacheConfiguration {
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.AppLog.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Recommendation.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.PasswordHistory.class.getName());
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ConfigSystem.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

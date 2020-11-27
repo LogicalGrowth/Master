@@ -23,11 +23,7 @@ export class LoginModalComponent implements AfterViewInit {
 
   constructor(private loginService: LoginService, private router: Router, public activeModal: NgbActiveModal, private fb: FormBuilder) {}
 
-  ngAfterViewInit(): void {
-    if (this.username) {
-      this.username.nativeElement.focus();
-    }
-  }
+  ngAfterViewInit(): void {}
 
   cancel(): void {
     this.authenticationError = false;
@@ -63,7 +59,7 @@ export class LoginModalComponent implements AfterViewInit {
 
   register(): void {
     this.activeModal.dismiss('to state register');
-    this.router.navigate(['/account/register']);
+    this.router.navigate(['/account/register-wizard']);
   }
 
   requestResetPassword(): void {

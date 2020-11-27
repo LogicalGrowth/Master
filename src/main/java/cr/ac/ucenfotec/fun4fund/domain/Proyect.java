@@ -14,6 +14,8 @@ import java.util.Set;
 
 import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProyectType;
 
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.Currency;
+
 /**
  * A Proyect.
  */
@@ -64,27 +66,28 @@ public class Proyect implements Serializable {
 
     @NotNull
     @Column(name = "coord_x", nullable = false)
-    private Long coordX;
+    private Double coordX;
 
     @NotNull
     @Column(name = "coord_y", nullable = false)
-    private Long coordY;
+    private Double coordY;
 
     @NotNull
     @Column(name = "fee", nullable = false)
     private Double fee;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private ProyectAccount account;
+    @NotNull
+    @Column(name = "number", nullable = false)
+    private String number;
 
-    @OneToMany(mappedBy = "proyect")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Image> images = new HashSet<>();
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency_type", nullable = false)
+    private Currency currencyType;
 
-    @OneToMany(mappedBy = "proyect")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<DonationHistory> donations = new HashSet<>();
+    @OneToMany(mappedBy = "proyect", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = "proyect", allowSetters = true)
+    private Set<Resource> images = new HashSet<>();
 
     @OneToMany(mappedBy = "proyect")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -239,29 +242,29 @@ public class Proyect implements Serializable {
         this.lastUpdated = lastUpdated;
     }
 
-    public Long getCoordX() {
+    public Double getCoordX() {
         return coordX;
     }
 
-    public Proyect coordX(Long coordX) {
+    public Proyect coordX(Double coordX) {
         this.coordX = coordX;
         return this;
     }
 
-    public void setCoordX(Long coordX) {
+    public void setCoordX(Double coordX) {
         this.coordX = coordX;
     }
 
-    public Long getCoordY() {
+    public Double getCoordY() {
         return coordY;
     }
 
-    public Proyect coordY(Long coordY) {
+    public Proyect coordY(Double coordY) {
         this.coordY = coordY;
         return this;
     }
 
-    public void setCoordY(Long coordY) {
+    public void setCoordY(Double coordY) {
         this.coordY = coordY;
     }
 
@@ -278,67 +281,55 @@ public class Proyect implements Serializable {
         this.fee = fee;
     }
 
-    public ProyectAccount getAccount() {
-        return account;
+    public String getNumber() {
+        return number;
     }
 
-    public Proyect account(ProyectAccount proyectAccount) {
-        this.account = proyectAccount;
+    public Proyect number(String number) {
+        this.number = number;
         return this;
     }
 
-    public void setAccount(ProyectAccount proyectAccount) {
-        this.account = proyectAccount;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public Set<Image> getImages() {
+    public Currency getCurrencyType() {
+        return currencyType;
+    }
+
+    public Proyect currencyType(Currency currencyType) {
+        this.currencyType = currencyType;
+        return this;
+    }
+
+    public void setCurrencyType(Currency currencyType) {
+        this.currencyType = currencyType;
+    }
+
+    public Set<Resource> getImages() {
         return images;
     }
 
-    public Proyect images(Set<Image> images) {
-        this.images = images;
+    public Proyect images(Set<Resource> resources) {
+        this.images = resources;
         return this;
     }
 
-    public Proyect addImage(Image image) {
-        this.images.add(image);
-        image.setProyect(this);
+    public Proyect addImage(Resource resource) {
+        this.images.add(resource);
+        resource.setProyect(this);
         return this;
     }
 
-    public Proyect removeImage(Image image) {
-        this.images.remove(image);
-        image.setProyect(null);
+    public Proyect removeImage(Resource resource) {
+        this.images.remove(resource);
+        resource.setProyect(null);
         return this;
     }
 
-    public void setImages(Set<Image> images) {
-        this.images = images;
-    }
-
-    public Set<DonationHistory> getDonations() {
-        return donations;
-    }
-
-    public Proyect donations(Set<DonationHistory> donationHistories) {
-        this.donations = donationHistories;
-        return this;
-    }
-
-    public Proyect addDonation(DonationHistory donationHistory) {
-        this.donations.add(donationHistory);
-        donationHistory.setProyect(this);
-        return this;
-    }
-
-    public Proyect removeDonation(DonationHistory donationHistory) {
-        this.donations.remove(donationHistory);
-        donationHistory.setProyect(null);
-        return this;
-    }
-
-    public void setDonations(Set<DonationHistory> donationHistories) {
-        this.donations = donationHistories;
+    public void setImages(Set<Resource> resources) {
+        this.images = resources;
     }
 
     public Set<Checkpoint> getCheckpoints() {
@@ -588,6 +579,8 @@ public class Proyect implements Serializable {
             ", coordX=" + getCoordX() +
             ", coordY=" + getCoordY() +
             ", fee=" + getFee() +
+            ", number='" + getNumber() + "'" +
+            ", currencyType='" + getCurrencyType() + "'" +
             "}";
     }
 }

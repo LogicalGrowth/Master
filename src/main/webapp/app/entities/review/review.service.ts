@@ -70,4 +70,10 @@ export class ReviewService {
     }
     return res;
   }
+
+  findByProyect(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<IReview>(`${this.resourceUrl}/proyect/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 }

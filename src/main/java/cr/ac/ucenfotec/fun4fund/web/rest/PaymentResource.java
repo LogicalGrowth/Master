@@ -1,8 +1,16 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
+import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
+import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
+import cr.ac.ucenfotec.fun4fund.service.*;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.PaymentCriteria;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +31,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class PaymentResource {
 
     private final Logger log = LoggerFactory.getLogger(PaymentResource.class);
@@ -34,10 +40,27 @@ public class PaymentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final PaymentService paymentService;
+
+    private final PaymentQueryService paymentQueryService;
+
     private final PaymentRepository paymentRepository;
 
-    public PaymentResource(PaymentRepository paymentRepository) {
+    private final MailService mailService;
+
+    private final ApplicationUserService applicationUserService;
+
+    private final ProyectService proyectService;
+
+    public PaymentResource(PaymentService paymentService, PaymentQueryService paymentQueryService,
+                           PaymentRepository paymentRepository, MailService mailService, ApplicationUserService applicationUserService,
+                           ProyectService proyectService) {
+        this.paymentService = paymentService;
+        this.paymentQueryService = paymentQueryService;
         this.paymentRepository = paymentRepository;
+        this.mailService = mailService;
+        this.applicationUserService = applicationUserService;
+        this.proyectService = proyectService;
     }
 
     /**
@@ -53,9 +76,48 @@ public class PaymentResource {
         if (payment.getId() != null) {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Payment result = paymentRepository.save(payment);
+
+        Optional<ApplicationUser> applicationUser = applicationUserService.findOne(payment.getApplicationUser().getId());
+
+        Proyect proyect = proyectService.findOne(payment.getProyect().getId()).get();
+
+        Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getApplicationUser().getId());
+
+        Double fee = payment.getAmount() * proyect.getFee() / 100;
+        proyect.setCollected(proyect.getCollected() + payment.getAmount() - fee);
+
+        String type = "";
+
+        if(payment.getType() == ProductType.AUCTION){
+            type = "la puja de $" + payment.getAmount() + "de la subasta en el proyecto " + proyect.getName();
+        } else if(payment.getType() == ProductType.DONATION){
+            type = "la donación de $" + payment.getAmount() +" al proyecto " + proyect.getName();
+
+            String msgSubject = "Donación recibida";
+            String msg = "Ha recibido una donación de $" + payment.getAmount() +" en el proyecto " + proyect.getName() + ".";
+            mailService.sendEmail(proyectOwner.get().getInternalUser().getEmail(),msgSubject,msg,false,true);
+
+        }else if(payment.getType() == ProductType.EXCLUSIVE_CONTENT){
+            type = "la compra de contenido exlusivo en el proyecto " + proyect.getName() + "monto final: $" + payment.getAmount();
+        }else if(payment.getType() == ProductType.PARTNERSHIP){
+            type = "";
+        }else if(payment.getType() == ProductType.RAFFLE){
+            type = "participar en la rifa del proyecto " + proyect.getName()+ "el monto final fue de: $" + payment.getAmount();
+        }
+        String subject = "Recibido de pago";
+
+        String content = "Muchas gracias por " + type;
+        mailService.sendEmail(applicationUser.get().getInternalUser().getEmail(),subject,content,false,true);
+
+
+        Proyect proyectResult = proyectService.save(proyect);
+        Payment result = paymentService.save(payment);
+
+
+        //Guardar aquí fee
+
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, content))
             .body(result);
     }
 
@@ -74,7 +136,7 @@ public class PaymentResource {
         if (payment.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Payment result = paymentRepository.save(payment);
+        Payment result = paymentService.save(payment);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, payment.getId().toString()))
             .body(result);
@@ -83,12 +145,26 @@ public class PaymentResource {
     /**
      * {@code GET  /payments} : get all the payments.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of payments in body.
      */
     @GetMapping("/payments")
-    public List<Payment> getAllPayments() {
-        log.debug("REST request to get all Payments");
-        return paymentRepository.findAll();
+    public ResponseEntity<List<Payment>> getAllPayments(PaymentCriteria criteria) {
+        log.debug("REST request to get Payments by criteria: {}", criteria);
+        List<Payment> entityList = paymentQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /payments/count} : count all the payments.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/payments/count")
+    public ResponseEntity<Long> countPayments(PaymentCriteria criteria) {
+        log.debug("REST request to count Payments by criteria: {}", criteria);
+        return ResponseEntity.ok().body(paymentQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +176,7 @@ public class PaymentResource {
     @GetMapping("/payments/{id}")
     public ResponseEntity<Payment> getPayment(@PathVariable Long id) {
         log.debug("REST request to get Payment : {}", id);
-        Optional<Payment> payment = paymentRepository.findById(id);
+        Optional<Payment> payment = paymentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(payment);
     }
 
@@ -113,7 +189,14 @@ public class PaymentResource {
     @DeleteMapping("/payments/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
         log.debug("REST request to delete Payment : {}", id);
-        paymentRepository.deleteById(id);
+        paymentService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/payments/proyect/{id}")
+    public List<?> getProyectDonations(@PathVariable Long id) {
+        log.debug("REST request to get Payment : {}", id);
+        Pageable paging = PageRequest.of(0, 5);
+        return paymentRepository.findTop5ByProyectId(id, paging);
     }
 }

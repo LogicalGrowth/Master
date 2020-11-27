@@ -2,19 +2,22 @@
   "fun4FundApp": {
     "proyect": {
       "home": {
-        "title": "Proyects",
+        "title": "Proyecto",
         "createLabel": "Create a new Proyect",
         "createOrEditLabel": "Create or edit a Proyect",
-        "notFound": "No Proyects found"
+        "notFound": "No hay proyectos registrados"
       },
-      "created": "A new Proyect is created with identifier {{ param }}",
-      "updated": "A Proyect is updated with identifier {{ param }}",
-      "deleted": "A Proyect is deleted with identifier {{ param }}",
+      "imagen": {
+        "created": "Imagen creada exitosamente."
+      },
+      "created": "Proyecto creado existosamente.",
+      "updated": "Proyecto actualizado existosamente.",
+      "deleted": "Proyecto borrado existosamente.",
       "delete": {
-        "question": "Are you sure you want to delete Proyect {{ id }}?"
+        "question": "¿Desea eliminar este proyecto?"
       },
       "detail": {
-        "title": "Proyect"
+        "title": "Proyecto"
       },
       "name": "Name",
       "description": "Description",
@@ -24,12 +27,12 @@
       "rating": "Rating",
       "creationDate": "Creation Date",
       "lastUpdated": "Last Updated",
-      "coordX": "Coord X",
-      "coordY": "Coord Y",
+      "coordX": "del mapa",
+      "coordY": "del mapa",
       "fee": "Fee",
-      "account": "Account",
+      "number": "Number",
+      "currencyType": "Currency Type",
       "image": "Image",
-      "donation": "Donation",
       "checkpoint": "Checkpoint",
       "review": "Review",
       "partner": "Partner",

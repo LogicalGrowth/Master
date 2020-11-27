@@ -7,9 +7,9 @@
         "createOrEditLabel": "Create or edit a Payment Method",
         "notFound": "No Payment Methods found"
       },
-      "created": "A new Payment Method is created with identifier {{ param }}",
-      "updated": "A Payment Method is updated with identifier {{ param }}",
-      "deleted": "A Payment Method is deleted with identifier {{ param }}",
+      "created": "Método de pago creado exitosamente.",
+      "updated": "Método de pago actualizado exitosamente.",
+      "deleted": "Método de pago borrado exitosamente.",
       "delete": {
         "question": "Are you sure you want to delete Payment Method {{ id }}?"
       },
@@ -21,6 +21,7 @@
       "expirationDate": "Expiration Date",
       "type": "Type",
       "cvc": "Cvc",
+      "favorite": "Favorite",
       "owner": "Owner"
     }
   }

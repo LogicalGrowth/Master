@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Fee;
-import cr.ac.ucenfotec.fun4fund.repository.FeeRepository;
+import cr.ac.ucenfotec.fun4fund.service.FeeService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.FeeCriteria;
+import cr.ac.ucenfotec.fun4fund.service.FeeQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class FeeResource {
 
     private final Logger log = LoggerFactory.getLogger(FeeResource.class);
@@ -34,10 +34,13 @@ public class FeeResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final FeeRepository feeRepository;
+    private final FeeService feeService;
 
-    public FeeResource(FeeRepository feeRepository) {
-        this.feeRepository = feeRepository;
+    private final FeeQueryService feeQueryService;
+
+    public FeeResource(FeeService feeService, FeeQueryService feeQueryService) {
+        this.feeService = feeService;
+        this.feeQueryService = feeQueryService;
     }
 
     /**
@@ -53,7 +56,7 @@ public class FeeResource {
         if (fee.getId() != null) {
             throw new BadRequestAlertException("A new fee cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Fee result = feeRepository.save(fee);
+        Fee result = feeService.save(fee);
         return ResponseEntity.created(new URI("/api/fees/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +77,7 @@ public class FeeResource {
         if (fee.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Fee result = feeRepository.save(fee);
+        Fee result = feeService.save(fee);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, fee.getId().toString()))
             .body(result);
@@ -83,12 +86,26 @@ public class FeeResource {
     /**
      * {@code GET  /fees} : get all the fees.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of fees in body.
      */
     @GetMapping("/fees")
-    public List<Fee> getAllFees() {
-        log.debug("REST request to get all Fees");
-        return feeRepository.findAll();
+    public ResponseEntity<List<Fee>> getAllFees(FeeCriteria criteria) {
+        log.debug("REST request to get Fees by criteria: {}", criteria);
+        List<Fee> entityList = feeQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /fees/count} : count all the fees.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/fees/count")
+    public ResponseEntity<Long> countFees(FeeCriteria criteria) {
+        log.debug("REST request to count Fees by criteria: {}", criteria);
+        return ResponseEntity.ok().body(feeQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +117,7 @@ public class FeeResource {
     @GetMapping("/fees/{id}")
     public ResponseEntity<Fee> getFee(@PathVariable Long id) {
         log.debug("REST request to get Fee : {}", id);
-        Optional<Fee> fee = feeRepository.findById(id);
+        Optional<Fee> fee = feeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(fee);
     }
 
@@ -113,7 +130,7 @@ public class FeeResource {
     @DeleteMapping("/fees/{id}")
     public ResponseEntity<Void> deleteFee(@PathVariable Long id) {
         log.debug("REST request to delete Fee : {}", id);
-        feeRepository.deleteById(id);
+        feeService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

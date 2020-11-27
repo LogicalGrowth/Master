@@ -11,6 +11,7 @@ import { ExclusiveContentService } from './exclusive-content.service';
 import { ExclusiveContentComponent } from './exclusive-content.component';
 import { ExclusiveContentDetailComponent } from './exclusive-content-detail.component';
 import { ExclusiveContentUpdateComponent } from './exclusive-content-update.component';
+import { ProyectResolve } from '../proyect/proyect.route';
 
 @Injectable({ providedIn: 'root' })
 export class ExclusiveContentResolve implements Resolve<IExclusiveContent> {
@@ -57,10 +58,10 @@ export const exclusiveContentRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: 'new',
+    path: ':id/new',
     component: ExclusiveContentUpdateComponent,
     resolve: {
-      exclusiveContent: ExclusiveContentResolve,
+      currentProyect: ProyectResolve,
     },
     data: {
       authorities: [Authority.USER],

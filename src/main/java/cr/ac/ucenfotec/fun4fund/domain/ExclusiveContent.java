@@ -30,7 +30,7 @@ public class ExclusiveContent implements Serializable {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Min(value = 1)
+    @Min(value = 0)
     @Column(name = "stock")
     private Integer stock;
 

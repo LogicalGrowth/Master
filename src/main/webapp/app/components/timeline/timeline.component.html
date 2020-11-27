@@ -1,0 +1,42 @@
+<div class="main-content">
+  <div class="header text-center">
+    <h6>{{title}}</h6>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="card card-timeline card-plain">
+    <div class="card-body">
+      <ul class="timeline {{timelineClass}}">
+        <li *ngFor="let card of cards;" class="{{card.inverted ? 'timeline-inverted' : ''}}">
+          <div class="timeline-badge {{card.type}}">
+            <i class="{{card.icon}}"></i>
+          </div>
+          <div class="timeline-panel">
+            <div class="pull-right">
+              <button *ngIf="card.isOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                (click)="editItem(card.routerLink)">
+                <i class="fa fa-edit"></i>
+              </button>
+            </div>
+            <div class="timeline-heading">
+              <span class="badge badge-pill badge-{{card.type}}">{{card.subTitle}}</span>
+            </div>
+            <div class="timeline-body">
+              <p>{{card.body}}</p>
+            </div>
+          </div>
+        </li>
+        <li *ngIf="!cards.length" class="timeline-inverted">
+          <div class="timeline-badge info">
+            <i class="nc-icon nc-single-copy-04"></i>
+          </div>
+          <div class="timeline-panel">
+            <div class="timeline-body">
+              <p>El administrador de este proyecto no ha registrado checkpoints.</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

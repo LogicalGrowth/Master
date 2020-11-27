@@ -1,71 +1,57 @@
-<div>
-    <h2 id="page-heading">
-        <span jhiTranslate="fun4FundApp.category.home.title">Categories</span>
-
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-category" [routerLink]="['/category/new']">
-            <fa-icon icon="plus"></fa-icon>
-            <span  jhiTranslate="fun4FundApp.category.home.createLabel">
-            Create a new Category
-            </span>
-        </button>
-    </h2>
-
+<div class="row">
     <jhi-alert-error></jhi-alert-error>
-
     <jhi-alert></jhi-alert>
-
     <div class="alert alert-warning" id="no-result" *ngIf="categories?.length === 0">
-        <span jhiTranslate="fun4FundApp.category.home.notFound">No categories found</span>
-    </div>
-
-    <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
-        <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-                <tr>
-                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.category.name">Name</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.category.description">Description</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.category.status">Status</span></th>
-                    <th scope="col" ><span jhiTranslate="fun4FundApp.category.image">Image</span></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let category of categories ;trackBy: trackId">
-                    <td><a [routerLink]="['/category', category.id, 'view']">{{ category.id }}</a></td>
-                    <td>{{ category.name }}</td>
-                    <td>{{ category.description }}</td>
-                    <td jhiTranslate="{{ 'fun4FundApp.CategoryStatus.' + category.status }}">{{ category.status }}</td>
-                    <td>
-                        <div *ngIf="category.image">
-                            <a [routerLink]="['/image', category.image?.id, 'view']" >{{ category.image?.id }}</a>
-                        </div>
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <button type="submit"
-                                    [routerLink]="['/category', category.id, 'view']"
-                                    class="btn btn-info btn-sm">
-                                <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                            </button>
-
-                            <button type="submit"
-                                    [routerLink]="['/category', category.id, 'edit']"
-                                    class="btn btn-primary btn-sm">
-                                <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                            </button>
-
-                            <button type="submit" (click)="delete(category)"
-                                    class="btn btn-danger btn-sm">
-                                <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <span>No hay categorías registradas</span>
     </div>
 </div>
+
+<div class="main-content">
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title d-inline">Categorías</h4>
+                    <div class="pull-right" >
+                        <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/category/new']">
+                            <i class="nc-icon nc-simple-add"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let category of categories ;trackBy: trackId">
+                                <td>{{ category.name }}</td>
+                                <td>{{ category.description }}</td>
+                                <td>{{ category.status == "ENABLED" ? "Activo" : "Inactivo" }}</td>
+                                <td>
+                                    <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                            [routerLink]="['/category', category.id, 'view']">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                            [routerLink]="['/category', category.id, 'edit']">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm" (click)="delete(category)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

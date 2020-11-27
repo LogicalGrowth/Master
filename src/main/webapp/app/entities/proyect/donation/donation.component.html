@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h4 class="modal-title d-inline">Donar a {{proyect?.name}}</h4>
+
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')">
+        <span aria-hidden="true">x</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-danger" *ngIf="authenticationError">
+                <strong>Failed to sign in!</strong> Please check your credentials and try again.
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-round btn-outline-info" (click)="setAmount(5)">$5</button>
+            <button type="button" class="btn btn-round btn-outline-info" (click)="setAmount(10)">$10</button>
+            <button type="button" class="btn btn-round btn-outline-info" (click)="setAmount(20)">$20</button>
+            <button type="button" class="btn btn-round btn-outline-info" (click)="setAmount(50)">$50</button>
+            <button type="button" class="btn btn-round btn-outline-info" (click)="setAmount(100)">$100</button>
+        </div>
+
+        <div class="col-md-10">
+            <form class="form" role="form">
+                <div class="form-group">
+                    <label class="username-label" for="username">Monto</label>
+                    <input type="number" class="form-control" name="username" id="username" placeholder="1"
+                        [(ngModel)]="data.value">
+                </div>
+
+            </form>
+        </div>
+
+        <jhi-paypal-button description="Donación proyecto {{ proyect?.name }}" [amount]="data"
+                projectId="{{ proyect?.id }}" [productType]="productType"></jhi-paypal-button>
+                
+    </div>
+</div>

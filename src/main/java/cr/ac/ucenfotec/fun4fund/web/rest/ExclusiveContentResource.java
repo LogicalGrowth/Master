@@ -1,8 +1,15 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent;
-import cr.ac.ucenfotec.fun4fund.repository.ExclusiveContentRepository;
+import cr.ac.ucenfotec.fun4fund.domain.Prize;
+import cr.ac.ucenfotec.fun4fund.domain.Resource;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ActivityStatus;
+import cr.ac.ucenfotec.fun4fund.service.ExclusiveContentService;
+import cr.ac.ucenfotec.fun4fund.service.PrizeService;
+import cr.ac.ucenfotec.fun4fund.service.ResourceService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.ExclusiveContentCriteria;
+import cr.ac.ucenfotec.fun4fund.service.ExclusiveContentQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,13 +24,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent}.
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class ExclusiveContentResource {
 
     private final Logger log = LoggerFactory.getLogger(ExclusiveContentResource.class);
@@ -34,10 +40,19 @@ public class ExclusiveContentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ExclusiveContentRepository exclusiveContentRepository;
+    private final ExclusiveContentService exclusiveContentService;
 
-    public ExclusiveContentResource(ExclusiveContentRepository exclusiveContentRepository) {
-        this.exclusiveContentRepository = exclusiveContentRepository;
+    private final ExclusiveContentQueryService exclusiveContentQueryService;
+
+    private final ResourceService resourceService;
+
+    private final PrizeService prizeService;
+
+    public ExclusiveContentResource(ExclusiveContentService exclusiveContentService, ExclusiveContentQueryService exclusiveContentQueryService, ResourceService resourceService, PrizeService prizeService) {
+        this.exclusiveContentService = exclusiveContentService;
+        this.exclusiveContentQueryService = exclusiveContentQueryService;
+        this.resourceService = resourceService;
+        this.prizeService = prizeService;
     }
 
     /**
@@ -53,7 +68,19 @@ public class ExclusiveContentResource {
         if (exclusiveContent.getId() != null) {
             throw new BadRequestAlertException("A new exclusiveContent cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ExclusiveContent result = exclusiveContentRepository.save(exclusiveContent);
+        Prize prize = exclusiveContent.getPrize();
+        Set<Resource> images = prize.getImages();
+
+        Prize temp = prizeService.save(prize);
+
+        for (Object image:images.toArray()) {
+            Resource img = (Resource)image;
+            img.setPrize(temp);
+            img.setType("image");
+            resourceService.save((Resource) image);
+        };
+
+        ExclusiveContent result = exclusiveContentService.save(exclusiveContent);
         return ResponseEntity.created(new URI("/api/exclusive-contents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -74,7 +101,15 @@ public class ExclusiveContentResource {
         if (exclusiveContent.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ExclusiveContent result = exclusiveContentRepository.save(exclusiveContent);
+        if(exclusiveContent.getStock() == 0) {
+            exclusiveContent.setState(ActivityStatus.DISABLED);
+        }
+
+        Prize prize = exclusiveContent.getPrize();
+
+        Prize temp = prizeService.save(prize);
+
+        ExclusiveContent result = exclusiveContentService.save(exclusiveContent);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exclusiveContent.getId().toString()))
             .body(result);
@@ -83,12 +118,26 @@ public class ExclusiveContentResource {
     /**
      * {@code GET  /exclusive-contents} : get all the exclusiveContents.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exclusiveContents in body.
      */
     @GetMapping("/exclusive-contents")
-    public List<ExclusiveContent> getAllExclusiveContents() {
-        log.debug("REST request to get all ExclusiveContents");
-        return exclusiveContentRepository.findAll();
+    public ResponseEntity<List<ExclusiveContent>> getAllExclusiveContents(ExclusiveContentCriteria criteria) {
+        log.debug("REST request to get ExclusiveContents by criteria: {}", criteria);
+        List<ExclusiveContent> entityList = exclusiveContentQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /exclusive-contents/count} : count all the exclusiveContents.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/exclusive-contents/count")
+    public ResponseEntity<Long> countExclusiveContents(ExclusiveContentCriteria criteria) {
+        log.debug("REST request to count ExclusiveContents by criteria: {}", criteria);
+        return ResponseEntity.ok().body(exclusiveContentQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -100,7 +149,7 @@ public class ExclusiveContentResource {
     @GetMapping("/exclusive-contents/{id}")
     public ResponseEntity<ExclusiveContent> getExclusiveContent(@PathVariable Long id) {
         log.debug("REST request to get ExclusiveContent : {}", id);
-        Optional<ExclusiveContent> exclusiveContent = exclusiveContentRepository.findById(id);
+        Optional<ExclusiveContent> exclusiveContent = exclusiveContentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(exclusiveContent);
     }
 
@@ -113,7 +162,7 @@ public class ExclusiveContentResource {
     @DeleteMapping("/exclusive-contents/{id}")
     public ResponseEntity<Void> deleteExclusiveContent(@PathVariable Long id) {
         log.debug("REST request to delete ExclusiveContent : {}", id);
-        exclusiveContentRepository.deleteById(id);
+        exclusiveContentService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

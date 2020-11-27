@@ -1,74 +1,81 @@
-<div class="row justify-content-center">
-    <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-checkpoint-heading" jhiTranslate="fun4FundApp.checkpoint.home.createOrEditLabel">Create or edit a Checkpoint</h2>
+<div class="main-content mt-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 ml-auto mr-auto">
+                <div class="card">
+                    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+                        <div class="card-header">
+                            <h4 class="card-title">Checkpoint</h4>
+                        </div>
 
-            <div>
-                <jhi-alert-error></jhi-alert-error>
+                        <div class="card-body">
 
-                <div class="form-group" [hidden]="!editForm.get('id')!.value">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
-                </div>
+                            <div class="form-group" [hidden]="true">
+                                <label for="id" jhiTranslate="global.field.id">ID</label>
+                                <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                                    readonly />
+                            </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.checkpoint.completitionPercentage" for="field_completitionPercentage">Completition Percentage</label>
-                    <input type="number" class="form-control" name="completitionPercentage" id="field_completitionPercentage"
-                           formControlName="completitionPercentage"/>
-                    <div *ngIf="editForm.get('completitionPercentage')!.invalid && (editForm.get('completitionPercentage')!.dirty || editForm.get('completitionPercentage')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('completitionPercentage')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                        <small class="form-text text-danger"
-                            [hidden]="!editForm.get('completitionPercentage')?.errors?.number" jhiTranslate="entity.validation.number">
-                            This field should be a number.
-                        </small>
-                    </div>
-                </div>
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_completitionPercentage">Porcentaje de
+                                    progreso
+                                    <span class="star">*</span>
+                                </label>
+                                <input type="number" class="form-control" name="completitionPercentage"
+                                    id="field_completitionPercentage" formControlName="completitionPercentage" />
+                                <div
+                                    *ngIf="editForm.get('completitionPercentage')!.invalid && (editForm.get('completitionPercentage')!.dirty || editForm.get('completitionPercentage')!.touched)">
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('completitionPercentage')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                    <small class="form-text text-danger"
+                                        [hidden]="!editForm.get('completitionPercentage')?.errors?.number">
+                                        Este campo debe ser un número.
+                                    </small>
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('completitionPercentage')?.errors?.min">
+                                        El campo tiene que ser mayor a un 1%.
+                                    </small>
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('completitionPercentage')?.errors?.max">
+                                        El campo tiene que ser menor a un 100%.
+                                    </small>
+                                    <small class="form-text text-danger"
+                                        [hidden]="!editForm.get('completitionPercentage')?.errors?.pattern">
+                                        El campo debe ser un número.
+                                    </small>
+                                </div>
+                            </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.checkpoint.message" for="field_message">Message</label>
-                    <input type="text" class="form-control" name="message" id="field_message"
-                           formControlName="message"/>
-                    <div *ngIf="editForm.get('message')!.invalid && (editForm.get('message')!.dirty || editForm.get('message')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('message')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
+                            <div class="form-group has-label">
+                                <label class="form-control-label" for="field_message">Mesanje en el checkpoint
+                                    <span class="star">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="message" id="field_message"
+                                    formControlName="message" />
+                                <div
+                                    *ngIf="editForm.get('message')!.invalid && (editForm.get('message')!.dirty || editForm.get('message')!.touched)">
+                                    <small class="form-text text-danger"
+                                        *ngIf="editForm.get('message')?.errors?.required">
+                                        Este campo es requerido.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.checkpoint.completed" for="field_completed">Completed</label>
-                    <input type="checkbox" class="form-control" name="completed" id="field_completed"
-                           formControlName="completed"/>
-                    <div *ngIf="editForm.get('completed')!.invalid && (editForm.get('completed')!.dirty || editForm.get('completed')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('completed')?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                        </small>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fun4FundApp.checkpoint.proyect" for="field_proyect">Proyect</label>
-                    <select class="form-control" id="field_proyect" name="proyect" formControlName="proyect">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="proyectOption.id === editForm.get('proyect')!.value?.id ? editForm.get('proyect')!.value : proyectOption" *ngFor="let proyectOption of proyects; trackBy: trackById">{{ proyectOption.id }}</option>
-                    </select>
+                        <div class="card-footer text-right">
+                            <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                                <span>Atrás</span>
+                            </button>
+                            <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
+                                class="btn btn-primary">
+                                <span>Guardar</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-                </button>
-
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>

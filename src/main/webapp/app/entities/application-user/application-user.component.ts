@@ -7,23 +7,29 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from './application-user.service';
 import { ApplicationUserDeleteDialogComponent } from './application-user-delete-dialog.component';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-application-user',
   templateUrl: './application-user.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class ApplicationUserComponent implements OnInit, OnDestroy {
   applicationUsers?: IApplicationUser[];
   eventSubscriber?: Subscription;
+  user?: IUser[];
 
   constructor(
     protected applicationUserService: ApplicationUserService,
+    protected userService: UserService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal
   ) {}
 
   loadAll(): void {
     this.applicationUserService.query().subscribe((res: HttpResponse<IApplicationUser[]>) => (this.applicationUsers = res.body || []));
+    this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.user = res.body || []));
   }
 
   ngOnInit(): void {
@@ -37,6 +43,12 @@ export class ApplicationUserComponent implements OnInit, OnDestroy {
     }
   }
 
+  setActive(applicationUser: IApplicationUser, isActivated: boolean): void {
+    if (applicationUser.internalUser) {
+      applicationUser.internalUser.activated = isActivated;
+    }
+    this.applicationUserService.update({ ...applicationUser }).subscribe(() => this.loadAll());
+  }
   trackId(index: number, item: IApplicationUser): number {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return item.id!;

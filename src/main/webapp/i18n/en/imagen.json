@@ -1,0 +1,7 @@
+{
+  "fun4FundApp": {
+    "imagen": {
+      "created": "Un elemento media se creo con el id {{ param }}"
+    }
+  }
+}

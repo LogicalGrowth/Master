@@ -18,6 +18,7 @@ import { IProyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from 'app/entities/proyect/proyect.service';
 import { IResource, Resource } from '../../shared/model/resource.model';
 import { ResourceService } from '../resource/resource.service';
+import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
 
 type SelectableEntity = IPrize | IApplicationUser | IProyect;
 
@@ -41,7 +42,7 @@ export class AuctionUpdateComponent implements OnInit {
     description: [null, [Validators.required]],
     initialBid: [null, [Validators.required, Validators.min(0)]],
     expirationDate: [null, [Validators.required]],
-    state: [null, [Validators.required]],
+    state: [],
     prize: [],
     winner: [],
     proyect: [],
@@ -164,7 +165,7 @@ export class AuctionUpdateComponent implements OnInit {
       expirationDate: this.editForm.get(['expirationDate'])!.value
         ? moment(this.editForm.get(['expirationDate'])!.value, DATE_TIME_FORMAT)
         : undefined,
-      state: this.editForm.get(['state'])!.value,
+      state: ActivityStatus.ENABLED,
       prize: newPrize,
       proyect: this.editForm.get(['proyect'])!.value,
     };

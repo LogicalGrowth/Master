@@ -34,6 +34,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   notLoggedNav = [
     { name: 'Inicio', route: '/', icon: '../../../content/images/navIcons/house.png' },
     { name: 'Proyectos', route: '/proyect', icon: '../../../content/images/navIcons/project.png' },
+    { name: 'Crear cuenta', route: '/account/register-wizard', icon: '../../../content/images/navIcons/newUser.png' },
   ];
 
   private _mobileQueryListener: () => void;
@@ -87,7 +88,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
   logout(): void {
     this.loginService.logout();
     this.router.navigate(['']);
-    location.reload();
   }
 
   getImageUrl(): string {

@@ -7,12 +7,13 @@
                     <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
                     <div class="card-header text-center">
                         <h3 class="card-title">
-                            Información básica.
+                            Construya su perfil
                         </h3>
+                        <h5 class="description">Información básica.</h5>
                         <div class="wizard-navigation">
                             <ul>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#about" aria-selected="true"> <i class="nc-icon nc-satisfied"></i> Perfil de usuario  </a>
+                                    <a class="nav-link active" href="#about" data-toggle="tab" role="tab" aria-controls="about" aria-selected="true"> <i class="nc-icon nc-satisfied"></i> Perfil de usuario  </a>
                                 </li>
                                 </li>
                             </ul>
@@ -21,7 +22,7 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane show active" id="about">
-                                <h5 class="info-text"></h5>
+                                <h5 class="info-text">Comencemos con la información básica</h5>
                                 <div class="row justify-content-center">
                                     <div class="col-md-6 mb-8">
                                         <div class="picture-container">
@@ -55,13 +56,13 @@
                                     </div>
                                     <div class="col-md-6 mb-8">
                                         <div class="input-group col-sm-offset-1 col-sm-10"  [ngClass]="{'input-group-focus':focus3===true}">
-                                            <label class="form-control" for="birthdate">Fecha Nacimiento:<input type="date" formControlName="birthdate" name="birthdate" max="2005-01-01"/></label>
+                                            <label class="form-control" for="birthdate">Fecha Nacimiento:<input type="date" formControlName="birthdate" name="birthdate" max="2015-01-01"/></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
                                   <p>Los campos marcados * son campos requeridos</p>
-                                  <p>Los campos nombre, apellido deben de tener un minimo de 2 caracteres</p>
+                                  <p>Los campos nombre, apellido deben de tener un mínimo de 2 caracteres</p>
                                   <p>La contraseña debe de contener al menos: 6 caracteres como mínimo, 1 mayúscula, 1 minúscula, 1 caracter especial, 1 número</p>
                               </div>
                             </div>
@@ -84,7 +85,7 @@
                             </div>
                             <div class="card-footer">
                                 <div class="pull-right">
-                                    <input type="submit" (onClick)="onFinishWizard()" class="btn btn-finish btn-fill btn-rose btn-wd" name="finish" value="Finalizar" />
+                                    <input type="submit" (onClick)="onFinishWizard()" class="btn btn-primary btn-finish btn-fill btn-rose btn-wd" name="finish" value="Finalizar" />
                                 </div>
                             </div>
                         </div>

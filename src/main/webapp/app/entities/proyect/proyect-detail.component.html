@@ -60,15 +60,20 @@
                             <button class="btn btn-warning col-md-12" (click)=donate()>
                                 <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
                             </button>
+                            <p class="card-text font-weight-bold" *ngIf="donors && donors.length">Top donadores</p>
                             <div *ngFor="let donor of donors;">
                                 <div class="row">
                                     <div class="col-md-1">
                                         <i class="fa fa-user-plus text-success" aria-hidden="true"></i>
                                     </div>
                                     <div class="col-md-10">
-                                        <p class="card-text soft-name">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}</p>
+                                        <p class="card-text">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}
+                                            <span class="card-text soft-name" style="font-size: 5px"><i class="fa fa-circle" aria-hidden="true"></i></span>
+                                            <span class="card-text soft-name">${{donor[0]}}</span>
+                                        </p>
                                     </div>
-                                </div>
+                                    <hr>
+                                </div><hr>
                             </div>
                             <div *ngIf="donors && !donors.length">
                                 <div class="row">
@@ -107,14 +112,6 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-row col-md-12 justify-content-center">
-                                <!--<div class="p-2">
-                                   <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
-                                   </div>
-
-                                   <div class="p-2">
-                                   <jhi-icon buttonCssClass="btn-facebook" iconCsClass="fa fa-facebook-f">
-                                   </jhi-icon>
-                                   </div>-->
                                 <button class="btn btn-info col-md-12">
                                     <span class="btn-label"><i class="nc-icon nc-circle-10"></i></span> Hacerse socio
                                 </button>
@@ -342,6 +339,19 @@
                             </div>
                             <jhi-timeline [cards]="cards" timelineClass="timeline-simple" style="margin-top: -40px;"></jhi-timeline>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="/proyect" class="text-secondary">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            Ver más proyectos
+                        </a>
                     </div>
                 </div>
             </div>

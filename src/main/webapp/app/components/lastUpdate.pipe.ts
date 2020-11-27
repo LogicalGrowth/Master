@@ -8,7 +8,7 @@ export class LastUpdatePipe implements PipeTransform {
     let output = '';
     switch (value) {
       case 0: {
-        output = 'Hace unas horas';
+        output = 'Pocas horas';
         break;
       }
       default: {

@@ -2,17 +2,15 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
+import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
-import cr.ac.ucenfotec.fun4fund.service.ApplicationUserService;
-import cr.ac.ucenfotec.fun4fund.service.MailService;
-import cr.ac.ucenfotec.fun4fund.service.PaymentService;
+import cr.ac.ucenfotec.fun4fund.service.*;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.PaymentCriteria;
-import cr.ac.ucenfotec.fun4fund.service.PaymentQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -52,13 +50,17 @@ public class PaymentResource {
 
     private final ApplicationUserService applicationUserService;
 
+    private final ProyectService proyectService;
+
     public PaymentResource(PaymentService paymentService, PaymentQueryService paymentQueryService,
-                           PaymentRepository paymentRepository, MailService mailService, ApplicationUserService applicationUserService) {
+                           PaymentRepository paymentRepository, MailService mailService, ApplicationUserService applicationUserService,
+                           ProyectService proyectService) {
         this.paymentService = paymentService;
         this.paymentQueryService = paymentQueryService;
         this.paymentRepository = paymentRepository;
         this.mailService = mailService;
         this.applicationUserService = applicationUserService;
+        this.proyectService = proyectService;
     }
 
     /**
@@ -77,27 +79,45 @@ public class PaymentResource {
 
         Optional<ApplicationUser> applicationUser = applicationUserService.findOne(payment.getApplicationUser().getId());
 
+        Proyect proyect = proyectService.findOne(payment.getProyect().getId()).get();
+
+        Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getApplicationUser().getId());
+
+        Double fee = payment.getAmount() * proyect.getFee() / 100;
+        proyect.setCollected(proyect.getCollected() + payment.getAmount() - fee);
+
         String type = "";
 
         if(payment.getType() == ProductType.AUCTION){
-            type = "la puja de " + payment.getAmount() + "de la subasta en el proyecto " + payment.getProyect().getName();
+            type = "la puja de $" + payment.getAmount() + "de la subasta en el proyecto " + proyect.getName();
         } else if(payment.getType() == ProductType.DONATION){
-            type = "la donación de " + payment.getAmount() +" al proyecto " + payment.getProyect().getName();
+            type = "la donación de $" + payment.getAmount() +" al proyecto " + proyect.getName();
+
+            String msgSubject = "Donación recibida";
+            String msg = "Ha recibido una donación de $" + payment.getAmount() +" en el proyecto " + proyect.getName() + ".";
+            mailService.sendEmail(proyectOwner.get().getInternalUser().getEmail(),msgSubject,msg,false,true);
+
         }else if(payment.getType() == ProductType.EXCLUSIVE_CONTENT){
-            type = "la compra de contenido exlusivo en el proyecto " + payment.getProyect().getName() + "monto final: " + payment.getAmount();
+            type = "la compra de contenido exlusivo en el proyecto " + proyect.getName() + "monto final: $" + payment.getAmount();
         }else if(payment.getType() == ProductType.PARTNERSHIP){
             type = "";
         }else if(payment.getType() == ProductType.RAFFLE){
-            type = "participar en la rifa del proyecto " + payment.getProyect().getName()+ "el monto final fue de: " + payment.getAmount();
+            type = "participar en la rifa del proyecto " + proyect.getName()+ "el monto final fue de: $" + payment.getAmount();
         }
-        String subject = "Recibdo de pago";
+        String subject = "Recibido de pago";
 
         String content = "Muchas gracias por " + type;
         mailService.sendEmail(applicationUser.get().getInternalUser().getEmail(),subject,content,false,true);
+
+
+        Proyect proyectResult = proyectService.save(proyect);
         Payment result = paymentService.save(payment);
 
+
+        //Guardar aquí fee
+
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, content))
             .body(result);
     }
 

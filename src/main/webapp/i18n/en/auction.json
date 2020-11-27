@@ -2,19 +2,19 @@
   "fun4FundApp": {
     "auction": {
       "home": {
-        "title": "Auctions",
+        "title": "Subastas",
         "createLabel": "Create a new Auction",
         "createOrEditLabel": "Create or edit a Auction",
-        "notFound": "No Auctions found"
+        "notFound": "No hay subastas registradas"
       },
-      "created": "A new Auction is created with identifier {{ param }}",
-      "updated": "A Auction is updated with identifier {{ param }}",
-      "deleted": "A Auction is deleted with identifier {{ param }}",
+      "created": "Subasta registrada exitosamente.",
+      "updated": "Subasta actualizada exitosamente.",
+      "deleted": "Subasta borrada exitosamente.",
       "delete": {
-        "question": "Are you sure you want to delete Auction {{ id }}?"
+        "question": "¿Desea eliminar esta subasta?"
       },
       "detail": {
-        "title": "Auction"
+        "title": "Subastas"
       },
       "initialBid": "Initial Bid",
       "winningBid": "Winning Bid",

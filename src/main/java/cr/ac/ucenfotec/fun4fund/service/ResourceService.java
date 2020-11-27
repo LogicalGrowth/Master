@@ -21,9 +21,12 @@ public class ResourceService {
     private final Logger log = LoggerFactory.getLogger(ResourceService.class);
 
     private final ResourceRepository resourceRepository;
+    private final ProyectService proyectService;
 
-    public ResourceService(ResourceRepository resourceRepository) {
+    public ResourceService(ResourceRepository resourceRepository,
+                           ProyectService proyectService) {
         this.resourceRepository = resourceRepository;
+        this.proyectService = proyectService;
     }
 
     /**
@@ -34,6 +37,9 @@ public class ResourceService {
      */
     public Resource save(Resource resource) {
         log.debug("Request to save Resource : {}", resource);
+        if (resource.getProyect() != null && resource.getProyect().getId() != 0) {
+            proyectService.updateDate(resource.getProyect());
+        }
         return resourceRepository.save(resource);
     }
 

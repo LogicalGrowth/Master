@@ -16,6 +16,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CarouselComponent } from './carousel/carousel.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StatePipe } from './state.pipe';
+import { LastUpdatePipe } from './lastUpdate.pipe';
 import { PaypalButtonComponent } from './paypal-button/paypal-button.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
@@ -33,12 +34,13 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     CloudinaryComponent,
     CarouselComponent,
     StatePipe,
+    LastUpdatePipe,
     PaypalButtonComponent,
   ],
   imports: [
     CommonModule,
     // eslint-disable-next-line @typescript-eslint/camelcase
-    CloudinaryModule.forRoot(cloudinary, { cloud_name: 'barnesnoble', upload_preset: 'cq8ymdc5' }),
+    CloudinaryModule.forRoot(cloudinary, { cloud_name: 'dbk8m5dcv', upload_preset: 'cq8ymdc5' }),
     FileUploadModule,
     YouTubePlayerModule,
     NgbModule,
@@ -56,6 +58,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     CloudinaryComponent,
     CarouselComponent,
     StatePipe,
+    LastUpdatePipe,
     PaypalButtonComponent,
   ],
 })

@@ -34,6 +34,7 @@
     <include file="config/liquibase/changelog/20201103005527_added_entity_AppLog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103005627_added_entity_Recommendation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103005727_added_entity_PasswordHistory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201124013500_added_entity_ConfigSystem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20201110023914_added_entity_constraints_Resource.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201103003727_added_entity_constraints_ApplicationUser.xml" relativeToChangelogFile="false"/>

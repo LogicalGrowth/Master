@@ -12,8 +12,9 @@
       </div>
       </div>
     
+      <jhi-alert></jhi-alert>
       <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
-          <span class="notFoundCard">No has agregado ningun método de pago</span>
+          <span class="notFoundCard">No ha agregado ningun método de pago</span>
         </div>
     
       <div class="card-body">
@@ -29,16 +30,23 @@
             </thead>
             <tbody>
               <tr *ngFor="let paymentMethod of paymentMethods; trackBy: trackId">
-                  <td>
+                  <td class="text-center">
                     <!--      <div class="form-check">
                                 <label class="form-check-label">
                                   <input class="form-check-input" type="checkbox" checked>
                                   <span class="form-check-sign"></span>
                                 </label>
                               </div> -->
-                    <button class="btn btn-round">
-                      <i class="fa fa-heart"></i>
-                    </button>
+
+
+                              <a class="like" (click)= like($event) id="{{paymentMethod.id}}" *ngIf="paymentMethod.favorite === false">
+                                <i class="fa fa-heart" aria-hidden="true" id="{{paymentMethod.id}}"></i>
+                            </a>
+
+                            <a class="like heart" (click)= like($event) id="{{paymentMethod.id}}" *ngIf="paymentMethod.favorite === true">
+                              <i class="fa fa-heart" aria-hidden="true" id="{{paymentMethod.id}}"></i>
+                          </a>
+                        
                   </td>
         
                   <td class="text-center">
@@ -69,3 +77,4 @@
     </div>
   </div>
 </div>
+

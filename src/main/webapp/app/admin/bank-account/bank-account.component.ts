@@ -1,14 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AccountService } from 'app/core/auth/account.service';
-import { User } from 'app/core/user/user.model';
-import { ApplicationUserService } from 'app/entities/application-user/application-user.service';
-import { PaymentMethodService } from 'app/entities/payment-method/payment-method.service';
+import { ConfigSystemService } from 'app/entities/config-system/config-system.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
-import { CardType } from 'app/shared/model/enumerations/card-type.model';
-import { IPaymentMethod, PaymentMethod } from 'app/shared/model/payment-method.model';
-import * as moment from 'moment';
+import { ConfigSystem, IConfigSystem } from 'app/shared/model/config-system.model';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -20,32 +15,21 @@ export class BankAccountComponent implements OnInit {
   regexIbanCrc = /CR[a-zA-Z0-9]{2}\s?([0-9]{4}\s?){4}([0-9]{2})\s?/;
   editForm = this.fb.group({
     id: [],
-    number: [null, Validators.compose([Validators.required, Validators.pattern(this.regexIbanCrc)])],
+    type: [],
+    value: [null, Validators.compose([Validators.required, Validators.pattern(this.regexIbanCrc)])],
   });
   isSaving = false;
-  account!: User;
-  applicationUser?: IApplicationUser[];
+  configSystem: ConfigSystem[] = [];
+  actualConfig: any;
 
-  constructor(
-    private fb: FormBuilder,
-    protected paymentMethodService: PaymentMethodService,
-    private accountService: AccountService,
-    private applicationUserService: ApplicationUserService
-  ) {}
+  constructor(private fb: FormBuilder, protected configSystemService: ConfigSystemService) {}
 
   ngOnInit(): void {
-    this.accountService.identity().subscribe(account => {
-      if (account) {
-        this.account = account;
-
-        this.applicationUserService
-          .query({ 'internalUserId.equals': this.account.id })
-          .subscribe((res: HttpResponse<IApplicationUser[]>) => {
-            this.applicationUser = res.body || [];
-            this.paymentMethodService
-              .query({ 'ownerId.equals': this.applicationUser[0].id })
-              .subscribe((res2: HttpResponse<IPaymentMethod[]>) => this.updateForm(res2.body![0]));
-          });
+    this.configSystemService.query({ 'type.equals': 'BankAccount' }).subscribe((res: HttpResponse<IConfigSystem[]>) => {
+      this.configSystem = res.body || [];
+      if (this.configSystem.length) {
+        this.actualConfig = this.configSystem[0];
+        this.updateForm(this.actualConfig);
       }
     });
   }
@@ -54,38 +38,34 @@ export class BankAccountComponent implements OnInit {
     window.history.back();
   }
 
-  updateForm(paymentMethod: IPaymentMethod): void {
+  updateForm(configSystem: IConfigSystem): void {
     this.editForm.patchValue({
-      id: paymentMethod.id,
-      number: paymentMethod.cardOwner,
+      id: configSystem.id,
+      type: configSystem.type,
+      value: configSystem.value,
     });
   }
 
   save(): void {
     this.isSaving = true;
-    const paymentMethod = this.createFromForm();
-    if (paymentMethod.id) {
-      this.subscribeToSaveResponse(this.paymentMethodService.update(paymentMethod));
+    const config = this.createFromForm();
+    if (config.id) {
+      this.subscribeToSaveResponse(this.configSystemService.update(config));
     } else {
-      this.subscribeToSaveResponse(this.paymentMethodService.create(paymentMethod));
+      this.subscribeToSaveResponse(this.configSystemService.create(config));
     }
   }
 
-  private createFromForm(): IPaymentMethod {
+  private createFromForm(): IConfigSystem {
     return {
-      ...new PaymentMethod(),
+      ...new ConfigSystem(),
       id: this.editForm.get(['id'])!.value,
-      cardNumber: this.editForm.get(['number'])!.value.replace('CR', '').slice(0, -1),
-      cardOwner: this.editForm.get(['number'])!.value,
-      expirationDate: moment(),
-      type: CardType.VISA,
-      cvc: '',
-      favorite: false,
-      owner: this.applicationUser![0],
+      type: 'BankAccount',
+      value: this.editForm.get(['value'])!.value,
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentMethod>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IConfigSystem>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()

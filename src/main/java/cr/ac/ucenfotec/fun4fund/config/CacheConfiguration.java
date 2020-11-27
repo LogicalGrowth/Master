@@ -83,6 +83,7 @@ public class CacheConfiguration {
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.AppLog.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Recommendation.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.PasswordHistory.class.getName());
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ConfigSystem.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

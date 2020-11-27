@@ -85,8 +85,8 @@ public class Proyect implements Serializable {
     @Column(name = "currency_type", nullable = false)
     private Currency currencyType;
 
-    @OneToMany(mappedBy = "proyect")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(mappedBy = "proyect", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = "proyect", allowSetters = true)
     private Set<Resource> images = new HashSet<>();
 
     @OneToMany(mappedBy = "proyect")

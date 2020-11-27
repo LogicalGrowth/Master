@@ -19,11 +19,18 @@ import { AuctionService } from '../auction/auction.service';
 import { ICheckpoint } from 'app/shared/model/checkpoint.model';
 import { ApplicationUserService } from '../application-user/application-user.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { ProductType } from 'app/shared/model/enumerations/product-type.model';
+import { DonationModalService } from './donation/donationModal.service';
+import { BidModalService } from '../auction/bid/bidModal.service';
 
 @Component({
   selector: 'jhi-proyect-detail',
   templateUrl: './proyect-detail.component.html',
-  styleUrls: ['../../../content/scss/paper-dashboard.scss', '../../../content/scss/paper-dashboard/rating/rating.scss'],
+  styleUrls: [
+    '../../../content/scss/paper-dashboard.scss',
+    '../../../content/scss/paper-dashboard/rating/rating.scss',
+    'proyecto-detail.scss',
+  ],
 })
 export class ProyectDetailComponent implements OnInit {
   proyect: IProyect | null = null;
@@ -49,6 +56,8 @@ export class ProyectDetailComponent implements OnInit {
     height: 31vw !important;
   }`;
   applicationUser?: IApplicationUser[];
+  productType?: ProductType;
+  userId: any;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -59,7 +68,9 @@ export class ProyectDetailComponent implements OnInit {
     protected auctionService: AuctionService,
     private accountService: AccountService,
     private resourceService: ResourceService,
-    private applicationUserService: ApplicationUserService
+    private applicationUserService: ApplicationUserService,
+    private donationModalService: DonationModalService,
+    private bidModalService: BidModalService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -97,9 +108,9 @@ export class ProyectDetailComponent implements OnInit {
         i++;
         const obj = {
           inverted: true,
-          type: 'success',
-          icon: 'nc-icon nc-sun-fog-29',
-          subTitle: 'Checkpoint ' + i,
+          type: 'info',
+          icon: 'nc-icon nc-check-2',
+          subTitle: 'Checkpoint ' + i + ' de ' + checkpoint.completitionPercentage + '%',
           body: checkpoint.message,
           isOwner: this.isProjectOwner,
           routerLink: '/checkpoint/' + checkpoint.id + '/edit',
@@ -124,6 +135,8 @@ export class ProyectDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.productType = ProductType.DONATION;
+
     const style = document.createElement('style');
     style.innerHTML = this.css;
     document.head.appendChild(style);
@@ -136,10 +149,12 @@ export class ProyectDetailComponent implements OnInit {
         lng: proyect.coordX,
       };
       this.hasMarker = true;
-      this.percentile = (100 * proyect.collected) / proyect.goalAmount;
+      this.percentile = Math.floor((100 * proyect.collected) / proyect.goalAmount);
       this.rating = (100 * proyect.rating) / 5;
       this.daysCreated = moment().diff(proyect.creationDate, 'days');
+      this.daysCreated = this.daysCreated === 0 ? 'Pocas horas ' : 'Hace ' + this.daysCreated + ' días ';
       this.updatedDays = moment().diff(proyect.lastUpdated, 'days');
+      this.updatedDays = this.updatedDays === 0 ? 'Pocas horas ' : 'Hace ' + this.updatedDays + ' días ';
       this.reviewService.findByProyect(proyect.id).subscribe(data => {
         this.reviews = data.body;
       });
@@ -159,13 +174,21 @@ export class ProyectDetailComponent implements OnInit {
           .query({ 'internalUserId.equals': this.account.id })
           .subscribe((res: HttpResponse<IApplicationUser[]>) => {
             this.applicationUser = res.body || [];
+            this.userId = this.applicationUser[0].id;
             this.isProjectOwner = this.applicationUser[0].id === this.proyect?.owner?.id ? true : false;
+            this.loadCheckPoints(this.proyect?.id as number);
+            this.loadExclusiveContent(this.proyect?.id as number);
+            this.loadAuction(this.proyect?.id as number);
           });
       }
     });
+  }
 
-    this.loadExclusiveContent(this.proyect?.id as number);
-    this.loadAuction(this.proyect?.id as number);
-    this.loadCheckPoints(this.proyect?.id as number);
+  donate(): void {
+    this.donationModalService.open(this.proyect!);
+  }
+
+  bid(auction: IAuction): void {
+    this.bidModalService.open(auction);
   }
 }

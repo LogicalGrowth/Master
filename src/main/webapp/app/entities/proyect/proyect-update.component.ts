@@ -14,6 +14,7 @@ import { ICategory } from 'app/shared/model/category.model';
 import { CategoryService } from 'app/entities/category/category.service';
 import { FeeService } from '../fee/fee.service';
 import { IFee } from 'app/shared/model/fee.model';
+import { CategoryStatus } from 'app/shared/model/enumerations/category-status.model';
 
 type SelectableEntity = IApplicationUser | ICategory;
 
@@ -83,7 +84,9 @@ export class ProyectUpdateComponent implements OnInit {
 
       this.applicationUserService.query().subscribe((res: HttpResponse<IApplicationUser[]>) => (this.applicationusers = res.body || []));
 
-      this.categoryService.query().subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
+      this.categoryService
+        .query({ 'status.equals': CategoryStatus.ENABLED })
+        .subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
 
       this.feeService.query({ page: 1, size: 1 }).subscribe((res: HttpResponse<IFee[]>) => {
         this.fee = res.body || [];

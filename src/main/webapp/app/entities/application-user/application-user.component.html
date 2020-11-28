@@ -35,10 +35,10 @@
                                     <td>{{ applicationUser.admin ? 'Administrador' : 'Usuario' }}</td>
                                     <td>
                                         <button class="btn btn-danger btn-sm" (click)="setActive(applicationUser,true)"
-                                            *ngIf="!applicationUser.internalUser?.activated">Deactivated</button>
+                                            *ngIf="!applicationUser.internalUser?.activated">Habilitar</button>
                                         <button class="btn btn-success btn-sm"
                                             (click)="setActive(applicationUser,false)"
-                                            *ngIf="applicationUser.internalUser?.activated">Activated</button>
+                                            *ngIf="applicationUser.internalUser?.activated">Deshabilitar</button>
                                     </td>
                                     <td>{{ applicationUser.internalUser?.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                                     <td>{{ applicationUser.internalUser?.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>

@@ -60,7 +60,6 @@ public class ApplicationUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/application-users")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ANONYMOUS + "\")")
     public ResponseEntity<ApplicationUser> createApplicationUser(@Valid @RequestBody ApplicationUser applicationUser) throws URISyntaxException {
         String subject = "Correo de confirmación del registro de usuario";
         String content = "Gracias por la suscripción";

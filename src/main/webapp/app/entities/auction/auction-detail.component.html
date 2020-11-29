@@ -1,51 +1,67 @@
-<div class="main-content">
+<div class="main-content mt-4">
     <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div *ngIf="auction">
-                        <div class="card-header ">
-                            <h4 class="card-title">Subasta</h4>
-                        </div>
+        <div class="row">
+            <div class="col-md-6 ml-auto mr-auto">
+                <div class="card card-user" *ngIf="auction">
 
-                        <div class="d-flex justify-content-center">
-                            <jhi-carousel [items]="images" [interval]="4000" [keyboard]="false" width="300px" height="200px"></jhi-carousel>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_initalBid">Nombre</label>
-                                <input type="text" class="form-control" name="name" id="field_name" value="{{ auction.prize?.name }}" readonly/>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_description">Descripción</label>
-                                <input type="text" class="form-control" name="name" id="field_description" value="{{ auction.prize?.description }}" readonly/>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_initalBid">Monto inicial</label>
-                                <input type="text" class="form-control" name="name" id="field_initalBid" value="{{ auction.initialBid | currency:'USD':'symbol':'4.2-2'}}" readonly/>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_expirationDate">Fecha límite</label>
-                                <input type="text" class="form-control" name="name" id="field_expirationDate" value="{{ auction.expirationDate | date:'DD-MM-YYYY HH:mm' }}" readonly/>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_state">Estado</label>
-                                <input type="text" class="form-control" name="name" id="field_state" value="{{ auction.state | state }}" readonly/>
-                            </div>
-                        </div>
-
-                        <div class="card-footer text-right">
-                            <button type="submit"
-                                    (click)="previousState()"
-                                    class="btn btn-default"> Atrás
-                            </button>
-                            <button type="button"
-                                    [routerLink]="['/auction', auction.id, 'edit']"
-                                    class="btn btn-primary"> Editar
-                            </button>
-                        </div>
+                    <div class="card-header ">
+                        <h4 class="card-title">Subasta</h4>
                     </div>
+
+                    <div class="d-flex justify-content-center">
+                        <jhi-carousel [items]="images" [interval]="4000" [keyboard]="false" width="300px"
+                            height="200px"></jhi-carousel>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="text-center">
+                            <h5 class="title">{{ auction.prize?.name }}</h5>
+                        </div>
+
+                        <p class="description text-center">
+                            {{ auction.prize?.description }}
+                        </p>
+
+                        <div class="button-container">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 col-6 ml-auto">
+                                  <h4>{{ auction.initialBid | currency:'USD':'symbol' }}
+                                    <br>
+                                    <small>Monto inicial</small>
+                                  </h4>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-6 ml-auto mr-auto">
+                                  <h4>{{ auction.expirationDate | date: 'M/d/yy HH:mm' }}
+                                    <br>
+                                    <small>Fecha límite</small>
+                                  </h4>
+                                </div>
+                                <div class="col-lg-3 mr-auto">
+                                    <h4 *ngIf="auction.winningBid">{{ auction.winningBid | currency:'USD':'symbol' }}
+                                      <br>
+                                      <small>Puja máxima</small>
+                                    </h4>
+                                    <h4 *ngIf="!auction.winningBid">No hay pujas
+                                        <br>
+                                        <small>Puja máxima</small>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="card-footer text-right">
+                        <button type="submit" (click)="previousState()" class="btn btn-default">
+                            Atrás
+                        </button>
+                        <button type="button" *ngIf="isProjectOwner"
+                            [routerLink]="['/auction', auction.id, 'edit']" class="btn btn-primary">
+                            Editar
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

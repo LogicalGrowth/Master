@@ -1,5 +1,5 @@
-<div class="container">
-    <jhi-alert></jhi-alert>
+<jhi-alert></jhi-alert>
+<div class="container mt-5">
     <div *ngIf="proyect">
         <div class="card">
             <div class="card-body">
@@ -15,7 +15,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="stars-outer">
-                                <div class="stars-inner" style="width:{{reviews.rating*100/5}}%"></div>
+                                <div class="stars-inner" style="width:{{rating}}%"></div>
                             </div>
                             <button type="button" *ngIf="isProjectOwner" [routerLink]="['/proyect', proyect.id, 'edit']"
                                     class="btn btn-primary">
@@ -27,7 +27,7 @@
                     <div class="row project-subinfo">
                         <p class="category-type">{{proyect.category?.name}}</p>
                         <p class="pipe">|</p>
-                        <p class="category-type project-type">Proyecto {{ proyect.idType === 'NONPROFIT' ? 'sin fines de lucro': 'con fines de lucro' }}</p>
+                        <p class="category-type project-type">Proyecto {{ proyect.idType === "NONPROFIT" ? 'sin fines de lucro': 'con fines de lucro' }}</p>
                         <p class="pipe soft-name">| Última actualización: {{updatedDays}}</p>
                     </div>
                 </div>
@@ -46,8 +46,8 @@
                         <div class="card-body">
                             <h5 class="card-title text-center">¡Forma parte de este sueño!</h5>
                             <div class="col-lg-12 mb-3">
-                                <span  class="hard-name font-weight-bold text-info">{{ proyect.collected| currency:proyect.currencyType:'symbol':'1.2-2' }}</span>
-                                <span class="soft-name">recaudado de {{ proyect.goalAmount| currency:proyect.currencyType:'symbol':'1.2-2'}}</span>
+                                <span  class="hard-name font-weight-bold text-info">{{ proyect.collected| currency:'USD':'symbol':'1.2-2' }}</span>
+                                <span class="soft-name"> de {{ proyect.goalAmount| currency:'USD':'symbol':'1.2-2'}}</span>
                             </div>
                             <div class="progress">
                                 <div class="progress-bar progress-bar-striped bg-info" role="progressbar"
@@ -60,15 +60,20 @@
                             <button class="btn btn-warning col-md-12" (click)=donate()>
                                 <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
                             </button>
+                            <p class="card-text font-weight-bold" *ngIf="donors && donors.length">Top donadores</p>
                             <div *ngFor="let donor of donors;">
                                 <div class="row">
                                     <div class="col-md-1">
                                         <i class="fa fa-user-plus text-success" aria-hidden="true"></i>
                                     </div>
                                     <div class="col-md-10">
-                                        <p class="card-text soft-name">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}</p>
+                                        <p class="card-text">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}
+                                            <span class="card-text soft-name" style="font-size: 5px"><i class="fa fa-circle" aria-hidden="true"></i></span>
+                                            <span class="card-text soft-name">${{donor[0]}}</span>
+                                        </p>
                                     </div>
-                                </div>
+                                    <hr>
+                                </div><hr>
                             </div>
                             <div *ngIf="donors && !donors.length">
                                 <div class="row">
@@ -107,14 +112,6 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-row col-md-12 justify-content-center">
-                                <!--<div class="p-2">
-                                   <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
-                                   </div>
-
-                                   <div class="p-2">
-                                   <jhi-icon buttonCssClass="btn-facebook" iconCsClass="fa fa-facebook-f">
-                                   </jhi-icon>
-                                   </div>-->
                                 <button class="btn btn-info col-md-12">
                                     <span class="btn-label"><i class="nc-icon nc-circle-10"></i></span> Hacerse socio
                                 </button>
@@ -174,15 +171,15 @@
                                                 <div class="col-md-10" *ngFor="let review of reviews;">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <h4 class="card-title">
-                                                                <div class="stars-outer little-stars">
-                                                                    <div class="stars-inner" style="width:{{review.rating*100/5}}%">
-                                                                    </div>
+                                                            <div class="stars-outer little-stars">
+                                                                <div class="stars-inner" style="width:{{review.rating*100/5}}%">
                                                                 </div>
-                                                            </h4>
-                                                            <p class="card-text">{{ review.message }}</p>
+                                                            </div>
+                                                            <p class="card-text font-italic">
+                                                                {{ review.message }}
+                                                            </p>
                                                             <p class="card-text">
-                                                                <small class="text-muted">{{ review.user }}</small>
+                                                                <small class="card-text soft-name">{{ review.user }}</small>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -278,7 +275,7 @@
                                                     <tbody>
                                                     <tr *ngFor="let auction of auctions">
                                                         <td>{{ auction.prize?.name }}</td>
-                                                        <td>{{ auction.prize?.description }}</td>
+                                                        <td style="max-width: 20rem;">{{ auction.prize?.description }}</td>
                                                         <td>{{ auction.expirationDate | date }}</td>
                                                         <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
                                                         <td>{{ auction.winningBid | currency:'USD':'symbol'}}
@@ -286,7 +283,7 @@
                                                         </td>
                                                         <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
                                                         <td class="text-center">
-                                                            <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                            <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                     [routerLink]="['/auction', auction.id, 'view']">
                                                                 <i class="fa fa-eye"></i>
                                                             </button>
@@ -294,7 +291,7 @@
                                                                     [disabled]="auction.winningBid" [routerLink]="['/auction', auction.id, 'edit']">
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
-                                                            <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                            <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
                                                                 (click)="bid(auction)" [disabled]="auction.winner?.id == userId">
                                                                 <i class="fa fa-gavel"></i>
                                                             </button>
@@ -342,6 +339,19 @@
                             </div>
                             <jhi-timeline [cards]="cards" timelineClass="timeline-simple" style="margin-top: -40px;"></jhi-timeline>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="/proyect" class="text-secondary">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            Ver más proyectos
+                        </a>
                     </div>
                 </div>
             </div>

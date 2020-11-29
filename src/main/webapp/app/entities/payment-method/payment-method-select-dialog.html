@@ -63,12 +63,12 @@
 
       <div class="card flex-wrap" style="width: 600px" *ngIf="paymentMethods?.length === 0">
         <div class="row justify-content-center">
-          <h3>Usted no posee metodos de pago</h3>
+          <h4>Usted no posee metodos de pago</h4>
           <button
-            id="jh-create-entity"
-            class="btn btn-primary float-right jh-create-entity create-payment-method"
-            [routerLink]="['/payment-method/new']"
-          >
+          style="margin-left: 2rem;"
+          id="jh-create-entity"
+          class="btn btn-success btn-round btn-icon btn-sm"
+          [routerLink]="['/payment-method/new']">
             <i class="nc-icon nc-simple-add"></i>
           </button>
         </div>

@@ -74,7 +74,6 @@ export class BankAccountComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
-    this.previousState();
   }
 
   protected onSaveError(): void {

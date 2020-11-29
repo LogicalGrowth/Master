@@ -11,6 +11,7 @@ import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.ApplicationUserCriteria;
 import cr.ac.ucenfotec.fun4fund.service.ApplicationUserQueryService;
 
+import cr.ac.ucenfotec.fun4fund.web.rest.vm.ManagedUserVM;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -59,20 +60,39 @@ public class ApplicationUserResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/application-users")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ANONYMOUS + "\")")
     public ResponseEntity<ApplicationUser> createApplicationUser(@Valid @RequestBody ApplicationUser applicationUser) throws URISyntaxException {
         String subject = "Correo de confirmación del registro de usuario";
         String content = "Gracias por la suscripción";
+        String template = "<subject>Gracias por la suscripción</subject>\n" +
+            "<message>\n" +
+            "Hola,<br/><br/>\n" +
+            "<b>Este</b> correo es para agreadecerte por la suscripción <b>{ProjectTitle}</b>.\n" +
+            "Que disfrutes de las busquedas y las donaciones\n" +
+            "<br/><br/>\n" +
+            "<br/><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n" +
+            "<tr>\n" +
+            "<td>\n" +
+            "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n" +
+            "<tr>\n" +
+            "<td align=\"center\" style=\"border-radius: 3px;\" bgcolor=\"#33AA55\"><a href=\"{Url}\" target=\"_blank\" style=\"font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; text-decoration: none;border-radius: 3px; padding: 12px 18px; border: 1px solid #33AA55; display: inline-block;\">View</a></td>\n" +
+            "</tr>\n" +
+            "</table>\n" +
+            "</td>\n" +
+            "</tr>\n" +
+            "</table><br/><br/>\n" +
+            "<br/>El equipo de Fun4Found<br/><br/></message>";
         log.debug("REST request to save ApplicationUser : {}", applicationUser);
         if (applicationUser.getId() != null) {
             throw new BadRequestAlertException("A new applicationUser cannot already have an ID", ENTITY_NAME, "idexists");
         }
         User user = applicationUser.getInternalUser();
-        UserDTO userDTO = new UserDTO(user);
-        User newUser = userService.createUser(userDTO);
+        user.setPassword(user.getRawpassword());
+        ManagedUserVM userManagedVM = new ManagedUserVM(user);
+        User newUser = userService.registerUser(userManagedVM,user.getRawpassword());
         Long jhisperUserId = newUser.getId();
         applicationUser.getInternalUser().setId(jhisperUserId);
         ApplicationUser result = applicationUserService.save(applicationUser);
+        mailService.sendEmailFromTemplate(applicationUser.getInternalUser(),template,"TEST");
         mailService.sendEmail(applicationUser.getInternalUser().getEmail(),subject,content,false,true);
         return ResponseEntity.created(new URI("/api/application-users/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -94,6 +114,10 @@ public class ApplicationUserResource {
         if (applicationUser.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        User user = applicationUser.getInternalUser();
+        UserDTO userDTO = new UserDTO(user);
+        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+            userDTO.getLangKey(), userDTO.getImageUrl());
         ApplicationUser result = applicationUserService.save(applicationUser);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, applicationUser.getId().toString()))

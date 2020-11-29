@@ -1,18 +1,18 @@
-<div class="row justify-content-center">
-  <div class="col-lg-6">
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
+<div class="row justify-content-center mt-5" style="margin-bottom: 20rem;">
+  <div class="col-lg-8">
     <div class="card">
       <div class="card-header">
         <h4 class="card-title d-inline">Métodos de pago</h4>
         <div class="pull-right">
           <button    id="jh-create-entity"
-          class="btn btn-primary float-right jh-create-entity create-payment-method"
+          class="btn btn-success btn-round btn-icon btn-sm"
           [routerLink]="['/payment-method/new']">
             <i class="nc-icon nc-simple-add"></i>
           </button>
       </div>
       </div>
-    
-      <jhi-alert></jhi-alert>
       <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
           <span class="notFoundCard">No ha agregado ningun método de pago</span>
         </div>

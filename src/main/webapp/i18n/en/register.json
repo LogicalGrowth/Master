@@ -1,8 +1,8 @@
 {
   "register": {
-    "title": "Registration",
+    "title": "Registro",
     "form": {
-      "button": "Register"
+      "button": "Registro"
     },
     "messages": {
       "validate": {

@@ -2,7 +2,7 @@
   "fun4FundApp": {
     "paymentMethod": {
       "home": {
-        "title": "Payment Methods",
+        "title": "Métodos de pago",
         "createLabel": "Create a new Payment Method",
         "createOrEditLabel": "Create or edit a Payment Method",
         "notFound": "No Payment Methods found"

@@ -10,7 +10,7 @@ import { PaymentMethodDeleteDialogComponent } from './payment-method-delete-dial
 import { User } from 'app/core/user/user.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { ApplicationUserService } from '../application-user/application-user.service';
-import { ApplicationUser, IApplicationUser } from 'app/shared/model/application-user.model';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 @Component({
   selector: 'jhi-payment-method',
   templateUrl: './payment-method.component.html',
@@ -118,11 +118,10 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
       const newFavoritePaymentMethod = e.body;
       if (newFavoritePaymentMethod) {
         newFavoritePaymentMethod.favorite = true;
-        newFavoritePaymentMethod.owner = { id: this.account.id };
+        newFavoritePaymentMethod.owner = { id: this.applicationUser![0].id };
         this.subscribeToSaveResponse(this.paymentMethodService.update(newFavoritePaymentMethod));
+        location.reload();
       }
-
-      this.loadPaymentMethods();
     });
   }
 

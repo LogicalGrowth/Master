@@ -11,9 +11,12 @@ import { PasswordResetFinishComponent } from './password-reset/finish/password-r
 import { SettingsComponent } from './settings/settings.component';
 import { accountState } from './account.route';
 import { RegisterWizardComponent } from './register-wizard/register-wizard.component';
+import { ComponentsModule } from 'app/components/components.module';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
-  imports: [Fun4FundSharedModule, RouterModule.forChild(accountState)],
+  imports: [Fun4FundSharedModule, RouterModule.forChild(accountState), ComponentsModule, NgSelectModule],
   declarations: [
     ActivateComponent,
     PasswordComponent,
@@ -22,6 +25,7 @@ import { RegisterWizardComponent } from './register-wizard/register-wizard.compo
     PasswordResetFinishComponent,
     SettingsComponent,
     RegisterWizardComponent,
+    UserProfileComponent,
   ],
 })
 export class AccountModule {}

@@ -1,35 +1,29 @@
-<div class="row">
-	<jhi-alert-error></jhi-alert-error>
-	<jhi-alert></jhi-alert>
-	<div class="alert alert-warning" id="no-result" *ngIf="applicationUsers?.length === 0">
-		<span>No hay usuarios registradas</span>
-	</div>
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
+<div class="alert alert-warning" id="no-result" *ngIf="applicationUsers?.length === 0">
+    <span>No hay usuarios registradas</span>
 </div>
 
-<div class="main-content">
+<div class="main-content mt-5">
     <div class="row justify-content-md-center">
         <div class="col-md-10">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title d-inline">Usuarios</h4>
-                    <div class="pull-right" >
-                        <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/application-user/new']">
-                            <i class="nc-icon nc-simple-add"></i>
-                        </button>
-                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="text-primary">
-                                <th scope="col" ><span>Cédula</span></th>
-                                <th scope="col" ><span>Nombre</span></th>
-                                <th scope="col" ><span>Apellido</span></th>
-                                <th scope="col" ><span>Email</span></th>
-                                <th scope="col" ><span>Teléfono</span></th>
-                                <th scope="col" ><span>Tipo de usuario</span></th>
-                                <th scope="col" ><span>Estado</span></th>
-                                <th scope="col"></th>
+                                <th scope="col"><span>Cédula</span></th>
+                                <th scope="col"><span>Nombre</span></th>
+                                <th scope="col"><span>Apellido</span></th>
+                                <th scope="col"><span>Email</span></th>
+                                <th scope="col"><span>Teléfono</span></th>
+                                <th scope="col"><span>Tipo de usuario</span></th>
+                                <th scope="col"><span>Estado</span></th>
+                                <th scope="col"><span>Fecha de modificación</span></th>
+                                <th scope="col"><span>Fecha de creación</span></th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let applicationUser of applicationUsers ;trackBy: trackId">
@@ -39,28 +33,15 @@
                                     <td>{{ applicationUser.internalUser?.email }}</td>
                                     <td>{{ applicationUser.phoneNumber }}</td>
                                     <td>{{ applicationUser.admin ? 'Administrador' : 'Usuario' }}</td>
-                                    <td>{{ applicationUser.internalUser?.activated ? 'Activo' : 'Inactivo' }}</td>
-                                    <td class="text-right">
-                                        <div class="btn-group">
-                                            <button type="submit"
-                                                    rel="tooltip"
-                                                    [routerLink]="['/application-user', applicationUser.id, 'view']"
-                                                    class="btn btn-info btn-sm">
-                                                <fa-icon icon="eye"></fa-icon>
-                                            </button>
-                                            <button type="submit"
-                                                    rel="tooltip"
-                                                    [routerLink]="['/application-user', applicationUser.id, 'edit']"
-                                                    class="btn btn-primary btn-sm">
-                                                <fa-icon icon="pencil-alt"></fa-icon>
-                                            </button>
-                                            <button type="submit" (click)="delete(applicationUser)"
-                                                    rel="tooltip"
-                                                    class="btn btn-danger btn-sm">
-                                                <fa-icon icon="times"></fa-icon>
-                                            </button>
-                                        </div>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" (click)="setActive(applicationUser,true)"
+                                            *ngIf="!applicationUser.internalUser?.activated">Habilitar</button>
+                                        <button class="btn btn-success btn-sm"
+                                            (click)="setActive(applicationUser,false)"
+                                            *ngIf="applicationUser.internalUser?.activated">Deshabilitar</button>
                                     </td>
+                                    <td>{{ applicationUser.internalUser?.createdDate | date:'dd/MM/yy HH:mm'}}</td>
+                                    <td>{{ applicationUser.internalUser?.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -70,4 +51,3 @@
         </div>
     </div>
 </div>
-

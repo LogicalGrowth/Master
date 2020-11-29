@@ -81,7 +81,7 @@ public class PaymentResource {
 
         Proyect proyect = proyectService.findOne(payment.getProyect().getId()).get();
 
-        Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getApplicationUser().getId());
+        Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getOwner().getId());
 
         Double fee = payment.getAmount() * proyect.getFee() / 100;
         proyect.setCollected(proyect.getCollected() + payment.getAmount() - fee);
@@ -112,7 +112,6 @@ public class PaymentResource {
 
         Proyect proyectResult = proyectService.save(proyect);
         Payment result = paymentService.save(payment);
-
 
         //Guardar aquí fee
 

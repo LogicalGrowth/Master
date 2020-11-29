@@ -190,7 +190,7 @@ public class UserDTO {
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
+            ", lastModifieDated=" + lastModifiedDate +
             ", authorities=" + authorities +
             "}";
     }

@@ -1,49 +1,46 @@
-<div class="main-content">
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
+<div class="main-content mt-5">
     <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div *ngIf="category">
-                        <div class="card-header ">
-                            <h4 class="card-title">Categoría</h4>
+        <div class="row">
+            <div class="col-md-6 ml-auto mr-auto">
+                <div class="card card-user" *ngIf="category">
+
+                    <div class="card-header">
+                        <h4 class="card-title">Categoría</h4>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <div *ngIf="category.image" class="w-50 p-3">
+                            <img src="{{category.image?.url}}">
                         </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_name">Nombre</label>
-                                <input type="text" class="form-control" name="name" id="field_name" value="{{ category.name }}" readonly/>
-                            </div>
+                        <div *ngIf="!category.image">
+                            <p>No hay ninguna imagen asociada.</p>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_description">Descripción</label>
-                                <input type="text" class="form-control" name="description" id="field_description" value="{{ category.description }}" readonly/>
-                            </div>
+                    <div class="card-body">
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="field_status">Estado</label>
-                                <input type="text" class="form-control" name="status" id="field_status" value="{{ category.status == 'DISABLED' ? 'Inactivo' : 'Activo'}}" readonly/>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-control-label">Imagen</label>
-                                <div *ngIf="category.image" class="w-50 p-3">
-                                    <img src="{{category.image?.url}}">
-                                </div>
-                                <div *ngIf="!category.image">
-                                    <p>No hay ninguna imagen asociada.</p>
-                                </div>
-                            </div>
+                        <div class="text-center">
+                            <h5 class="title">{{ category.name }}</h5>
                         </div>
 
-                        <div class="card-footer text-right">
-                            <button type="submit"
-                                    (click)="previousState()"
-                                    class="btn btn-default"> Atrás
-                            </button>
-                            <button type="button"
-                                    [routerLink]="['/category', category.id, 'edit']"
-                                    class="btn btn-primary"> Editar
-                            </button>
-                        </div>
+                        <p class="description text-center">
+                            {{ category.description }}
+                        </p>
+
+                        <hr>
+                    </div>
+
+                    <div class="card-footer text-right">
+                        <button type="submit"
+                                (click)="previousState()"
+                                class="btn btn-default"> Atrás
+                        </button>
+                        <button type="button"
+                                [routerLink]="['/category', category.id, 'edit']"
+                                class="btn btn-primary"> Editar
+                        </button>
                     </div>
                 </div>
             </div>

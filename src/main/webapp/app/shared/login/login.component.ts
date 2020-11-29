@@ -8,6 +8,7 @@ import { LoginService } from 'app/core/login/login.service';
 @Component({
   selector: 'jhi-login-modal',
   templateUrl: './login.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class LoginModalComponent implements AfterViewInit {
   @ViewChild('username', { static: false })
@@ -59,7 +60,7 @@ export class LoginModalComponent implements AfterViewInit {
 
   register(): void {
     this.activeModal.dismiss('to state register');
-    this.router.navigate(['/account/register']);
+    this.router.navigate(['/account/register-wizard']);
   }
 
   requestResetPassword(): void {

@@ -37,7 +37,10 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "blueprints": []
+    "blueprints": [],
+    "herokuAppName": "prod-fun-4-fund",
+    "herokuDeployType": "jar",
+    "herokuJavaVersion": "14"
   },
   "entities": []
 }

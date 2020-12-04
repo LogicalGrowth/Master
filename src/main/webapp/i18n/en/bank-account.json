@@ -1,6 +1,6 @@
 {
   "bankAccount": {
-    "title": "Cuenta de banco",
+    "title": "Configuraciones",
     "refresh.button": "Refresh",
     "stacktrace": "Stacktrace",
     "details": {

@@ -7,8 +7,8 @@
         "createOrEditLabel": "Create or edit a Fee",
         "notFound": "No Fees found"
       },
-      "created": "A new Fee is created with identifier {{ param }}",
-      "updated": "A Fee is updated with identifier {{ param }}",
+      "created": "Comisión creada exitosamente.",
+      "updated": "Comisión actualizada exitosamente.",
       "deleted": "A Fee is deleted with identifier {{ param }}",
       "delete": {
         "question": "Are you sure you want to delete Fee {{ id }}?"

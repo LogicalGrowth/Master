@@ -40,7 +40,7 @@ export const proyectRoute: Routes = [
     path: '',
     component: ProyectComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'fun4FundApp.proyect.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -52,7 +52,7 @@ export const proyectRoute: Routes = [
       proyect: ProyectResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER, Authority.ADMIN],
       pageTitle: 'fun4FundApp.proyect.home.title',
     },
     canActivate: [UserRouteAccessService],

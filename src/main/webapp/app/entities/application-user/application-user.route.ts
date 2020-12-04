@@ -39,7 +39,7 @@ export const applicationUserRoute: Routes = [
     path: '',
     component: ApplicationUserComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'fun4FundApp.applicationUser.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const applicationUserRoute: Routes = [
       applicationUser: ApplicationUserResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'fun4FundApp.applicationUser.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -63,7 +63,7 @@ export const applicationUserRoute: Routes = [
       applicationUser: ApplicationUserResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'fun4FundApp.applicationUser.home.title',
     },
     canActivate: [UserRouteAccessService],
@@ -75,7 +75,7 @@ export const applicationUserRoute: Routes = [
       applicationUser: ApplicationUserResolve,
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'fun4FundApp.applicationUser.home.title',
     },
     canActivate: [UserRouteAccessService],

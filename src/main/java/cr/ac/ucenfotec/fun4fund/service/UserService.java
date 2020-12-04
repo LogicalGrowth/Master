@@ -203,7 +203,6 @@ public class UserService {
             })
             .map(UserDTO::new);
     }
-
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
@@ -300,5 +299,47 @@ public class UserService {
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
+    }
+
+    public void updateAdmin(User user, boolean isAdmin){
+        Set<Authority> authorities = new HashSet<>();
+        if(isAdmin){
+            authorityRepository.findById(AuthoritiesConstants.ADMIN).ifPresent(authorities::add);
+        }else{
+            authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        }
+        user.setAuthorities(authorities);
+        userRepository.save(user);
+    }
+
+    public Optional<UserDTO> updateUser(UserDTO userDTO, boolean isAdmin) {
+        return Optional.of(userRepository
+            .findById(userDTO.getId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(user -> {
+                this.clearUserCaches(user);
+                user.setLogin(userDTO.getLogin().toLowerCase());
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                if (userDTO.getEmail() != null) {
+                    user.setEmail(userDTO.getEmail().toLowerCase());
+                }
+                Set<Authority> authorities = new HashSet<>();
+                if(isAdmin){
+                    authorityRepository.findById(AuthoritiesConstants.ADMIN).ifPresent(authorities::add);
+                }else{
+                    authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+                }
+
+                user.setAuthorities(authorities);
+                user.setImageUrl(userDTO.getImageUrl());
+                user.setActivated(userDTO.isActivated());
+                user.setLangKey(userDTO.getLangKey());
+                this.clearUserCaches(user);
+                log.debug("Changed Information for User: {}", user);
+                return user;
+            })
+            .map(UserDTO::new);
     }
 }

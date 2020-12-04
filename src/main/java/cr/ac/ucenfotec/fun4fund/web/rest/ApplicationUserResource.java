@@ -115,9 +115,8 @@ public class ApplicationUserResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         User user = applicationUser.getInternalUser();
-        UserDTO userDTO = new UserDTO(user);
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+       UserDTO userDTO = new UserDTO(user);
+        userService.updateUser(userDTO, applicationUser.isAdmin());
         ApplicationUser result = applicationUserService.save(applicationUser);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, applicationUser.getId().toString()))

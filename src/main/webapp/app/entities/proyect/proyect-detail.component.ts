@@ -195,6 +195,6 @@ export class ProyectDetailComponent implements OnInit {
   }
 
   partnerRequest(): void {
-    this.partnerRequestModalService.open(this.proyect!);
+    this.partnerRequestModalService.open(this.proyect!, this.applicationUser![0]);
   }
 }

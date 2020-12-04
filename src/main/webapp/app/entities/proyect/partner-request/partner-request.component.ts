@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PartnerRequestService } from 'app/entities/partner-request/partner-request.service';
+import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { RequestStatus } from 'app/shared/model/enumerations/request-status.model';
 import { IPartnerRequest, PartnerRequest } from 'app/shared/model/partner-request.model';
 import { IProyect } from 'app/shared/model/proyect.model';
@@ -15,10 +16,12 @@ import { Observable } from 'rxjs';
 })
 export class PartnerRequestComponent implements OnInit {
   @Input() public proyect: IProyect | undefined;
+  @Input() public user: IApplicationUser | undefined;
+
   isSaving = false;
   editForm = this.fb.group({
     id: [],
-    amount: [null, [Validators.required, Validators.pattern('^[0-9]*$')]],
+    amount: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
   });
 
   constructor(private fb: FormBuilder, public activeModal: NgbActiveModal, private partnerRequestService: PartnerRequestService) {}
@@ -28,11 +31,7 @@ export class PartnerRequestComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const partnerRequest = this.createFromForm();
-    if (partnerRequest.id !== undefined) {
-      this.subscribeToSaveResponse(this.partnerRequestService.update(partnerRequest));
-    } else {
-      this.subscribeToSaveResponse(this.partnerRequestService.create(partnerRequest));
-    }
+    this.subscribeToSaveResponse(this.partnerRequestService.create(partnerRequest));
   }
 
   private createFromForm(): IPartnerRequest {
@@ -41,6 +40,8 @@ export class PartnerRequestComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       amount: this.editForm.get(['amount'])!.value,
       status: RequestStatus.SEND,
+      proyect: this.proyect,
+      applicant: this.user,
     };
   }
 

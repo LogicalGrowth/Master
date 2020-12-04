@@ -17,6 +17,12 @@
                     <input type="number" class="form-control" name="amount" id="amount" formControlName="amount">
                 </div>
 
+                <div class="text-right">
+                  <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <span>Guardar</span>
+                  </button>
+                </div>
+
             </form>
         </div>
 

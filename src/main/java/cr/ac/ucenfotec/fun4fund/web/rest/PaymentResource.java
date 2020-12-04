@@ -46,21 +46,13 @@ public class PaymentResource {
 
     private final PaymentRepository paymentRepository;
 
-    private final MailService mailService;
-
-    private final ApplicationUserService applicationUserService;
-
-    private final ProyectService proyectService;
-
-    public PaymentResource(PaymentService paymentService, PaymentQueryService paymentQueryService,
-                           PaymentRepository paymentRepository, MailService mailService, ApplicationUserService applicationUserService,
-                           ProyectService proyectService) {
+    public PaymentResource(PaymentService paymentService,
+                           PaymentQueryService paymentQueryService,
+                           PaymentRepository paymentRepository
+    ) {
         this.paymentService = paymentService;
         this.paymentQueryService = paymentQueryService;
         this.paymentRepository = paymentRepository;
-        this.mailService = mailService;
-        this.applicationUserService = applicationUserService;
-        this.proyectService = proyectService;
     }
 
     /**
@@ -77,43 +69,8 @@ public class PaymentResource {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        Optional<ApplicationUser> applicationUser = applicationUserService.findOne(payment.getApplicationUser().getId());
-
-        Proyect proyect = proyectService.findOne(payment.getProyect().getId()).get();
-
-        Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getOwner().getId());
-
-        Double fee = payment.getAmount() * proyect.getFee() / 100;
-        proyect.setCollected(proyect.getCollected() + payment.getAmount() - fee);
-
-        String type = "";
-
-        if(payment.getType() == ProductType.AUCTION){
-            type = "la puja de $" + payment.getAmount() + "de la subasta en el proyecto " + proyect.getName();
-        } else if(payment.getType() == ProductType.DONATION){
-            type = "la donación de $" + payment.getAmount() +" al proyecto " + proyect.getName();
-
-            String msgSubject = "Donación recibida";
-            String msg = "Ha recibido una donación de $" + payment.getAmount() +" en el proyecto " + proyect.getName() + ".";
-            mailService.sendEmail(proyectOwner.get().getInternalUser().getEmail(),msgSubject,msg,false,true);
-
-        }else if(payment.getType() == ProductType.EXCLUSIVE_CONTENT){
-            type = "la compra de contenido exlusivo en el proyecto " + proyect.getName() + "monto final: $" + payment.getAmount();
-        }else if(payment.getType() == ProductType.PARTNERSHIP){
-            type = "";
-        }else if(payment.getType() == ProductType.RAFFLE){
-            type = "participar en la rifa del proyecto " + proyect.getName()+ "el monto final fue de: $" + payment.getAmount();
-        }
-        String subject = "Recibido de pago";
-
-        String content = "Muchas gracias por " + type;
-        mailService.sendEmail(applicationUser.get().getInternalUser().getEmail(),subject,content,false,true);
-
-
-        Proyect proyectResult = proyectService.save(proyect);
-        Payment result = paymentService.save(payment);
-
-        //Guardar aquí fee
+        Payment result = paymentService.makePayment(payment);
+        String content = "Muchas gracias por " + result.getType();
 
         return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, content))

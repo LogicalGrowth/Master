@@ -1,0 +1,14 @@
+.flexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.flexContent {
+  flex: 1 0 40%;
+  margin-bottom: 5rem;
+}
+
+.flexTitle {
+  display: flex;
+}

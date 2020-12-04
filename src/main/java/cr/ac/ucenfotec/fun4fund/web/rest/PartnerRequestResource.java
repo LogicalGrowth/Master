@@ -78,6 +78,7 @@ public class PartnerRequestResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         PartnerRequest result = partnerRequestService.save(partnerRequest);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, partnerRequest.getId().toString()))
             .body(result);

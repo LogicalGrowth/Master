@@ -1,0 +1,45 @@
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
+<div class="alert alert-warning" id="no-result" *ngIf="partnerRequests?.length === 0">
+    <span>No hay solicitudes de socio registradas</span>
+</div>
+<div class="main-content mt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title d-inline">Solicitudes de socio</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <th>Nombre proyecto</th>
+                                <th>Nombre del socio</th>
+                                <th>Dinero propuesto</th>
+                                <th>Acciones</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let partnerRequest of partnerRequests;">
+                                    <td>{{ partnerRequest.proyect?.name }}</td>
+                                    <td>{{ partnerRequest.applicant?.internalUser?.firstName }} {{ partnerRequest.applicant?.internalUser?.lastName }}</td>
+                                    <td style="max-width: 29rem;">{{ partnerRequest.amount | currency:'USD':'symbol':'1.2-2'}}</td>
+                                    <td>
+                                        <button type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                            (click)="accept(partnerRequest)">
+                                            <i class="fa fa-check-circle"></i>
+                                        </button>
+                                        <button type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm"
+                                            (click)="delete(partnerRequest)">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

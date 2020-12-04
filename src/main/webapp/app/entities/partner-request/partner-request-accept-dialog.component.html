@@ -1,6 +1,6 @@
-<form *ngIf="partnerRequest" name="deleteForm" (ngSubmit)="confirmDelete(partnerRequest!)">
+<form *ngIf="partnerRequest" name="deleteForm" (ngSubmit)="confirmApprove(partnerRequest)">
     <div class="modal-header">
-        <h4 class="modal-title">Descartar solicitud</h4>
+        <h4 class="modal-title">Aprobar solicitud</h4>
 
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="cancel()">&times;</button>
@@ -9,7 +9,7 @@
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
 
-        <p id="jhi-delete-partnerRequest-heading">¿Quieres descartar esta solicitud de socio?</p>
+        <p id="jhi-delete-partnerRequest-heading">¿Quieres aprobar esta solicitud de socio?</p>
     </div>
 
     <div class="modal-footer">
@@ -17,8 +17,8 @@
             <span>Cancelar</span>
         </button>
 
-        <button id="jhi-confirm-delete-partnerRequest" type="submit" class="btn btn-danger">
-            <span>Borrar</span>
+        <button id="jhi-confirm-delete-partnerRequest" type="submit" class="btn btn-success">
+            <span>Aprobar</span>
         </button>
     </div>
 </form>

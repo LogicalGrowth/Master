@@ -13,6 +13,7 @@ import { ComponentsModule } from 'app/components/components.module';
 import { ProyectImageUpdateComponent } from './proyect-image-update/proyect-image-update.component';
 import { DonationComponent } from './donation/donation.component';
 import { PartnerRequestComponent } from './partner-request/partner-request.component';
+import { PartnerRequestListComponent } from './partner-request-list/partner-request-list.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { PartnerRequestComponent } from './partner-request/partner-request.compo
     ProyectImageUpdateComponent,
     DonationComponent,
     PartnerRequestComponent,
+    PartnerRequestListComponent,
   ],
   entryComponents: [ProyectDeleteDialogComponent],
 })

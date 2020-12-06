@@ -14,6 +14,7 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
   data: any;
   labels: any[] = [];
   datasets: ChartDataSets[] = [];
+  chart: any;
 
   constructor(protected eventManager: JhiEventManager, protected auctionService: AuctionService) {
     this.loadData();
@@ -21,10 +22,13 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
 
   loadData(): void {
     const monthsElement = document.querySelector('#monthsFilter') as HTMLSelectElement;
-    this.auctionService.getAuctionsWinnerByMonth(+monthsElement.value).subscribe(data => {
+    const number = monthsElement ? +monthsElement.value : 6;
+    this.auctionService.getAuctionsWinnerByMonth(number).subscribe(data => {
       this.data = data.body;
       const months = new Intl.DateTimeFormat('es', { month: 'long' });
       const pointsData: any[] = [];
+      this.labels = [];
+      this.datasets = [];
       for (let i = 0; i < this.data.length; i++) {
         this.labels.push(months.format(new Date(2020, this.data[i].month - 1, 1)));
         pointsData.push(this.data[i].count);
@@ -40,6 +44,11 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
         borderWidth: 3,
         data: pointsData,
       });
+      if (this.chart) {
+        this.chart.data.labels = this.labels;
+        this.chart.data.datasets = this.datasets;
+        this.chart.update();
+      }
     });
   }
 
@@ -49,5 +58,9 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
     if (this.eventSubscriber) {
       this.eventManager.destroy(this.eventSubscriber);
     }
+  }
+
+  onchange(chart: any): void {
+    this.chart = chart;
   }
 }

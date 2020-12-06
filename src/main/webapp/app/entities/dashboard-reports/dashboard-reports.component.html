@@ -1,7 +1,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6" *ngIf="labels.length !== 0 && datasets.length !== 0">
-            <select name="cars" id="monthsFilter" (change)="loadData">
+            <select class="form-control col-md-4 ml-auto" id="monthsFilter" (change)="loadData()">
                 <option value="2">2 meses</option>
                 <option value="3">3 meses</option>
                 <option value="4">4 meses</option>
@@ -13,8 +13,9 @@
                 <option value="10">10 meses</option>
                 <option value="11">11 meses</option>
                 <option value="12">12 meses</option>
-              </select>
-            <jhi-chart-line id="chat1" [labels]="labels" [datasets]="datasets" title="Reporte de subastas ganadas por mes">
+            </select>
+            <jhi-chart-line id="chat1" [labels]="labels" [datasets]="datasets"
+                title="Reporte de subastas ganadas por mes" [onchange]='onchange.bind(this)'>
             </jhi-chart-line>
         </div>
     </div>

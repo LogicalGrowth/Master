@@ -12,6 +12,7 @@ export class ChartLineComponent implements OnInit {
   @Input() datasets: ChartDataSets[] = [];
   @Input() title: any;
   @Input() id: any;
+  @Input() onchange: any;
   gradientStroke: any;
   chartColor = '#FFFFFF';
   canvas: any;
@@ -81,5 +82,9 @@ export class ChartLineComponent implements OnInit {
         },
       },
     });
+
+    if (typeof this.onchange === 'function') {
+      this.onchange(this.myChart);
+    }
   }
 }

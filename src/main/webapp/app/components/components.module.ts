@@ -19,6 +19,7 @@ import { StatePipe } from './state.pipe';
 import { LastUpdatePipe } from './lastUpdate.pipe';
 import { PaypalButtonComponent } from './paypal-button/paypal-button.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+import { ChartLineComponent } from './chart-line/chart-line.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     StatePipe,
     LastUpdatePipe,
     PaypalButtonComponent,
+    ChartLineComponent,
   ],
   imports: [
     CommonModule,
@@ -60,6 +62,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     StatePipe,
     LastUpdatePipe,
     PaypalButtonComponent,
+    ChartLineComponent,
   ],
 })
 export class ComponentsModule {}

@@ -11,6 +11,7 @@ export class ChartLineComponent implements OnInit {
   @Input() labels: any[] = [];
   @Input() datasets: ChartDataSets[] = [];
   @Input() title: any;
+  @Input() id: any;
   gradientStroke: any;
   chartColor = '#FFFFFF';
   canvas: any;
@@ -21,7 +22,7 @@ export class ChartLineComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.canvas = document.getElementById('line-chard');
+    this.canvas = document.querySelector(`#${this.id} canvas`);
     this.ctx = this.canvas.getContext('2d');
 
     this.gradientStroke = this.ctx.createLinearGradient(500, 0, 100, 0);

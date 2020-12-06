@@ -70,4 +70,10 @@ export class AuctionService {
     }
     return res;
   }
+
+  getAuctionsWinnerByMonth(numMonths = 6): Observable<EntityResponseType> {
+    return this.http
+      .get(`${this.resourceUrl}/byMonthWinner?numberMonths=${numMonths}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 }

@@ -1,6 +1,7 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Auction;
+import cr.ac.ucenfotec.fun4fund.domain.AuctionAnswerStatistics;
 import cr.ac.ucenfotec.fun4fund.domain.Prize;
 import cr.ac.ucenfotec.fun4fund.domain.Resource;
 import cr.ac.ucenfotec.fun4fund.service.AuctionService;
@@ -156,5 +157,15 @@ public class AuctionResource {
         log.debug("REST request to delete Auction : {}", id);
         auctionService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/auctions/byMonthWinner")
+    public List<AuctionAnswerStatistics> getAuctionsWinnerByMonth(
+        @RequestParam(name = "numberMonths", required = false, defaultValue = "6") int numberMonths) {
+        if(numberMonths == 0){
+            numberMonths = 6;
+        }
+        List<AuctionAnswerStatistics> data = auctionService.getWinnersAuctionByMonth(numberMonths);
+        return data;
     }
 }

@@ -88,8 +88,13 @@ import { RouterModule } from '@angular/router';
         path: 'config-system',
         loadChildren: () => import('./config-system/config-system.module').then(m => m.Fun4FundConfigSystemModule),
       },
+      {
+        path: 'dashboard-reports',
+        loadChildren: () => import('./dashboard-reports/dashboard-reports.module').then(m => m.Fun4FundDashboardReportsModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],
+  declarations: [],
 })
 export class Fun4FundEntityModule {}

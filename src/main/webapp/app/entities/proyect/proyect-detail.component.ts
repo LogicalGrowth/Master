@@ -197,4 +197,12 @@ export class ProyectDetailComponent implements OnInit {
   partnerRequest(): void {
     this.partnerRequestModalService.open(this.proyect!, this.applicationUser![0]);
   }
+
+  facebook(): void {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href);
+  }
+
+  twitter(): void {
+    window.open('https://twitter.com/intent/tweet?text=' + window.location.href);
+  }
 }

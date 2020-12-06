@@ -143,6 +143,12 @@
                     <button class="btn btn-warning col-md-12" (click)=donate()>
                         <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
                     </button>
+                    <div>
+                        <jhi-icon buttonCssClass="btn-facebook fb-share-button" iconCssClass="fa fa-facebook-f"
+                            [functionClick]='facebook'></jhi-icon>
+                        <jhi-icon buttonCssClass="btn-twitter" iconCssClass="fa fa-twitter"
+                            [functionClick]='twitter'></jhi-icon>
+                    </div>
                 </div>
                 <div class="col-md-9">
                     <div class="card">

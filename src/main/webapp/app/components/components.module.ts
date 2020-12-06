@@ -20,6 +20,7 @@ import { LastUpdatePipe } from './lastUpdate.pipe';
 import { PaypalButtonComponent } from './paypal-button/paypal-button.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { SmallCardImagesComponent } from './small-card-images/small-card-images.component';
+import { ChartLineComponent } from './chart-line/chart-line.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { SmallCardImagesComponent } from './small-card-images/small-card-images.
     LastUpdatePipe,
     PaypalButtonComponent,
     SmallCardImagesComponent,
+    ChartLineComponent,
   ],
   imports: [
     CommonModule,
@@ -63,6 +65,7 @@ import { SmallCardImagesComponent } from './small-card-images/small-card-images.
     LastUpdatePipe,
     PaypalButtonComponent,
     SmallCardImagesComponent,
+    ChartLineComponent,
   ],
 })
 export class ComponentsModule {}

@@ -1,7 +1,12 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.PartnerRequest;
+import cr.ac.ucenfotec.fun4fund.domain.Payment;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.RequestStatus;
+import cr.ac.ucenfotec.fun4fund.service.MailService;
 import cr.ac.ucenfotec.fun4fund.service.PartnerRequestService;
+import cr.ac.ucenfotec.fun4fund.service.PaymentService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.PartnerRequestCriteria;
 import cr.ac.ucenfotec.fun4fund.service.PartnerRequestQueryService;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,9 +44,19 @@ public class PartnerRequestResource {
 
     private final PartnerRequestQueryService partnerRequestQueryService;
 
-    public PartnerRequestResource(PartnerRequestService partnerRequestService, PartnerRequestQueryService partnerRequestQueryService) {
+    private final PaymentService paymentService;
+
+    private final MailService mailService;
+
+    public PartnerRequestResource(PartnerRequestService partnerRequestService,
+                                  PartnerRequestQueryService partnerRequestQueryService,
+                                  PaymentService paymentService,
+                                  MailService mailService
+    ) {
         this.partnerRequestService = partnerRequestService;
         this.partnerRequestQueryService = partnerRequestQueryService;
+        this.paymentService = paymentService;
+        this.mailService = mailService;
     }
 
     /**
@@ -78,6 +94,23 @@ public class PartnerRequestResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         PartnerRequest result = partnerRequestService.save(partnerRequest);
+
+        if (result.getStatus() == RequestStatus.ACCEPTED){
+            Payment payment = new Payment();
+            payment.setAmount(result.getAmount());
+            payment.setType(ProductType.PARTNERSHIP);
+            payment.setApplicationUser(partnerRequest.getApplicant());
+            payment.setProyect(partnerRequest.getProyect());
+            payment.setTimeStamp(ZonedDateTime.now());
+
+            paymentService.makePayment(payment);
+        }
+        else{
+            String subject = "Solicitud de socio rechazada";
+            String content = result.getProyect().getName() + " ha rechazado su propuesta de socio.";
+            mailService.sendEmail(partnerRequest.getApplicant().getInternalUser().getEmail(),subject,content,false,true);
+        }
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, partnerRequest.getId().toString()))
             .body(result);

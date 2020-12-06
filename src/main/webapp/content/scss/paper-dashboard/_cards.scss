@@ -139,3 +139,10 @@
 .card-block {
   display: block;
 }
+
+.card-img-top,
+.card-img-bottom,
+.card-img {
+  min-height: 200px;
+  max-height: 200px;
+}

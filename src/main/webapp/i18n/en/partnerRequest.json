@@ -7,14 +7,14 @@
         "createOrEditLabel": "Create or edit a Partner Request",
         "notFound": "No Partner Requests found"
       },
-      "created": "A new Partner Request is created with identifier {{ param }}",
-      "updated": "A Partner Request is updated with identifier {{ param }}",
+      "created": "Solicitud de socio creada existosamente.",
+      "updated": "Solicitud de socio actualizada existosamente.",
       "deleted": "A Partner Request is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Are you sure you want to delete Partner Request {{ id }}?"
+        "question": "¿Quieres descartar esta solicitud de socio?"
       },
       "detail": {
-        "title": "Partner Request"
+        "title": "Solicitud de socio"
       },
       "amount": "Amount",
       "status": "Status",

@@ -78,7 +78,7 @@
                                 <div class="row justify-content-md-center">
                                     <div *ngFor="let category of  categories" class="col-lg-3 col-md-6 col-sm-6">
                                         <input type="checkbox" id="category-id" data-id= {{category.id}}>
-                                        <jhi-small-card description="{{category.name}}" title="{{category.description}}" icon="{{category.image == null ? '../../../content/images/noimagen.jpg' : category.image }}"></jhi-small-card>
+                                        <jhi-small-card-images description="{{category.name}}" title="{{category.description}}" url="{{category.image == null ? '../../../content/images/noimagen.jpg' : category.image.url }}"></jhi-small-card-images>
                                     </div>
                                 </div>
                           </div>

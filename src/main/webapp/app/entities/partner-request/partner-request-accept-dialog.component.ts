@@ -7,9 +7,9 @@ import { PartnerRequestService } from './partner-request.service';
 import { RequestStatus } from 'app/shared/model/enumerations/request-status.model';
 
 @Component({
-  templateUrl: './partner-request-delete-dialog.component.html',
+  templateUrl: './partner-request-accept-dialog.component.html',
 })
-export class PartnerRequestDeleteDialogComponent {
+export class PartnerRequestAcceptDialogComponent {
   partnerRequest?: IPartnerRequest;
 
   constructor(
@@ -22,8 +22,8 @@ export class PartnerRequestDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(partnerRequest: IPartnerRequest): void {
-    partnerRequest.status = RequestStatus.DENIED;
+  confirmApprove(partnerRequest: IPartnerRequest): void {
+    partnerRequest.status = RequestStatus.ACCEPTED;
     this.partnerRequestService.update(partnerRequest).subscribe(() => {
       this.eventManager.broadcast('partnerRequestListModification');
       this.activeModal.close();

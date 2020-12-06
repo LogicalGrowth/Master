@@ -6,6 +6,7 @@ import { PartnerRequestComponent } from './partner-request.component';
 import { PartnerRequestDetailComponent } from './partner-request-detail.component';
 import { PartnerRequestUpdateComponent } from './partner-request-update.component';
 import { PartnerRequestDeleteDialogComponent } from './partner-request-delete-dialog.component';
+import { PartnerRequestAcceptDialogComponent } from './partner-request-accept-dialog.component';
 import { partnerRequestRoute } from './partner-request.route';
 
 @NgModule({
@@ -15,7 +16,8 @@ import { partnerRequestRoute } from './partner-request.route';
     PartnerRequestDetailComponent,
     PartnerRequestUpdateComponent,
     PartnerRequestDeleteDialogComponent,
+    PartnerRequestAcceptDialogComponent,
   ],
-  entryComponents: [PartnerRequestDeleteDialogComponent],
+  entryComponents: [PartnerRequestDeleteDialogComponent, PartnerRequestAcceptDialogComponent],
 })
 export class Fun4FundPartnerRequestModule {}

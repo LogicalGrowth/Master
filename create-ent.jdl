@@ -203,6 +203,9 @@ entity PasswordHistory {
     status PasswordStatus
 }
 
+entity Ticket {
+}
+
 //filter
 filter Resource, ApplicationUser, PasswordHistory, Recommendation, AppLog, Fee, AdminPreferences, UserPreferences, Payment, Notification
 filter PartnerRequest, Prize, ExclusiveContent, Raffle, Auction, Review, Checkpoint, Category, Proyect, PaymentMethod
@@ -219,7 +222,15 @@ relationship OneToMany {
     ApplicationUser{proyect} to Proyect{owner},
     ApplicationUser{notification} to Notification,
     ApplicationUser{payment} to Payment,
-    ApplicationUser{favorite} to Proyect
+    
+    ApplicationUser{auction} to Auction{winner} 
+    
+    ApplicationUser{partnerRequest} to PartnerRequest{applicant}
+}
+
+//Favorite
+relationship ManyToMany {
+	ApplicationUser{favorite} to Proyect{proyect}
 }
 
 //Proyect
@@ -253,7 +264,6 @@ relationship OneToMany {
 //Auction
 relationship OneToOne {
 	Auction{prize} to Prize,
-    Auction{winner} to ApplicationUser
 }
 
 //Raffle
@@ -271,7 +281,8 @@ relationship OneToOne {
 	ExclusiveContent{prize} to Prize
 }
 
-//PartnerRequest
-relationship OneToOne {
-	PartnerRequest{applicant} to ApplicationUser
+//Tickets
+relationship OneToMany {
+	ApplicationUser to Ticket{buyer}
+    Raffle to Ticket{raffle}
 }

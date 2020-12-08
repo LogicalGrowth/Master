@@ -136,7 +136,6 @@ export class ProyectUpdateComponent implements OnInit {
       proyect.collected = this.updateProyect.collected;
       proyect.rating = this.updateProyect.rating;
       proyect.owner = this.updateProyect.owner;
-      proyect.applicationUser = this.updateProyect.applicationUser;
       proyect.creationDate = this.updateProyect.creationDate;
       proyect.fee = this.updateProyect.fee;
       this.isUpdate = true;

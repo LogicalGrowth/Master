@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { IPrize } from 'app/shared/model/prize.model';
+import { ITicket } from 'app/shared/model/ticket.model';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { ActivityStatus } from 'app/shared/model/enumerations/activity-status.model';
@@ -11,6 +12,7 @@ export interface IRaffle {
   expirationDate?: Moment;
   state?: ActivityStatus;
   prize?: IPrize;
+  tickets?: ITicket[];
   buyer?: IApplicationUser;
   proyect?: IProyect;
 }
@@ -23,6 +25,7 @@ export class Raffle implements IRaffle {
     public expirationDate?: Moment,
     public state?: ActivityStatus,
     public prize?: IPrize,
+    public tickets?: ITicket[],
     public buyer?: IApplicationUser,
     public proyect?: IProyect
   ) {}

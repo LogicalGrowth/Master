@@ -5,6 +5,8 @@ import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,9 +47,18 @@ public class ApplicationUserService {
     @Transactional(readOnly = true)
     public List<ApplicationUser> findAll() {
         log.debug("Request to get all ApplicationUsers");
-        return applicationUserRepository.findAll();
+        return applicationUserRepository.findAllWithEagerRelationships();
     }
 
+
+    /**
+     * Get all the applicationUsers with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<ApplicationUser> findAllWithEagerRelationships(Pageable pageable) {
+        return applicationUserRepository.findAllWithEagerRelationships(pageable);
+    }
 
     /**
      * Get one applicationUser by id.
@@ -58,7 +69,7 @@ public class ApplicationUserService {
     @Transactional(readOnly = true)
     public Optional<ApplicationUser> findOne(Long id) {
         log.debug("Request to get ApplicationUser : {}", id);
-        return applicationUserRepository.findById(id);
+        return applicationUserRepository.findOneWithEagerRelationships(id);
     }
 
     /**

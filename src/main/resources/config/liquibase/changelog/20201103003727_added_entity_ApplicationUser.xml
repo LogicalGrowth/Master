@@ -41,6 +41,17 @@
 
     <changeSet id="20201103003727-1-relations" author="jhipster">
 
+        <createTable tableName="application_user_favorite">
+            <column name="favorite_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="application_user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="application_user_id, favorite_id" tableName="application_user_favorite"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 

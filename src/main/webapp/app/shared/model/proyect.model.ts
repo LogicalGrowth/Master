@@ -36,8 +36,8 @@ export interface IProyect {
   exclusiveContents?: IExclusiveContent[];
   payments?: IPayment[];
   owner?: IApplicationUser;
-  applicationUser?: IApplicationUser;
   category?: ICategory;
+  proyects?: IApplicationUser[];
 }
 
 export class Proyect implements IProyect {
@@ -65,7 +65,7 @@ export class Proyect implements IProyect {
     public exclusiveContents?: IExclusiveContent[],
     public payments?: IPayment[],
     public owner?: IApplicationUser,
-    public applicationUser?: IApplicationUser,
-    public category?: ICategory
+    public category?: ICategory,
+    public proyects?: IApplicationUser[]
   ) {}
 }

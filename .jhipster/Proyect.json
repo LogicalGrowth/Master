@@ -154,17 +154,18 @@
     },
     {
       "relationshipType": "many-to-one",
-      "otherEntityName": "applicationUser",
-      "otherEntityRelationshipName": "favorite",
-      "relationshipName": "applicationUser",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
       "otherEntityName": "category",
       "otherEntityRelationshipName": "proyect",
       "relationshipName": "category",
       "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "favorite",
+      "relationshipName": "proyect",
+      "otherEntityField": "id",
+      "ownerSide": false
     }
   ],
   "changelogDate": "20201103003927",

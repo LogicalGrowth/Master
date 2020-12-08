@@ -109,9 +109,9 @@ public class ProyectCriteria implements Serializable, Criteria {
 
     private LongFilter ownerId;
 
-    private LongFilter applicationUserId;
-
     private LongFilter categoryId;
+
+    private LongFilter proyectId;
 
     public ProyectCriteria() {
     }
@@ -140,8 +140,8 @@ public class ProyectCriteria implements Serializable, Criteria {
         this.exclusiveContentId = other.exclusiveContentId == null ? null : other.exclusiveContentId.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.ownerId = other.ownerId == null ? null : other.ownerId.copy();
-        this.applicationUserId = other.applicationUserId == null ? null : other.applicationUserId.copy();
         this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
+        this.proyectId = other.proyectId == null ? null : other.proyectId.copy();
     }
 
     @Override
@@ -333,20 +333,20 @@ public class ProyectCriteria implements Serializable, Criteria {
         this.ownerId = ownerId;
     }
 
-    public LongFilter getApplicationUserId() {
-        return applicationUserId;
-    }
-
-    public void setApplicationUserId(LongFilter applicationUserId) {
-        this.applicationUserId = applicationUserId;
-    }
-
     public LongFilter getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(LongFilter categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public LongFilter getProyectId() {
+        return proyectId;
+    }
+
+    public void setProyectId(LongFilter proyectId) {
+        this.proyectId = proyectId;
     }
 
 
@@ -383,8 +383,8 @@ public class ProyectCriteria implements Serializable, Criteria {
             Objects.equals(exclusiveContentId, that.exclusiveContentId) &&
             Objects.equals(paymentId, that.paymentId) &&
             Objects.equals(ownerId, that.ownerId) &&
-            Objects.equals(applicationUserId, that.applicationUserId) &&
-            Objects.equals(categoryId, that.categoryId);
+            Objects.equals(categoryId, that.categoryId) &&
+            Objects.equals(proyectId, that.proyectId);
     }
 
     @Override
@@ -413,8 +413,8 @@ public class ProyectCriteria implements Serializable, Criteria {
         exclusiveContentId,
         paymentId,
         ownerId,
-        applicationUserId,
-        categoryId
+        categoryId,
+        proyectId
         );
     }
 
@@ -445,8 +445,8 @@ public class ProyectCriteria implements Serializable, Criteria {
                 (exclusiveContentId != null ? "exclusiveContentId=" + exclusiveContentId + ", " : "") +
                 (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
                 (ownerId != null ? "ownerId=" + ownerId + ", " : "") +
-                (applicationUserId != null ? "applicationUserId=" + applicationUserId + ", " : "") +
                 (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
+                (proyectId != null ? "proyectId=" + proyectId + ", " : "") +
             "}";
     }
 

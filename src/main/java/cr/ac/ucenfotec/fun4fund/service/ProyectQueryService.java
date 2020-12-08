@@ -160,13 +160,13 @@ public class ProyectQueryService extends QueryService<Proyect> {
                 specification = specification.and(buildSpecification(criteria.getOwnerId(),
                     root -> root.join(Proyect_.owner, JoinType.LEFT).get(ApplicationUser_.id)));
             }
-            if (criteria.getApplicationUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getApplicationUserId(),
-                    root -> root.join(Proyect_.applicationUser, JoinType.LEFT).get(ApplicationUser_.id)));
-            }
             if (criteria.getCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCategoryId(),
                     root -> root.join(Proyect_.category, JoinType.LEFT).get(Category_.id)));
+            }
+            if (criteria.getProyectId() != null) {
+                specification = specification.and(buildSpecification(criteria.getProyectId(),
+                    root -> root.join(Proyect_.proyects, JoinType.LEFT).get(ApplicationUser_.id)));
             }
         }
         return specification;

@@ -84,6 +84,12 @@ public class CacheConfiguration {
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Recommendation.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.PasswordHistory.class.getName());
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ConfigSystem.class.getName());
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".auctions");
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".partnerRequests");
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.ApplicationUser.class.getName() + ".tickets");
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".proyects");
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Raffle.class.getName() + ".tickets");
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Ticket.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

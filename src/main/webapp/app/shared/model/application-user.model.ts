@@ -4,6 +4,9 @@ import { IPaymentMethod } from 'app/shared/model/payment-method.model';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { INotification } from 'app/shared/model/notification.model';
 import { IPayment } from 'app/shared/model/payment.model';
+import { IAuction } from 'app/shared/model/auction.model';
+import { IPartnerRequest } from 'app/shared/model/partner-request.model';
+import { ITicket } from 'app/shared/model/ticket.model';
 import { IdType } from 'app/shared/model/enumerations/id-type.model';
 
 export interface IApplicationUser {
@@ -18,6 +21,9 @@ export interface IApplicationUser {
   proyects?: IProyect[];
   notifications?: INotification[];
   payments?: IPayment[];
+  auctions?: IAuction[];
+  partnerRequests?: IPartnerRequest[];
+  tickets?: ITicket[];
   favorites?: IProyect[];
 }
 
@@ -34,6 +40,9 @@ export class ApplicationUser implements IApplicationUser {
     public proyects?: IProyect[],
     public notifications?: INotification[],
     public payments?: IPayment[],
+    public auctions?: IAuction[],
+    public partnerRequests?: IPartnerRequest[],
+    public tickets?: ITicket[],
     public favorites?: IProyect[]
   ) {
     this.admin = this.admin || false;

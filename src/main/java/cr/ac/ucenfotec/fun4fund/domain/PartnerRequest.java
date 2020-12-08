@@ -35,8 +35,8 @@ public class PartnerRequest implements Serializable {
     @Column(name = "status", nullable = false)
     private RequestStatus status;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
+    @JsonIgnoreProperties(value = "partnerRequests", allowSetters = true)
     private ApplicationUser applicant;
 
     @ManyToOne

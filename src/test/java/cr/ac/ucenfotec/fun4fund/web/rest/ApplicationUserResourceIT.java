@@ -7,6 +7,9 @@ import cr.ac.ucenfotec.fun4fund.domain.PaymentMethod;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.domain.Notification;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
+import cr.ac.ucenfotec.fun4fund.domain.Auction;
+import cr.ac.ucenfotec.fun4fund.domain.PartnerRequest;
+import cr.ac.ucenfotec.fun4fund.domain.Ticket;
 import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.service.ApplicationUserService;
 import cr.ac.ucenfotec.fun4fund.service.dto.ApplicationUserCriteria;
@@ -14,9 +17,14 @@ import cr.ac.ucenfotec.fun4fund.service.ApplicationUserQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,11 +34,13 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 import static cr.ac.ucenfotec.fun4fund.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,6 +49,7 @@ import cr.ac.ucenfotec.fun4fund.domain.enumeration.IdType;
  * Integration tests for the {@link ApplicationUserResource} REST controller.
  */
 @SpringBootTest(classes = Fun4FundApp.class)
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class ApplicationUserResourceIT {
@@ -61,6 +72,12 @@ public class ApplicationUserResourceIT {
 
     @Autowired
     private ApplicationUserRepository applicationUserRepository;
+
+    @Mock
+    private ApplicationUserRepository applicationUserRepositoryMock;
+
+    @Mock
+    private ApplicationUserService applicationUserServiceMock;
 
     @Autowired
     private ApplicationUserService applicationUserService;
@@ -266,6 +283,26 @@ public class ApplicationUserResourceIT {
             .andExpect(jsonPath("$.[*].admin").value(hasItem(DEFAULT_ADMIN.booleanValue())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllApplicationUsersWithEagerRelationshipsIsEnabled() throws Exception {
+        when(applicationUserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restApplicationUserMockMvc.perform(get("/api/application-users?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(applicationUserServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllApplicationUsersWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(applicationUserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restApplicationUserMockMvc.perform(get("/api/application-users?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(applicationUserServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getApplicationUser() throws Exception {
@@ -766,6 +803,66 @@ public class ApplicationUserResourceIT {
 
         // Get all the applicationUserList where payment equals to paymentId + 1
         defaultApplicationUserShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllApplicationUsersByAuctionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Auction auction = AuctionResourceIT.createEntity(em);
+        em.persist(auction);
+        em.flush();
+        applicationUser.addAuction(auction);
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long auctionId = auction.getId();
+
+        // Get all the applicationUserList where auction equals to auctionId
+        defaultApplicationUserShouldBeFound("auctionId.equals=" + auctionId);
+
+        // Get all the applicationUserList where auction equals to auctionId + 1
+        defaultApplicationUserShouldNotBeFound("auctionId.equals=" + (auctionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllApplicationUsersByPartnerRequestIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+        PartnerRequest partnerRequest = PartnerRequestResourceIT.createEntity(em);
+        em.persist(partnerRequest);
+        em.flush();
+        applicationUser.addPartnerRequest(partnerRequest);
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long partnerRequestId = partnerRequest.getId();
+
+        // Get all the applicationUserList where partnerRequest equals to partnerRequestId
+        defaultApplicationUserShouldBeFound("partnerRequestId.equals=" + partnerRequestId);
+
+        // Get all the applicationUserList where partnerRequest equals to partnerRequestId + 1
+        defaultApplicationUserShouldNotBeFound("partnerRequestId.equals=" + (partnerRequestId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllApplicationUsersByTicketIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Ticket ticket = TicketResourceIT.createEntity(em);
+        em.persist(ticket);
+        em.flush();
+        applicationUser.addTicket(ticket);
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long ticketId = ticket.getId();
+
+        // Get all the applicationUserList where ticket equals to ticketId
+        defaultApplicationUserShouldBeFound("ticketId.equals=" + ticketId);
+
+        // Get all the applicationUserList where ticket equals to ticketId + 1
+        defaultApplicationUserShouldNotBeFound("ticketId.equals=" + (ticketId + 1));
     }
 
 

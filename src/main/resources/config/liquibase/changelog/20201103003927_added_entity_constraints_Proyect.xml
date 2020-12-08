@@ -14,12 +14,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="application_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="application_user_id"
-                                 baseTableName="proyect"
-                                 constraintName="fk_proyect_application_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="application_user"/>
-
         <addForeignKeyConstraint baseColumnNames="category_id"
                                  baseTableName="proyect"
                                  constraintName="fk_proyect_category_id"

@@ -26,6 +26,9 @@
       "proyect": "Proyect",
       "notification": "Notification",
       "payment": "Payment",
+      "auction": "Auction",
+      "partnerRequest": "Partner Request",
+      "ticket": "Ticket",
       "favorite": "Favorite"
     }
   }

@@ -92,6 +92,10 @@ import { RouterModule } from '@angular/router';
         path: 'dashboard-reports',
         loadChildren: () => import('./dashboard-reports/dashboard-reports.module').then(m => m.Fun4FundDashboardReportsModule),
       },
+      {
+        path: 'ticket',
+        loadChildren: () => import('./ticket/ticket.module').then(m => m.Fun4FundTicketModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

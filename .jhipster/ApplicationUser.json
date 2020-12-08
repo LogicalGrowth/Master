@@ -81,9 +81,29 @@
     },
     {
       "relationshipType": "one-to-many",
+      "otherEntityName": "auction",
+      "otherEntityRelationshipName": "winner",
+      "relationshipName": "auction"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "partnerRequest",
+      "otherEntityRelationshipName": "applicant",
+      "relationshipName": "partnerRequest"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ticket",
+      "otherEntityRelationshipName": "buyer",
+      "relationshipName": "ticket"
+    },
+    {
+      "relationshipType": "many-to-many",
       "otherEntityName": "proyect",
-      "otherEntityRelationshipName": "applicationUser",
-      "relationshipName": "favorite"
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "favorite",
+      "otherEntityField": "id",
+      "ownerSide": true
     }
   ],
   "changelogDate": "20201103003727",

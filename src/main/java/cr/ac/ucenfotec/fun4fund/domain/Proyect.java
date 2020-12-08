@@ -1,5 +1,6 @@
 package cr.ac.ucenfotec.fun4fund.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -122,12 +123,13 @@ public class Proyect implements Serializable {
     private ApplicationUser owner;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "favorites", allowSetters = true)
-    private ApplicationUser applicationUser;
-
-    @ManyToOne
     @JsonIgnoreProperties(value = "proyects", allowSetters = true)
     private Category category;
+
+    @ManyToMany(mappedBy = "favorites")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<ApplicationUser> proyects = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -520,19 +522,6 @@ public class Proyect implements Serializable {
         this.owner = applicationUser;
     }
 
-    public ApplicationUser getApplicationUser() {
-        return applicationUser;
-    }
-
-    public Proyect applicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
-        return this;
-    }
-
-    public void setApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
-    }
-
     public Category getCategory() {
         return category;
     }
@@ -544,6 +533,31 @@ public class Proyect implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Set<ApplicationUser> getProyects() {
+        return proyects;
+    }
+
+    public Proyect proyects(Set<ApplicationUser> applicationUsers) {
+        this.proyects = applicationUsers;
+        return this;
+    }
+
+    public Proyect addProyect(ApplicationUser applicationUser) {
+        this.proyects.add(applicationUser);
+        applicationUser.getFavorites().add(this);
+        return this;
+    }
+
+    public Proyect removeProyect(ApplicationUser applicationUser) {
+        this.proyects.remove(applicationUser);
+        applicationUser.getFavorites().remove(this);
+        return this;
+    }
+
+    public void setProyects(Set<ApplicationUser> applicationUsers) {
+        this.proyects = applicationUsers;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

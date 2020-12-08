@@ -48,8 +48,8 @@ public class Auction implements Serializable {
     @JoinColumn(unique = true)
     private Prize prize;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
+    @JsonIgnoreProperties(value = "auctions", allowSetters = true)
     private ApplicationUser winner;
 
     @ManyToOne

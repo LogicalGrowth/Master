@@ -58,9 +58,6 @@
             <column name="owner_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="application_user_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="category_id" type="bigint">
                 <constraints nullable="true" />
             </column>

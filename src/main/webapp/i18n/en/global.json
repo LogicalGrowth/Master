@@ -28,6 +28,7 @@
         "recommendation": "Recommendation",
         "passwordHistory": "Password History",
         "configSystem": "Config System",
+        "ticket": "Ticket",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

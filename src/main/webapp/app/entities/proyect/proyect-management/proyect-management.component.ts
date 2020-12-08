@@ -25,4 +25,9 @@ export class ProyectManagementComponent implements OnInit {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return item.id!;
   }
+
+  setActive(proyect: IProyect, isActivated: boolean): void {
+    proyect.status = isActivated;
+    this.proyectService.update({ ...proyect }).subscribe(() => this.loadAll());
+  }
 }

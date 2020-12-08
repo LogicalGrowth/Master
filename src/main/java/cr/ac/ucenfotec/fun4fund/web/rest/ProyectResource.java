@@ -74,6 +74,7 @@ public class ProyectResource {
         }
 
         proyect.setOwner(applicationUser.get());
+        proyect.setStatus(true);
         Proyect result = proyectService.save(proyect);
         return ResponseEntity.created(new URI("/api/proyects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

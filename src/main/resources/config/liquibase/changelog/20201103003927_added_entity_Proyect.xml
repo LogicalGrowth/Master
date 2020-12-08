@@ -55,6 +55,9 @@
             <column name="currency_type" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="status" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="owner_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -102,6 +105,7 @@
             <column name="fee" type="numeric"/>
             <column name="number" type="string"/>
             <column name="currency_type" type="string"/>
+            <column name="status" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

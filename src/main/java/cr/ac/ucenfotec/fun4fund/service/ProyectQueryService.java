@@ -124,6 +124,9 @@ public class ProyectQueryService extends QueryService<Proyect> {
             if (criteria.getCurrencyType() != null) {
                 specification = specification.and(buildSpecification(criteria.getCurrencyType(), Proyect_.currencyType));
             }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getStatus(), Proyect_.status));
+            }
             if (criteria.getImageId() != null) {
                 specification = specification.and(buildSpecification(criteria.getImageId(),
                     root -> root.join(Proyect_.images, JoinType.LEFT).get(Resource_.id)));

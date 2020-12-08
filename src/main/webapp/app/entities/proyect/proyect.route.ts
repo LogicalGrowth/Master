@@ -13,6 +13,7 @@ import { ProyectDetailComponent } from './proyect-detail.component';
 import { ProyectUpdateComponent } from './proyect-update.component';
 import { ProyectImageUpdateComponent } from './proyect-image-update/proyect-image-update.component';
 import { PartnerRequestListComponent } from './partner-request-list/partner-request-list.component';
+import { ProyectManagementComponent } from './proyect-management/proyect-management.component';
 
 @Injectable({ providedIn: 'root' })
 export class ProyectResolve implements Resolve<IProyect> {
@@ -42,6 +43,15 @@ export const proyectRoute: Routes = [
     component: ProyectComponent,
     data: {
       authorities: [Authority.USER, Authority.ADMIN],
+      pageTitle: 'fun4FundApp.proyect.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'proyectManagement',
+    component: ProyectManagementComponent,
+    data: {
+      authorities: [Authority.ADMIN],
       pageTitle: 'fun4FundApp.proyect.home.title',
     },
     canActivate: [UserRouteAccessService],

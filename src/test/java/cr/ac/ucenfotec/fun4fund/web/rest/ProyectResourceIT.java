@@ -96,6 +96,9 @@ public class ProyectResourceIT {
     private static final Currency DEFAULT_CURRENCY_TYPE = Currency.USD;
     private static final Currency UPDATED_CURRENCY_TYPE = Currency.CRC;
 
+    private static final Boolean DEFAULT_STATUS = false;
+    private static final Boolean UPDATED_STATUS = true;
+
     @Autowired
     private ProyectRepository proyectRepository;
 
@@ -133,7 +136,8 @@ public class ProyectResourceIT {
             .coordY(DEFAULT_COORD_Y)
             .fee(DEFAULT_FEE)
             .number(DEFAULT_NUMBER)
-            .currencyType(DEFAULT_CURRENCY_TYPE);
+            .currencyType(DEFAULT_CURRENCY_TYPE)
+            .status(DEFAULT_STATUS);
         return proyect;
     }
     /**
@@ -156,7 +160,8 @@ public class ProyectResourceIT {
             .coordY(UPDATED_COORD_Y)
             .fee(UPDATED_FEE)
             .number(UPDATED_NUMBER)
-            .currencyType(UPDATED_CURRENCY_TYPE);
+            .currencyType(UPDATED_CURRENCY_TYPE)
+            .status(UPDATED_STATUS);
         return proyect;
     }
 
@@ -192,6 +197,7 @@ public class ProyectResourceIT {
         assertThat(testProyect.getFee()).isEqualTo(DEFAULT_FEE);
         assertThat(testProyect.getNumber()).isEqualTo(DEFAULT_NUMBER);
         assertThat(testProyect.getCurrencyType()).isEqualTo(DEFAULT_CURRENCY_TYPE);
+        assertThat(testProyect.isStatus()).isEqualTo(DEFAULT_STATUS);
     }
 
     @Test
@@ -427,7 +433,8 @@ public class ProyectResourceIT {
             .andExpect(jsonPath("$.[*].coordY").value(hasItem(DEFAULT_COORD_Y.doubleValue())))
             .andExpect(jsonPath("$.[*].fee").value(hasItem(DEFAULT_FEE.doubleValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
-            .andExpect(jsonPath("$.[*].currencyType").value(hasItem(DEFAULT_CURRENCY_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].currencyType").value(hasItem(DEFAULT_CURRENCY_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
     }
     
     @Test
@@ -453,7 +460,8 @@ public class ProyectResourceIT {
             .andExpect(jsonPath("$.coordY").value(DEFAULT_COORD_Y.doubleValue()))
             .andExpect(jsonPath("$.fee").value(DEFAULT_FEE.doubleValue()))
             .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER))
-            .andExpect(jsonPath("$.currencyType").value(DEFAULT_CURRENCY_TYPE.toString()));
+            .andExpect(jsonPath("$.currencyType").value(DEFAULT_CURRENCY_TYPE.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.booleanValue()));
     }
 
 
@@ -1656,6 +1664,58 @@ public class ProyectResourceIT {
 
     @Test
     @Transactional
+    public void getAllProyectsByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        proyectRepository.saveAndFlush(proyect);
+
+        // Get all the proyectList where status equals to DEFAULT_STATUS
+        defaultProyectShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the proyectList where status equals to UPDATED_STATUS
+        defaultProyectShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProyectsByStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        proyectRepository.saveAndFlush(proyect);
+
+        // Get all the proyectList where status not equals to DEFAULT_STATUS
+        defaultProyectShouldNotBeFound("status.notEquals=" + DEFAULT_STATUS);
+
+        // Get all the proyectList where status not equals to UPDATED_STATUS
+        defaultProyectShouldBeFound("status.notEquals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProyectsByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        proyectRepository.saveAndFlush(proyect);
+
+        // Get all the proyectList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultProyectShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the proyectList where status equals to UPDATED_STATUS
+        defaultProyectShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllProyectsByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        proyectRepository.saveAndFlush(proyect);
+
+        // Get all the proyectList where status is not null
+        defaultProyectShouldBeFound("status.specified=true");
+
+        // Get all the proyectList where status is null
+        defaultProyectShouldNotBeFound("status.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllProyectsByImageIsEqualToSomething() throws Exception {
         // Initialize the database
         proyectRepository.saveAndFlush(proyect);
@@ -1893,7 +1953,8 @@ public class ProyectResourceIT {
             .andExpect(jsonPath("$.[*].coordY").value(hasItem(DEFAULT_COORD_Y.doubleValue())))
             .andExpect(jsonPath("$.[*].fee").value(hasItem(DEFAULT_FEE.doubleValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
-            .andExpect(jsonPath("$.[*].currencyType").value(hasItem(DEFAULT_CURRENCY_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].currencyType").value(hasItem(DEFAULT_CURRENCY_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.booleanValue())));
 
         // Check, that the count call also returns 1
         restProyectMockMvc.perform(get("/api/proyects/count?sort=id,desc&" + filter))
@@ -1952,7 +2013,8 @@ public class ProyectResourceIT {
             .coordY(UPDATED_COORD_Y)
             .fee(UPDATED_FEE)
             .number(UPDATED_NUMBER)
-            .currencyType(UPDATED_CURRENCY_TYPE);
+            .currencyType(UPDATED_CURRENCY_TYPE)
+            .status(UPDATED_STATUS);
 
         restProyectMockMvc.perform(put("/api/proyects")
             .contentType(MediaType.APPLICATION_JSON)
@@ -1976,6 +2038,7 @@ public class ProyectResourceIT {
         assertThat(testProyect.getFee()).isEqualTo(UPDATED_FEE);
         assertThat(testProyect.getNumber()).isEqualTo(UPDATED_NUMBER);
         assertThat(testProyect.getCurrencyType()).isEqualTo(UPDATED_CURRENCY_TYPE);
+        assertThat(testProyect.isStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

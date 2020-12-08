@@ -91,6 +91,8 @@ public class ProyectCriteria implements Serializable, Criteria {
 
     private CurrencyFilter currencyType;
 
+    private BooleanFilter status;
+
     private LongFilter imageId;
 
     private LongFilter checkpointId;
@@ -131,6 +133,7 @@ public class ProyectCriteria implements Serializable, Criteria {
         this.fee = other.fee == null ? null : other.fee.copy();
         this.number = other.number == null ? null : other.number.copy();
         this.currencyType = other.currencyType == null ? null : other.currencyType.copy();
+        this.status = other.status == null ? null : other.status.copy();
         this.imageId = other.imageId == null ? null : other.imageId.copy();
         this.checkpointId = other.checkpointId == null ? null : other.checkpointId.copy();
         this.reviewId = other.reviewId == null ? null : other.reviewId.copy();
@@ -261,6 +264,14 @@ public class ProyectCriteria implements Serializable, Criteria {
         this.currencyType = currencyType;
     }
 
+    public BooleanFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(BooleanFilter status) {
+        this.status = status;
+    }
+
     public LongFilter getImageId() {
         return imageId;
     }
@@ -374,6 +385,7 @@ public class ProyectCriteria implements Serializable, Criteria {
             Objects.equals(fee, that.fee) &&
             Objects.equals(number, that.number) &&
             Objects.equals(currencyType, that.currencyType) &&
+            Objects.equals(status, that.status) &&
             Objects.equals(imageId, that.imageId) &&
             Objects.equals(checkpointId, that.checkpointId) &&
             Objects.equals(reviewId, that.reviewId) &&
@@ -404,6 +416,7 @@ public class ProyectCriteria implements Serializable, Criteria {
         fee,
         number,
         currencyType,
+        status,
         imageId,
         checkpointId,
         reviewId,
@@ -436,6 +449,7 @@ public class ProyectCriteria implements Serializable, Criteria {
                 (fee != null ? "fee=" + fee + ", " : "") +
                 (number != null ? "number=" + number + ", " : "") +
                 (currencyType != null ? "currencyType=" + currencyType + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
                 (imageId != null ? "imageId=" + imageId + ", " : "") +
                 (checkpointId != null ? "checkpointId=" + checkpointId + ", " : "") +
                 (reviewId != null ? "reviewId=" + reviewId + ", " : "") +

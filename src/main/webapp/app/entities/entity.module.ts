@@ -96,6 +96,10 @@ import { RouterModule } from '@angular/router';
         path: 'ticket',
         loadChildren: () => import('./ticket/ticket.module').then(m => m.Fun4FundTicketModule),
       },
+      {
+        path: 'favorite',
+        loadChildren: () => import('./favorite/favorite.module').then(m => m.Fun4FundFavoriteModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

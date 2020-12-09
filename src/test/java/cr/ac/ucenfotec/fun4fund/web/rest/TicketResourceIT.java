@@ -2,7 +2,12 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.Fun4FundApp;
 import cr.ac.ucenfotec.fun4fund.domain.Ticket;
+import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
+import cr.ac.ucenfotec.fun4fund.domain.Raffle;
 import cr.ac.ucenfotec.fun4fund.repository.TicketRepository;
+import cr.ac.ucenfotec.fun4fund.service.TicketService;
+import cr.ac.ucenfotec.fun4fund.service.dto.TicketCriteria;
+import cr.ac.ucenfotec.fun4fund.service.TicketQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +36,12 @@ public class TicketResourceIT {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private TicketService ticketService;
+
+    @Autowired
+    private TicketQueryService ticketQueryService;
 
     @Autowired
     private EntityManager em;
@@ -127,6 +138,99 @@ public class TicketResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(ticket.getId().intValue()));
     }
+
+
+    @Test
+    @Transactional
+    public void getTicketsByIdFiltering() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        Long id = ticket.getId();
+
+        defaultTicketShouldBeFound("id.equals=" + id);
+        defaultTicketShouldNotBeFound("id.notEquals=" + id);
+
+        defaultTicketShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultTicketShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultTicketShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultTicketShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTicketsByBuyerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+        ApplicationUser buyer = ApplicationUserResourceIT.createEntity(em);
+        em.persist(buyer);
+        em.flush();
+        ticket.setBuyer(buyer);
+        ticketRepository.saveAndFlush(ticket);
+        Long buyerId = buyer.getId();
+
+        // Get all the ticketList where buyer equals to buyerId
+        defaultTicketShouldBeFound("buyerId.equals=" + buyerId);
+
+        // Get all the ticketList where buyer equals to buyerId + 1
+        defaultTicketShouldNotBeFound("buyerId.equals=" + (buyerId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTicketsByRaffleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+        Raffle raffle = RaffleResourceIT.createEntity(em);
+        em.persist(raffle);
+        em.flush();
+        ticket.setRaffle(raffle);
+        ticketRepository.saveAndFlush(ticket);
+        Long raffleId = raffle.getId();
+
+        // Get all the ticketList where raffle equals to raffleId
+        defaultTicketShouldBeFound("raffleId.equals=" + raffleId);
+
+        // Get all the ticketList where raffle equals to raffleId + 1
+        defaultTicketShouldNotBeFound("raffleId.equals=" + (raffleId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultTicketShouldBeFound(String filter) throws Exception {
+        restTicketMockMvc.perform(get("/api/tickets?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(ticket.getId().intValue())));
+
+        // Check, that the count call also returns 1
+        restTicketMockMvc.perform(get("/api/tickets/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultTicketShouldNotBeFound(String filter) throws Exception {
+        restTicketMockMvc.perform(get("/api/tickets?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restTicketMockMvc.perform(get("/api/tickets/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
     @Test
     @Transactional
     public void getNonExistingTicket() throws Exception {
@@ -139,7 +243,7 @@ public class TicketResourceIT {
     @Transactional
     public void updateTicket() throws Exception {
         // Initialize the database
-        ticketRepository.saveAndFlush(ticket);
+        ticketService.save(ticket);
 
         int databaseSizeBeforeUpdate = ticketRepository.findAll().size();
 
@@ -179,7 +283,7 @@ public class TicketResourceIT {
     @Transactional
     public void deleteTicket() throws Exception {
         // Initialize the database
-        ticketRepository.saveAndFlush(ticket);
+        ticketService.save(ticket);
 
         int databaseSizeBeforeDelete = ticketRepository.findAll().size();
 

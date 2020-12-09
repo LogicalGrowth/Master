@@ -156,6 +156,10 @@ public class ProyectQueryService extends QueryService<Proyect> {
                 specification = specification.and(buildSpecification(criteria.getPaymentId(),
                     root -> root.join(Proyect_.payments, JoinType.LEFT).get(Payment_.id)));
             }
+            if (criteria.getFavoriteId() != null) {
+                specification = specification.and(buildSpecification(criteria.getFavoriteId(),
+                    root -> root.join(Proyect_.favorites, JoinType.LEFT).get(Favorite_.id)));
+            }
             if (criteria.getOwnerId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOwnerId(),
                     root -> root.join(Proyect_.owner, JoinType.LEFT).get(ApplicationUser_.id)));
@@ -163,10 +167,6 @@ public class ProyectQueryService extends QueryService<Proyect> {
             if (criteria.getCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCategoryId(),
                     root -> root.join(Proyect_.category, JoinType.LEFT).get(Category_.id)));
-            }
-            if (criteria.getProyectId() != null) {
-                specification = specification.and(buildSpecification(criteria.getProyectId(),
-                    root -> root.join(Proyect_.proyects, JoinType.LEFT).get(ApplicationUser_.id)));
             }
         }
         return specification;

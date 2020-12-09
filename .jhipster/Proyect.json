@@ -146,6 +146,12 @@
       "relationshipName": "payment"
     },
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "favorite",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "favorite"
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "applicationUser",
       "otherEntityRelationshipName": "proyect",
@@ -158,14 +164,6 @@
       "otherEntityRelationshipName": "proyect",
       "relationshipName": "category",
       "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-many",
-      "otherEntityName": "applicationUser",
-      "otherEntityRelationshipName": "favorite",
-      "relationshipName": "proyect",
-      "otherEntityField": "id",
-      "ownerSide": false
     }
   ],
   "changelogDate": "20201103003927",

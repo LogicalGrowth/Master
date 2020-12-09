@@ -1,6 +1,5 @@
 package cr.ac.ucenfotec.fun4fund.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -118,6 +117,10 @@ public class Proyect implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Payment> payments = new HashSet<>();
 
+    @OneToMany(mappedBy = "proyect")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Favorite> favorites = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = "proyects", allowSetters = true)
     private ApplicationUser owner;
@@ -125,11 +128,6 @@ public class Proyect implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = "proyects", allowSetters = true)
     private Category category;
-
-    @ManyToMany(mappedBy = "favorites")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnore
-    private Set<ApplicationUser> proyects = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -509,6 +507,31 @@ public class Proyect implements Serializable {
         this.payments = payments;
     }
 
+    public Set<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public Proyect favorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
+        return this;
+    }
+
+    public Proyect addFavorite(Favorite favorite) {
+        this.favorites.add(favorite);
+        favorite.setProyect(this);
+        return this;
+    }
+
+    public Proyect removeFavorite(Favorite favorite) {
+        this.favorites.remove(favorite);
+        favorite.setProyect(null);
+        return this;
+    }
+
+    public void setFavorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
+    }
+
     public ApplicationUser getOwner() {
         return owner;
     }
@@ -533,31 +556,6 @@ public class Proyect implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public Set<ApplicationUser> getProyects() {
-        return proyects;
-    }
-
-    public Proyect proyects(Set<ApplicationUser> applicationUsers) {
-        this.proyects = applicationUsers;
-        return this;
-    }
-
-    public Proyect addProyect(ApplicationUser applicationUser) {
-        this.proyects.add(applicationUser);
-        applicationUser.getFavorites().add(this);
-        return this;
-    }
-
-    public Proyect removeProyect(ApplicationUser applicationUser) {
-        this.proyects.remove(applicationUser);
-        applicationUser.getFavorites().remove(this);
-        return this;
-    }
-
-    public void setProyects(Set<ApplicationUser> applicationUsers) {
-        this.proyects = applicationUsers;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

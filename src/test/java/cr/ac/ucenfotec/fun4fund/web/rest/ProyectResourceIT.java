@@ -10,6 +10,7 @@ import cr.ac.ucenfotec.fun4fund.domain.Raffle;
 import cr.ac.ucenfotec.fun4fund.domain.Auction;
 import cr.ac.ucenfotec.fun4fund.domain.ExclusiveContent;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
+import cr.ac.ucenfotec.fun4fund.domain.Favorite;
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Category;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
@@ -429,7 +430,7 @@ public class ProyectResourceIT {
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
             .andExpect(jsonPath("$.[*].currencyType").value(hasItem(DEFAULT_CURRENCY_TYPE.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getProyect() throws Exception {
@@ -1816,6 +1817,26 @@ public class ProyectResourceIT {
 
     @Test
     @Transactional
+    public void getAllProyectsByFavoriteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        proyectRepository.saveAndFlush(proyect);
+        Favorite favorite = FavoriteResourceIT.createEntity(em);
+        em.persist(favorite);
+        em.flush();
+        proyect.addFavorite(favorite);
+        proyectRepository.saveAndFlush(proyect);
+        Long favoriteId = favorite.getId();
+
+        // Get all the proyectList where favorite equals to favoriteId
+        defaultProyectShouldBeFound("favoriteId.equals=" + favoriteId);
+
+        // Get all the proyectList where favorite equals to favoriteId + 1
+        defaultProyectShouldNotBeFound("favoriteId.equals=" + (favoriteId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllProyectsByOwnerIsEqualToSomething() throws Exception {
         // Initialize the database
         proyectRepository.saveAndFlush(proyect);
@@ -1851,26 +1872,6 @@ public class ProyectResourceIT {
 
         // Get all the proyectList where category equals to categoryId + 1
         defaultProyectShouldNotBeFound("categoryId.equals=" + (categoryId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllProyectsByProyectIsEqualToSomething() throws Exception {
-        // Initialize the database
-        proyectRepository.saveAndFlush(proyect);
-        ApplicationUser proyect2 = ApplicationUserResourceIT.createEntity(em);
-        em.persist(proyect2);
-        em.flush();
-        proyect.addProyect(proyect2);
-        proyectRepository.saveAndFlush(proyect);
-        Long proyectId = proyect.getId();
-
-        // Get all the proyectList where proyect equals to proyectId
-        defaultProyectShouldBeFound("proyectId.equals=" + proyectId);
-
-        // Get all the proyectList where proyect equals to proyectId + 1
-        defaultProyectShouldNotBeFound("proyectId.equals=" + (proyectId + 1));
     }
 
     /**

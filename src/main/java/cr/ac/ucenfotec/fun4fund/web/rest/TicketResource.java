@@ -1,8 +1,10 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Ticket;
-import cr.ac.ucenfotec.fun4fund.repository.TicketRepository;
+import cr.ac.ucenfotec.fun4fund.service.TicketService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
+import cr.ac.ucenfotec.fun4fund.service.dto.TicketCriteria;
+import cr.ac.ucenfotec.fun4fund.service.TicketQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,7 +24,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class TicketResource {
 
     private final Logger log = LoggerFactory.getLogger(TicketResource.class);
@@ -33,10 +33,13 @@ public class TicketResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final TicketRepository ticketRepository;
+    private final TicketService ticketService;
 
-    public TicketResource(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
+    private final TicketQueryService ticketQueryService;
+
+    public TicketResource(TicketService ticketService, TicketQueryService ticketQueryService) {
+        this.ticketService = ticketService;
+        this.ticketQueryService = ticketQueryService;
     }
 
     /**
@@ -52,7 +55,7 @@ public class TicketResource {
         if (ticket.getId() != null) {
             throw new BadRequestAlertException("A new ticket cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Ticket result = ticketRepository.save(ticket);
+        Ticket result = ticketService.save(ticket);
         return ResponseEntity.created(new URI("/api/tickets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -73,7 +76,7 @@ public class TicketResource {
         if (ticket.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Ticket result = ticketRepository.save(ticket);
+        Ticket result = ticketService.save(ticket);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ticket.getId().toString()))
             .body(result);
@@ -82,12 +85,26 @@ public class TicketResource {
     /**
      * {@code GET  /tickets} : get all the tickets.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tickets in body.
      */
     @GetMapping("/tickets")
-    public List<Ticket> getAllTickets() {
-        log.debug("REST request to get all Tickets");
-        return ticketRepository.findAll();
+    public ResponseEntity<List<Ticket>> getAllTickets(TicketCriteria criteria) {
+        log.debug("REST request to get Tickets by criteria: {}", criteria);
+        List<Ticket> entityList = ticketQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /tickets/count} : count all the tickets.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/tickets/count")
+    public ResponseEntity<Long> countTickets(TicketCriteria criteria) {
+        log.debug("REST request to count Tickets by criteria: {}", criteria);
+        return ResponseEntity.ok().body(ticketQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -99,7 +116,7 @@ public class TicketResource {
     @GetMapping("/tickets/{id}")
     public ResponseEntity<Ticket> getTicket(@PathVariable Long id) {
         log.debug("REST request to get Ticket : {}", id);
-        Optional<Ticket> ticket = ticketRepository.findById(id);
+        Optional<Ticket> ticket = ticketService.findOne(id);
         return ResponseUtil.wrapOrNotFound(ticket);
     }
 
@@ -112,7 +129,7 @@ public class TicketResource {
     @DeleteMapping("/tickets/{id}")
     public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
         log.debug("REST request to delete Ticket : {}", id);
-        ticketRepository.deleteById(id);
+        ticketService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -206,9 +206,12 @@ entity PasswordHistory {
 entity Ticket {
 }
 
+entity Favorite {
+}
+
 //filter
 filter Resource, ApplicationUser, PasswordHistory, Recommendation, AppLog, Fee, AdminPreferences, UserPreferences, Payment, Notification
-filter PartnerRequest, Prize, ExclusiveContent, Raffle, Auction, Review, Checkpoint, Category, Proyect, PaymentMethod
+filter PartnerRequest, Prize, ExclusiveContent, Raffle, Auction, Review, Checkpoint, Category, Proyect, PaymentMethod, Ticket, Favorite
 
 //Composición entre User y ApplicationUser para extender fields
 relationship OneToOne {
@@ -226,11 +229,6 @@ relationship OneToMany {
     ApplicationUser{auction} to Auction{winner} 
     
     ApplicationUser{partnerRequest} to PartnerRequest{applicant}
-}
-
-//Favorite
-relationship ManyToMany {
-	ApplicationUser{favorite} to Proyect{proyect}
 }
 
 //Proyect
@@ -285,4 +283,10 @@ relationship OneToOne {
 relationship OneToMany {
 	ApplicationUser to Ticket{buyer}
     Raffle to Ticket{raffle}
+}
+
+//Favorite
+relationship OneToMany {
+	ApplicationUser to Favorite{user}
+    Proyect to Favorite{proyect}
 }

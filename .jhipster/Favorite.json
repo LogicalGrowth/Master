@@ -1,24 +1,24 @@
 {
-  "name": "Ticket",
+  "name": "Favorite",
   "fields": [],
   "relationships": [
     {
       "relationshipType": "many-to-one",
       "otherEntityName": "applicationUser",
-      "otherEntityRelationshipName": "ticket",
-      "relationshipName": "buyer",
+      "otherEntityRelationshipName": "favorite",
+      "relationshipName": "user",
       "otherEntityField": "id"
     },
     {
       "relationshipType": "many-to-one",
-      "otherEntityName": "raffle",
-      "otherEntityRelationshipName": "ticket",
-      "relationshipName": "raffle",
+      "otherEntityName": "proyect",
+      "otherEntityRelationshipName": "favorite",
+      "relationshipName": "proyect",
       "otherEntityField": "id"
     }
   ],
-  "changelogDate": "20201208081347",
-  "entityTableName": "ticket",
+  "changelogDate": "20201208100918",
+  "entityTableName": "favorite",
   "dto": "no",
   "pagination": "no",
   "service": "serviceClass",

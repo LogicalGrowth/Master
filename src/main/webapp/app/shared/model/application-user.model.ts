@@ -7,6 +7,7 @@ import { IPayment } from 'app/shared/model/payment.model';
 import { IAuction } from 'app/shared/model/auction.model';
 import { IPartnerRequest } from 'app/shared/model/partner-request.model';
 import { ITicket } from 'app/shared/model/ticket.model';
+import { IFavorite } from 'app/shared/model/favorite.model';
 import { IdType } from 'app/shared/model/enumerations/id-type.model';
 
 export interface IApplicationUser {
@@ -24,7 +25,7 @@ export interface IApplicationUser {
   auctions?: IAuction[];
   partnerRequests?: IPartnerRequest[];
   tickets?: ITicket[];
-  favorites?: IProyect[];
+  favorites?: IFavorite[];
 }
 
 export class ApplicationUser implements IApplicationUser {
@@ -43,7 +44,7 @@ export class ApplicationUser implements IApplicationUser {
     public auctions?: IAuction[],
     public partnerRequests?: IPartnerRequest[],
     public tickets?: ITicket[],
-    public favorites?: IProyect[]
+    public favorites?: IFavorite[]
   ) {
     this.admin = this.admin || false;
   }

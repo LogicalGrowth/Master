@@ -90,6 +90,8 @@ public class CacheConfiguration {
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".proyects");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Raffle.class.getName() + ".tickets");
             createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Ticket.class.getName());
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Proyect.class.getName() + ".favorites");
+            createCache(cm, cr.ac.ucenfotec.fun4fund.domain.Favorite.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

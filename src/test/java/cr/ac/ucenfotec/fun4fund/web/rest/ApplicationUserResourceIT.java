@@ -10,6 +10,7 @@ import cr.ac.ucenfotec.fun4fund.domain.Payment;
 import cr.ac.ucenfotec.fun4fund.domain.Auction;
 import cr.ac.ucenfotec.fun4fund.domain.PartnerRequest;
 import cr.ac.ucenfotec.fun4fund.domain.Ticket;
+import cr.ac.ucenfotec.fun4fund.domain.Favorite;
 import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.service.ApplicationUserService;
 import cr.ac.ucenfotec.fun4fund.service.dto.ApplicationUserCriteria;
@@ -17,14 +18,9 @@ import cr.ac.ucenfotec.fun4fund.service.ApplicationUserQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,13 +30,11 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 
 import static cr.ac.ucenfotec.fun4fund.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -49,7 +43,6 @@ import cr.ac.ucenfotec.fun4fund.domain.enumeration.IdType;
  * Integration tests for the {@link ApplicationUserResource} REST controller.
  */
 @SpringBootTest(classes = Fun4FundApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class ApplicationUserResourceIT {
@@ -72,12 +65,6 @@ public class ApplicationUserResourceIT {
 
     @Autowired
     private ApplicationUserRepository applicationUserRepository;
-
-    @Mock
-    private ApplicationUserRepository applicationUserRepositoryMock;
-
-    @Mock
-    private ApplicationUserService applicationUserServiceMock;
 
     @Autowired
     private ApplicationUserService applicationUserService;
@@ -283,26 +270,6 @@ public class ApplicationUserResourceIT {
             .andExpect(jsonPath("$.[*].admin").value(hasItem(DEFAULT_ADMIN.booleanValue())));
     }
     
-    @SuppressWarnings({"unchecked"})
-    public void getAllApplicationUsersWithEagerRelationshipsIsEnabled() throws Exception {
-        when(applicationUserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restApplicationUserMockMvc.perform(get("/api/application-users?eagerload=true"))
-            .andExpect(status().isOk());
-
-        verify(applicationUserServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public void getAllApplicationUsersWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(applicationUserServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restApplicationUserMockMvc.perform(get("/api/application-users?eagerload=true"))
-            .andExpect(status().isOk());
-
-        verify(applicationUserServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
     @Test
     @Transactional
     public void getApplicationUser() throws Exception {
@@ -871,7 +838,7 @@ public class ApplicationUserResourceIT {
     public void getAllApplicationUsersByFavoriteIsEqualToSomething() throws Exception {
         // Initialize the database
         applicationUserRepository.saveAndFlush(applicationUser);
-        Proyect favorite = ProyectResourceIT.createEntity(em);
+        Favorite favorite = FavoriteResourceIT.createEntity(em);
         em.persist(favorite);
         em.flush();
         applicationUser.addFavorite(favorite);

@@ -134,7 +134,7 @@ public class ApplicationUserQueryService extends QueryService<ApplicationUser> {
             }
             if (criteria.getFavoriteId() != null) {
                 specification = specification.and(buildSpecification(criteria.getFavoriteId(),
-                    root -> root.join(ApplicationUser_.favorites, JoinType.LEFT).get(Proyect_.id)));
+                    root -> root.join(ApplicationUser_.favorites, JoinType.LEFT).get(Favorite_.id)));
             }
         }
         return specification;

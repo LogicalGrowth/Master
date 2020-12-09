@@ -98,12 +98,10 @@
       "relationshipName": "ticket"
     },
     {
-      "relationshipType": "many-to-many",
-      "otherEntityName": "proyect",
-      "otherEntityRelationshipName": "proyect",
-      "relationshipName": "favorite",
-      "otherEntityField": "id",
-      "ownerSide": true
+      "relationshipType": "one-to-many",
+      "otherEntityName": "favorite",
+      "otherEntityRelationshipName": "user",
+      "relationshipName": "favorite"
     }
   ],
   "changelogDate": "20201103003727",

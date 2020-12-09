@@ -82,12 +82,9 @@ public class ApplicationUser implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Ticket> tickets = new HashSet<>();
 
-    @ManyToMany
+    @OneToMany(mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JoinTable(name = "application_user_favorite",
-               joinColumns = @JoinColumn(name = "application_user_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "favorite_id", referencedColumnName = "id"))
-    private Set<Proyect> favorites = new HashSet<>();
+    private Set<Favorite> favorites = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -351,29 +348,29 @@ public class ApplicationUser implements Serializable {
         this.tickets = tickets;
     }
 
-    public Set<Proyect> getFavorites() {
+    public Set<Favorite> getFavorites() {
         return favorites;
     }
 
-    public ApplicationUser favorites(Set<Proyect> proyects) {
-        this.favorites = proyects;
+    public ApplicationUser favorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
         return this;
     }
 
-    public ApplicationUser addFavorite(Proyect proyect) {
-        this.favorites.add(proyect);
-        proyect.getProyects().add(this);
+    public ApplicationUser addFavorite(Favorite favorite) {
+        this.favorites.add(favorite);
+        favorite.setUser(this);
         return this;
     }
 
-    public ApplicationUser removeFavorite(Proyect proyect) {
-        this.favorites.remove(proyect);
-        proyect.getProyects().remove(this);
+    public ApplicationUser removeFavorite(Favorite favorite) {
+        this.favorites.remove(favorite);
+        favorite.setUser(null);
         return this;
     }
 
-    public void setFavorites(Set<Proyect> proyects) {
-        this.favorites = proyects;
+    public void setFavorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

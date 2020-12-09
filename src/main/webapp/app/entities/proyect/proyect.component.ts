@@ -40,7 +40,7 @@ export class ProyectComponent implements OnInit, OnDestroy {
   ) {}
 
   loadAll(): void {
-    this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+    this.proyectService.query({ 'status.equals': true }).subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
   }
 
   ngOnInit(): void {

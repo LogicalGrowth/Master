@@ -28,6 +28,7 @@ export interface IProyect {
   fee?: number;
   number?: string;
   currencyType?: Currency;
+  status?: boolean;
   images?: IResource[];
   checkpoints?: ICheckpoint[];
   reviews?: IReview[];
@@ -57,6 +58,7 @@ export class Proyect implements IProyect {
     public fee?: number,
     public number?: string,
     public currencyType?: Currency,
+    public status?: boolean,
     public images?: IResource[],
     public checkpoints?: ICheckpoint[],
     public reviews?: IReview[],
@@ -68,5 +70,7 @@ export class Proyect implements IProyect {
     public favorites?: IFavorite[],
     public owner?: IApplicationUser,
     public category?: ICategory
-  ) {}
+  ) {
+    this.status = this.status || false;
+  }
 }

@@ -85,8 +85,11 @@ public class Proyect implements Serializable {
     @Column(name = "currency_type", nullable = false)
     private Currency currencyType;
 
-    @OneToMany(mappedBy = "proyect", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = "proyect", allowSetters = true)
+    @Column(name = "status")
+    private Boolean status;
+
+    @OneToMany(mappedBy = "proyect")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Resource> images = new HashSet<>();
 
     @OneToMany(mappedBy = "proyect")
@@ -305,6 +308,19 @@ public class Proyect implements Serializable {
 
     public void setCurrencyType(Currency currencyType) {
         this.currencyType = currencyType;
+    }
+
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public Proyect status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Set<Resource> getImages() {
@@ -593,6 +609,7 @@ public class Proyect implements Serializable {
             ", fee=" + getFee() +
             ", number='" + getNumber() + "'" +
             ", currencyType='" + getCurrencyType() + "'" +
+            ", status='" + isStatus() + "'" +
             "}";
     }
 }

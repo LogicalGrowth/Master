@@ -32,6 +32,7 @@
       "fee": "Fee",
       "number": "Number",
       "currencyType": "Currency Type",
+      "status": "Status",
       "image": "Image",
       "checkpoint": "Checkpoint",
       "review": "Review",

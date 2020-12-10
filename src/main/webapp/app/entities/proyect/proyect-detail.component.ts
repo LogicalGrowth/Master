@@ -23,7 +23,7 @@ import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 import { DonationModalService } from './donation/donationModal.service';
 import { BidModalService } from '../auction/bid/bidModal.service';
 import { PartnerRequestModalService } from './partner-request/partnerRequestModal.service';
-
+import { ReviewModalService } from './review/reviewModal.service';
 @Component({
   selector: 'jhi-proyect-detail',
   templateUrl: './proyect-detail.component.html',
@@ -72,7 +72,8 @@ export class ProyectDetailComponent implements OnInit {
     private applicationUserService: ApplicationUserService,
     private donationModalService: DonationModalService,
     private bidModalService: BidModalService,
-    private partnerRequestModalService: PartnerRequestModalService
+    private partnerRequestModalService: PartnerRequestModalService,
+    private reviewModalService: ReviewModalService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -204,5 +205,9 @@ export class ProyectDetailComponent implements OnInit {
 
   twitter(): void {
     window.open('https://twitter.com/intent/tweet?text=' + window.location.href);
+  }
+
+  addRating(): void {
+    this.reviewModalService.open(this.proyect!);
   }
 }

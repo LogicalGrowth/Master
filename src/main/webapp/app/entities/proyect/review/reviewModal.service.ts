@@ -22,7 +22,6 @@ export class ReviewModalService {
   }
 
   close(): void {
-    this.isOpen = false;
     this.modalService.dismissAll();
 
     setTimeout(() => {

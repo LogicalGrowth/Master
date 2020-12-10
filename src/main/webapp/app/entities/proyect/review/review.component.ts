@@ -107,9 +107,13 @@ export class ReviewComponent implements OnInit {
       this.proyect!.rating = Math.round(average);
     }
 
-    alert(Math.round(average));
-
     this.subscribeToSaveResponse(this.proyectService.update(this.proyect!));
+
+    this.activeModal.dismiss();
+
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
   }
 
   private createFromForm(): IReview {

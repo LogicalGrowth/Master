@@ -70,4 +70,7 @@ public class ReviewService {
         log.debug("Request to delete Review : {}", id);
         reviewRepository.deleteById(id);
     }
+
+    public void calculateReviews(List<Review> reviews, Long id) {
+    }
 }

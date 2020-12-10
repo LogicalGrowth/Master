@@ -1,0 +1,47 @@
+<jhi-alert-error></jhi-alert-error>
+<jhi-alert></jhi-alert>
+<div class="alert alert-warning" id="no-result" *ngIf="proyects?.length === 0">
+    <span>No hay proyectos registradas</span>
+</div>
+
+<div class="main-content mt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title d-inline">Proyectos</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <th scope="col"><span>Nombre</span></th>
+                                <th scope="col"><span>Tipo de proyecto</span></th>
+                                <th scope="col"><span>Monto recolectado</span></th>
+                                <th scope="col"><span>Fecha de creación</span></th>
+                                <th scope="col"><span>Última modificación</span></th>
+                                <th scope="col"><span>Estado</span></th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let proyect of proyects ;trackBy: trackId">
+                                    <td><a [routerLink]="['/proyect', proyect.id, 'view']">{{ proyect.name }}</a></td>
+                                    <td>{{ proyect.idType === "NONPROFIT" ? 'Sin fines de lucro': 'Con fines de lucro' }}</td>
+                                    <td>{{ proyect.collected | currency: 'USD':'symbol':'1.2-2'}} de {{ proyect.goalAmount | currency: 'USD':'symbol':'1.2-2'}}</td>
+                                    <td>{{ proyect.creationDate | date:'dd/MM/yy HH:mm'}}</td>
+                                    <td>{{ proyect.lastUpdated | date:'dd/MM/yy HH:mm'}}</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" (click)="setActive(proyect, true)"
+                                            *ngIf="!proyect.status">Deshabilitado</button>
+                                        <button class="btn btn-success btn-sm"
+                                            (click)="setActive(proyect, false)"
+                                            *ngIf="proyect.status">Habilitado</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

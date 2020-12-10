@@ -66,6 +66,12 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
 
     private LongFilter paymentId;
 
+    private LongFilter auctionId;
+
+    private LongFilter partnerRequestId;
+
+    private LongFilter ticketId;
+
     private LongFilter favoriteId;
 
     public ApplicationUserCriteria() {
@@ -83,6 +89,9 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         this.proyectId = other.proyectId == null ? null : other.proyectId.copy();
         this.notificationId = other.notificationId == null ? null : other.notificationId.copy();
         this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
+        this.auctionId = other.auctionId == null ? null : other.auctionId.copy();
+        this.partnerRequestId = other.partnerRequestId == null ? null : other.partnerRequestId.copy();
+        this.ticketId = other.ticketId == null ? null : other.ticketId.copy();
         this.favoriteId = other.favoriteId == null ? null : other.favoriteId.copy();
     }
 
@@ -179,6 +188,30 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         this.paymentId = paymentId;
     }
 
+    public LongFilter getAuctionId() {
+        return auctionId;
+    }
+
+    public void setAuctionId(LongFilter auctionId) {
+        this.auctionId = auctionId;
+    }
+
+    public LongFilter getPartnerRequestId() {
+        return partnerRequestId;
+    }
+
+    public void setPartnerRequestId(LongFilter partnerRequestId) {
+        this.partnerRequestId = partnerRequestId;
+    }
+
+    public LongFilter getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(LongFilter ticketId) {
+        this.ticketId = ticketId;
+    }
+
     public LongFilter getFavoriteId() {
         return favoriteId;
     }
@@ -209,6 +242,9 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
             Objects.equals(proyectId, that.proyectId) &&
             Objects.equals(notificationId, that.notificationId) &&
             Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(auctionId, that.auctionId) &&
+            Objects.equals(partnerRequestId, that.partnerRequestId) &&
+            Objects.equals(ticketId, that.ticketId) &&
             Objects.equals(favoriteId, that.favoriteId);
     }
 
@@ -226,6 +262,9 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
         proyectId,
         notificationId,
         paymentId,
+        auctionId,
+        partnerRequestId,
+        ticketId,
         favoriteId
         );
     }
@@ -245,6 +284,9 @@ public class ApplicationUserCriteria implements Serializable, Criteria {
                 (proyectId != null ? "proyectId=" + proyectId + ", " : "") +
                 (notificationId != null ? "notificationId=" + notificationId + ", " : "") +
                 (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
+                (auctionId != null ? "auctionId=" + auctionId + ", " : "") +
+                (partnerRequestId != null ? "partnerRequestId=" + partnerRequestId + ", " : "") +
+                (ticketId != null ? "ticketId=" + ticketId + ", " : "") +
                 (favoriteId != null ? "favoriteId=" + favoriteId + ", " : "") +
             "}";
     }

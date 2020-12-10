@@ -101,6 +101,10 @@ public class RaffleQueryService extends QueryService<Raffle> {
                 specification = specification.and(buildSpecification(criteria.getPrizeId(),
                     root -> root.join(Raffle_.prize, JoinType.LEFT).get(Prize_.id)));
             }
+            if (criteria.getTicketId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTicketId(),
+                    root -> root.join(Raffle_.tickets, JoinType.LEFT).get(Ticket_.id)));
+            }
             if (criteria.getBuyerId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBuyerId(),
                     root -> root.join(Raffle_.buyer, JoinType.LEFT).get(ApplicationUser_.id)));

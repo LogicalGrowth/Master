@@ -4,10 +4,7 @@ import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Auction;
 
 import cr.ac.ucenfotec.fun4fund.domain.AuctionAnswerStatistics;
-import cr.ac.ucenfotec.fun4fund.domain.Payment;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

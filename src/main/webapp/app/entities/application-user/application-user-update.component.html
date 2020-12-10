@@ -101,6 +101,13 @@
                         <option [ngValue]="userOption.id === editForm.get('internalUser')!.value?.id ? editForm.get('internalUser')!.value : userOption" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.id }}</option>
                     </select>
                 </div>
+
+                <div class="form-group">
+                    <label jhiTranslate="fun4FundApp.applicationUser.favorite" for="field_favorites">Favorite</label>
+                    <select class="form-control" id="field_favorites" multiple name="favorites" formControlName="favorites">
+                        <option [ngValue]="getSelected(editForm.get('favorites')!.value, proyectOption)" *ngFor="let proyectOption of proyects; trackBy: trackById">{{ proyectOption.id }}</option>
+                    </select>
+                </div>
             </div>
 
             <div>

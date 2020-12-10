@@ -44,12 +44,11 @@
       "ownerSide": true
     },
     {
-      "relationshipType": "one-to-one",
+      "relationshipType": "many-to-one",
       "otherEntityName": "applicationUser",
       "otherEntityRelationshipName": "auction",
       "relationshipName": "winner",
-      "otherEntityField": "id",
-      "ownerSide": true
+      "otherEntityField": "id"
     },
     {
       "relationshipType": "many-to-one",

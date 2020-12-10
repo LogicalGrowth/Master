@@ -7,6 +7,7 @@ import { IRaffle } from 'app/shared/model/raffle.model';
 import { IAuction } from 'app/shared/model/auction.model';
 import { IExclusiveContent } from 'app/shared/model/exclusive-content.model';
 import { IPayment } from 'app/shared/model/payment.model';
+import { IFavorite } from 'app/shared/model/favorite.model';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ICategory } from 'app/shared/model/category.model';
 import { ProyectType } from 'app/shared/model/enumerations/proyect-type.model';
@@ -27,6 +28,7 @@ export interface IProyect {
   fee?: number;
   number?: string;
   currencyType?: Currency;
+  status?: boolean;
   images?: IResource[];
   checkpoints?: ICheckpoint[];
   reviews?: IReview[];
@@ -35,8 +37,8 @@ export interface IProyect {
   auctions?: IAuction[];
   exclusiveContents?: IExclusiveContent[];
   payments?: IPayment[];
+  favorites?: IFavorite[];
   owner?: IApplicationUser;
-  applicationUser?: IApplicationUser;
   category?: ICategory;
 }
 
@@ -56,6 +58,7 @@ export class Proyect implements IProyect {
     public fee?: number,
     public number?: string,
     public currencyType?: Currency,
+    public status?: boolean,
     public images?: IResource[],
     public checkpoints?: ICheckpoint[],
     public reviews?: IReview[],
@@ -64,8 +67,10 @@ export class Proyect implements IProyect {
     public auctions?: IAuction[],
     public exclusiveContents?: IExclusiveContent[],
     public payments?: IPayment[],
+    public favorites?: IFavorite[],
     public owner?: IApplicationUser,
-    public applicationUser?: IApplicationUser,
     public category?: ICategory
-  ) {}
+  ) {
+    this.status = this.status || false;
+  }
 }

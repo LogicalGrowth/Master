@@ -7,6 +7,10 @@ import cr.ac.ucenfotec.fun4fund.domain.PaymentMethod;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.domain.Notification;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
+import cr.ac.ucenfotec.fun4fund.domain.Auction;
+import cr.ac.ucenfotec.fun4fund.domain.PartnerRequest;
+import cr.ac.ucenfotec.fun4fund.domain.Ticket;
+import cr.ac.ucenfotec.fun4fund.domain.Favorite;
 import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.service.ApplicationUserService;
 import cr.ac.ucenfotec.fun4fund.service.dto.ApplicationUserCriteria;
@@ -771,10 +775,70 @@ public class ApplicationUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllApplicationUsersByAuctionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Auction auction = AuctionResourceIT.createEntity(em);
+        em.persist(auction);
+        em.flush();
+        applicationUser.addAuction(auction);
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long auctionId = auction.getId();
+
+        // Get all the applicationUserList where auction equals to auctionId
+        defaultApplicationUserShouldBeFound("auctionId.equals=" + auctionId);
+
+        // Get all the applicationUserList where auction equals to auctionId + 1
+        defaultApplicationUserShouldNotBeFound("auctionId.equals=" + (auctionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllApplicationUsersByPartnerRequestIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+        PartnerRequest partnerRequest = PartnerRequestResourceIT.createEntity(em);
+        em.persist(partnerRequest);
+        em.flush();
+        applicationUser.addPartnerRequest(partnerRequest);
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long partnerRequestId = partnerRequest.getId();
+
+        // Get all the applicationUserList where partnerRequest equals to partnerRequestId
+        defaultApplicationUserShouldBeFound("partnerRequestId.equals=" + partnerRequestId);
+
+        // Get all the applicationUserList where partnerRequest equals to partnerRequestId + 1
+        defaultApplicationUserShouldNotBeFound("partnerRequestId.equals=" + (partnerRequestId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllApplicationUsersByTicketIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Ticket ticket = TicketResourceIT.createEntity(em);
+        em.persist(ticket);
+        em.flush();
+        applicationUser.addTicket(ticket);
+        applicationUserRepository.saveAndFlush(applicationUser);
+        Long ticketId = ticket.getId();
+
+        // Get all the applicationUserList where ticket equals to ticketId
+        defaultApplicationUserShouldBeFound("ticketId.equals=" + ticketId);
+
+        // Get all the applicationUserList where ticket equals to ticketId + 1
+        defaultApplicationUserShouldNotBeFound("ticketId.equals=" + (ticketId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllApplicationUsersByFavoriteIsEqualToSomething() throws Exception {
         // Initialize the database
         applicationUserRepository.saveAndFlush(applicationUser);
-        Proyect favorite = ProyectResourceIT.createEntity(em);
+        Favorite favorite = FavoriteResourceIT.createEntity(em);
         em.persist(favorite);
         em.flush();
         applicationUser.addFavorite(favorite);

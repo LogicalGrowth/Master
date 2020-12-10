@@ -3,6 +3,7 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 import cr.ac.ucenfotec.fun4fund.Fun4FundApp;
 import cr.ac.ucenfotec.fun4fund.domain.Raffle;
 import cr.ac.ucenfotec.fun4fund.domain.Prize;
+import cr.ac.ucenfotec.fun4fund.domain.Ticket;
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.repository.RaffleRepository;
@@ -661,6 +662,26 @@ public class RaffleResourceIT {
 
         // Get all the raffleList where prize equals to prizeId + 1
         defaultRaffleShouldNotBeFound("prizeId.equals=" + (prizeId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllRafflesByTicketIsEqualToSomething() throws Exception {
+        // Initialize the database
+        raffleRepository.saveAndFlush(raffle);
+        Ticket ticket = TicketResourceIT.createEntity(em);
+        em.persist(ticket);
+        em.flush();
+        raffle.addTicket(ticket);
+        raffleRepository.saveAndFlush(raffle);
+        Long ticketId = ticket.getId();
+
+        // Get all the raffleList where ticket equals to ticketId
+        defaultRaffleShouldBeFound("ticketId.equals=" + ticketId);
+
+        // Get all the raffleList where ticket equals to ticketId + 1
+        defaultRaffleShouldNotBeFound("ticketId.equals=" + (ticketId + 1));
     }
 
 

@@ -56,6 +56,8 @@ public class RaffleCriteria implements Serializable, Criteria {
 
     private LongFilter prizeId;
 
+    private LongFilter ticketId;
+
     private LongFilter buyerId;
 
     private LongFilter proyectId;
@@ -70,6 +72,7 @@ public class RaffleCriteria implements Serializable, Criteria {
         this.expirationDate = other.expirationDate == null ? null : other.expirationDate.copy();
         this.state = other.state == null ? null : other.state.copy();
         this.prizeId = other.prizeId == null ? null : other.prizeId.copy();
+        this.ticketId = other.ticketId == null ? null : other.ticketId.copy();
         this.buyerId = other.buyerId == null ? null : other.buyerId.copy();
         this.proyectId = other.proyectId == null ? null : other.proyectId.copy();
     }
@@ -127,6 +130,14 @@ public class RaffleCriteria implements Serializable, Criteria {
         this.prizeId = prizeId;
     }
 
+    public LongFilter getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(LongFilter ticketId) {
+        this.ticketId = ticketId;
+    }
+
     public LongFilter getBuyerId() {
         return buyerId;
     }
@@ -160,6 +171,7 @@ public class RaffleCriteria implements Serializable, Criteria {
             Objects.equals(expirationDate, that.expirationDate) &&
             Objects.equals(state, that.state) &&
             Objects.equals(prizeId, that.prizeId) &&
+            Objects.equals(ticketId, that.ticketId) &&
             Objects.equals(buyerId, that.buyerId) &&
             Objects.equals(proyectId, that.proyectId);
     }
@@ -173,6 +185,7 @@ public class RaffleCriteria implements Serializable, Criteria {
         expirationDate,
         state,
         prizeId,
+        ticketId,
         buyerId,
         proyectId
         );
@@ -188,6 +201,7 @@ public class RaffleCriteria implements Serializable, Criteria {
                 (expirationDate != null ? "expirationDate=" + expirationDate + ", " : "") +
                 (state != null ? "state=" + state + ", " : "") +
                 (prizeId != null ? "prizeId=" + prizeId + ", " : "") +
+                (ticketId != null ? "ticketId=" + ticketId + ", " : "") +
                 (buyerId != null ? "buyerId=" + buyerId + ", " : "") +
                 (proyectId != null ? "proyectId=" + proyectId + ", " : "") +
             "}";

@@ -40,6 +40,7 @@ export interface IProyect {
   favorites?: IFavorite[];
   owner?: IApplicationUser;
   category?: ICategory;
+  favorite?: boolean;
 }
 
 export class Proyect implements IProyect {
@@ -69,8 +70,10 @@ export class Proyect implements IProyect {
     public payments?: IPayment[],
     public favorites?: IFavorite[],
     public owner?: IApplicationUser,
-    public category?: ICategory
+    public category?: ICategory,
+    public favorite?: boolean
   ) {
     this.status = this.status || false;
+    this.favorite = false;
   }
 }

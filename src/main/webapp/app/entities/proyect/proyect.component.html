@@ -58,7 +58,13 @@
 
                     <div class="pull-right">
                         <a [routerLink]="['/proyect', proyect.id, 'view']" class="btn btn-primary pull-center">Ver proyecto</a>
-                        <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-heart"></jhi-icon>
+                        <div *ngIf="!proyect.favorite; then thenBlock else elseBlock"></div>
+                        <ng-template #thenBlock>
+                            <jhi-icon buttonCssClass="btn-secondary" iconCssClass="fa fa-heart" (click)="addFavorite(proyect)"></jhi-icon>
+                        </ng-template>
+                        <ng-template #elseBlock>
+                            <jhi-icon buttonCssClass="btn-danger" iconCssClass="fa fa-heart" (click)="removeFavorite(proyect)"></jhi-icon>
+                        </ng-template>
                         <jhi-icon *ngIf="isProjectAdmin(proyect)" buttonCssClass="btn-success" iconCssClass="fa fa-edit" [routerLink]="['/proyect', proyect.id, 'edit']"></jhi-icon>
                     </div>
                 </div>

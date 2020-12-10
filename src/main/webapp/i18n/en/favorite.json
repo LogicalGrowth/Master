@@ -7,9 +7,9 @@
         "createOrEditLabel": "Create or edit a Favorite",
         "notFound": "No Favorites found"
       },
-      "created": "A new Favorite is created with identifier {{ param }}",
+      "created": "Agregado a favoritos existosamente.",
       "updated": "A Favorite is updated with identifier {{ param }}",
-      "deleted": "A Favorite is deleted with identifier {{ param }}",
+      "deleted": "Eliminado de favoritos existosamente.",
       "delete": {
         "question": "Are you sure you want to delete Favorite {{ id }}?"
       },

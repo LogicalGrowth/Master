@@ -14,6 +14,9 @@ import { IResource } from '../../shared/model/resource.model';
 import { ResourceService } from '../resource/resource.service';
 import { IApplicationUser } from '../../shared/model/application-user.model';
 import { ApplicationUserService } from '../application-user/application-user.service';
+import { CategoryService } from '../category/category.service';
+import { ICategory } from '../../shared/model/category.model';
+import { CategoryStatus } from '../../shared/model/enumerations/category-status.model';
 
 @Component({
   selector: 'jhi-proyect',
@@ -29,6 +32,12 @@ export class ProyectComponent implements OnInit, OnDestroy {
   account!: User;
   resource?: IResource[];
   applicationUser?: IApplicationUser[];
+  categories?: ICategory[];
+  description: string;
+  profitable: boolean;
+  nonprofit: boolean;
+  category: number;
+  sortBy: string;
 
   constructor(
     protected proyectService: ProyectService,
@@ -36,16 +45,51 @@ export class ProyectComponent implements OnInit, OnDestroy {
     protected modalService: NgbModal,
     private accountService: AccountService,
     private resourceService: ResourceService,
-    private applicationUserService: ApplicationUserService
-  ) {}
+    private applicationUserService: ApplicationUserService,
+    protected categoryService: CategoryService
+  ) {
+    this.description = '';
+    this.profitable = true;
+    this.nonprofit = true;
+    this.category = -1;
+    this.sortBy = 'creationDate';
+  }
 
   loadAll(): void {
     this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
   }
 
+  loadFilter(): void {
+    const showAllCategories = this.category === -1;
+
+    const queryName = { 'Name.contains': this.description };
+    const queryCategory = showAllCategories ? {} : { 'Name.contains': this.description, 'categoryId.equals': this.category };
+    const queryProjectType = this.profitable && this.nonprofit ? {} : { 'idType.equals': this.profitable ? 'PROFITABLE' : 'NONPROFIT' };
+
+    const finalQuery = Object.assign(queryName, queryCategory, queryProjectType);
+
+    this.proyectService.query(finalQuery).subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+  }
+
+  clearFilters(): void {
+    if (this.description !== '' || !this.nonprofit || !this.profitable || this.category !== -1) {
+      this.description = '';
+      this.profitable = true;
+      this.nonprofit = true;
+      this.category = -1;
+      this.sortBy = 'creationDate';
+
+      this.loadAll();
+    }
+  }
+
   ngOnInit(): void {
     this.loadAll();
     this.registerChangeInProyects();
+
+    this.categoryService
+      .query({ 'State.equals': CategoryStatus.ENABLED })
+      .subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
 
     this.accountService.identity().subscribe(account => {
       if (account) {
@@ -90,5 +134,10 @@ export class ProyectComponent implements OnInit, OnDestroy {
 
   isProjectAdmin(item: IProyect): boolean {
     return (this.isProjectOwner = this.applicationUser && this.applicationUser[0].id === item.owner?.id ? true : false);
+  }
+
+  topFunction(): void {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   }
 }

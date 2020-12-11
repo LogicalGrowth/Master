@@ -27,7 +27,7 @@
                     <div class="row project-subinfo">
                         <p class="category-type">{{proyect.category?.name}}</p>
                         <p class="pipe">|</p>
-                        <p class="category-type project-type">Proyecto {{ proyect.idType === "NONPROFIT" ? 'sin fines de lucro': 'con fines de lucro' }}</p>
+                        <p class="category-type project-type">{{ proyect.idType === "NONPROFIT" ? 'No lucrativo': 'Lucrativo' }}</p>
                         <p class="pipe soft-name">| Última actualización: {{updatedDays}}</p>
                     </div>
                 </div>

@@ -138,6 +138,12 @@ export class ProyectDetailComponent implements OnInit {
     }
   }
 
+  loadDonors(id: any): void {
+    this.paymentService.findTopDonations(id).subscribe(data => {
+      this.donors = data.body;
+    });
+  }
+
   ngOnInit(): void {
     this.productType = ProductType.DONATION;
 
@@ -165,9 +171,7 @@ export class ProyectDetailComponent implements OnInit {
       this.resourceService
         .query({ 'proyectId.equals': proyect.id })
         .subscribe((res: HttpResponse<IResource[]>) => (this.items = res.body || []));
-      this.paymentService.findTopDonations(proyect.id).subscribe(data => {
-        this.donors = data.body;
-      });
+      this.loadDonors(proyect.id as number);
     });
 
     this.accountService.identity().subscribe(account => {
@@ -214,6 +218,9 @@ export class ProyectDetailComponent implements OnInit {
 
   changeStatus(auction: IAuction): void {
     auction.state = ActivityStatus.FINISHED;
-    this.auctionService.update(auction).subscribe(() => {});
+    this.auctionService.update(auction).subscribe((res: HttpResponse<IAuction>) => {
+      this.proyect!.collected = res.body!.proyect!.collected;
+      this.loadDonors(this.proyect?.id);
+    });
   }
 }

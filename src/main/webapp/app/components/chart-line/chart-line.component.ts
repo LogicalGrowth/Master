@@ -46,7 +46,7 @@ export class ChartLineComponent implements OnInit {
         },
 
         tooltips: {
-          enabled: false,
+          enabled: true,
         },
 
         scales: {

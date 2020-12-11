@@ -20,6 +20,16 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
   datasetsRaffle: ChartDataSets[] = [];
   chart: any;
   chartRaffle: any;
+  raffleChartConfig = [
+    {
+      color: '#f17e5d',
+      title: 'Rifas participadas',
+    },
+    {
+      color: '#4cbdd7',
+      title: 'Rifas ganadas',
+    },
+  ];
 
   constructor(protected eventManager: JhiEventManager, protected auctionService: AuctionService, protected raffleService: RaffleService) {
     this.loadData();
@@ -40,9 +50,9 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
         pointsData.push(this.data[i].count);
       }
       this.datasets.push({
-        label: 'Active Users',
-        borderColor: '#f17e5d',
-        pointBackgroundColor: '#f17e5d',
+        label: 'Subastas',
+        borderColor: '#6bd098',
+        pointBackgroundColor: '#6bd098',
         pointRadius: 3,
         pointHoverRadius: 3,
         lineTension: 0,
@@ -77,9 +87,9 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
           pointsData.push(element.count);
         }
         datachart.push({
-          label: 'Active Users',
-          borderColor: '#f17e5d',
-          pointBackgroundColor: '#f17e5d',
+          label: this.raffleChartConfig[i].title,
+          borderColor: this.raffleChartConfig[i].color,
+          pointBackgroundColor: this.raffleChartConfig[i].color,
           pointRadius: 3,
           pointHoverRadius: 3,
           lineTension: 0,

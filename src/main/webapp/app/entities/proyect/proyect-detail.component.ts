@@ -59,6 +59,7 @@ export class ProyectDetailComponent implements OnInit {
   applicationUser?: IApplicationUser[];
   productType?: ProductType;
   userId: any;
+  now = moment();
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -209,5 +210,10 @@ export class ProyectDetailComponent implements OnInit {
 
   addRating(): void {
     this.reviewModalService.open(this.proyect!);
+  }
+
+  changeStatus(auction: IAuction): void {
+    auction.state = ActivityStatus.FINISHED;
+    this.auctionService.update(auction).subscribe(() => {});
   }
 }

@@ -305,6 +305,11 @@
                                                                 (click)="bid(auction)" [disabled]="auction.winner?.id == userId">
                                                                 <i class="fa fa-gavel"></i>
                                                             </button>
+                                                            <button *ngIf="isProjectOwner && auction && auction.expirationDate && auction.expirationDate < now"
+                                                                [disabled]="auction?.state === 'FINISHED'"
+                                                            type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm" (click)="changeStatus(auction)">
+                                                                <i class="fa fa-remove"></i>
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                     </tbody>

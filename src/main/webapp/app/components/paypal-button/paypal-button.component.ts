@@ -14,6 +14,7 @@ import { ApplicationUserService } from 'app/entities/application-user/applicatio
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import * as moment from 'moment';
 import { DonationModalService } from 'app/entities/proyect/donation/donationModal.service';
+import { ExclusiveContentBuyoutService } from 'app/entities/proyect/exclusive-content-buyout/exclusive-content-buyout.service';
 
 @Component({
   selector: 'jhi-paypal-button',
@@ -40,7 +41,8 @@ export class PaypalButtonComponent implements OnInit {
     private accountService: AccountService,
     protected modalService: NgbModal,
     private applicationUserService: ApplicationUserService,
-    private donationModalService: DonationModalService
+    private donationModalService: DonationModalService,
+    private exclusiveContentBuyoutService: ExclusiveContentBuyoutService
   ) {
     // Initialization inside the constructor
     this.paypalElement = paypalElement;
@@ -107,6 +109,9 @@ export class PaypalButtonComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
     result.subscribe(() => {
+      if (this.productType === ProductType.EXCLUSIVE_CONTENT) {
+        this.exclusiveContentBuyoutService.updateExclusiveContent();
+      }
       this.donationModalService.close();
     });
   }

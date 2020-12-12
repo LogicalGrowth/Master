@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IProyect } from 'app/shared/model/proyect.model';
+import { IProyect, Proyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
 import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component';
 import * as moment from 'moment';
@@ -24,7 +24,7 @@ import { CategoryStatus } from '../../shared/model/enumerations/category-status.
   styleUrls: ['../../../content/scss/paper-dashboard.scss', 'project.scss'],
 })
 export class ProyectComponent implements OnInit, OnDestroy {
-  proyects?: IProyect[];
+  proyects!: IProyect[];
   eventSubscriber?: Subscription;
   updatedDays: any;
   percentile: any;

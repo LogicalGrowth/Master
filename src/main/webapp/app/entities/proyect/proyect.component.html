@@ -56,7 +56,6 @@
                         <div class="form-group">
                             <label for="sortBy">Ordenar</label>
                             <select class="form-control active-cyan-4" id="sortBy" [(ngModel)]="sortBy">
-                                <option value="rating">Calificación</option>
                                 <option value="creationDate" selected>Fecha de creación</option>
                                 <option value="lastUpdated">Fecha de actualización</option>
                                 <option value="collected">Monto recolectado</option>
@@ -76,11 +75,13 @@
     </div>
 </div>
 <div class="container bcontent mt-5">
-    <jhi-icon buttonCssClass="btn-primary" iconCssClass="fa fa-arrow-up fa-lg" id="myBtn" [functionClick]="topFunction()"></jhi-icon>
     <div class="alert alert-warning" id="no-result" *ngIf="proyects?.length === 0">
         <span>Estamos trabajando en encontrar proyectos. Por favor regrese pronto.</span>
+        <span>No existen resultados con los filtros seleccionados.</span>
+        <p (click)="clearFilters()">Limpiar filtros</p>
     </div>
-    <div class="card proyect-card" *ngFor="let proyect of proyects;trackBy: trackId">
+
+    <div class="card proyect-card" *ngFor="let proyect of proyects | orderBy: sortBy:true;trackBy: trackId">
         <div class="row no-gutters">
             <div class="col-sm-3">
                 <div *ngIf="proyect.images && proyect.images.length > 0; else noImage">

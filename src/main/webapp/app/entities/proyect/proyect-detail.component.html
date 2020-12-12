@@ -244,6 +244,10 @@
                                                                         [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
                                                                     <i class="fa fa-edit"></i>
                                                                 </button>
+                                                                <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                        (click)="exclusiveContentBuyout(exclusiveContent)">
+                                                                    <i class="fa fa-shopping-cart"></i>
+                                                            </button>
                                                             </td>
                                                         </tr>
                                                         </tbody>

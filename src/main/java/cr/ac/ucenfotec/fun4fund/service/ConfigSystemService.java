@@ -61,6 +61,11 @@ public class ConfigSystemService {
         return configSystemRepository.findById(id);
     }
 
+    public List<ConfigSystem> findByType(String type) {
+        log.debug("Request to get all ConfigSystems");
+        return configSystemRepository.findByType(type);
+    }
+
     /**
      * Delete the configSystem by id.
      *

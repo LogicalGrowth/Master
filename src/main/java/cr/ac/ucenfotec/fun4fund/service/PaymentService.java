@@ -1,10 +1,12 @@
 package cr.ac.ucenfotec.fun4fund.service;
 
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
+import cr.ac.ucenfotec.fun4fund.domain.ConfigSystem;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
+import org.HdrHistogram.DoubleLinearIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,16 +33,20 @@ public class PaymentService {
 
     private final ProyectService proyectService;
 
+    private final ConfigSystemService configSystemService;
+
     public PaymentService(
         PaymentRepository paymentRepository,
         MailService mailService,
         ApplicationUserService applicationUserService,
-        ProyectService proyectService
+        ProyectService proyectService,
+        ConfigSystemService configSystemService
     ) {
         this.paymentRepository = paymentRepository;
         this.mailService = mailService;
         this.applicationUserService = applicationUserService;
         this.proyectService = proyectService;
+        this.configSystemService = configSystemService;
     }
 
     /**
@@ -130,6 +136,10 @@ public class PaymentService {
         Payment result = save(payment);
 
         //Guardar aquí fee
+        ConfigSystem config = configSystemService.findByType("FeeValue").get(0);
+        Double value = (Double.parseDouble(config.getValue()) + fee);
+        config.setValue(value.toString());
+        configSystemService.save(config);
         return  result;
     }
 }

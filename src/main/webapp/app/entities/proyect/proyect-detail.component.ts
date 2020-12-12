@@ -23,6 +23,8 @@ import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 import { DonationModalService } from './donation/donationModal.service';
 import { BidModalService } from '../auction/bid/bidModal.service';
 import { PartnerRequestModalService } from './partner-request/partnerRequestModal.service';
+import { RaffleService } from '../raffle/raffle.service';
+import { IRaffle } from 'app/shared/model/raffle.model';
 
 @Component({
   selector: 'jhi-proyect-detail',
@@ -47,6 +49,7 @@ export class ProyectDetailComponent implements OnInit {
   cards: any[] = [];
   exclusiveContents?: IExclusiveContent[];
   auctions?: IAuction[];
+  raffles?: IRaffle[];
   account!: User;
   isProjectOwner!: Boolean;
   daysCreated: any;
@@ -72,7 +75,8 @@ export class ProyectDetailComponent implements OnInit {
     private applicationUserService: ApplicationUserService,
     private donationModalService: DonationModalService,
     private bidModalService: BidModalService,
-    private partnerRequestModalService: PartnerRequestModalService
+    private partnerRequestModalService: PartnerRequestModalService,
+    private raffleService: RaffleService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -99,6 +103,20 @@ export class ProyectDetailComponent implements OnInit {
         this.auctionService
           .query({ 'proyectId.equals': projectId, 'state.equals': ActivityStatus.ENABLED })
           .subscribe((res: HttpResponse<IAuction[]>) => (this.auctions = res.body || []));
+      }
+    }
+  }
+
+  loadRaffle(projectId: number): void {
+    if (this.proyect != null) {
+      if (this.isProjectOwner) {
+        this.raffleService
+          .query({ 'proyectId.equals': projectId })
+          .subscribe((res: HttpResponse<IRaffle[]>) => (this.raffles = res.body || []));
+      } else {
+        this.raffleService
+          .query({ 'proyectId.equals': projectId, 'state.equals': ActivityStatus.ENABLED })
+          .subscribe((res: HttpResponse<IRaffle[]>) => (this.raffles = res.body || []));
       }
     }
   }
@@ -181,6 +199,7 @@ export class ProyectDetailComponent implements OnInit {
             this.loadCheckPoints(this.proyect?.id as number);
             this.loadExclusiveContent(this.proyect?.id as number);
             this.loadAuction(this.proyect?.id as number);
+            this.loadRaffle(this.proyect?.id as number);
           });
       }
     });
@@ -194,6 +213,9 @@ export class ProyectDetailComponent implements OnInit {
     this.bidModalService.open(auction);
   }
 
+  buy(raffle: IRaffle): void {
+    /*Usar ticket service*/
+  }
   partnerRequest(): void {
     this.partnerRequestModalService.open(this.proyect!, this.applicationUser![0]);
   }

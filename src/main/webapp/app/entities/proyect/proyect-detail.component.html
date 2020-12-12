@@ -170,6 +170,11 @@
                                             <i class="now-ui-icons shopping_shop"></i>Subastas
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#link12" role="tablist">
+                                            <i class="now-ui-icons shopping_shop"></i>Rifas
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="row justify-content-center">
@@ -321,6 +326,65 @@
 											</div>
                                     </div>
                                 </div>
+                                <div class="tab-pane" id="link12">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-12">
+                                            <div class="text-center" *ngIf="isProjectOwner">
+                                                <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/raffle', proyect!.id, 'new']">
+                                                    <i class="nc-icon nc-simple-add"></i>
+                                                </button>
+                                            </div>
+                                            <div class="table-responsive" id="raffles"
+                                                 *ngIf="raffles && raffles.length > 0">
+                                                <table class="table">
+                                                <thead class="text-primary">
+                                                <th><span>Nombre</span></th>
+                                                <th><span>Descripción</span></th>
+                                                <th><span>Fecha de expiración</span></th>
+                                                <th><span>Precio del tiquete</span></th>
+                                                <th *ngIf="isProjectOwner"><span>Estado</span></th>
+                                                <th class="text-center">
+                                                    <span>Acciones</span></th>
+                                                </thead>
+                                                <tbody>
+                                                <tr *ngFor="let raffle of raffles">
+                                                    <td>{{ raffle.prize?.name }}</td>
+                                                    <td style="max-width: 20rem;">{{ raffle.prize?.description }}</td>
+                                                    <td>{{ raffle.expirationDate | date }}</td>
+                                                    <td>{{ raffle.price | currency:'USD':'symbol'}}
+                                                        <span *ngIf="raffle.buyer?.id == userId" class="badge badge-pill badge-success">Tú</span>
+                                                    </td>
+                                                    <td *ngIf="isProjectOwner">{{ raffle.state | state}}</td>
+                                                    <td class="text-center">
+                                                        <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
+                                                                [routerLink]="['/raffle', raffle.id, 'view']">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                        <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                [disabled]="raffle.buyer?.id" [routerLink]="['/raffle', raffle.id, 'edit']">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                        <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                            (click)="buy(raffle)" [disabled]="raffle.buyer?.id == userId">
+                                                            <i class="fa fa-gavel"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-10" *ngIf="raffles?.length === 0">
+                                            <div class="card">
+                                                <div class="card-body justify-content-center">
+                                                    <p class="card-text">No hay rifas disponibles.</p>
+                                                    <p class="soft-name">Mantente conectado.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>

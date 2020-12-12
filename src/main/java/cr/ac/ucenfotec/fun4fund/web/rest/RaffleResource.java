@@ -1,6 +1,8 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
+import cr.ac.ucenfotec.fun4fund.domain.Prize;
 import cr.ac.ucenfotec.fun4fund.domain.Raffle;
+import cr.ac.ucenfotec.fun4fund.service.PrizeService;
 import cr.ac.ucenfotec.fun4fund.service.RaffleService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.RaffleCriteria;
@@ -38,9 +40,12 @@ public class RaffleResource {
 
     private final RaffleQueryService raffleQueryService;
 
-    public RaffleResource(RaffleService raffleService, RaffleQueryService raffleQueryService) {
+    private final PrizeService prizeService;
+
+    public RaffleResource(RaffleService raffleService, RaffleQueryService raffleQueryService, PrizeService prizeService) {
         this.raffleService = raffleService;
         this.raffleQueryService = raffleQueryService;
+        this.prizeService = prizeService;
     }
 
     /**
@@ -56,6 +61,9 @@ public class RaffleResource {
         if (raffle.getId() != null) {
             throw new BadRequestAlertException("A new raffle cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Prize prizeResult = raffle.getPrize();
+        Prize newPrize = prizeService.save(prizeResult);
+        raffle.setPrize(newPrize);
         Raffle result = raffleService.save(raffle);
         return ResponseEntity.created(new URI("/api/raffles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -77,6 +85,9 @@ public class RaffleResource {
         if (raffle.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        Prize prizeResult = raffle.getPrize();
+        Prize newPrize = prizeService.save(prizeResult);
+        raffle.setPrize(newPrize);
         Raffle result = raffleService.save(raffle);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, raffle.getId().toString()))

@@ -11,6 +11,7 @@ import { RaffleService } from './raffle.service';
 import { RaffleComponent } from './raffle.component';
 import { RaffleDetailComponent } from './raffle-detail.component';
 import { RaffleUpdateComponent } from './raffle-update.component';
+import { ProyectResolve } from '../proyect/proyect.route';
 
 @Injectable({ providedIn: 'root' })
 export class RaffleResolve implements Resolve<IRaffle> {
@@ -77,6 +78,18 @@ export const raffleRoute: Routes = [
     data: {
       authorities: [Authority.USER],
       pageTitle: 'fun4FundApp.raffle.home.title',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/new',
+    component: RaffleUpdateComponent,
+    resolve: {
+      currentProyect: ProyectResolve,
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'fun4FundApp.exclusiveContent.home.title',
     },
     canActivate: [UserRouteAccessService],
   },

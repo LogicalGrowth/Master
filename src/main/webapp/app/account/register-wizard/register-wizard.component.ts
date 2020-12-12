@@ -146,10 +146,8 @@ export class RegisterWizardComponent implements AfterViewInit {
         },
       },
       messages: {
-        email: {
+        identify: {
           required: 'this field is required',
-          minlength: 'this field must contain at least {0} characters',
-          digits: 'this field can only contain numbers',
         },
       },
 

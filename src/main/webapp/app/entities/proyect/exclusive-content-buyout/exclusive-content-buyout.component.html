@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h4 class="modal-title d-inline">Compra de contenido exclusivo</h4>
+
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')">
+        <span aria-hidden="true">x</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-danger" *ngIf="authenticationError">
+                <strong>Failed to sign in!</strong> Please check your credentials and try again.
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <h3>Producto: {{ exclusiveContent?.prize?.name }}</h3>
+            <h3>Precio: {{ exclusiveContent?.price | currency:'USD':'symbol' }}</h3>
+        </div>
+
+        <jhi-paypal-button description="Compra de {{ exclusiveContent?.prize?.name }}" [amount]="data"
+                projectId="{{ exclusiveContent?.proyect?.id }}" [productType]="productType"></jhi-paypal-button>
+                
+    </div>
+</div>

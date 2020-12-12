@@ -9,6 +9,7 @@ import { ICategory, Category } from 'app/shared/model/category.model';
 import { CategoryService } from './category.service';
 import { IResource, Resource } from 'app/shared/model/resource.model';
 import { ResourceService } from 'app/entities/resource/resource.service';
+import { CategoryStatus } from '../../shared/model/enumerations/category-status.model';
 
 @Component({
   selector: 'jhi-category-update',
@@ -16,6 +17,7 @@ import { ResourceService } from 'app/entities/resource/resource.service';
   styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class CategoryUpdateComponent implements OnInit {
+  creating = true;
   isSaving = false;
   images: IResource[] = [];
   imageSrc = null;
@@ -25,7 +27,7 @@ export class CategoryUpdateComponent implements OnInit {
     id: [],
     name: [null, [Validators.required]],
     description: [null, [Validators.required]],
-    status: [null, [Validators.required]],
+    status: [],
     image: [],
   });
 
@@ -38,6 +40,7 @@ export class CategoryUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ category }) => {
+      this.creating = false;
       this.updateForm(category);
 
       this.resourceService
@@ -80,7 +83,14 @@ export class CategoryUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const category = this.createFromForm();
+    let category;
+
+    if (this.creating) {
+      category = this.createFromForm();
+    } else {
+      category = this.updateFromForm();
+    }
+
     if (category.id !== undefined) {
       this.subscribeToSaveResponse(this.categoryService.update(category));
     } else {
@@ -94,8 +104,19 @@ export class CategoryUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
+      status: CategoryStatus.ENABLED,
+      image: this.resourceToSave ?? this.editForm.get(['image'])!.value,
+    };
+  }
+
+  private updateFromForm(): ICategory {
+    return {
+      ...new Category(),
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      description: this.editForm.get(['description'])!.value,
       status: this.editForm.get(['status'])!.value,
-      image: this.resourceToSave ?? this.editForm.get(['image_id'])!.value,
+      image: this.resourceToSave ?? this.editForm.get(['image'])!.value,
     };
   }
 
@@ -137,5 +158,6 @@ export class CategoryUpdateComponent implements OnInit {
     const image = this.createFromFormResource(data.secure_url, 'Image');
     this.subscribeToSaveResponseResource(this.resourceService.create(image));
     this.imageSrc = data.secure_url;
+    this.isSaving = false;
   }
 }

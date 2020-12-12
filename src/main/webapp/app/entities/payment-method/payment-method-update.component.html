@@ -8,21 +8,19 @@
                         <div class="card-header " [hidden]="!editForm.get('id')!.value">
                             <h4 >Modificar método de pago</h4>
                         </div>
-                        
+
                         <div class="card-header" [hidden]="editForm.get('id')!.value">
                             <h4>Registrar método de pago</h4>
                         </div>
-                    
+
                         <div class="card-body">
                             <div class="form-group hidden" [hidden]="!editForm.get('id')!.value">
                                 <label for="id" jhiTranslate="global.field.id">ID</label>
                                 <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
                             </div>
-                    
+
                             <div class="form-group" [hidden]="editForm.get('id')!.value">
-                                <label class="form-control-label" for="field_cardNumber">Número de tarjeta:
-                                    <span class="star">*</span>
-                                </label>
+                                <label class="form-control-label" for="field_cardNumber">Número de tarjeta:</label>
                                 <span class="star">*</span>
                                 <input type="text" class="form-control" name="cardNumber" id="field_cardNumber"
                                 formControlName="cardNumber" (keyup)="validateCard($event)"/>
@@ -41,15 +39,15 @@
                                     </small>
                                     <small class="form-text text-danger"
                                     *ngIf="isValid === false">
-                                    Tarjeta invalida.
+                                    Tarjeta inválida.
                                      </small>
                                 </div>
                                 <img class="img-payment-cards" src="{{cardTypeImage}}" *ngIf="showCardImage" style="margin-top: 0.8rem;"/>
                             </div>
-                    
-                    
+
+
                             <div class="form-group">
-                                <label class="form-control-label" for="field_cardOwner">Nombre de la tarjeta: </label>
+                                <label class="form-control-label" for="field_cardOwner">Tarjetahabiente: </label>
                                 <span class="star">*</span>
                                 <input type="text" class="form-control" name="cardOwner" id="field_cardOwner"
                                        formControlName="cardOwner"/>
@@ -64,7 +62,7 @@
                              </small>
                                 </div>
                             </div>
-                    
+
                             <div class="form-group">
                                 <label class="form-control-label" for="field_expirationDate">Fecha de vencimiento: </label>
                                 <span class="star">*</span>
@@ -78,12 +76,12 @@
                                     </small>
                                     <small class="form-text text-danger"
                                            *ngIf="!isDateValid(editForm.get('expirationDate'))" >
-                                    Fecha invalida.
+                                    Fecha inválida.
                                     </small>
                                 </div>
                             </div>
-                    
-                    
+
+
                             <div class="form-group hidden">
                                 <label class="form-control-label" jhiTranslate="fun4FundApp.paymentMethod.type" for="field_type">Type</label>
                                 <select class="form-control" name="type" formControlName="type" id="field_type" [(ngModel)]="type">
@@ -92,7 +90,7 @@
                                     <option value="EXPRESS">{{ 'fun4FundApp.CardType.EXPRESS' | translate }}</option>
                                 </select>
                             </div>
-                    
+
                             <div class="form-group" [hidden]="editForm.get('id')!.value">
                                 <label class="form-control-label" for="field_cvc">CVC:</label>
                                 <span class="star">*</span>
@@ -101,23 +99,23 @@
                                 <div *ngIf=" editForm.get('cvc')!.dirty || editForm.get('cvc')!.touched">
                                     <small class="form-text text-danger"
                                            *ngIf="!isValidCvc(editForm.get('cvc'))">
-                                    CVC invalido.
+                                    CVC inválido.
                                     </small>
                                 </div>
                             </div>
-                       
+
                         </div>
-                    
+
                         <div  class="card-footer text-right">
                             <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
                                 <span>Atrás</span>
                             </button>
-                    
+
                             <button  [hidden]="editForm.get('id')!.value" type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving || !isValidCvc(editForm.get('cvc')) || !isDateValid(editForm.get('expirationDate')) || !validateName(editForm.get('cardOwner'))" class="btn btn-primary">
                                 <span>Guardar</span>
                             </button>
-                    
-                            
+
+
                             <button [hidden]="!editForm.get('id')!.value" type="submit" id="save-entity" [disabled]=" editForm.invalid ||!isDateValid(editForm.get('expirationDate')) || !validateName(editForm.get('cardOwner'))" class="btn btn-primary">
                                 <span>Guardar</span>
                             </button>

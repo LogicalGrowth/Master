@@ -3,7 +3,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { IProyect } from 'app/shared/model/proyect.model';
+
+import { IProyect, Proyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
 import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component';
 import * as moment from 'moment';
@@ -12,8 +13,12 @@ import { AccountService } from '../../core/auth/account.service';
 import { IResource } from '../../shared/model/resource.model';
 import { IApplicationUser } from '../../shared/model/application-user.model';
 import { ApplicationUserService } from '../application-user/application-user.service';
+import { CategoryService } from '../category/category.service';
+import { ICategory } from '../../shared/model/category.model';
+import { CategoryStatus } from '../../shared/model/enumerations/category-status.model';
 import { FavoriteService } from '../favorite/favorite.service';
 import { Favorite, IFavorite } from 'app/shared/model/favorite.model';
+import { ResourceService } from '../resource/resource.service';
 
 @Component({
   selector: 'jhi-proyect',
@@ -21,7 +26,7 @@ import { Favorite, IFavorite } from 'app/shared/model/favorite.model';
   styleUrls: ['../../../content/scss/paper-dashboard.scss', 'project.scss'],
 })
 export class ProyectComponent implements OnInit, OnDestroy {
-  proyects?: IProyect[];
+  proyects!: IProyect[];
   eventSubscriber?: Subscription;
   updatedDays: any;
   percentile: any;
@@ -29,6 +34,12 @@ export class ProyectComponent implements OnInit, OnDestroy {
   account!: User;
   resource?: IResource[];
   applicationUser?: IApplicationUser[];
+  categories?: ICategory[];
+  description: string;
+  profitable: boolean;
+  nonprofit: boolean;
+  category: number;
+  sortBy: string;
   favorites?: IFavorite[];
 
   constructor(
@@ -36,27 +47,67 @@ export class ProyectComponent implements OnInit, OnDestroy {
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
     private accountService: AccountService,
+    private resourceService: ResourceService,
     private applicationUserService: ApplicationUserService,
+    protected categoryService: CategoryService,
     private favoriteService: FavoriteService
-  ) {}
+  ) {
+    this.description = '';
+    this.profitable = true;
+    this.nonprofit = true;
+    this.category = -1;
+    this.sortBy = 'creationDate';
+  }
 
   loadAll(): void {
     this.proyectService.query({ 'status.equals': true }).subscribe((res: HttpResponse<IProyect[]>) => {
       this.proyects = res.body || [];
+    });
+  }
 
-      this.accountService.identity().subscribe(account => {
-        if (account) {
-          this.account = account;
-        }
+  loadFilter(): void {
+    const showAllCategories = this.category === -1;
 
-        this.applicationUserService
-          .query({ 'internalUserId.equals': this.account.id })
-          .subscribe((response: HttpResponse<IApplicationUser[]>) => {
-            this.applicationUser = response.body || [];
+    const queryName = { 'Name.contains': this.description };
+    const queryCategory = showAllCategories ? {} : { 'Name.contains': this.description, 'categoryId.equals': this.category };
+    const queryProjectType = this.profitable && this.nonprofit ? {} : { 'idType.equals': this.profitable ? 'PROFITABLE' : 'NONPROFIT' };
 
-            this.loadFavorites(response.body![0].id as number);
-          });
-      });
+    const finalQuery = Object.assign(queryName, queryCategory, queryProjectType);
+
+    this.proyectService.query(finalQuery).subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+  }
+
+  clearFilters(): void {
+    if (this.description !== '' || !this.nonprofit || !this.profitable || this.category !== -1) {
+      this.description = '';
+      this.profitable = true;
+      this.nonprofit = true;
+      this.category = -1;
+      this.sortBy = 'creationDate';
+
+      this.loadAll();
+    }
+  }
+
+  ngOnInit(): void {
+    this.loadAll();
+    this.registerChangeInProyects();
+
+    this.categoryService
+      .query({ 'State.equals': CategoryStatus.ENABLED })
+      .subscribe((res: HttpResponse<ICategory[]>) => (this.categories = res.body || []));
+
+    this.accountService.identity().subscribe(account => {
+      if (account) {
+        this.account = account;
+      }
+
+      this.applicationUserService
+        .query({ 'internalUserId.equals': this.account.id })
+        .subscribe((response: HttpResponse<IApplicationUser[]>) => {
+          this.applicationUser = response.body || [];
+          this.loadFavorites(response.body![0].id as number);
+        });
     });
   }
 
@@ -70,11 +121,6 @@ export class ProyectComponent implements OnInit, OnDestroy {
           if (res.body!.length > 0) element.favorite = true;
         });
     });
-  }
-
-  ngOnInit(): void {
-    this.loadAll();
-    this.registerChangeInProyects();
   }
 
   ngOnDestroy(): void {

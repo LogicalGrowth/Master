@@ -21,6 +21,7 @@ import { ApplicationUserService } from '../application-user/application-user.ser
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 import { DonationModalService } from './donation/donationModal.service';
+import { ExclusiveContentBuyoutService } from './exclusive-content-buyout/exclusive-content-buyout.service';
 import { BidModalService } from '../auction/bid/bidModal.service';
 import { PartnerRequestModalService } from './partner-request/partnerRequestModal.service';
 import { RaffleService } from '../raffle/raffle.service';
@@ -76,6 +77,7 @@ export class ProyectDetailComponent implements OnInit {
     private resourceService: ResourceService,
     private applicationUserService: ApplicationUserService,
     private donationModalService: DonationModalService,
+    private exclusiveContentBuyoutService: ExclusiveContentBuyoutService,
     private bidModalService: BidModalService,
     private partnerRequestModalService: PartnerRequestModalService,
     private raffleService: RaffleService,
@@ -90,7 +92,7 @@ export class ProyectDetailComponent implements OnInit {
           .subscribe((res: HttpResponse<IExclusiveContent[]>) => (this.exclusiveContents = res.body || []));
       } else {
         this.exclusiveContentService
-          .query({ 'proyectId.equals': projectId, 'stock.greaterThan': 1, 'state.equals': ActivityStatus.ENABLED })
+          .query({ 'proyectId.equals': projectId, 'stock.greaterThan': 0, 'state.equals': ActivityStatus.ENABLED })
           .subscribe((res: HttpResponse<IExclusiveContent[]>) => (this.exclusiveContents = res.body || []));
       }
     }
@@ -214,6 +216,10 @@ export class ProyectDetailComponent implements OnInit {
 
   donate(): void {
     this.donationModalService.open(this.proyect!);
+  }
+
+  exclusiveContentBuyout(exclusiveContent: IExclusiveContent): void {
+    this.exclusiveContentBuyoutService.open(exclusiveContent);
   }
 
   bid(auction: IAuction): void {

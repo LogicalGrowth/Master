@@ -27,7 +27,7 @@
                     <div class="row project-subinfo">
                         <p class="category-type">{{proyect.category?.name}}</p>
                         <p class="pipe">|</p>
-                        <p class="category-type project-type">Proyecto {{ proyect.idType === "NONPROFIT" ? 'sin fines de lucro': 'con fines de lucro' }}</p>
+                        <p class="category-type project-type">{{ proyect.idType === "NONPROFIT" ? 'No lucrativo': 'Lucrativo' }}</p>
                         <p class="pipe soft-name">| Última actualización: {{updatedDays}}</p>
                     </div>
                 </div>
@@ -178,7 +178,7 @@
                                 </ul>
                             </div>
                             <div class="row justify-content-center">
-                                <div class="tab-content tab-space tab-subcategories">
+                                <div class="tab-content tab-subcategories">
                                     <div class="tab-pane active" id="link9">
                                         <div class="container-fluid">
                                             <div class="row d-flex justify-content-center">
@@ -249,6 +249,10 @@
                                                                         [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
                                                                     <i class="fa fa-edit"></i>
                                                                 </button>
+                                                                <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
+                                                                        (click)="exclusiveContentBuyout(exclusiveContent)">
+                                                                    <i class="fa fa-shopping-cart"></i>
+                                                            </button>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -330,6 +334,10 @@
                                                     </div>
                                                 </div>
 											</div>
+
+                                            <!--<button class="btn btn-warning col-md-3" (click)=donate()>
+                                                Declarar ganador
+                                            </button>-->
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="link12">

@@ -70,9 +70,21 @@ public class ApplicationUser implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Payment> payments = new HashSet<>();
 
-    @OneToMany(mappedBy = "applicationUser")
+    @OneToMany(mappedBy = "winner")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Proyect> favorites = new HashSet<>();
+    private Set<Auction> auctions = new HashSet<>();
+
+    @OneToMany(mappedBy = "applicant")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<PartnerRequest> partnerRequests = new HashSet<>();
+
+    @OneToMany(mappedBy = "buyer")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Ticket> tickets = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Favorite> favorites = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -261,29 +273,104 @@ public class ApplicationUser implements Serializable {
         this.payments = payments;
     }
 
-    public Set<Proyect> getFavorites() {
+    public Set<Auction> getAuctions() {
+        return auctions;
+    }
+
+    public ApplicationUser auctions(Set<Auction> auctions) {
+        this.auctions = auctions;
+        return this;
+    }
+
+    public ApplicationUser addAuction(Auction auction) {
+        this.auctions.add(auction);
+        auction.setWinner(this);
+        return this;
+    }
+
+    public ApplicationUser removeAuction(Auction auction) {
+        this.auctions.remove(auction);
+        auction.setWinner(null);
+        return this;
+    }
+
+    public void setAuctions(Set<Auction> auctions) {
+        this.auctions = auctions;
+    }
+
+    public Set<PartnerRequest> getPartnerRequests() {
+        return partnerRequests;
+    }
+
+    public ApplicationUser partnerRequests(Set<PartnerRequest> partnerRequests) {
+        this.partnerRequests = partnerRequests;
+        return this;
+    }
+
+    public ApplicationUser addPartnerRequest(PartnerRequest partnerRequest) {
+        this.partnerRequests.add(partnerRequest);
+        partnerRequest.setApplicant(this);
+        return this;
+    }
+
+    public ApplicationUser removePartnerRequest(PartnerRequest partnerRequest) {
+        this.partnerRequests.remove(partnerRequest);
+        partnerRequest.setApplicant(null);
+        return this;
+    }
+
+    public void setPartnerRequests(Set<PartnerRequest> partnerRequests) {
+        this.partnerRequests = partnerRequests;
+    }
+
+    public Set<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public ApplicationUser tickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
+        return this;
+    }
+
+    public ApplicationUser addTicket(Ticket ticket) {
+        this.tickets.add(ticket);
+        ticket.setBuyer(this);
+        return this;
+    }
+
+    public ApplicationUser removeTicket(Ticket ticket) {
+        this.tickets.remove(ticket);
+        ticket.setBuyer(null);
+        return this;
+    }
+
+    public void setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+    public Set<Favorite> getFavorites() {
         return favorites;
     }
 
-    public ApplicationUser favorites(Set<Proyect> proyects) {
-        this.favorites = proyects;
+    public ApplicationUser favorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
         return this;
     }
 
-    public ApplicationUser addFavorite(Proyect proyect) {
-        this.favorites.add(proyect);
-        proyect.setApplicationUser(this);
+    public ApplicationUser addFavorite(Favorite favorite) {
+        this.favorites.add(favorite);
+        favorite.setUser(this);
         return this;
     }
 
-    public ApplicationUser removeFavorite(Proyect proyect) {
-        this.favorites.remove(proyect);
-        proyect.setApplicationUser(null);
+    public ApplicationUser removeFavorite(Favorite favorite) {
+        this.favorites.remove(favorite);
+        favorite.setUser(null);
         return this;
     }
 
-    public void setFavorites(Set<Proyect> proyects) {
-        this.favorites = proyects;
+    public void setFavorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

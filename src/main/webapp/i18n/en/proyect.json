@@ -10,9 +10,9 @@
       "imagen": {
         "created": "Imagen creada exitosamente."
       },
-      "created": "Proyecto creado existosamente.",
-      "updated": "Proyecto actualizado existosamente.",
-      "deleted": "Proyecto borrado existosamente.",
+      "created": "Proyecto creado exitosamente.",
+      "updated": "Proyecto actualizado exitosamente.",
+      "deleted": "Proyecto borrado exitosamente.",
       "delete": {
         "question": "¿Desea eliminar este proyecto?"
       },
@@ -32,6 +32,7 @@
       "fee": "Fee",
       "number": "Number",
       "currencyType": "Currency Type",
+      "status": "Status",
       "image": "Image",
       "checkpoint": "Checkpoint",
       "review": "Review",

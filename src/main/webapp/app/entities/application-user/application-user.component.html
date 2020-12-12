@@ -20,10 +20,10 @@
                                 <th scope="col"><span>Apellido</span></th>
                                 <th scope="col"><span>Email</span></th>
                                 <th scope="col"><span>Teléfono</span></th>
-                                <th scope="col"><span>Tipo de usuario</span></th>
                                 <th scope="col"><span>Estado</span></th>
                                 <th scope="col"><span>Fecha de modificación</span></th>
                                 <th scope="col"><span>Fecha de creación</span></th>
+                                <th scope="col"><span>Administrador</span></th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let applicationUser of applicationUsers ;trackBy: trackId">
@@ -32,7 +32,7 @@
                                     <td>{{ applicationUser.internalUser?.lastName }}</td>
                                     <td>{{ applicationUser.internalUser?.email }}</td>
                                     <td>{{ applicationUser.phoneNumber }}</td>
-                                    <td>{{ applicationUser.admin ? 'Administrador' : 'Usuario' }}</td>
+                                   <!--<td>{{ applicationUser.admin ? 'Administrador' : 'Usuario' }}</td>--> 
                                     <td>
                                         <button class="btn btn-danger btn-sm" (click)="setActive(applicationUser,true)"
                                             *ngIf="!applicationUser.internalUser?.activated">Habilitar</button>
@@ -42,6 +42,25 @@
                                     </td>
                                     <td>{{ applicationUser.internalUser?.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                                     <td>{{ applicationUser.internalUser?.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                                    <td class="text-center"> 
+                                        
+                                        
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <div *ngIf="applicationUser.admin ">
+                                              <input class="form-check-input" type="checkbox" checked (click)="addAdmin($event, applicationUser)">
+                                              <span class="form-check-sign"></span>
+                                            </div>
+                                            <div *ngIf="!applicationUser.admin ">
+                                                <input class="form-check-input" type="checkbox" (click)="addAdmin($event, applicationUser)">
+                                                <span class="form-check-sign"></span>
+                                            </div>
+                                            </label>
+                                          </div>
+                
+                                        </td>   
+                
+                               
                                 </tr>
                             </tbody>
                         </table>

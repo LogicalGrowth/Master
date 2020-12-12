@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import cr.ac.ucenfotec.fun4fund.domain.enumeration.ActivityStatus;
 
@@ -48,6 +50,10 @@ public class Raffle implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private Prize prize;
+
+    @OneToMany(mappedBy = "raffle")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Ticket> tickets = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = "raffles", allowSetters = true)
@@ -129,6 +135,31 @@ public class Raffle implements Serializable {
 
     public void setPrize(Prize prize) {
         this.prize = prize;
+    }
+
+    public Set<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public Raffle tickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
+        return this;
+    }
+
+    public Raffle addTicket(Ticket ticket) {
+        this.tickets.add(ticket);
+        ticket.setRaffle(this);
+        return this;
+    }
+
+    public Raffle removeTicket(Ticket ticket) {
+        this.tickets.remove(ticket);
+        ticket.setRaffle(null);
+        return this;
+    }
+
+    public void setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     public ApplicationUser getBuyer() {

@@ -8,7 +8,7 @@ import { RequestStatus } from 'app/shared/model/enumerations/request-status.mode
 import { IPartnerRequest, PartnerRequest } from 'app/shared/model/partner-request.model';
 import { IProyect } from 'app/shared/model/proyect.model';
 import { Observable } from 'rxjs';
-
+import { PartnerRequestModalService } from './partnerRequestModal.service';
 @Component({
   selector: 'jhi-partner-request',
   templateUrl: './partner-request.component.html',
@@ -24,7 +24,12 @@ export class PartnerRequestComponent implements OnInit {
     amount: [null, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]],
   });
 
-  constructor(private fb: FormBuilder, public activeModal: NgbActiveModal, private partnerRequestService: PartnerRequestService) {}
+  constructor(
+    private fb: FormBuilder,
+    public activeModal: NgbActiveModal,
+    private partnerRequestService: PartnerRequestService,
+    private partnerRequestModalService: PartnerRequestModalService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -54,6 +59,7 @@ export class PartnerRequestComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.isSaving = false;
+    this.partnerRequestModalService.close();
   }
 
   protected onSaveError(): void {

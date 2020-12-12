@@ -11,6 +11,9 @@ import { User } from 'app/core/user/user.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { ApplicationUserService } from '../application-user/application-user.service';
 import { IApplicationUser } from 'app/shared/model/application-user.model';
+import { PaymentService } from '../payment/payment.service';
+import { IPayment } from 'app/shared/model/payment.model';
+import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 @Component({
   selector: 'jhi-payment-method',
   templateUrl: './payment-method.component.html',
@@ -22,13 +25,22 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
   data?: IPaymentMethod[];
   account!: User;
   applicationUser?: IApplicationUser[];
+  mypayments?: IPayment[];
+  productType?: ProductType;
+
+  donationProduct = ProductType.DONACION;
+  raffleProduct = ProductType.RIFA;
+  auctionProduct = ProductType.SUBASTA;
+  exclusiveProduct = ProductType.CONTENIDO_EXCLUSIVO;
+  partnershipProduct = ProductType.SOCIO;
 
   constructor(
     protected paymentMethodService: PaymentMethodService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
     private accountService: AccountService,
-    private applicationUserService: ApplicationUserService
+    private applicationUserService: ApplicationUserService,
+    protected paymentService: PaymentService
   ) {}
 
   loadAll(): void {
@@ -68,6 +80,7 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
           .subscribe((res: HttpResponse<IApplicationUser[]>) => {
             this.applicationUser = res.body || [];
             this.loadPaymentMethods();
+            this.loadPayments();
           });
       }
     });
@@ -127,5 +140,32 @@ export class PaymentMethodComponent implements OnInit, OnDestroy {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentMethod>>): void {
     result.subscribe();
+  }
+
+  loadPayments(): void {
+    if (this.applicationUser != null) {
+      this.paymentService.query({ 'applicationUserId.equals': this.applicationUser[0].id }).subscribe((res: HttpResponse<IPayment[]>) => {
+        this.mypayments = res.body || [];
+        this.translateDonationType();
+      });
+    }
+  }
+
+  translateDonationType(): void {
+    if (this.mypayments) {
+      for (let i = 0; i < this.mypayments.length; i++) {
+        if (this.mypayments[i].type === 'RAFFLE') {
+          this.mypayments[i].type = this.raffleProduct;
+        } else if (this.mypayments[i].type === 'AUCTION') {
+          this.mypayments[i].type = this.auctionProduct;
+        } else if (this.mypayments[i].type === 'DONATION') {
+          this.mypayments[i].type = this.donationProduct;
+        } else if (this.mypayments[i].type === 'EXCLUSIVE_CONTENT') {
+          this.mypayments[i].type = this.exclusiveProduct;
+        } else if (this.mypayments[i].type === 'PARTNERSHIP') {
+          this.mypayments[i].type = this.partnershipProduct;
+        }
+      }
+    }
   }
 }

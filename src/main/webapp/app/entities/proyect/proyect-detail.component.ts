@@ -26,6 +26,7 @@ import { PartnerRequestModalService } from './partner-request/partnerRequestModa
 import { RaffleService } from '../raffle/raffle.service';
 import { IRaffle } from 'app/shared/model/raffle.model';
 
+import { ReviewModalService } from './review/reviewModal.service';
 @Component({
   selector: 'jhi-proyect-detail',
   templateUrl: './proyect-detail.component.html',
@@ -62,6 +63,7 @@ export class ProyectDetailComponent implements OnInit {
   applicationUser?: IApplicationUser[];
   productType?: ProductType;
   userId: any;
+  now = moment();
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -76,7 +78,8 @@ export class ProyectDetailComponent implements OnInit {
     private donationModalService: DonationModalService,
     private bidModalService: BidModalService,
     private partnerRequestModalService: PartnerRequestModalService,
-    private raffleService: RaffleService
+    private raffleService: RaffleService,
+    private reviewModalService: ReviewModalService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -154,6 +157,12 @@ export class ProyectDetailComponent implements OnInit {
     }
   }
 
+  loadDonors(id: any): void {
+    this.paymentService.findTopDonations(id).subscribe(data => {
+      this.donors = data.body;
+    });
+  }
+
   ngOnInit(): void {
     this.productType = ProductType.DONATION;
 
@@ -181,9 +190,7 @@ export class ProyectDetailComponent implements OnInit {
       this.resourceService
         .query({ 'proyectId.equals': proyect.id })
         .subscribe((res: HttpResponse<IResource[]>) => (this.items = res.body || []));
-      this.paymentService.findTopDonations(proyect.id).subscribe(data => {
-        this.donors = data.body;
-      });
+      this.loadDonors(proyect.id as number);
     });
 
     this.accountService.identity().subscribe(account => {
@@ -226,5 +233,17 @@ export class ProyectDetailComponent implements OnInit {
 
   twitter(): void {
     window.open('https://twitter.com/intent/tweet?text=' + window.location.href);
+  }
+
+  addRating(): void {
+    this.reviewModalService.open(this.proyect!);
+  }
+
+  changeStatus(auction: IAuction): void {
+    auction.state = ActivityStatus.FINISHED;
+    this.auctionService.update(auction).subscribe((res: HttpResponse<IAuction>) => {
+      this.proyect!.collected = res.body!.proyect!.collected;
+      this.loadDonors(this.proyect?.id);
+    });
   }
 }

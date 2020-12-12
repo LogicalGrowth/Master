@@ -7,8 +7,8 @@
         "createOrEditLabel": "Create or edit a Checkpoint",
         "notFound": "No Checkpoints found"
       },
-      "created": "Checkpoint creado existosamente.",
-      "updated": "Checkpoint actualizado existosamente.",
+      "created": "Checkpoint creado exitosamente.",
+      "updated": "Checkpoint actualizado exitosamente.",
       "deleted": "A Checkpoint is deleted with identifier {{ param }}",
       "delete": {
         "question": "Are you sure you want to delete Checkpoint {{ id }}?"

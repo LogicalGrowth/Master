@@ -8,7 +8,7 @@
         "notFound": "No Application Users found"
       },
       "created": "A new Application User is created with identifier {{ param }}",
-      "updated": "A Application User is updated with identifier {{ param }}",
+      "updated": "Usuario actualizado correctamente",
       "deleted": "A Application User is deleted with identifier {{ param }}",
       "delete": {
         "question": "Are you sure you want to delete Application User {{ id }}?"
@@ -26,6 +26,9 @@
       "proyect": "Proyect",
       "notification": "Notification",
       "payment": "Payment",
+      "auction": "Auction",
+      "partnerRequest": "Partner Request",
+      "ticket": "Ticket",
       "favorite": "Favorite"
     }
   }

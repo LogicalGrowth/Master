@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PartnerRequestService } from 'app/entities/partner-request/partner-request.service';
 import { IPartnerRequest } from 'app/shared/model/partner-request.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -18,12 +18,14 @@ import { JhiEventManager } from 'ng-jhipster';
 export class PartnerRequestListComponent implements OnInit, OnDestroy {
   partnerRequests?: IPartnerRequest[];
   eventSubscriber?: Subscription;
+  id: any;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected partnerRequestService: PartnerRequestService,
     protected modalService: NgbModal,
-    protected eventManager: JhiEventManager
+    protected eventManager: JhiEventManager,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +35,7 @@ export class PartnerRequestListComponent implements OnInit, OnDestroy {
 
   loadAll(): void {
     this.activatedRoute.data.subscribe(({ proyect }) => {
+      this.id = proyect.id;
       this.partnerRequestService
         .query({ 'proyectId.equals': proyect.id, 'status.equals': RequestStatus.SEND })
         .subscribe((data: HttpResponse<IPartnerRequest[]>) => {
@@ -59,5 +62,9 @@ export class PartnerRequestListComponent implements OnInit, OnDestroy {
 
   registerChangeInPartnerRequest(): void {
     this.eventSubscriber = this.eventManager.subscribe('partnerRequestListModification', () => this.loadAll());
+  }
+
+  goToProyect(): void {
+    this.router.navigate(['/proyect/' + this.id + '/view']);
   }
 }

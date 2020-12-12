@@ -1,6 +1,7 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Prize;
+import cr.ac.ucenfotec.fun4fund.domain.AuctionAnswerStatistics;
 import cr.ac.ucenfotec.fun4fund.domain.Raffle;
 import cr.ac.ucenfotec.fun4fund.service.PrizeService;
 import cr.ac.ucenfotec.fun4fund.service.RaffleService;
@@ -143,5 +144,15 @@ public class RaffleResource {
         log.debug("REST request to delete Raffle : {}", id);
         raffleService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/raffles/getMyRaffleReport")
+    public List<List<AuctionAnswerStatistics>> getRaffle(
+        @RequestParam(name = "numberMonths", required = false, defaultValue = "6") int numberMonths
+    ) {
+        if(numberMonths == 0){
+            numberMonths = 6;
+        }
+        return raffleService.getDataRaffle(numberMonths);
     }
 }

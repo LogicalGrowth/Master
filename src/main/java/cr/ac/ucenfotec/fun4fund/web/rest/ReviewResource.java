@@ -2,6 +2,7 @@ package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Review;
 import cr.ac.ucenfotec.fun4fund.repository.ReviewRepository;
+import cr.ac.ucenfotec.fun4fund.service.ProyectService;
 import cr.ac.ucenfotec.fun4fund.service.ReviewService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.ReviewCriteria;
@@ -41,11 +42,14 @@ public class ReviewResource {
 
     private final ReviewRepository reviewRepository;
 
+    private final ProyectService proyectService;
+
     public ReviewResource(ReviewService reviewService, ReviewQueryService reviewQueryService,
-                          ReviewRepository reviewRepository) {
+                          ReviewRepository reviewRepository, ProyectService proyectService) {
         this.reviewService = reviewService;
         this.reviewQueryService = reviewQueryService;
         this.reviewRepository = reviewRepository;
+        this.proyectService = proyectService;
     }
 
     /**

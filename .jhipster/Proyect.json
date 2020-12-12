@@ -4,44 +4,31 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required",
-        "maxlength"
-      ],
+      "fieldValidateRules": ["required", "maxlength"],
       "fieldValidateRulesMaxlength": "30"
     },
     {
       "fieldName": "description",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required",
-        "maxlength"
-      ],
+      "fieldValidateRules": ["required", "maxlength"],
       "fieldValidateRulesMaxlength": "300"
     },
     {
       "fieldName": "idType",
       "fieldType": "ProyectType",
       "fieldValues": "PROFITABLE,NONPROFIT",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "goalAmount",
       "fieldType": "Double",
-      "fieldValidateRules": [
-        "min",
-        "required"
-      ],
+      "fieldValidateRules": ["min", "required"],
       "fieldValidateRulesMin": "1"
     },
     {
       "fieldName": "collected",
       "fieldType": "Double",
-      "fieldValidateRules": [
-        "min"
-      ],
+      "fieldValidateRules": ["min"],
       "fieldValidateRulesMin": "0"
     },
     {
@@ -51,9 +38,7 @@
     {
       "fieldName": "creationDate",
       "fieldType": "ZonedDateTime",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "lastUpdated",
@@ -62,38 +47,32 @@
     {
       "fieldName": "coordX",
       "fieldType": "Double",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "coordY",
       "fieldType": "Double",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "fee",
       "fieldType": "Double",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "number",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "currencyType",
       "fieldType": "Currency",
       "fieldValues": "USD,CRC",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
@@ -146,17 +125,16 @@
       "relationshipName": "payment"
     },
     {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "applicationUser",
+      "relationshipType": "one-to-many",
+      "otherEntityName": "favorite",
       "otherEntityRelationshipName": "proyect",
-      "relationshipName": "owner",
-      "otherEntityField": "id"
+      "relationshipName": "favorite"
     },
     {
       "relationshipType": "many-to-one",
       "otherEntityName": "applicationUser",
-      "otherEntityRelationshipName": "favorite",
-      "relationshipName": "applicationUser",
+      "otherEntityRelationshipName": "proyect",
+      "relationshipName": "owner",
       "otherEntityField": "id"
     },
     {
@@ -177,5 +155,7 @@
   "readOnly": false,
   "embedded": false,
   "clientRootFolder": "",
-  "applications": "*"
+  "applications": "*",
+  "searchEngine": false,
+  "databaseType": "sql"
 }

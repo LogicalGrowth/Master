@@ -11,6 +11,10 @@ import { IApplicationUser, ApplicationUser } from 'app/shared/model/application-
 import { ApplicationUserService } from './application-user.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
+import { IProyect } from 'app/shared/model/proyect.model';
+import { ProyectService } from 'app/entities/proyect/proyect.service';
+
+type SelectableEntity = IUser | IProyect;
 
 @Component({
   selector: 'jhi-application-user-update',
@@ -19,6 +23,7 @@ import { UserService } from 'app/core/user/user.service';
 export class ApplicationUserUpdateComponent implements OnInit {
   isSaving = false;
   users: IUser[] = [];
+  proyects: IProyect[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -28,11 +33,13 @@ export class ApplicationUserUpdateComponent implements OnInit {
     phoneNumber: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(11)]],
     admin: [null, [Validators.required]],
     internalUser: [],
+    favorites: [],
   });
 
   constructor(
     protected applicationUserService: ApplicationUserService,
     protected userService: UserService,
+    protected proyectService: ProyectService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -47,6 +54,8 @@ export class ApplicationUserUpdateComponent implements OnInit {
       this.updateForm(applicationUser);
 
       this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
+
+      this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
     });
   }
 
@@ -59,6 +68,7 @@ export class ApplicationUserUpdateComponent implements OnInit {
       phoneNumber: applicationUser.phoneNumber,
       admin: applicationUser.admin,
       internalUser: applicationUser.internalUser,
+      favorites: applicationUser.favorites,
     });
   }
 
@@ -86,6 +96,7 @@ export class ApplicationUserUpdateComponent implements OnInit {
       phoneNumber: this.editForm.get(['phoneNumber'])!.value,
       admin: this.editForm.get(['admin'])!.value,
       internalUser: this.editForm.get(['internalUser'])!.value,
+      favorites: this.editForm.get(['favorites'])!.value,
     };
   }
 
@@ -105,7 +116,18 @@ export class ApplicationUserUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  trackById(index: number, item: IUser): any {
+  trackById(index: number, item: SelectableEntity): any {
     return item.id;
+  }
+
+  getSelected(selectedVals: IProyect[], option: IProyect): IProyect {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

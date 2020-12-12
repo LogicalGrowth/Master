@@ -21,14 +21,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
     { name: 'Inicio', route: '/', icon: '../../../content/images/navIcons/house.png' },
     { name: 'Usuarios', route: '/application-user', icon: '../../../content/images/navIcons/users.png' },
     { name: 'Proyectos', route: '/proyect', icon: '../../../content/images/navIcons/project.png' },
+    { name: 'Administrar proyectos', route: '/proyect/proyectManagement', icon: '../../../content/images/navIcons/gear.png' },
     { name: 'Configuración', route: '/admin/bank-account', icon: '../../../content/images/navIcons/gear.png' },
     { name: 'Categorías', route: '/category', icon: '../../../content/images/navIcons/category.png' },
+    { name: 'Reportes', route: '/dashboard-reports', icon: '../../../content/images/navIcons/report.png' },
   ];
 
   userNav = [
     { name: 'Inicio', route: '/', icon: '../../../content/images/navIcons/house.png' },
     { name: 'Proyectos', route: '/proyect', icon: '../../../content/images/navIcons/project.png' },
     { name: 'Pagos', route: '/payment-method', icon: '../../../content/images/navIcons/payment.png' },
+    { name: 'Reportes', route: '/dashboard-reports', icon: '../../../content/images/navIcons/report.png' },
   ];
 
   notLoggedNav = [

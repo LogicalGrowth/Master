@@ -62,4 +62,14 @@ export class ApplicationUserComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(ApplicationUserDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.applicationUser = applicationUser;
   }
+
+  addAdmin(e: any, applicationUser: IApplicationUser): void {
+    if (e.currentTarget.checked === false) {
+      applicationUser.admin = false;
+      this.applicationUserService.update({ ...applicationUser }).subscribe(() => this.loadAll());
+    } else if (e.currentTarget.checked === true) {
+      applicationUser.admin = true;
+      this.applicationUserService.update({ ...applicationUser }).subscribe(() => this.loadAll());
+    }
+  }
 }

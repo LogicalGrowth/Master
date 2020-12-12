@@ -1,13 +1,15 @@
 .btnSelectPayment {
-  background: #303030;
+  background: #2ba9cd;
   color: #ffffff;
-  font-size: 18px;
   height: 3rem;
   border: none;
-
-  a:hover {
-    border-bottom: white 2px solid;
-  }
+  font-weight: 600;
+  font-size: 0.8571em;
+  line-height: 1.35em;
+  text-transform: uppercase;
+  margin: 10px 1px;
+  border-radius: 3px;
+  padding: 11px 22px;
 }
 
 /* Icon Up */

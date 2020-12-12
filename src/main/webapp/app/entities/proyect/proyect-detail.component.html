@@ -173,7 +173,7 @@
                                 </ul>
                             </div>
                             <div class="row justify-content-center">
-                                <div class="tab-content tab-space tab-subcategories">
+                                <div class="tab-content tab-subcategories">
                                     <div class="tab-pane active" id="link9">
                                         <div class="container-fluid">
                                             <div class="row d-flex justify-content-center">
@@ -325,6 +325,12 @@
                                                     </div>
                                                 </div>
 											</div>
+
+                                            <button class="btn btn-warning col-md-3"
+                                                    *ngIf="auctions?.length > 0 && isProjectOwner"
+                                                    (click)=donate()>
+                                                Declarar ganador
+                                            </button>
                                     </div>
                                 </div>
                             </div>

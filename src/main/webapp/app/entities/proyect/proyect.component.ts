@@ -102,18 +102,12 @@ export class ProyectComponent implements OnInit, OnDestroy {
         this.account = account;
       }
 
-      this.accountService.identity().subscribe(account => {
-        if (account) {
-          this.account = account;
-        }
-
-        this.applicationUserService
-          .query({ 'internalUserId.equals': this.account.id })
-          .subscribe((response: HttpResponse<IApplicationUser[]>) => {
-            this.applicationUser = response.body || [];
-            this.loadFavorites(response.body![0].id as number);
-          });
-      });
+      this.applicationUserService
+        .query({ 'internalUserId.equals': this.account.id })
+        .subscribe((response: HttpResponse<IApplicationUser[]>) => {
+          this.applicationUser = response.body || [];
+          this.loadFavorites(response.body![0].id as number);
+        });
     });
   }
 

@@ -8,7 +8,22 @@
                         <div class="card-header ">
                             <h4 class="card-title">Categoría</h4>
                         </div>
+
                         <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-control-label">Imagen</label>
+                                <span class="star">*</span>
+                                <div *ngIf="imageSrc" class="w-50 p-3">
+                                    <img src="{{imageSrc}}">
+                                </div>
+                                <div *ngIf="editForm.get('image')!.value" class="w-50 p-3">
+                                    <img src="{{editForm.get('image')!.value?.url}}">
+                                </div>
+                                <div *ngIf="!editForm.get('image')!.value">
+                                    <jhi-cloudinary [okCallback]="saveImage.bind(this)"></jhi-cloudinary>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="form-control-label" for="field_name">Nombre</label>
                                 <span class="star">*</span>
@@ -36,7 +51,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" [hidden]="!editForm.get('id')!.value">
                                 <label class="form-control-label" for="field_status">Estado</label>
                                 <span class="star">*</span>
                                 <select class="form-control" name="status" formControlName="status" id="field_status">
@@ -51,27 +66,13 @@
                                     </small>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label class="form-control-label">Imagen</label>
-                                <span class="star">*</span>
-                                <div *ngIf="imageSrc" class="w-50 p-3">
-                                    <img src="{{imageSrc}}">
-                                </div>
-                                <div *ngIf="editForm.get('image')!.value" class="w-50 p-3">
-                                    <img src="{{editForm.get('image')!.value?.url}}">
-                                </div>
-                                <div *ngIf="!editForm.get('image')!.value">
-                                    <jhi-cloudinary [okCallback]="saveImage.bind(this)"></jhi-cloudinary>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="card-footer text-right">
                             <button type="button" id="cancel-save2" class="btn btn-default"
                                 (click)="previousState()">Atrás</button>
                             <button type="submit" id="save-entity2"
-                                [disabled]="editForm.invalid || isSaving || !imageSrc"
+                                [disabled]="editForm.invalid || isSaving || (!imageSrc && !editForm.get('id')!.value)"
                                 class="btn btn-primary">Guardar</button>
                         </div>
                     </form>

@@ -120,9 +120,21 @@ public class ApplicationUserQueryService extends QueryService<ApplicationUser> {
                 specification = specification.and(buildSpecification(criteria.getPaymentId(),
                     root -> root.join(ApplicationUser_.payments, JoinType.LEFT).get(Payment_.id)));
             }
+            if (criteria.getAuctionId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAuctionId(),
+                    root -> root.join(ApplicationUser_.auctions, JoinType.LEFT).get(Auction_.id)));
+            }
+            if (criteria.getPartnerRequestId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPartnerRequestId(),
+                    root -> root.join(ApplicationUser_.partnerRequests, JoinType.LEFT).get(PartnerRequest_.id)));
+            }
+            if (criteria.getTicketId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTicketId(),
+                    root -> root.join(ApplicationUser_.tickets, JoinType.LEFT).get(Ticket_.id)));
+            }
             if (criteria.getFavoriteId() != null) {
                 specification = specification.and(buildSpecification(criteria.getFavoriteId(),
-                    root -> root.join(ApplicationUser_.favorites, JoinType.LEFT).get(Proyect_.id)));
+                    root -> root.join(ApplicationUser_.favorites, JoinType.LEFT).get(Favorite_.id)));
             }
         }
         return specification;

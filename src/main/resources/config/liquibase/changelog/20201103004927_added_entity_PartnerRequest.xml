@@ -23,7 +23,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="applicant_id" type="bigint">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_partner_request_applicant_id" />
+                <constraints nullable="true" />
             </column>
             <column name="proyect_id" type="bigint">
                 <constraints nullable="true" />

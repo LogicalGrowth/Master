@@ -153,6 +153,18 @@
                             <span jhiTranslate="global.menu.entities.configSystem">Config System</span>
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="ticket" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.ticket">Ticket</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="favorite" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                            <span jhiTranslate="global.menu.entities.favorite">Favorite</span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

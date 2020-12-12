@@ -81,8 +81,26 @@
     },
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "proyect",
-      "otherEntityRelationshipName": "applicationUser",
+      "otherEntityName": "auction",
+      "otherEntityRelationshipName": "winner",
+      "relationshipName": "auction"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "partnerRequest",
+      "otherEntityRelationshipName": "applicant",
+      "relationshipName": "partnerRequest"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ticket",
+      "otherEntityRelationshipName": "buyer",
+      "relationshipName": "ticket"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "favorite",
+      "otherEntityRelationshipName": "user",
       "relationshipName": "favorite"
     }
   ],

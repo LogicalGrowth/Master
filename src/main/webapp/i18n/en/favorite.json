@@ -1,0 +1,23 @@
+{
+  "fun4FundApp": {
+    "favorite": {
+      "home": {
+        "title": "Favorites",
+        "createLabel": "Create a new Favorite",
+        "createOrEditLabel": "Create or edit a Favorite",
+        "notFound": "No Favorites found"
+      },
+      "created": "Agregado a favoritos existosamente.",
+      "updated": "A Favorite is updated with identifier {{ param }}",
+      "deleted": "Eliminado de favoritos existosamente.",
+      "delete": {
+        "question": "Are you sure you want to delete Favorite {{ id }}?"
+      },
+      "detail": {
+        "title": "Favorite"
+      },
+      "user": "User",
+      "proyect": "Proyect"
+    }
+  }
+}

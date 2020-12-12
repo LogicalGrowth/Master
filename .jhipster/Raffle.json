@@ -45,6 +45,12 @@
       "ownerSide": true
     },
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ticket",
+      "otherEntityRelationshipName": "raffle",
+      "relationshipName": "ticket"
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "applicationUser",
       "otherEntityRelationshipName": "raffle",

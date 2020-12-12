@@ -1,0 +1,31 @@
+{
+  "name": "Ticket",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "ticket",
+      "relationshipName": "buyer",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "raffle",
+      "otherEntityRelationshipName": "ticket",
+      "relationshipName": "raffle",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201208081347",
+  "entityTableName": "ticket",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

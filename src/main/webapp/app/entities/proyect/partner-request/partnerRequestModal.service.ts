@@ -27,7 +27,6 @@ export class PartnerRequestModalService {
   }
 
   close(): void {
-    this.isOpen = false;
     this.modalService.dismissAll();
   }
 }

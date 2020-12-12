@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,12 +11,14 @@ import * as moment from 'moment';
 import { User } from '../../core/user/user.model';
 import { AccountService } from '../../core/auth/account.service';
 import { IResource } from '../../shared/model/resource.model';
-import { ResourceService } from '../resource/resource.service';
 import { IApplicationUser } from '../../shared/model/application-user.model';
 import { ApplicationUserService } from '../application-user/application-user.service';
 import { CategoryService } from '../category/category.service';
 import { ICategory } from '../../shared/model/category.model';
 import { CategoryStatus } from '../../shared/model/enumerations/category-status.model';
+import { FavoriteService } from '../favorite/favorite.service';
+import { Favorite, IFavorite } from 'app/shared/model/favorite.model';
+import { ResourceService } from '../resource/resource.service';
 
 @Component({
   selector: 'jhi-proyect',
@@ -38,6 +40,7 @@ export class ProyectComponent implements OnInit, OnDestroy {
   nonprofit: boolean;
   category: number;
   sortBy: string;
+  favorites?: IFavorite[];
 
   constructor(
     protected proyectService: ProyectService,
@@ -46,7 +49,8 @@ export class ProyectComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private resourceService: ResourceService,
     private applicationUserService: ApplicationUserService,
-    protected categoryService: CategoryService
+    protected categoryService: CategoryService,
+    private favoriteService: FavoriteService
   ) {
     this.description = '';
     this.profitable = true;
@@ -56,7 +60,9 @@ export class ProyectComponent implements OnInit, OnDestroy {
   }
 
   loadAll(): void {
-    this.proyectService.query().subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+    this.proyectService.query({ 'status.equals': true }).subscribe((res: HttpResponse<IProyect[]>) => {
+      this.proyects = res.body || [];
+    });
   }
 
   loadFilter(): void {
@@ -96,9 +102,30 @@ export class ProyectComponent implements OnInit, OnDestroy {
         this.account = account;
       }
 
-      this.applicationUserService.query({ 'internalUserId.equals': this.account.id }).subscribe((res: HttpResponse<IApplicationUser[]>) => {
-        this.applicationUser = res.body || [];
+      this.accountService.identity().subscribe(account => {
+        if (account) {
+          this.account = account;
+        }
+
+        this.applicationUserService
+          .query({ 'internalUserId.equals': this.account.id })
+          .subscribe((response: HttpResponse<IApplicationUser[]>) => {
+            this.applicationUser = response.body || [];
+            this.loadFavorites(response.body![0].id as number);
+          });
       });
+    });
+  }
+
+  loadFavorites(id: number): void {
+    this.proyects?.forEach(element => {
+      this.favoriteService
+        .query({ 'proyectId.equals': element.id as number, 'userId.equals': id })
+        .subscribe((res: HttpResponse<IFavorite[]>) => {
+          element.favorites = res.body || [];
+
+          if (res.body!.length > 0) element.favorite = true;
+        });
     });
   }
 
@@ -136,8 +163,39 @@ export class ProyectComponent implements OnInit, OnDestroy {
     return (this.isProjectOwner = this.applicationUser && this.applicationUser[0].id === item.owner?.id ? true : false);
   }
 
-  topFunction(): void {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+  addFavorite(proyect: IProyect): void {
+    const favorite = {
+      ...new Favorite(),
+      id: undefined,
+      user: this.applicationUser![0],
+      proyect,
+    };
+    this.subscribeToSaveResponse(this.favoriteService.create(favorite));
   }
+
+  removeFavorite(proyect: IProyect): void {
+    this.favoriteService
+      .query({ 'userId.equals': this.applicationUser![0].id, 'proyectId.equals': proyect.id })
+      .subscribe((res: HttpResponse<IFavorite[]>) => {
+        this.favorites = res.body || [];
+        if (res.body !== []) {
+          this.favoriteService.delete(res.body![0].id as number).subscribe(() => {
+            this.loadAll();
+          });
+        }
+      });
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IFavorite>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveSuccess(): void {
+    this.loadAll();
+  }
+
+  protected onSaveError(): void {}
 }

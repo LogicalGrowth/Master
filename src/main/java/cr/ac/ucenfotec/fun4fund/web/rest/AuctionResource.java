@@ -1,15 +1,11 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
-import cr.ac.ucenfotec.fun4fund.domain.Auction;
-import cr.ac.ucenfotec.fun4fund.domain.AuctionAnswerStatistics;
-import cr.ac.ucenfotec.fun4fund.domain.Prize;
-import cr.ac.ucenfotec.fun4fund.domain.Resource;
-import cr.ac.ucenfotec.fun4fund.service.AuctionService;
-import cr.ac.ucenfotec.fun4fund.service.PrizeService;
-import cr.ac.ucenfotec.fun4fund.service.ResourceService;
+import cr.ac.ucenfotec.fun4fund.domain.*;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ActivityStatus;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
+import cr.ac.ucenfotec.fun4fund.service.*;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.AuctionCriteria;
-import cr.ac.ucenfotec.fun4fund.service.AuctionQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -22,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -44,12 +41,16 @@ public class AuctionResource {
     private final AuctionQueryService auctionQueryService;
     private final ResourceService resourceService;
     private final PrizeService prizeService;
+    private final MailService mailService;
+    private final PaymentService paymentService;
 
-    public AuctionResource(AuctionService auctionService, AuctionQueryService auctionQueryService, ResourceService resourceService, PrizeService prizeService) {
+    public AuctionResource(AuctionService auctionService, AuctionQueryService auctionQueryService, ResourceService resourceService, PrizeService prizeService, MailService mailService, PaymentService paymentService) {
         this.auctionService = auctionService;
         this.auctionQueryService = auctionQueryService;
         this.resourceService =  resourceService;
         this.prizeService = prizeService;
+        this.mailService = mailService;
+        this.paymentService = paymentService;
     }
 
     /**
@@ -99,10 +100,29 @@ public class AuctionResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        Prize prize = auction.getPrize();
-        prizeService.save(prize);
+        if (auction.getState() == ActivityStatus.FINISHED){
+            String subject = "Finalización subasta";
+            String msg = "La subasta de" + auction.getPrize().getName() + " ha terminado";
+            User owner = auction.getProyect().getOwner().getInternalUser();
+            mailService.sendEmail(owner.getEmail(),subject,msg,false,true);
+            msg += "\nUsted ha resultado ganador de esta subasta del proyecto " + auction.getProyect().getName() + " pongase en contacto con " + owner.getFirstName() + " " + owner.getLastName() +
+                "\n Correo: " + owner.getEmail();
+            mailService.sendEmail(auction.getWinner().getInternalUser().getEmail(),subject,msg,false,true);
+            Payment payment = new Payment();
+            payment.setProyect(auction.getProyect());
+            payment.setTimeStamp(ZonedDateTime.now());
+            payment.setApplicationUser(auction.getWinner());
+            payment.setType(ProductType.AUCTION);
+            payment.setAmount(auction.getWinningBid());
+            paymentService.makePayment(payment);
+        }
+        else{
+            Prize prize = auction.getPrize();
+            prizeService.save(prize);
+        }
 
         Auction result = auctionService.save(auction);
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, auction.getId().toString()))
             .body(result);

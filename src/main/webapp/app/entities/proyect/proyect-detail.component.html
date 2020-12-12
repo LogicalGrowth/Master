@@ -200,10 +200,11 @@
                                                                 <div class="stars-inner" style="width:{{reviews.rating*100/5}}%"></div>
                                                             </div>
                                                             <p class="card-text">Sé el primero en compartir palabras de aliento.</p>
-                                                            <button class="btn btn-info col-md-12">Agregar</button>
+                                                            <button class="btn btn-info col-md-12" (click) ="addRating()">Agregar</button>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <button *ngIf="reviews && reviews.length" class="btn btn-info col-md-4" (click) ="addRating()">Agregar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -303,6 +304,11 @@
                                                             <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
                                                                 (click)="bid(auction)" [disabled]="auction.winner?.id == userId">
                                                                 <i class="fa fa-gavel"></i>
+                                                            </button>
+                                                            <button *ngIf="isProjectOwner && auction && auction.expirationDate && auction.expirationDate < now"
+                                                                [disabled]="auction?.state === 'FINISHED'"
+                                                            type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm" (click)="changeStatus(auction)">
+                                                                <i class="fa fa-remove"></i>
                                                             </button>
                                                         </td>
                                                     </tr>

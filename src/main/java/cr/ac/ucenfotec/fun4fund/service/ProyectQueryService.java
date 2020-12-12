@@ -124,6 +124,9 @@ public class ProyectQueryService extends QueryService<Proyect> {
             if (criteria.getCurrencyType() != null) {
                 specification = specification.and(buildSpecification(criteria.getCurrencyType(), Proyect_.currencyType));
             }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getStatus(), Proyect_.status));
+            }
             if (criteria.getImageId() != null) {
                 specification = specification.and(buildSpecification(criteria.getImageId(),
                     root -> root.join(Proyect_.images, JoinType.LEFT).get(Resource_.id)));
@@ -156,13 +159,13 @@ public class ProyectQueryService extends QueryService<Proyect> {
                 specification = specification.and(buildSpecification(criteria.getPaymentId(),
                     root -> root.join(Proyect_.payments, JoinType.LEFT).get(Payment_.id)));
             }
+            if (criteria.getFavoriteId() != null) {
+                specification = specification.and(buildSpecification(criteria.getFavoriteId(),
+                    root -> root.join(Proyect_.favorites, JoinType.LEFT).get(Favorite_.id)));
+            }
             if (criteria.getOwnerId() != null) {
                 specification = specification.and(buildSpecification(criteria.getOwnerId(),
                     root -> root.join(Proyect_.owner, JoinType.LEFT).get(ApplicationUser_.id)));
-            }
-            if (criteria.getApplicationUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getApplicationUserId(),
-                    root -> root.join(Proyect_.applicationUser, JoinType.LEFT).get(ApplicationUser_.id)));
             }
             if (criteria.getCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCategoryId(),

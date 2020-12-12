@@ -85,8 +85,11 @@ public class Proyect implements Serializable {
     @Column(name = "currency_type", nullable = false)
     private Currency currencyType;
 
-    @OneToMany(mappedBy = "proyect", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = "proyect", allowSetters = true)
+    @Column(name = "status")
+    private Boolean status;
+
+    @OneToMany(mappedBy = "proyect")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Resource> images = new HashSet<>();
 
     @OneToMany(mappedBy = "proyect")
@@ -117,13 +120,13 @@ public class Proyect implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Payment> payments = new HashSet<>();
 
+    @OneToMany(mappedBy = "proyect")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Favorite> favorites = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = "proyects", allowSetters = true)
     private ApplicationUser owner;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = "favorites", allowSetters = true)
-    private ApplicationUser applicationUser;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "proyects", allowSetters = true)
@@ -305,6 +308,19 @@ public class Proyect implements Serializable {
 
     public void setCurrencyType(Currency currencyType) {
         this.currencyType = currencyType;
+    }
+
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public Proyect status(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Set<Resource> getImages() {
@@ -507,6 +523,31 @@ public class Proyect implements Serializable {
         this.payments = payments;
     }
 
+    public Set<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public Proyect favorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
+        return this;
+    }
+
+    public Proyect addFavorite(Favorite favorite) {
+        this.favorites.add(favorite);
+        favorite.setProyect(this);
+        return this;
+    }
+
+    public Proyect removeFavorite(Favorite favorite) {
+        this.favorites.remove(favorite);
+        favorite.setProyect(null);
+        return this;
+    }
+
+    public void setFavorites(Set<Favorite> favorites) {
+        this.favorites = favorites;
+    }
+
     public ApplicationUser getOwner() {
         return owner;
     }
@@ -518,19 +559,6 @@ public class Proyect implements Serializable {
 
     public void setOwner(ApplicationUser applicationUser) {
         this.owner = applicationUser;
-    }
-
-    public ApplicationUser getApplicationUser() {
-        return applicationUser;
-    }
-
-    public Proyect applicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
-        return this;
-    }
-
-    public void setApplicationUser(ApplicationUser applicationUser) {
-        this.applicationUser = applicationUser;
     }
 
     public Category getCategory() {
@@ -581,6 +609,7 @@ public class Proyect implements Serializable {
             ", fee=" + getFee() +
             ", number='" + getNumber() + "'" +
             ", currencyType='" + getCurrencyType() + "'" +
+            ", status='" + isStatus() + "'" +
             "}";
     }
 }

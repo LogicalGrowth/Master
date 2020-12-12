@@ -7,7 +7,7 @@
         "createOrEditLabel": "Create or edit a Review",
         "notFound": "No Reviews found"
       },
-      "created": "A new Review is created with identifier {{ param }}",
+      "created": "Calificación agregada exitosamente.",
       "updated": "A Review is updated with identifier {{ param }}",
       "deleted": "A Review is deleted with identifier {{ param }}",
       "delete": {

@@ -14,6 +14,7 @@ import { ProyectImageUpdateComponent } from './proyect-image-update/proyect-imag
 import { DonationComponent } from './donation/donation.component';
 import { PartnerRequestComponent } from './partner-request/partner-request.component';
 import { PartnerRequestListComponent } from './partner-request-list/partner-request-list.component';
+import { ProyectManagementComponent } from './proyect-management/proyect-management.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { PartnerRequestListComponent } from './partner-request-list/partner-requ
     DonationComponent,
     PartnerRequestComponent,
     PartnerRequestListComponent,
+    ProyectManagementComponent,
   ],
   entryComponents: [ProyectDeleteDialogComponent],
 })

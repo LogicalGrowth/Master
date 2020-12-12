@@ -70,4 +70,10 @@ export class RaffleService {
     }
     return res;
   }
+
+  getDataReportRaffle(numMonths = 6): Observable<EntityResponseType> {
+    return this.http
+      .get(`${this.resourceUrl}/getMyRaffleReport?numberMonths=${numMonths}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 }

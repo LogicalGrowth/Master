@@ -1,0 +1,38 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="ticket">
+            <h2><span jhiTranslate="fun4FundApp.ticket.detail.title">Ticket</span> {{ ticket.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fun4FundApp.ticket.buyer">Buyer</span></dt>
+                <dd>
+                    <div *ngIf="ticket.buyer">
+                        <a [routerLink]="['/application-user', ticket.buyer?.id, 'view']">{{ ticket.buyer?.id }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fun4FundApp.ticket.raffle">Raffle</span></dt>
+                <dd>
+                    <div *ngIf="ticket.raffle">
+                        <a [routerLink]="['/raffle', ticket.raffle?.id, 'view']">{{ ticket.raffle?.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/ticket', ticket.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

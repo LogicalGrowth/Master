@@ -32,6 +32,12 @@
                 <dd>
                     {{ applicationUser.internalUser?.id }}
                 </dd>
+                <dt><span jhiTranslate="fun4FundApp.applicationUser.favorite">Favorite</span></dt>
+                <dd>
+                    <span *ngFor="let favorite of applicationUser.favorites; let last = last">
+                        <a [routerLink]="['/proyect', favorite?.id, 'view']">{{ favorite.id }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </dd>
             </dl>
 
             <button type="submit"

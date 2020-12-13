@@ -15,7 +15,8 @@
                 <option value="12">12 meses</option>
             </select>
             <jhi-chart-line id="chat1" [labels]="labels" [datasets]="datasets"
-                title="Reporte de subastas ganadas por mes" [onchange]='onchange.bind(this)'>
+                title="Reporte de subastas ganadas por mes" [onchange]='onchange.bind(this)'
+                type="line" [ticks]="true">
             </jhi-chart-line>
         </div>
 
@@ -34,7 +35,17 @@
                 <option value="12">12 meses</option>
             </select>
             <jhi-chart-line id="chat2" [labels]="labelsRaffle" [datasets]="datasetsRaffle"
-                title="Reporte de participación en rifas por mes" [onchange]='onchangeRaffle.bind(this)'>
+                title="Reporte de participación en rifas por mes" [onchange]='onchangeRaffle.bind(this)'
+                type="line" [ticks]="true">
+            </jhi-chart-line>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6" *ngIf="labelsProyectStatus.length !== 0 && dataProyectStatus.length !== 0">
+            <jhi-chart-line id="chat3" [labels]="labelsProyectStatus" [datasets]="dataProyectStatus"
+                title="Reporte de estatus de los proyectos"
+                type="pie" [ticks]="false">
             </jhi-chart-line>
         </div>
     </div>

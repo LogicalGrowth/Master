@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { AuctionService } from '../auction/auction.service';
 import { RaffleService } from '../raffle/raffle.service';
+import { ProyectService } from '../proyect/proyect.service';
 
 @Component({
   selector: 'jhi-dashboard-reports',
@@ -30,10 +31,19 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
       title: 'Rifas ganadas',
     },
   ];
+  dataProyectStatus: ChartDataSets[] = [];
+  labelsProyectStatus = ['Activado', 'Desactivado'];
+  dataProyectReport: any;
 
-  constructor(protected eventManager: JhiEventManager, protected auctionService: AuctionService, protected raffleService: RaffleService) {
+  constructor(
+    protected eventManager: JhiEventManager,
+    protected auctionService: AuctionService,
+    protected raffleService: RaffleService,
+    protected proyectService: ProyectService
+  ) {
     this.loadData();
     this.loadDataRaffle();
+    this.loadProyectReportStatus();
   }
 
   loadData(): void {
@@ -105,6 +115,29 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
         this.chartRaffle.data.datasets = this.datasetsRaffle;
         this.chartRaffle.update();
       }
+    });
+  }
+
+  loadProyectReportStatus(): void {
+    this.proyectService.getReportStatus().subscribe(data => {
+      this.dataProyectReport = data.body;
+      const dataResult = [];
+      for (let i = 0; i < this.dataProyectReport.length; i++) {
+        if (this.dataProyectReport[i].status) {
+          this.labelsProyectStatus.push('Activado');
+        } else {
+          this.labelsProyectStatus.push('Desactivado');
+        }
+        dataResult.push(this.dataProyectReport[i].count);
+      }
+      this.dataProyectStatus.push({
+        label: 'Proyect Report',
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        backgroundColor: ['#fcc468', '#4acccd'],
+        borderWidth: 0,
+        data: dataResult,
+      });
     });
   }
 

@@ -1,6 +1,7 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
+import cr.ac.ucenfotec.fun4fund.domain.IProyectAnswerStatistics;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.service.ProyectService;
 import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
@@ -151,5 +152,10 @@ public class ProyectResource {
         log.debug("REST request to delete Proyect : {}", id);
         proyectService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/proyects/reportStatus")
+    public List<IProyectAnswerStatistics> getProyectStatusReport() {
+        return proyectService.getProyectStatusReport();
     }
 }

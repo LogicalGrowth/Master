@@ -2,7 +2,9 @@ package cr.ac.ucenfotec.fun4fund.service;
 
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Favorite;
+import cr.ac.ucenfotec.fun4fund.domain.IProyectAnswerStatistics;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.repository.FavoriteRepository;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
 import org.slf4j.Logger;
@@ -30,14 +32,22 @@ public class ProyectService {
 
     private final MailService mailService;
 
+    private final ApplicationUserRepository applicationUserRepository;
+
+    private final UserService userService;
+
     public ProyectService(
         ProyectRepository proyectRepository,
         FavoriteRepository favoriteRepository,
-        MailService mailService
+        MailService mailService,
+        ApplicationUserRepository applicationUserRepository,
+        UserService userService
     ) {
         this.proyectRepository = proyectRepository;
         this.favoriteRepository = favoriteRepository;
         this.mailService = mailService;
+        this.applicationUserRepository = applicationUserRepository;
+        this.userService = userService;
     }
 
     /**
@@ -105,6 +115,12 @@ public class ProyectService {
             }
         }
         return new Proyect();
+    }
+
+    public List<IProyectAnswerStatistics> getProyectStatusReport() {
+        log.debug("Request to get all Proyects");
+        Optional<ApplicationUser> owner = applicationUserRepository.findByInternalUserId(userService.getUserWithAuthorities().get().getId());
+        return proyectRepository.getReportsProyectsStatus(owner.get());
     }
 
 }

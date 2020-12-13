@@ -32,8 +32,11 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
     },
   ];
   dataProyectStatus: ChartDataSets[] = [];
-  labelsProyectStatus = ['Activado', 'Desactivado'];
+  labelsProyectStatus: any[] = [];
   dataProyectReport: any;
+  dataProyectComplete: ChartDataSets[] = [];
+  labelsProyectComplete: any[] = [];
+  dataProyectReportComplete: any;
 
   constructor(
     protected eventManager: JhiEventManager,
@@ -44,6 +47,7 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
     this.loadData();
     this.loadDataRaffle();
     this.loadProyectReportStatus();
+    this.loadProyectReportCompletePercentile();
   }
 
   loadData(): void {
@@ -136,6 +140,26 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
         pointHoverRadius: 0,
         backgroundColor: ['#fcc468', '#4acccd'],
         borderWidth: 0,
+        data: dataResult,
+      });
+    });
+  }
+
+  loadProyectReportCompletePercentile(): void {
+    this.proyectService.getCompletePercentile().subscribe(data => {
+      this.dataProyectReportComplete = data.body;
+      const dataResult = [];
+      for (let i = 0; i < this.dataProyectReportComplete.length; i++) {
+        this.labelsProyectComplete.push(this.dataProyectReportComplete[i].name);
+        dataResult.push(this.dataProyectReportComplete[i].complete.toFixed(2));
+      }
+      this.dataProyectComplete.push({
+        label: 'Data',
+        borderColor: '#fcc468',
+        fill: true,
+        backgroundColor: '#fcc468',
+        hoverBorderColor: '#fcc468',
+        borderWidth: 5,
         data: dataResult,
       });
     });

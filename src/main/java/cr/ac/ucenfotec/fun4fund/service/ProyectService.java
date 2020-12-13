@@ -1,9 +1,6 @@
 package cr.ac.ucenfotec.fun4fund.service;
 
-import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
-import cr.ac.ucenfotec.fun4fund.domain.Favorite;
-import cr.ac.ucenfotec.fun4fund.domain.IProyectAnswerStatistics;
-import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.*;
 import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.repository.FavoriteRepository;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
@@ -123,4 +120,9 @@ public class ProyectService {
         return proyectRepository.getReportsProyectsStatus(owner.get());
     }
 
+    public List<IProyectCompletedPercentile> getProyectCompletePercentile() {
+        log.debug("Request to get all Proyects");
+        Optional<ApplicationUser> owner = applicationUserRepository.findByInternalUserId(userService.getUserWithAuthorities().get().getId());
+        return proyectRepository.getReportsProyectsComplete(owner.get());
+    }
 }

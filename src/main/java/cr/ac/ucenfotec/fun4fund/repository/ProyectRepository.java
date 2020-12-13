@@ -1,9 +1,6 @@
 package cr.ac.ucenfotec.fun4fund.repository;
 
-import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
-import cr.ac.ucenfotec.fun4fund.domain.Checkpoint;
-import cr.ac.ucenfotec.fun4fund.domain.IProyectAnswerStatistics;
-import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.*;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.*;
@@ -18,8 +15,16 @@ import java.util.List;
 @Repository
 public interface ProyectRepository extends JpaRepository<Proyect, Long>, JpaSpecificationExecutor<Proyect> {
     @Query(nativeQuery = true, value =
-        "SELECT status, count(1) as count FROM fun4fund.proyect " +
+        "SELECT status, count(1) as count " +
+        "FROM Proyect " +
         "where owner_id = ?1 " +
-        "group by status;")
-    List<IProyectAnswerStatistics> getReportsProyectsStatus(ApplicationUser ownner);
+        "group by status")
+    List<IProyectAnswerStatistics> getReportsProyectsStatus(ApplicationUser owner);
+
+    @Query(nativeQuery = true, value =
+        "SELECT name, (collected*100/goal_amount) as complete " +
+        "FROM Proyect " +
+        "where owner_id = ?1 " +
+        "order by complete")
+    List<IProyectCompletedPercentile> getReportsProyectsComplete(ApplicationUser owner);
 }

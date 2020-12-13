@@ -48,5 +48,12 @@
                 type="pie" [ticks]="false">
             </jhi-chart-line>
         </div>
+
+        <div class="col-md-6" *ngIf="labelsProyectComplete.length !== 0 && dataProyectComplete.length !== 0">
+            <jhi-chart-line id="chat4" [labels]="labelsProyectComplete" [datasets]="dataProyectComplete"
+                title="Reporte de completitud de los proyectos"
+                type="bar" [ticks]="true">
+            </jhi-chart-line>
+        </div>
     </div>
 </div>

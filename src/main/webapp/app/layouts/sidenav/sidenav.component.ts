@@ -31,7 +31,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     { name: 'Inicio', route: '/', icon: '../../../content/images/navIcons/house.png' },
     { name: 'Proyectos', route: '/proyect', icon: '../../../content/images/navIcons/project.png' },
     { name: 'Pagos', route: '/payment-method', icon: '../../../content/images/navIcons/payment.png' },
-    { name: 'Reportes', route: '/dashboard-reports', icon: '../../../content/images/navIcons/report.png' },
+    { name: 'Reportes', route: '/dashboard-reports', icon: '../../../content/images/report.png' },
   ];
 
   notLoggedNav = [

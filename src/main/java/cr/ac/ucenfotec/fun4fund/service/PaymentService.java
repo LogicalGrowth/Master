@@ -107,7 +107,7 @@ public class PaymentService {
         String type = "";
 
         if(payment.getType() == ProductType.AUCTION){
-            type = "la puja de $" + payment.getAmount() + "de la subasta en el proyecto " + proyect.getName();
+            type = "la puja de $" + payment.getAmount() + " de la subasta en el proyecto " + proyect.getName();
         } else if(payment.getType() == ProductType.DONATION){
             type = "la donación de $" + payment.getAmount() +" al proyecto " + proyect.getName();
 

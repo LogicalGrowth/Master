@@ -62,6 +62,19 @@ export class ProyectComponent implements OnInit, OnDestroy {
   loadAll(): void {
     this.proyectService.query({ 'status.equals': true }).subscribe((res: HttpResponse<IProyect[]>) => {
       this.proyects = res.body || [];
+
+      this.accountService.identity().subscribe(account => {
+        if (account) {
+          this.account = account;
+        }
+
+        this.applicationUserService
+          .query({ 'internalUserId.equals': this.account.id })
+          .subscribe((response: HttpResponse<IApplicationUser[]>) => {
+            this.applicationUser = response.body || [];
+            this.loadFavorites(response.body![0].id as number);
+          });
+      });
     });
   }
 
@@ -72,9 +85,12 @@ export class ProyectComponent implements OnInit, OnDestroy {
     const queryCategory = showAllCategories ? {} : { 'Name.contains': this.description, 'categoryId.equals': this.category };
     const queryProjectType = this.profitable && this.nonprofit ? {} : { 'idType.equals': this.profitable ? 'PROFITABLE' : 'NONPROFIT' };
 
-    const finalQuery = Object.assign(queryName, queryCategory, queryProjectType);
+    const finalQuery = Object.assign(queryName, queryCategory, queryProjectType, { 'status.equals': true });
 
-    this.proyectService.query(finalQuery).subscribe((res: HttpResponse<IProyect[]>) => (this.proyects = res.body || []));
+    this.proyectService.query(finalQuery).subscribe((res: HttpResponse<IProyect[]>) => {
+      this.proyects = res.body || [];
+      this.loadFavorites(this.applicationUser![0].id as number);
+    });
   }
 
   clearFilters(): void {
@@ -101,13 +117,6 @@ export class ProyectComponent implements OnInit, OnDestroy {
       if (account) {
         this.account = account;
       }
-
-      this.applicationUserService
-        .query({ 'internalUserId.equals': this.account.id })
-        .subscribe((response: HttpResponse<IApplicationUser[]>) => {
-          this.applicationUser = response.body || [];
-          this.loadFavorites(response.body![0].id as number);
-        });
     });
   }
 
@@ -174,7 +183,7 @@ export class ProyectComponent implements OnInit, OnDestroy {
         this.favorites = res.body || [];
         if (res.body !== []) {
           this.favoriteService.delete(res.body![0].id as number).subscribe(() => {
-            this.loadAll();
+            this.loadFilter();
           });
         }
       });
@@ -188,7 +197,7 @@ export class ProyectComponent implements OnInit, OnDestroy {
   }
 
   protected onSaveSuccess(): void {
-    this.loadAll();
+    this.loadFilter();
   }
 
   protected onSaveError(): void {}

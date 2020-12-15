@@ -8,7 +8,7 @@ export const dashboardReportsRoute: Routes = [
     path: '',
     component: DashboardReportsComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER][Authority.ADMIN],
       pageTitle: 'fun4FundApp.dashboardReports.home.title',
     },
     canActivate: [UserRouteAccessService],

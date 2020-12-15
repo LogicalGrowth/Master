@@ -4,11 +4,14 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { AuctionService } from '../auction/auction.service';
 import { RaffleService } from '../raffle/raffle.service';
+import { ProyectService } from '../proyect/proyect.service';
+import { IProyect } from 'app/shared/model/proyect.model';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-dashboard-reports',
   templateUrl: './dashboard-reports.component.html',
-  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
+  styleUrls: ['../../../content/scss/paper-dashboard.scss', './dashboard-reports.component.scss'],
 })
 export class DashboardReportsComponent implements OnInit, OnDestroy {
   eventSubscriber?: Subscription;
@@ -30,10 +33,19 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
       title: 'Rifas ganadas',
     },
   ];
-
-  constructor(protected eventManager: JhiEventManager, protected auctionService: AuctionService, protected raffleService: RaffleService) {
+  activeProyects: IProyect[] | undefined;
+  inactiveProyects: IProyect[] | undefined;
+  totalActive!: number;
+  totalInactive!: number;
+  constructor(
+    protected eventManager: JhiEventManager,
+    protected auctionService: AuctionService,
+    protected raffleService: RaffleService,
+    protected proyectService: ProyectService
+  ) {
     this.loadData();
     this.loadDataRaffle();
+    this.loadProjects();
   }
 
   loadData(): void {
@@ -122,5 +134,17 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
 
   onchangeRaffle(chart: any): void {
     this.chartRaffle = chart;
+  }
+
+  loadProjects(): void {
+    this.proyectService.query({ 'status.equals': true }).subscribe((res: HttpResponse<IProyect[]>) => {
+      this.activeProyects = res.body || [];
+      this.totalActive = this.activeProyects.length;
+    });
+
+    this.proyectService.query({ 'status.equals': false }).subscribe((res: HttpResponse<IProyect[]>) => {
+      this.inactiveProyects = res.body || [];
+      this.totalInactive = this.inactiveProyects.length;
+    });
   }
 }

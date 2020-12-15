@@ -37,5 +37,21 @@
                 title="Reporte de participación en rifas por mes" [onchange]='onchangeRaffle.bind(this)'>
             </jhi-chart-line>
         </div>
-    </div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <jhi-small-card title="Proyectos inactivos" description={{totalActive}} icon="nc-check-2 text-success"></jhi-small-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <jhi-small-card title="Proyectos activos" description={{totalInactive}} icon="nc-button-pause text-warning"></jhi-small-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <jhi-small-card title="Total" description="Muchos" icon="nc-check-2"></jhi-small-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <jhi-small-card title="Total" description="Muchos" icon="nc-check-2"></jhi-small-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <jhi-small-card title="Total" description="Muchos" icon="nc-check-2"></jhi-small-card>
+            </div>
+        </div>
+
 </div>

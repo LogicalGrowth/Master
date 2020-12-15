@@ -135,11 +135,12 @@ public class PaymentService {
         Proyect proyectResult = proyectService.save(proyect);
         Payment result = save(payment);
 
-        //Guardar aquí fee
+        /*Guardar aquí fee
         ConfigSystem config = configSystemService.findByType("FeeValue").get(0);
         Double value = (Double.parseDouble(config.getValue()) + fee);
         config.setValue(value.toString());
         configSystemService.save(config);
+         */
         return  result;
     }
 }

@@ -24,7 +24,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     { name: 'Administrar proyectos', route: '/proyect/proyectManagement', icon: '../../../content/images/navIcons/gear.png' },
     { name: 'Configuración', route: '/admin/bank-account', icon: '../../../content/images/navIcons/gear.png' },
     { name: 'Categorías', route: '/category', icon: '../../../content/images/navIcons/category.png' },
-    { name: 'Reportes', route: '/dashboard-reports', icon: '../../../content/images/navIcons/report.png' },
+    { name: 'Reportes', route: '/dashboard-reports', icon: '../../../content/images/report.png' },
   ];
 
   userNav = [

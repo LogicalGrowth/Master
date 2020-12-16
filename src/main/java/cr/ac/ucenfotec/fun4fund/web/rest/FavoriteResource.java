@@ -1,6 +1,8 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
 import cr.ac.ucenfotec.fun4fund.domain.Favorite;
+import cr.ac.ucenfotec.fun4fund.domain.IProyectCompletedPercentile;
+import cr.ac.ucenfotec.fun4fund.domain.ITopFavorites;
 import cr.ac.ucenfotec.fun4fund.service.FavoriteService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
 import cr.ac.ucenfotec.fun4fund.service.dto.FavoriteCriteria;
@@ -131,5 +133,10 @@ public class FavoriteResource {
         log.debug("REST request to delete Favorite : {}", id);
         favoriteService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/favorites/getTop5Favorites")
+    public List<ITopFavorites> getProyectCompletePercentile() {
+        return favoriteService.getTop5Favorites();
     }
 }

@@ -12,7 +12,9 @@ export class ChartLineComponent implements OnInit {
   @Input() datasets: ChartDataSets[] = [];
   @Input() title: any;
   @Input() id: any;
+  @Input() type: any;
   @Input() onchange: any;
+  @Input() ticks: any;
   gradientStroke: any;
   chartColor = '#FFFFFF';
   canvas: any;
@@ -23,19 +25,45 @@ export class ChartLineComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    if (typeof this.onchange !== 'function') {
+      this.onchange = () => {};
+    }
     this.canvas = document.querySelector(`#${this.id} canvas`);
     this.ctx = this.canvas.getContext('2d');
 
-    this.gradientStroke = this.ctx.createLinearGradient(500, 0, 100, 0);
-    this.gradientStroke.addColorStop(0, '#80b6f4');
-    this.gradientStroke.addColorStop(1, this.chartColor);
+    if (this.type === 'line') {
+      this.gradientStroke = this.ctx.createLinearGradient(500, 0, 100, 0);
+      this.gradientStroke.addColorStop(0, '#80b6f4');
+      this.gradientStroke.addColorStop(1, this.chartColor);
 
-    this.gradientFill = this.ctx.createLinearGradient(0, 170, 0, 50);
-    this.gradientFill.addColorStop(0, 'rgba(128, 182, 244, 0)');
-    this.gradientFill.addColorStop(1, 'rgba(249, 99, 59, 0.40)');
+      this.gradientFill = this.ctx.createLinearGradient(0, 170, 0, 50);
+      this.gradientFill.addColorStop(0, 'rgba(128, 182, 244, 0)');
+      this.gradientFill.addColorStop(1, 'rgba(249, 99, 59, 0.40)');
+    }
+    let ticks1;
+    let ticks2;
+    if (this.ticks) {
+      ticks1 = {
+        fontColor: '#9f9f9f',
+        beginAtZero: false,
+        maxTicksLimit: 5,
+      };
+      ticks2 = {
+        padding: 20,
+        fontColor: '#9f9f9f',
+      };
+    } else {
+      ticks1 = {
+        display: this.ticks,
+      };
+
+      ticks2 = {
+        display: this.ticks,
+      };
+    }
 
     this.myChart = new Chart(this.ctx, {
-      type: 'line',
+      type: this.type,
       data: {
         labels: this.labels,
         datasets: this.datasets,
@@ -52,11 +80,7 @@ export class ChartLineComponent implements OnInit {
         scales: {
           yAxes: [
             {
-              ticks: {
-                fontColor: '#9f9f9f',
-                beginAtZero: false,
-                maxTicksLimit: 5,
-              },
+              ticks: ticks1,
               gridLines: {
                 drawBorder: false,
                 zeroLineColor: 'transparent',
@@ -73,10 +97,7 @@ export class ChartLineComponent implements OnInit {
                 zeroLineColor: 'transparent',
                 display: false,
               },
-              ticks: {
-                padding: 20,
-                fontColor: '#9f9f9f',
-              },
+              ticks: ticks2,
             },
           ],
         },

@@ -1,6 +1,8 @@
 package cr.ac.ucenfotec.fun4fund.service;
 
-import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.*;
+import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
+import cr.ac.ucenfotec.fun4fund.repository.FavoriteRepository;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +25,26 @@ public class ProyectService {
 
     private final ProyectRepository proyectRepository;
 
-    public ProyectService(ProyectRepository proyectRepository) {
+    private final FavoriteRepository favoriteRepository;
+
+    private final MailService mailService;
+
+    private final ApplicationUserRepository applicationUserRepository;
+
+    private final UserService userService;
+
+    public ProyectService(
+        ProyectRepository proyectRepository,
+        FavoriteRepository favoriteRepository,
+        MailService mailService,
+        ApplicationUserRepository applicationUserRepository,
+        UserService userService
+    ) {
         this.proyectRepository = proyectRepository;
+        this.favoriteRepository = favoriteRepository;
+        this.mailService = mailService;
+        this.applicationUserRepository = applicationUserRepository;
+        this.userService = userService;
     }
 
     /**
@@ -80,10 +100,29 @@ public class ProyectService {
             if (getProyect.isPresent()){
                 Proyect updateProyect = getProyect.get();
                 updateProyect.setLastUpdated(ZonedDateTime.now());
-                return proyectRepository.save(updateProyect);
+                Proyect saved = proyectRepository.save(updateProyect);
+                List<Favorite> favorites = favoriteRepository.findByProyect(saved);
+                for (Favorite favorite: favorites) {
+                    String subject = "El proyecto " + favorite.getProyect().getName() + " ha sido actualizado.";
+                    String content = "El proyecto " + favorite.getProyect().getName() + " ha sido actualizado." +
+                        "<br> Visítanos para ver cuales son las últimas actualizaciones";
+                    String email = favorite.getUser().getInternalUser().getEmail();
+                    mailService.sendEmail(email,subject,content,false,true);
+                }
             }
         }
         return new Proyect();
     }
 
+    public List<IProyectAnswerStatistics> getProyectStatusReport() {
+        log.debug("Request to get all Proyects");
+        Optional<ApplicationUser> owner = applicationUserRepository.findByInternalUserId(userService.getUserWithAuthorities().get().getId());
+        return proyectRepository.getReportsProyectsStatus(owner.get());
+    }
+
+    public List<IProyectCompletedPercentile> getProyectCompletePercentile() {
+        log.debug("Request to get all Proyects");
+        Optional<ApplicationUser> owner = applicationUserRepository.findByInternalUserId(userService.getUserWithAuthorities().get().getId());
+        return proyectRepository.getReportsProyectsComplete(owner.get());
+    }
 }

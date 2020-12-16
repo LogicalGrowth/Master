@@ -79,4 +79,16 @@ export class ProyectService {
     formData.append('multipartFile', imagen);
     return this.http.post<any>('api/cloudinary/uploadtoproyect/' + id, formData);
   }
+
+  getReportStatus(): Observable<EntityResponseType> {
+    return this.http
+      .get(`${this.resourceUrl}/reportStatus`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  getCompletePercentile(): Observable<EntityResponseType> {
+    return this.http
+      .get(`${this.resourceUrl}/completePercentile`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 }

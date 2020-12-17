@@ -116,4 +116,20 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+
+    <div class="col-md-6" *ngIf="labelsProyectCategory.length !== 0 && dataProyectCategory.length !== 0">
+      <jhi-chart-line
+        id="chat6"
+        [labels]="labelsProyectCategory"
+        [datasets]="dataProyectCategory"
+        title="Reporte de proyectos por categoría"
+        type="bar"
+        [ticks]="true"
+      >
+      </jhi-chart-line>
+    </div>
+
+  </div>
 </div>

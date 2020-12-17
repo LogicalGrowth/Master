@@ -4,6 +4,7 @@ import cr.ac.ucenfotec.fun4fund.domain.*;
 import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.repository.FavoriteRepository;
 import cr.ac.ucenfotec.fun4fund.repository.ProyectRepository;
+import cr.ac.ucenfotec.fun4fund.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,5 +125,18 @@ public class ProyectService {
         log.debug("Request to get all Proyects");
         Optional<ApplicationUser> owner = applicationUserRepository.findByInternalUserId(userService.getUserWithAuthorities().get().getId());
         return proyectRepository.getReportsProyectsComplete(owner.get());
+    }
+
+    public List<IProyectCategoryStatistics> getProyectCategoryReport() {
+        log.debug("Request to get all Proyects");
+        User user = userService.getUserWithAuthorities().get();
+        Optional<ApplicationUser> owner = applicationUserRepository.findByInternalUserId(user.getId());
+
+        if (owner.get().isAdmin()){
+            return proyectRepository.getAllReportsProyectsCategory();
+        } else {
+            return proyectRepository.getReportsProyectsCategory(owner.get());
+        }
+
     }
 }

@@ -1,6 +1,9 @@
 package cr.ac.ucenfotec.fun4fund.service;
 
+import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
 import cr.ac.ucenfotec.fun4fund.domain.Favorite;
+import cr.ac.ucenfotec.fun4fund.domain.IProyectCompletedPercentile;
+import cr.ac.ucenfotec.fun4fund.domain.ITopFavorites;
 import cr.ac.ucenfotec.fun4fund.repository.FavoriteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,5 +72,10 @@ public class FavoriteService {
     public void delete(Long id) {
         log.debug("Request to delete Favorite : {}", id);
         favoriteRepository.deleteById(id);
+    }
+
+    public List<ITopFavorites> getTop5Favorites() {
+        log.debug("Request to get top 5 favorites");
+        return favoriteRepository.getTopFavorites();
     }
 }

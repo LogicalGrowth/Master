@@ -23,9 +23,9 @@
                                 <th scope="col"><span>Estado</span></th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let proyect of proyects ;trackBy: trackId">
+                                <tr estatus *ngFor="let proyect of proyects ;trackBy: trackId">
                                     <td><a [routerLink]="['/proyect', proyect.id, 'view']">{{ proyect.name }}</a></td>
-                                    <td>{{ proyect.idType === "NONPROFIT" ? 'Sin fines de lucro': 'Con fines de lucro' }}</td>
+                                    <td>{{ proyect.idType === "NONPROFIT" ? 'No lucrativo': 'Lucrativo' }}</td>
                                     <td>{{ proyect.collected | currency: 'USD':'symbol':'1.2-2'}} de {{ proyect.goalAmount | currency: 'USD':'symbol':'1.2-2'}}</td>
                                     <td>{{ proyect.creationDate | date:'dd/MM/yy HH:mm'}}</td>
                                     <td>{{ proyect.lastUpdated | date:'dd/MM/yy HH:mm'}}</td>

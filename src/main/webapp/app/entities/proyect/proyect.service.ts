@@ -91,4 +91,10 @@ export class ProyectService {
       .get(`${this.resourceUrl}/completePercentile`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
+
+  getCategoryReport(): Observable<EntityResponseType> {
+    return this.http
+      .get(`${this.resourceUrl}/categoryReport`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
 }

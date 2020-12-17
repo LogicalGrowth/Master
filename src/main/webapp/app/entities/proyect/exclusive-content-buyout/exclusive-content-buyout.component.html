@@ -15,12 +15,12 @@
         </div>
 
         <div class="col-md-10">
-            <h3>Producto: {{ exclusiveContent?.prize?.name }}</h3>
-            <h3>Precio: {{ exclusiveContent?.price | currency:'USD':'symbol' }}</h3>
+            <h6>Producto: {{ exclusiveContent?.prize?.name }}</h6>
+            <p>Precio: {{ exclusiveContent?.price | currency:'USD':'symbol' }}</p>
         </div>
 
         <jhi-paypal-button description="Compra de {{ exclusiveContent?.prize?.name }}" [amount]="data"
                 projectId="{{ exclusiveContent?.proyect?.id }}" [productType]="productType"></jhi-paypal-button>
-                
+
     </div>
 </div>

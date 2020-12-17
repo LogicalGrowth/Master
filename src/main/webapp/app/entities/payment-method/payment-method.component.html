@@ -14,9 +14,9 @@
       </div>
       </div>
       <div class="alert alert-warning" id="no-result" *ngIf="paymentMethods?.length === 0">
-          <span class="notFoundCard">No ha agregado ningun método de pago</span>
+          <span class="notFoundCard">No ha agregado ningún método de pago</span>
         </div>
-    
+
       <div class="card-body">
         <div class="table-responsive">
           <table class="table">
@@ -46,30 +46,30 @@
                             <a class="like heart" (click)= like($event) id="{{paymentMethod.id}}" *ngIf="paymentMethod.favorite === true">
                               <i class="fa fa-heart" aria-hidden="true" id="{{paymentMethod.id}}"></i>
                           </a>
-                        
+
                   </td>
-        
+
                   <td class="text-center">
                     <img class="img-payment-cards" src="{{ paymentMethod.typeImage }}" alt="{{ paymentMethod.type }}" />
                   </td>
                   <td class="text-center">***********{{ paymentMethod.cardNumber! | slice: 12:19 }}</td>
                   <td class="text-center">{{ paymentMethod.cardOwner }}</td>
                   <td class="text-center">{{ paymentMethod.expirationDate | date: 'MM/yy' }}</td>
-        
+
                   <td class="text-center">
                     <div class="btn-group">
 
-                      
+
                       <button type="submit" [routerLink]="['/payment-method', paymentMethod.id, 'edit']" class="btn btn-success btn-icon btn-sm ">
                         <i class="fa fa-edit"></i>
                       </button>
-               
+
                       <button  type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm " (click)="delete(paymentMethod)">
                         <i class="fa fa-times"></i>
-                      </button>   
+                      </button>
                     </div>
                   </td>
-                </tr>  
+                </tr>
             </tbody>
           </table>
         </div>
@@ -84,7 +84,7 @@
       <div class="alert alert-warning" id="no-result" *ngIf="mypayments?.length === 0">
           <span class="notFoundCard">No ha realizado ningún pago</span>
         </div>
-    
+
       <div class="card-body">
         <div class="table-responsive">
           <table class="table">
@@ -96,14 +96,14 @@
             </thead>
             <tbody>
               <tr *ngFor="let payment of mypayments;">
-              
-        
+
+
                   <td class="text-center">${{ payment.amount }}</td>
                   <td class="text-center">{{ payment.type }}</td>
                   <td class="text-center">{{ payment.timeStamp | date: 'dd/MM/yy' }}</td>
                   <td class="text-center">{{ payment.proyect?.name }}</td>
-              
-                </tr>  
+
+                </tr>
             </tbody>
           </table>
         </div>

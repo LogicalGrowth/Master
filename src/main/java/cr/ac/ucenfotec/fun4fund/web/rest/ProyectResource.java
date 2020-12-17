@@ -1,9 +1,6 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
-import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
-import cr.ac.ucenfotec.fun4fund.domain.IProyectAnswerStatistics;
-import cr.ac.ucenfotec.fun4fund.domain.IProyectCompletedPercentile;
-import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.*;
 import cr.ac.ucenfotec.fun4fund.service.ProyectService;
 import cr.ac.ucenfotec.fun4fund.repository.ApplicationUserRepository;
 import cr.ac.ucenfotec.fun4fund.service.UserService;
@@ -163,5 +160,10 @@ public class ProyectResource {
     @GetMapping("/proyects/completePercentile")
     public List<IProyectCompletedPercentile> getProyectCompletePercentile() {
         return proyectService.getProyectCompletePercentile();
+    }
+
+    @GetMapping("/proyects/categoryReport")
+    public List<IProyectCategoryStatistics> getProyectCategoryReport() {
+        return proyectService.getProyectCategoryReport();
     }
 }

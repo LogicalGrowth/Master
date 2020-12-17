@@ -3,7 +3,7 @@
         <ngb-carousel [interval]="interval">
             <ng-template ngbSlide *ngFor="let item of items">
                 <img *ngIf="item.type === '' || item.type === 'Image' || item.type === 'image'" src={{item.url}}
-                    style="width: {{width}}; height: {{height}}; max-height: 670px; max-width: 670px">
+                    style="max-height: 520px;">
                 <div *ngIf="item.type === 'Youtube'">
                     <youtube-player videoId="{{GetVideoId(item.url)}}">
                     </youtube-player>

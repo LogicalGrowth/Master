@@ -51,6 +51,9 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
   dataFollowersReport: any;
   labelsFollowers: any[] = [];
   dataFollowers: ChartDataSets[] = [];
+  dataProyectCategoryReport: any;
+  dataProyectCategory: ChartDataSets[] = [];
+  labelsProyectCategory: any[] = [];
   constructor(
     protected eventManager: JhiEventManager,
     protected auctionService: AuctionService,
@@ -65,6 +68,7 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
     this.loadProyectReportStatus();
     this.loadProyectReportCompletePercentile();
     this.loadMostFollowersProject();
+    this.loadProyectCategoryReport();
   }
 
   loadData(): void {
@@ -172,6 +176,26 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
       }
       this.dataProyectComplete.push({
         label: 'Data',
+        borderColor: '#fcc468',
+        fill: true,
+        backgroundColor: '#fcc468',
+        hoverBorderColor: '#fcc468',
+        borderWidth: 5,
+        data: dataResult,
+      });
+    });
+  }
+
+  loadProyectCategoryReport(): void {
+    this.proyectService.getCategoryReport().subscribe(data => {
+      this.dataProyectCategoryReport = data.body;
+      const dataResult = [];
+      for (let i = 0; i < this.dataProyectCategoryReport.length; i++) {
+        this.labelsProyectCategory.push(this.dataProyectCategoryReport[i].name);
+        dataResult.push(this.dataProyectCategoryReport[i].count);
+      }
+      this.dataProyectCategory.push({
+        label: 'Cantidad',
         borderColor: '#fcc468',
         fill: true,
         backgroundColor: '#fcc468',

@@ -1,8 +1,6 @@
 <jhi-alert-error></jhi-alert-error>
 <jhi-alert></jhi-alert>
-<div class="alert alert-warning" id="no-result" *ngIf="partnerRequests?.length === 0">
-    <span>No hay solicitudes de socio registradas</span>
-</div>
+
 <div class="main-content mt-5">
     <div class="row justify-content-md-center">
         <div class="col-md-8">
@@ -11,7 +9,7 @@
                     <h4 class="card-title d-inline">Solicitudes de socio</h4>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive" *ngIf="partnerRequests?.length">
                         <table class="table">
                             <thead class="text-primary">
                                 <th>Nombre proyecto</th>
@@ -37,6 +35,14 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body justify-content-center">
+                                <p class="card-text">No hay solicitudes de socio registradas.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

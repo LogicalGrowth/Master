@@ -79,36 +79,108 @@
     </div>
 
     <div class="row justify-content-center" *ngIf="isAdmin()">
-
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <jhi-small-card title="Proyectos activos" description="{{ totalActive }}" icon="nc-button-play text-success"></jhi-small-card>
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-button-play text-success"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos activos' | uppercase}}</p>
+                  <p class="card-title">{{ totalActive }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <jhi-small-card title="Proyectos inactivos" description="{{ totalInactive }}" icon="nc-button-pause text-danger"></jhi-small-card>
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-button-pause text-danger"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos inactivos' | uppercase}}</p>
+                  <p class="card-title">{{ totalInactive }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <jhi-small-card title="Proyectos completados" description="{{ totalComplete }}" icon="nc-check-2"></jhi-small-card>
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-check-2 text-primary"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos completados' | uppercase}}</p>
+                  <p class="card-title">{{ totalComplete }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <jhi-small-card
-          title="Proyectos sin completar"
-          description="{{ totalIncomplete }}"
-          icon="nc-chart-bar-32 text-warning"
-        ></jhi-small-card>
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-chart-bar-32 text-warning"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos sin completar' | uppercase}}</p>
+                  <p class="card-title">{{ totalIncomplete }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
-        <jhi-small-card
-          title="Total de proyectos"
-          description="{{ totalActive + totalInactive }}"
-          icon="nc-chart-pie-36 text-success"
-        ></jhi-small-card>
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-chart-pie-36 text-success"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{"Total de proyectos" | uppercase}}</p>
+                  <p class="card-title">{{ totalActive + totalInactive }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-md-6" *ngIf="dataFollowersReport.length === 5">
         <jhi-chart-line
           id="chat5"
           [labels]="labelsFollowers"
           [datasets]="dataFollowers"
-          title="Top proyectos con más favoritos"
+          title="Top 5 proyectos con más favoritos"
           type="pie"
           [ticks]="false"
         >

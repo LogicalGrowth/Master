@@ -37,6 +37,7 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
   dataProyectComplete: ChartDataSets[] = [];
   labelsProyectComplete: any[] = [];
   dataProyectReportComplete: any;
+  dataDonationByProject: any[] = [];
 
   constructor(
     protected eventManager: JhiEventManager,

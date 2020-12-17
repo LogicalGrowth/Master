@@ -1,18 +1,20 @@
 package cr.ac.ucenfotec.fun4fund.service;
 
 import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
-import cr.ac.ucenfotec.fun4fund.domain.ConfigSystem;
+import cr.ac.ucenfotec.fun4fund.domain.Checkpoint;
 import cr.ac.ucenfotec.fun4fund.domain.Payment;
 import cr.ac.ucenfotec.fun4fund.domain.Proyect;
 import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
+import cr.ac.ucenfotec.fun4fund.repository.CheckpointRepository;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
-import org.HdrHistogram.DoubleLinearIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +29,10 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
+    private final CheckpointRepository checkpointRepository;
+
+    private final CheckpointService checkpointService;
+
     private final MailService mailService;
 
     private final ApplicationUserService applicationUserService;
@@ -37,12 +43,14 @@ public class PaymentService {
 
     public PaymentService(
         PaymentRepository paymentRepository,
-        MailService mailService,
+        CheckpointRepository checkpointRepository, CheckpointService checkpointService, MailService mailService,
         ApplicationUserService applicationUserService,
         ProyectService proyectService,
         ConfigSystemService configSystemService
     ) {
         this.paymentRepository = paymentRepository;
+        this.checkpointRepository = checkpointRepository;
+        this.checkpointService = checkpointService;
         this.mailService = mailService;
         this.applicationUserService = applicationUserService;
         this.proyectService = proyectService;
@@ -102,7 +110,22 @@ public class PaymentService {
         Optional<ApplicationUser> proyectOwner = applicationUserService.findOne(proyect.getOwner().getId());
 
         Double fee = payment.getAmount() * proyect.getFee() / 100;
+
         proyect.setCollected(proyect.getCollected() + payment.getAmount() - fee);
+
+        Double percentageCollected = (proyect.getCollected() + payment.getAmount() - fee) * 100 / proyect.getGoalAmount();
+
+        List<Checkpoint> achieved = new ArrayList<>();
+
+        List<Checkpoint> checkpoint = checkpointRepository.findByProyectIdAndCompletitionPercentageLessThanEqual(proyect.getId(), percentageCollected, Sort.unsorted());
+        for (Checkpoint item: checkpoint) {
+            if(!item.isCompleted()) {
+                item.setCompleted(true);
+                checkpointService.save(item);
+
+                achieved.add(item);
+            }
+        }
 
         String type = "";
 
@@ -120,7 +143,7 @@ public class PaymentService {
         }else if(payment.getType() == ProductType.PARTNERSHIP){
             type = "la solicitud de socio de $" + payment.getAmount() +" al proyecto " + proyect.getName();
 
-            String msgSubject = "Solicitud de socio aprovada";
+            String msgSubject = "Solicitud de socio aprobada";
             String msg = "Ha recibido un dinero de $" + payment.getAmount() +" en el proyecto " + proyect.getName() + ".";
             mailService.sendEmail(proyectOwner.get().getInternalUser().getEmail(),msgSubject,msg,false,true);
         }else if(payment.getType() == ProductType.RAFFLE){
@@ -131,6 +154,13 @@ public class PaymentService {
         String content = "Muchas gracias por " + type;
         mailService.sendEmail(applicationUser.get().getInternalUser().getEmail(),subject,content,false,true);
 
+        if(!achieved.isEmpty()) {
+
+            for (Checkpoint item: achieved) {
+                mailService.sendEmail(proyectOwner.get().getInternalUser().getEmail(),"Checkpoint alcanzado",
+                    "¡Felicidades! Se ha alcanzado el checkpoint del " + item.getCompletitionPercentage() + "% para el proyecto " + proyect.getName() + ".",false,true);
+            }
+        }
 
         Proyect proyectResult = proyectService.save(proyect);
         Payment result = save(payment);

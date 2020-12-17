@@ -27,4 +27,21 @@ public interface ProyectRepository extends JpaRepository<Proyect, Long>, JpaSpec
         "where owner_id = ?1 " +
         "order by complete")
     List<IProyectCompletedPercentile> getReportsProyectsComplete(ApplicationUser owner);
+
+    @Query(nativeQuery = true, value =
+        "SELECT c.name, count(1) as count " +
+        "FROM Proyect as p " +
+        "LEFT JOIN Category as c " +
+        "ON p.category_id = c.id " +
+        "Where p.owner_id = ?1 " +
+        "GROUP BY category_id")
+    List<IProyectCategoryStatistics> getReportsProyectsCategory(ApplicationUser owner);
+
+    @Query(nativeQuery = true, value =
+        "SELECT c.name, count(1) as count " +
+        "FROM Proyect as p " +
+        "LEFT JOIN Category as c " +
+        "ON p.category_id = c.id " +
+        "GROUP BY category_id")
+    List<IProyectCategoryStatistics> getAllReportsProyectsCategory();
 }

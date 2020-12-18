@@ -175,21 +175,25 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6" *ngIf="dataFollowersReport.length === 5">
-        <jhi-chart-line
-          id="chat5"
-          [labels]="labelsFollowers"
-          [datasets]="dataFollowers"
-          title="Top 5 proyectos con más favoritos"
-          type="pie"
-          [ticks]="false"
-        >
-        </jhi-chart-line>
-      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isAdmin()" style="margin-bottom: 10rem">
+    <div class="col-md-6" *ngIf="labelsProyectCategory.length !== 0 && dataProyectCategory.length !== 0">
+      <jhi-chart-line
+        id="chat6"
+        [labels]="labelsProyectCategory"
+        [datasets]="dataProyectCategory"
+        title="Reporte de proyectos por categoría"
+        type="bar"
+        [ticks]="true"
+      >
+      </jhi-chart-line>
     </div>
   </div>
 
-  <div class="row">
+
+
+  <div class="row" *ngIf="isAdmin()" style="margin-bottom: 10rem">
 
     <div class="col-md-6" *ngIf="labelsProyectCategory.length !== 0 && dataProyectCategory.length !== 0">
       <jhi-chart-line
@@ -203,5 +207,16 @@
       </jhi-chart-line>
     </div>
 
+    <div class="col-md-6" *ngIf="dataFollowersReport.length === 5">
+      <jhi-chart-line
+        id="chat5"
+        [labels]="labelsFollowers"
+        [datasets]="dataFollowers"
+        title="Top 5 proyectos con más favoritos"
+        type="pie"
+        [ticks]="false"
+      >
+      </jhi-chart-line>
+    </div>
   </div>
 </div>

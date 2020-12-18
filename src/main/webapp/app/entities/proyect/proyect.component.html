@@ -90,8 +90,8 @@
     <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
 
+    <p class="section-subheading font-weight-light" *ngIf="proyects?.length > 1">Hemos encontrado {{proyects?.length}} resultados</p>
     <p class="section-subheading font-weight-light" *ngIf="proyects?.length === 1">Hemos encontrado {{proyects?.length}} resultado</p>
-    <p class="section-subheading font-weight-light" *ngIf="proyects?.length > 1">Hemos encontrado {{proyects?.length}} resultado</p>
     <p class="section-subheading font-weight-light" *ngIf="!proyects?.length">No hemos encontrado resultados</p>
 
     <div class="alert alert-warning" id="no-result" *ngIf="proyects?.length === 0">

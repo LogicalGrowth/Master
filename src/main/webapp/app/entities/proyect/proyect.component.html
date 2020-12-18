@@ -90,7 +90,7 @@
                     <img class="card-img" src="../../../content/images/noimagen.jpg" alt="No hay imágenes">
                 </ng-template>
                 <div class="row project-subinfo">
-                    <p class="category-type">{{proyect.category?.name}}</p><br>
+                    <p class="category-type">{{proyect.category?.name}}</p>
                     <p class="category-type project-type">{{ proyect.idType === "NONPROFIT" ? 'No lucrativo': 'Lucrativo' }}</p>
                 </div>
             </div>
@@ -101,10 +101,7 @@
                         por {{ proyect.owner?.internalUser?.firstName }} {{ proyect.owner?.internalUser?.lastName }}
                         | {{ proyect.creationDate | date:"MM/dd/yy" }}
                     </p>
-                    <p class="card-text"> {{ (proyect.description) }}</p>
-                    <div class="stars-outer">
-                        <div class="stars-inner" style="width:94%"></div>
-                    </div>
+                    <p class="card-text"> {{ (proyect.description.length > 200)? (proyect.description | slice:0:200)+'..':(proyect.description) }}</p>
                 </div>
             </div>
             <div class="col-sm-3">

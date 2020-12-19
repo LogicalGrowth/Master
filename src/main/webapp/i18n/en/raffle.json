@@ -7,9 +7,9 @@
         "createOrEditLabel": "Create or edit a Raffle",
         "notFound": "No Raffles found"
       },
-      "created": "A new Raffle is created with identifier {{ param }}",
-      "updated": "A Raffle is updated with identifier {{ param }}",
-      "deleted": "A Raffle is deleted with identifier {{ param }}",
+      "created": "Rifa creada exitosamente",
+      "updated": "Rifa actualizada exitosamente",
+      "deleted": "Rifa creada exitosamente",
       "delete": {
         "question": "Are you sure you want to delete Raffle {{ id }}?"
       },

@@ -95,11 +95,11 @@
         </div>
         <div class="col-md-2" *ngIf="filterOn">
             <div class="timeline-heading" style="margin-left: 1rem;">
-                <span class="badge badge-pill badge-warning">Filtros aplicados</span>
+                <span class="badge badge-pill badge-warning" style="cursor: pointer;">Filtros aplicados</span>
             </div>
         </div>
         <div class="col-md-2" *ngIf="filterOn">
-            <p (click)="clearFilters()" class="text-warning font-weight-bold">Limpiar</p>
+            <p (click)="clearFilters()" class="text-warning font-weight-bold" style="cursor: pointer;">Limpiar</p>
         </div>
     </div>
 

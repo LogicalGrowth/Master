@@ -5,7 +5,10 @@
     <h4 class="modal-title d-inline">Comprar tiquete</h4>
     <h6 class="modal-title">Precio: ${{raffle?.price}}</h6>
 </div>
-<div class="modal-body"><jhi-paypal-button description="Donación proyecto {{ proyect?.name }}" [amount]="data"
-    projectId="{{ proyect?.id }}" [productType]="productType"></jhi-paypal-button>
+<div class="modal-body">
+    <div class="row justify-content-center"> 
+        <jhi-paypal-button class="justify-content-center" description="Donación proyecto {{ proyect?.name }}" [amount]="data"
+        projectId="{{ proyect?.id }}" [productType]="productType"></jhi-paypal-button>
+    </div>
 </div>
 

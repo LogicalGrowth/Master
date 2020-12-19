@@ -238,7 +238,7 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
 
   checkGoalActive(): void {
     for (let i = 0; i < this.activeProyects!.length; i++) {
-      if (this.activeProyects![i].goalAmount! > this.activeProyects![i].collected!) {
+      if (this.activeProyects![i].goalAmount! < this.activeProyects![i].collected!) {
         this.totalComplete = this.totalComplete + 1;
       } else {
         this.totalIncomplete = this.totalIncomplete + 1;
@@ -248,7 +248,7 @@ export class DashboardReportsComponent implements OnInit, OnDestroy {
 
   checkGoalInactive(): void {
     for (let i = 0; i < this.inactiveProyects!.length; i++) {
-      if (this.inactiveProyects![i].goalAmount! > this.inactiveProyects![i].collected!) {
+      if (this.inactiveProyects![i].goalAmount! < this.inactiveProyects![i].collected!) {
         this.totalComplete = this.totalComplete + 1;
       } else {
         this.totalIncomplete = this.totalIncomplete + 1;

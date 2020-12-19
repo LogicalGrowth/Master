@@ -25,6 +25,7 @@ type SelectableEntity = IPrize | IApplicationUser | IProyect;
 @Component({
   selector: 'jhi-raffle-update',
   templateUrl: './raffle-update.component.html',
+  styleUrls: ['../../../content/scss/paper-dashboard.scss'],
 })
 export class RaffleUpdateComponent implements OnInit {
   creating = true;

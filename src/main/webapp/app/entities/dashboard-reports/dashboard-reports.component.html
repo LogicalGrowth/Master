@@ -1,41 +1,208 @@
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6" *ngIf="labels.length !== 0 && datasets.length !== 0">
-            <select class="form-control col-md-4 ml-auto" id="monthsFilter" (change)="loadData()">
-                <option value="2">2 meses</option>
-                <option value="3">3 meses</option>
-                <option value="4">4 meses</option>
-                <option value="5">5 meses</option>
-                <option value="6" selected>6 meses</option>
-                <option value="7">7 meses</option>
-                <option value="8">8 meses</option>
-                <option value="9">9 meses</option>
-                <option value="10">10 meses</option>
-                <option value="11">11 meses</option>
-                <option value="12">12 meses</option>
-            </select>
-            <jhi-chart-line id="chat1" [labels]="labels" [datasets]="datasets"
-                title="Reporte de subastas ganadas por mes" [onchange]='onchange.bind(this)'>
-            </jhi-chart-line>
+    <h4 id="page-heading">Reportes</h4>
+  <div class="row">
+    <div class="col-md-6" *ngIf="labels.length !== 0 && datasets.length !== 0 && !isAdmin()">
+      <select class="form-control col-md-4 ml-auto" id="monthsFilter" (change)="loadData()">
+        <option value="2">2 meses</option>
+        <option value="3">3 meses</option>
+        <option value="4">4 meses</option>
+        <option value="5">5 meses</option>
+        <option value="6" selected>6 meses</option>
+        <option value="7">7 meses</option>
+        <option value="8">8 meses</option>
+        <option value="9">9 meses</option>
+        <option value="10">10 meses</option>
+        <option value="11">11 meses</option>
+        <option value="12">12 meses</option>
+      </select>
+      <jhi-chart-line
+        id="chat1"
+        [labels]="labels"
+        [datasets]="datasets"
+        title="Reporte de subastas ganadas por mes"
+        [onchange]="onchange.bind(this)"
+        type="line"
+        [ticks]="true"
+      >
+      </jhi-chart-line>
+    </div>
+
+    <div class="col-md-6" *ngIf="labelsRaffle.length !== 0 && datasetsRaffle.length !== 0 && !isAdmin()">
+      <select class="form-control col-md-4 ml-auto" id="monthsRaffle" (change)="loadDataRaffle()">
+        <option value="2">2 meses</option>
+        <option value="3">3 meses</option>
+        <option value="4">4 meses</option>
+        <option value="5">5 meses</option>
+        <option value="6" selected>6 meses</option>
+        <option value="7">7 meses</option>
+        <option value="8">8 meses</option>
+        <option value="9">9 meses</option>
+        <option value="10">10 meses</option>
+        <option value="11">11 meses</option>
+        <option value="12">12 meses</option>
+      </select>
+      <jhi-chart-line
+        id="chat2"
+        [labels]="labelsRaffle"
+        [datasets]="datasetsRaffle"
+        title="Reporte de participación en rifas por mes"
+        [onchange]="onchangeRaffle.bind(this)"
+        type="line"
+        [ticks]="true"
+      >
+      </jhi-chart-line>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6" *ngIf="labelsProyectStatus.length !== 0 && dataProyectStatus.length !== 0 && !isAdmin()">
+      <jhi-chart-line
+        id="chat3"
+        [labels]="labelsProyectStatus"
+        [datasets]="dataProyectStatus"
+        title="Reporte de estatus de los proyectos"
+        type="pie"
+        [ticks]="false"
+      >
+      </jhi-chart-line>
+    </div>
+
+    <div class="col-md-6" *ngIf="labelsProyectComplete.length !== 0 && dataProyectComplete.length !== 0 && !isAdmin()">
+      <jhi-chart-line
+        id="chat4"
+        [labels]="labelsProyectComplete"
+        [datasets]="dataProyectComplete"
+        title="Reporte de completitud de los proyectos"
+        type="bar"
+        [ticks]="true"
+      >
+      </jhi-chart-line>
+    </div>
+
+    <div class="row justify-content-center" *ngIf="isAdmin()">
+      <div class="col-lg-3 col-md-3 col-sm-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-button-play text-success"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos activos' | uppercase}}</p>
+                  <p class="card-title">{{ totalActive }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-button-pause text-danger"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos inactivos' | uppercase}}</p>
+                  <p class="card-title">{{ totalInactive }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-check-2 text-primary"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos completados' | uppercase}}</p>
+                  <p class="card-title">{{ totalComplete }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="col-md-6" *ngIf="labelsRaffle.length !== 0 && datasetsRaffle.length !== 0">
-            <select class="form-control col-md-4 ml-auto" id="monthsRaffle" (change)="loadDataRaffle()">
-                <option value="2">2 meses</option>
-                <option value="3">3 meses</option>
-                <option value="4">4 meses</option>
-                <option value="5">5 meses</option>
-                <option value="6" selected>6 meses</option>
-                <option value="7">7 meses</option>
-                <option value="8">8 meses</option>
-                <option value="9">9 meses</option>
-                <option value="10">10 meses</option>
-                <option value="11">11 meses</option>
-                <option value="12">12 meses</option>
-            </select>
-            <jhi-chart-line id="chat2" [labels]="labelsRaffle" [datasets]="datasetsRaffle"
-                title="Reporte de participación en rifas por mes" [onchange]='onchangeRaffle.bind(this)'>
-            </jhi-chart-line>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-chart-bar-32 text-warning"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{'Proyectos sin completar' | uppercase}}</p>
+                  <p class="card-title">{{ totalIncomplete }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+        <div class="card card-stats">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5 col-md-4">
+                <div class="icon-big text-center icon-warning">
+                  <i class="nc-icon nc-chart-pie-36 text-success"></i>
+                </div>
+              </div>
+              <div class="col-7 col-md-8">
+                <div class="numbers">
+                  <p class="card-category">{{"Total de proyectos" | uppercase}}</p>
+                  <p class="card-title">{{ totalActive + totalInactive }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" *ngIf="dataFollowersReport.length === 5">
+        <jhi-chart-line
+          id="chat5"
+          [labels]="labelsFollowers"
+          [datasets]="dataFollowers"
+          title="Top 5 proyectos con más favoritos"
+          type="pie"
+          [ticks]="false"
+        >
+        </jhi-chart-line>
+      </div>
     </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-6" *ngIf="labelsProyectCategory.length !== 0 && dataProyectCategory.length !== 0">
+      <jhi-chart-line
+        id="chat6"
+        [labels]="labelsProyectCategory"
+        [datasets]="dataProyectCategory"
+        title="Reporte de proyectos por categoría"
+        type="bar"
+        [ticks]="true"
+      >
+      </jhi-chart-line>
+    </div>
+
+  </div>
 </div>

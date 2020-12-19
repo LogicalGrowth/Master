@@ -29,6 +29,8 @@ import { RaffleService } from '../raffle/raffle.service';
 import { IRaffle } from 'app/shared/model/raffle.model';
 
 import { ReviewModalService } from './review/reviewModal.service';
+import { IPayment } from '../../shared/model/payment.model';
+import { IReview } from '../../shared/model/review.model';
 @Component({
   selector: 'jhi-proyect-detail',
   templateUrl: './proyect-detail.component.html',
@@ -65,6 +67,9 @@ export class ProyectDetailComponent implements OnInit {
   applicationUser?: IApplicationUser[];
   productType?: ProductType;
   userId: any;
+  userPayments?: IPayment[];
+  userReviews?: IReview[];
+  validReview = false;
   now = moment();
 
   constructor(
@@ -211,6 +216,7 @@ export class ProyectDetailComponent implements OnInit {
             this.loadExclusiveContent(this.proyect?.id as number);
             this.loadAuction(this.proyect?.id as number);
             this.loadRaffle(this.proyect?.id as number);
+            this.checkReview(this.applicationUser[0].id);
           });
       }
     });
@@ -259,5 +265,37 @@ export class ProyectDetailComponent implements OnInit {
   changeStatusRaffle(raffle: IRaffle): void {
     raffle.state = ActivityStatus.FINISHED;
     this.raffleService.update(raffle).subscribe((res: HttpResponse<IAuction>) => {});
+  }
+
+  checkReview(user: any): void {
+    if (!this.isProjectOwner) {
+      this.paymentService.query({ 'applicationUserId.equals': user }).subscribe((res: HttpResponse<IPayment[]>) => {
+        this.userPayments = res.body || [];
+        this.checkPayments();
+      });
+
+      this.reviewService
+        .query({ 'user.equals': this.account.firstName + ' ' + this.account.lastName })
+        .subscribe((res: HttpResponse<IReview[]>) => {
+          this.userReviews = res.body || [];
+          this.checkIsValidReview();
+        });
+    }
+  }
+
+  checkPayments(): void {
+    for (let i = 0; i < this.userPayments!.length; i++) {
+      if (this.userPayments![i].proyect?.id === this.proyect?.id) {
+        this.validReview = true;
+      }
+    }
+  }
+
+  checkIsValidReview(): void {
+    for (let i = 0; i < this.userReviews!.length; i++) {
+      if (this.userReviews![i].proyect?.id === this.proyect?.id) {
+        this.validReview = false;
+      }
+    }
   }
 }

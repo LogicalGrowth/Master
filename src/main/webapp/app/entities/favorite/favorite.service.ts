@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IFavorite } from 'app/shared/model/favorite.model';
+import { map } from 'rxjs/operators';
 
 type EntityResponseType = HttpResponse<IFavorite>;
 type EntityArrayResponseType = HttpResponse<IFavorite[]>;
@@ -34,5 +35,15 @@ export class FavoriteService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+    return res;
+  }
+
+  getTop5Favorites(): Observable<EntityResponseType> {
+    return this.http
+      .get(`${this.resourceUrl}/getTop5Favorites`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 }

@@ -138,12 +138,14 @@ export class ProyectUpdateComponent implements OnInit {
       proyect.owner = this.updateProyect.owner;
       proyect.creationDate = this.updateProyect.creationDate;
       proyect.fee = this.updateProyect.fee;
+      proyect.status = this.updateProyect.status;
       this.isUpdate = true;
       this.subscribeToSaveResponse(this.proyectService.update(proyect));
     } else {
       proyect.collected = 0;
       proyect.rating = 0;
       proyect.creationDate = moment();
+      proyect.status = true;
       proyect.fee = this.fee[0].percentage;
       this.subscribeToSaveResponse(this.proyectService.create(proyect));
     }

@@ -1,34 +1,33 @@
 <jhi-alert></jhi-alert>
-<div class="container mt-5">
-    <div *ngIf="proyect">
+<div class="container mt-5" *ngIf="proyect">
+    <div>
         <div class="card">
             <div class="card-body">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-10">
-                            <h5 class="card-title detail-title">{{proyect.name}}</h5>
+                            <h5 class="card-title detail-title">{{ proyect.name }}</h5>
                             <p class="card-text soft-name">
-                                por {{ proyect.owner?.internalUser?.firstName }} {{ proyect.owner?.internalUser?.lastName }}
-                                | {{ proyect.creationDate | date:"MM/dd/yy" }}
+                                por {{ proyect.owner?.internalUser?.firstName }} {{ proyect.owner?.internalUser?.lastName }} |
+                                {{ proyect.creationDate | date: 'MM/dd/yy' }}
                             </p>
-                            <p class="card-text" style="margin-top: 16px; margin-bottom: 30px; font-style: inherit;"> {{ (proyect.description) }}</p>
+                            <p class="card-text" style="margin-top: 16px; margin-bottom: 30px; font-style: inherit">{{ proyect.description }}</p>
                         </div>
                         <div class="col-md-2">
                             <div class="stars-outer">
-                                <div class="stars-inner" style="width:{{rating}}%"></div>
+                                <div class="stars-inner" style="width:{{ rating }}%"></div>
                             </div>
-                            <button type="button" *ngIf="isProjectOwner" [routerLink]="['/proyect', proyect.id, 'edit']"
-                                    class="btn btn-primary">
+                            <button type="button" *ngIf="isProjectOwner" [routerLink]="['/proyect', proyect.id, 'edit']" class="btn btn-primary">
                                 <fa-icon icon="pencil-alt"></fa-icon>
                                 &nbsp;<span>Editar</span>
                             </button>
                         </div>
                     </div>
                     <div class="row project-subinfo">
-                        <p class="category-type">{{proyect.category?.name}}</p>
+                        <p class="category-type">{{ proyect.category?.name }}</p>
                         <p class="pipe">|</p>
-                        <p class="category-type project-type">{{ proyect.idType === "NONPROFIT" ? 'No lucrativo': 'Lucrativo' }}</p>
-                        <p class="pipe soft-name">| Última actualización: {{updatedDays}}</p>
+                        <p class="category-type project-type">{{ proyect.idType === 'NONPROFIT' ? 'No lucrativo' : 'Lucrativo' }}</p>
+                        <p class="pipe soft-name">| Última actualización: {{ updatedDays }}</p>
                     </div>
                 </div>
             </div>
@@ -38,7 +37,7 @@
                 <div class="col-md-8" id="gallery">
                     <jhi-carousel [items]="items" [interval]="0" [keyboard]="true" width="100%" height="37vw"></jhi-carousel>
                     <div *ngIf="items && items.length === 0">
-                        <img src="../../../content/images/noimagen.jpg" alt="No hay imágenes">
+                        <img src="../../../content/images/noimagen.jpg" alt="No hay imágenes" />
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -46,43 +45,50 @@
                         <div class="card-body">
                             <h5 class="card-title text-center">¡Forma parte de este sueño!</h5>
                             <div class="col-lg-12 mb-3">
-                                <span  class="hard-name font-weight-bold text-info">{{ proyect.collected| currency:'USD':'symbol':'1.2-2' }}</span>
-                                <span class="soft-name"> de {{ proyect.goalAmount| currency:'USD':'symbol':'1.2-2'}}</span>
+                                <span class="hard-name font-weight-bold text-info">{{ proyect.collected | currency: 'USD':'symbol':'1.2-2' }}</span>
+                                <span class="soft-name"> de {{ proyect.goalAmount | currency: 'USD':'symbol':'1.2-2' }}</span>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar progress-bar-striped bg-info" role="progressbar"
-                                     style="width: {{percentile}}%" aria-valuemin="0" aria-valuemax="100">
-                                    {{percentile}}%
+                                <div
+                                    class="progress-bar progress-bar-striped bg-info"
+                                    role="progressbar"
+                                    style="width: {{ percentile }}%"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                >
+                                    {{ percentile }}%
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <button class="btn btn-warning col-md-12" (click)=donate()>
+                            <button class="btn btn-warning col-md-12" (click)="donate()">
                                 <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
                             </button>
                             <p class="card-text font-weight-bold" *ngIf="donors && donors.length">Top donadores</p>
-                            <div *ngFor="let donor of donors;">
+                            <div *ngFor="let donor of donors">
                                 <div class="row">
                                     <div class="col-md-1">
                                         <i class="fa fa-user-plus text-success" aria-hidden="true"></i>
                                     </div>
                                     <div class="col-md-10">
-                                        <p class="card-text">{{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}
+                                        <p class="card-text">
+                                            {{ donor[1].internalUser.firstName }} {{ donor[1].internalUser.lastName }}
                                             <span class="card-text soft-name" style="font-size: 5px"><i class="fa fa-circle" aria-hidden="true"></i></span>
-                                            <span class="card-text soft-name">${{donor[0]}}</span>
+                                            <span class="card-text soft-name">${{ donor[0] }}</span>
                                         </p>
                                     </div>
-                                    <hr>
-                                </div><hr>
+                                    <hr />
+                                </div>
+                                <hr />
                             </div>
                             <div *ngIf="donors && !donors.length">
                                 <div class="row">
                                     <div class="col-md-1">
-                                        <i class="fa fa-user-plus text-success" aria-hidden="true" style="margin-top: 14px;"></i>
+                                        <i class="fa fa-user-plus text-success" aria-hidden="true" style="margin-top: 14px"></i>
                                     </div>
                                     <div class="col-md-10">
                                         <p class="card-text">Conviértete en el primer donador</p>
-                                        <p class="card-text soft-name" style="margin-top: -17px;">Tu donación importa</p>
+                                        <p class="card-text soft-name" style="margin-top: -17px">Tu donación importa</p>
                                     </div>
                                 </div>
                             </div>
@@ -98,13 +104,13 @@
                                     <div class="icon-big text-center icon-warning">
                                         <i class="nc-icon nc-diamond text-primary"></i>
                                     </div>
-                                    <p class="soft-name">Exclusividad ({{exclusiveContents?.length}})</p>
+                                    <p class="soft-name">Exclusividad ({{ exclusiveContents?.length }})</p>
                                 </div>
                                 <div class="services-content">
                                     <div class="icon-big text-center icon-warning">
                                         <i class="nc-icon nc-trophy text-primary"></i>
                                     </div>
-                                    <p class="soft-name">Subasta ({{auctions?.length}})</p>
+                                    <p class="soft-name">Subasta ({{ auctions?.length }})</p>
                                 </div>
                             </div>
                         </div>
@@ -123,31 +129,29 @@
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-3">
-                    <div *ngIf="donors && !donors.length; ">
-                        <jhi-small-card description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
-                                        title="Sé el primero en ayudar"
-                                        icon="nc-bulb-63">
+                    <div *ngIf="donors && !donors.length">
+                        <jhi-small-card
+                            description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
+                            title="Sé el primero en ayudar"
+                            icon="nc-bulb-63">
                         </jhi-small-card>
                     </div>
-
                     <div *ngIf="donors && donors.length > 0">
-                        <jhi-small-card description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
-                                        title="Tu donación importa"
-                                        icon="nc-bulb-63">
+                        <jhi-small-card
+                            description="Tu apoyo será de gran ayuda y ayudará a inspirar a otros a donar."
+                            title="Tu donación importa"
+                            icon="nc-bulb-63"
+                        >
                         </jhi-small-card>
                     </div>
-
-                    <button class="btn btn-warning col-md-12" (click)=donate()>
+                    <button class="btn btn-warning col-md-12" (click)="donate()">
                         <span class="btn-label"><i class="nc-icon nc-money-coins"></i></span> Hacer una donación
                     </button>
                     <div>
-                        <jhi-icon buttonCssClass="btn-facebook fb-share-button" iconCssClass="fa fa-facebook-f"
-                            [functionClick]='facebook'></jhi-icon>
-                        <jhi-icon buttonCssClass="btn-twitter" iconCssClass="fa fa-twitter"
-                            [functionClick]='twitter'></jhi-icon>
+                        <jhi-icon buttonCssClass="btn-facebook fb-share-button" iconCssClass="fa fa-facebook-f" [functionClick]="facebook"></jhi-icon>
+                        <jhi-icon buttonCssClass="btn-twitter" iconCssClass="fa fa-twitter" [functionClick]="twitter"></jhi-icon>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -182,12 +186,11 @@
                                     <div class="tab-pane active" id="link9">
                                         <div class="container-fluid">
                                             <div class="row d-flex justify-content-center">
-                                                <div class="col-md-10" *ngFor="let review of reviews;">
+                                                <div class="col-md-12" *ngFor="let review of reviews">
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <div class="stars-outer little-stars">
-                                                                <div class="stars-inner" style="width:{{review.rating*100/5}}%">
-                                                                </div>
+                                                                <div class="stars-inner" style="width:{{ (review.rating * 100) / 5 }}%"></div>
                                                             </div>
                                                             <p class="card-text font-italic">
                                                                 {{ review.message }}
@@ -198,18 +201,41 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-10" *ngIf="reviews && !reviews.length">
+                                                <div class="col-md-10" *ngIf="reviews && !reviews.length && validReview">
                                                     <div class="card">
                                                         <div class="card-body justify-content-center">
                                                             <div class="stars-outer">
-                                                                <div class="stars-inner" style="width:{{reviews.rating*100/5}}%"></div>
+                                                                <div class="stars-inner" style="width:{{ (reviews.rating * 100) / 5 }}%"></div>
                                                             </div>
                                                             <p class="card-text">Sé el primero en compartir palabras de aliento.</p>
-                                                            <button class="btn btn-info col-md-12" (click) ="addRating()">Agregar</button>
+                                                            <button class="btn btn-info col-md-12" (click)="addRating()">Agregar</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button *ngIf="reviews && reviews.length" class="btn btn-info col-md-4" (click) ="addRating()">Agregar</button>
+                                                <div class="col-md-10" *ngIf="reviews && !reviews.length && !validReview && !isProjectOwner">
+                                                    <div class="card">
+                                                        <div class="card-body justify-content-center">
+                                                            <div class="stars-outer">
+                                                                <div class="stars-inner" style="width:{{ (reviews.rating * 100) / 5 }}%"></div>
+                                                            </div>
+                                                            <p class="card-text">Interactúa con el proyecto para ser el primero en compartir palabras de aliento.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-10" *ngIf="reviews && !reviews.length && !validReview && isProjectOwner">
+                                                    <div class="card">
+                                                        <div class="card-body justify-content-center">
+                                                            <p class="card-text">No se han agregado comentarios por el momento.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    *ngIf="reviews && reviews.length && !isProjectOwner && validReview"
+                                                    class="btn btn-info col-md-6"
+                                                    (click)="addRating()"
+                                                >
+                                                    Agregar
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -217,13 +243,14 @@
                                         <div class="row justify-content-center">
                                             <div class="col-md-12">
                                                 <div class="text-center" *ngIf="isProjectOwner">
-                                                    <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/exclusive-content', proyect!.id, 'new']">
+                                                    <button
+                                                        class="btn btn-success btn-round btn-icon btn-sm"
+                                                        [routerLink]="['/exclusive-content', proyect!.id, 'new']"
+                                                    >
                                                         <i class="nc-icon nc-simple-add"></i>
                                                     </button>
                                                 </div>
-
-                                                <div class="table-responsive" id="entities"
-                                                     *ngIf="exclusiveContents && exclusiveContents.length > 0">
+                                                <div class="table-responsive" id="entities" *ngIf="exclusiveContents && exclusiveContents.length > 0">
                                                     <table class="table">
                                                         <thead class="text-primary">
                                                         <th><span>Producto</span></th>
@@ -237,20 +264,34 @@
                                                         <tbody>
                                                         <tr *ngFor="let exclusiveContent of exclusiveContents">
                                                             <td>{{ exclusiveContent.prize?.name }}</td>
-                                                            <td>{{ exclusiveContent.price | currency:'USD':'symbol'}}</td>
+                                                            <td>{{ exclusiveContent.price | currency: 'USD':'symbol' }}</td>
                                                             <td>{{ exclusiveContent.stock }}</td>
-                                                            <td *ngIf="isProjectOwner">{{ exclusiveContent.state | state}}</td>
+                                                            <td *ngIf="isProjectOwner">{{ exclusiveContent.state | state }}</td>
                                                             <td class="text-center">
-                                                                <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
-                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']">
+                                                                <button
+                                                                    type="submit"
+                                                                    rel="tooltip"
+                                                                    class="btn btn-info btn-icon btn-sm"
+                                                                    [routerLink]="['/exclusive-content', exclusiveContent.id, 'view']"
+                                                                >
                                                                     <i class="fa fa-eye"></i>
                                                                 </button>
-                                                                <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                                        [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']">
+                                                                <button
+                                                                    *ngIf="isProjectOwner"
+                                                                    type="submit"
+                                                                    rel="tooltip"
+                                                                    class="btn btn-success btn-icon btn-sm"
+                                                                    [routerLink]="['/exclusive-content', exclusiveContent.id, 'edit']"
+                                                                >
                                                                     <i class="fa fa-edit"></i>
                                                                 </button>
-                                                                <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                                        (click)="exclusiveContentBuyout(exclusiveContent)">
+                                                                <button
+                                                                    *ngIf="!isProjectOwner"
+                                                                    type="submit"
+                                                                    rel="tooltip"
+                                                                    class="btn btn-success btn-icon btn-sm"
+                                                                    (click)="exclusiveContentBuyout(exclusiveContent)"
+                                                                >
                                                                     <i class="fa fa-shopping-cart"></i>
                                                                 </button>
                                                             </td>
@@ -259,7 +300,6 @@
                                                     </table>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-10" *ngIf="exclusiveContents?.length === 0">
                                                 <div class="card">
                                                     <div class="card-body justify-content-center">
@@ -278,51 +318,73 @@
                                                         <i class="nc-icon nc-simple-add"></i>
                                                     </button>
                                                 </div>
-                                                <div class="table-responsive" id="auctions"
-                                                     *ngIf="auctions && auctions.length > 0">
+                                                <div class="table-responsive" id="auctions" *ngIf="auctions && auctions.length > 0">
                                                     <table class="table">
-                                                    <thead class="text-primary">
-                                                    <th><span>Nombre</span></th>
-                                                    <th><span>Descripción</span></th>
-                                                    <th><span>Fecha de expiración</span></th>
-                                                    <th><span>Monto Inicial</span></th>
-                                                    <th><span>Puja ganadora</span></th>
-                                                    <th *ngIf="isProjectOwner"><span>Estado</span></th>
-                                                    <th class="text-center">
-                                                        <span>Acciones</span></th>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr *ngFor="let auction of auctions">
-                                                        <td>{{ auction.prize?.name }}</td>
-                                                        <td style="max-width: 20rem;">{{ auction.prize?.description }}</td>
-                                                        <td>{{ auction.expirationDate | date }}</td>
-                                                        <td>{{ auction.initialBid | currency:'USD':'symbol'}}</td>
-                                                        <td>{{ auction.winningBid | currency:'USD':'symbol'}}
-                                                            <span *ngIf="auction.winner?.id == userId" class="badge badge-pill badge-success">Tú</span>
-                                                        </td>
-                                                        <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
-                                                        <td style="width: 8rem;" class="text-center">
-                                                            <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
-                                                                    [routerLink]="['/auction', auction.id, 'view']">
-                                                                <i class="fa fa-eye"></i>
-                                                            </button>
-                                                            <button *ngIf="isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                                    [disabled]="auction.winningBid" [routerLink]="['/auction', auction.id, 'edit']">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                            <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                                (click)="bid(auction)" [disabled]="auction.winner?.id == userId">
-                                                                <i class="fa fa-gavel"></i>
-                                                            </button>
-                                                            <button *ngIf="isProjectOwner && auction && auction.expirationDate && auction.expirationDate < now"
-                                                                [disabled]="auction?.state === 'FINISHED'"
-                                                            type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm" (click)="changeStatus(auction)">
-                                                                <i class="fa fa-remove"></i>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
+                                                        <thead class="text-primary">
+                                                        <th><span>Nombre</span></th>
+                                                        <th><span>Descripción</span></th>
+                                                        <th><span>Fecha de expiración</span></th>
+                                                        <th><span>Monto Inicial</span></th>
+                                                        <th><span>Puja ganadora</span></th>
+                                                        <th *ngIf="isProjectOwner"><span>Estado</span></th>
+                                                        <th class="text-center">
+                                                            <span>Acciones</span>
+                                                        </th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr *ngFor="let auction of auctions">
+                                                            <td>{{ auction.prize?.name }}</td>
+                                                            <td style="max-width: 20rem">{{ auction.prize?.description }}</td>
+                                                            <td>{{ auction.expirationDate | date }}</td>
+                                                            <td>{{ auction.initialBid | currency: 'USD':'symbol' }}</td>
+                                                            <td>
+                                                                {{ auction.winningBid | currency: 'USD':'symbol' }}
+                                                                <span *ngIf="auction.winner?.id == userId" class="badge badge-pill badge-success">Tú</span>
+                                                            </td>
+                                                            <td *ngIf="isProjectOwner">{{ auction.state | state }}</td>
+                                                            <td style="width: 8rem;" class="text-center">
+                                                                <button
+                                                                    type="submit"
+                                                                    rel="tooltip"
+                                                                    class="btn btn-info btn-icon btn-sm"
+                                                                    [routerLink]="['/auction', auction.id, 'view']"
+                                                                >
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                                <button
+                                                                    *ngIf="isProjectOwner"
+                                                                    type="submit"
+                                                                    rel="tooltip"
+                                                                    class="btn btn-success btn-icon btn-sm"
+                                                                    [disabled]="auction.winningBid"
+                                                                    [routerLink]="['/auction', auction.id, 'edit']"
+                                                                >
+                                                                    <i class="fa fa-edit"></i>
+                                                                </button>
+                                                                <button
+                                                                    *ngIf="!isProjectOwner"
+                                                                    type="submit"
+                                                                    rel="tooltip"
+                                                                    class="btn btn-success btn-icon btn-sm"
+                                                                    (click)="bid(auction)"
+                                                                    [disabled]="auction.winner?.id == userId"
+                                                                >
+                                                                    <i class="fa fa-gavel"></i>
+                                                                </button>
+                                                                <button
+                                                                    *ngIf="isProjectOwner && auction && auction.expirationDate && auction.expirationDate < now"
+                                                                    [disabled]="auction?.state === 'FINISHED'"
+                                                                    type="submit"
+                                                                    rel="tooltip"
+                                                                    class="btn btn-danger btn-icon btn-sm"
+                                                                    (click)="changeStatus(auction)"
+                                                                >
+                                                                    <i class="fa fa-remove"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
 
@@ -333,11 +395,9 @@
                                                         <p class="soft-name">Mantente conectado.</p>
                                                     </div>
                                                 </div>
-											</div>
+                                            </div>
 
-                                            <!--<button class="btn btn-warning col-md-3" (click)=donate()>
-                                                Declarar ganador
-                                            </button>-->
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="link12">
@@ -392,60 +452,60 @@
                                                 </tbody>
                                             </table>
                                             </div>
-                                        </div>
-
-                                        <div class="col-md-10" *ngIf="raffles?.length === 0">
-                                            <div class="card">
-                                                <div class="card-body justify-content-center">
-                                                    <p class="card-text">No hay rifas disponibles.</p>
-                                                    <p class="soft-name">Mantente conectado.</p>
+                                            <div class="col-md-10" *ngIf="raffles?.length === 0">
+                                                <div class="card">
+                                                    <div class="card-body justify-content-center">
+                                                        <p class="card-text">No hay rifas disponibles.</p>
+                                                        <p class="soft-name">Mantente conectado.</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
-                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title text-center">Conoce información adicional</h4>
-                </div>
-                <div class="card-body ">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p><b>{{proyect.name}}</b> está localizado en el siguiente punto:</p>
-                            <ngui-map zoom="13" [center]="mapCenter">
-                                <marker [position]="position" *ngIf="hasMarker"></marker>
-                            </ngui-map>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="text-center" *ngIf="isProjectOwner">
-                                <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/checkpoint', proyect!.id, 'new']">
-                                    <i class="nc-icon nc-simple-add"></i>
-                                </button>
-                            </div>
-                            <jhi-timeline [cards]="cards" timelineClass="timeline-simple" style="margin-top: -40px;"></jhi-timeline>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <a href="/proyect" class="text-secondary">
-                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                            Ver más proyectos
-                        </a>
-                    </div>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title text-center">Conoce información adicional</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <p>
+                        <b>{{ proyect.name }}</b> está localizado en el siguiente punto:
+                    </p>
+                    <ngui-map zoom="13" [center]="mapCenter">
+                        <marker [position]="position" *ngIf="hasMarker"></marker>
+                    </ngui-map>
                 </div>
+                <div class="col-md-8">
+                    <div class="text-center" *ngIf="isProjectOwner">
+                        <button class="btn btn-success btn-round btn-icon btn-sm" [routerLink]="['/checkpoint', proyect!.id, 'new']">
+                            <i class="nc-icon nc-simple-add"></i>
+                        </button>
+                    </div>
+                    <jhi-timeline [cards]="cards" timelineClass="timeline-simple" style="margin-top: -40px"></jhi-timeline>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a href="/proyect" class="text-secondary">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    Ver más proyectos
+                </a>
             </div>
         </div>
     </div>

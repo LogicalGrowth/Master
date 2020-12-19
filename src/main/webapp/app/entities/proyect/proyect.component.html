@@ -1,17 +1,19 @@
-<header class="masthead text-center text-white">
+<header class="masthead text-white">
     <div class="mask rgba-gradient masthead-content">
         <div class="container bcontent mt-5" style="margin-bottom: -148px; max-width: 1375px !important;">
-            <h2 id="page-heading" class="main-title">Proyectos</h2>
+            <div class="text-center">
+                <h2 id="page-heading" class="main-title">Proyectos</h2>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="main-text">¿Preparado para encontrar proyectos?</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="main-text">¿Preparado para encontrar proyectos?</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row justify-content-center">
-                <div class="col-sm-12">
-                    <jhi-simple-button type="warning" label="Iniciar proyecto" [routerLink]="['/proyect/new']"></jhi-simple-button>
+                <div class="row justify-content-center">
+                    <div class="col-sm-12">
+                        <jhi-simple-button type="warning" label="Iniciar proyecto" [routerLink]="['/proyect/new']"></jhi-simple-button>
+                    </div>
                 </div>
             </div>
 
@@ -20,7 +22,7 @@
                     <div class="row">
                         <div class="col-sm-3 active-cyan-4">
                             <div class="form-group has-label">
-                                <label for="filer_searchBar" class="control-label">Nombre</label>
+                                <label for="filer_searchBar" class="text-left">Nombre</label>
                                 <input type="text" class="form-control" name="descriptionName" id="filer_searchBar" [(ngModel)]="description">
                             </div>
                         </div>
@@ -58,7 +60,7 @@
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label for="sortBy">Ordenar</label>
-                                <select class="form-control active-cyan-4" id="sortBy" [(ngModel)]="sortBy">
+                                <select class="form-control active-cyan-4" id="sortBy" [(ngModel)]="sortBy" (change)="loadFilter()">
                                     <option value="creationDate" selected>Fecha de creación</option>
                                     <option value="lastUpdated">Fecha de actualización</option>
                                     <option value="collected">Monto recolectado</option>
@@ -91,12 +93,12 @@
                 No hemos encontrado resultados
             </p>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" *ngIf="filterOn">
             <div class="timeline-heading" style="margin-left: 1rem;">
                 <span class="badge badge-pill badge-warning">Filtros aplicados</span>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" *ngIf="filterOn">
             <p (click)="clearFilters()" class="text-warning font-weight-bold">Limpiar</p>
         </div>
     </div>

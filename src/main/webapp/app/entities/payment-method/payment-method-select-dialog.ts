@@ -16,6 +16,7 @@ import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ApplicationUserService } from '../application-user/application-user.service';
 import { TicketModalService } from '../proyect/ticket/ticketModal.service';
 import { ProductType } from 'app/shared/model/enumerations/product-type.model';
+import { ExclusiveContentBuyoutService } from '../proyect/exclusive-content-buyout/exclusive-content-buyout.service';
 
 @Component({
   templateUrl: './payment-method-select-dialog.html',
@@ -46,7 +47,8 @@ export class PaymentMethodSelectDialogComponent implements OnInit {
     private proyectService: ProyectService,
     protected paymentService: PaymentService,
     protected applicationUserService: ApplicationUserService,
-    private ticketModalService: TicketModalService
+    private ticketModalService: TicketModalService,
+    private exclusiveContentBuyoutService: ExclusiveContentBuyoutService
   ) {}
 
   ngOnInit(): void {
@@ -109,8 +111,14 @@ export class PaymentMethodSelectDialogComponent implements OnInit {
     this.loading = false;
 
     if (this.payment?.type === ProductType.RAFFLE) {
-      this.ticketModalService.close();
+      this.ticketModalService.createTicket();
     }
+
+    if (this.payment?.type === ProductType.EXCLUSIVE_CONTENT) {
+      this.exclusiveContentBuyoutService.updateExclusiveContent();
+    }
+
+    this.ticketModalService.close();
 
     const cards = document.getElementsByClassName('paymentCard');
     for (let i = 0; i < cards.length; i++) {

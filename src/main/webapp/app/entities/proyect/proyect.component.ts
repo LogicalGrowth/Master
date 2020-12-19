@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IProyect, Proyect } from 'app/shared/model/proyect.model';
+import { IProyect } from 'app/shared/model/proyect.model';
 import { ProyectService } from './proyect.service';
 import { ProyectDeleteDialogComponent } from './proyect-delete-dialog.component';
 import * as moment from 'moment';
@@ -18,7 +18,6 @@ import { ICategory } from '../../shared/model/category.model';
 import { CategoryStatus } from '../../shared/model/enumerations/category-status.model';
 import { FavoriteService } from '../favorite/favorite.service';
 import { Favorite, IFavorite } from 'app/shared/model/favorite.model';
-import { ResourceService } from '../resource/resource.service';
 
 @Component({
   selector: 'jhi-proyect',
@@ -41,13 +40,13 @@ export class ProyectComponent implements OnInit, OnDestroy {
   category: number;
   sortBy: string;
   favorites?: IFavorite[];
+  filterOn?: boolean;
 
   constructor(
     protected proyectService: ProyectService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
     private accountService: AccountService,
-    private resourceService: ResourceService,
     private applicationUserService: ApplicationUserService,
     protected categoryService: CategoryService,
     private favoriteService: FavoriteService
@@ -60,6 +59,7 @@ export class ProyectComponent implements OnInit, OnDestroy {
   }
 
   loadAll(): void {
+    this.filterOn = false;
     this.proyectService.query({ 'status.equals': true }).subscribe((res: HttpResponse<IProyect[]>) => {
       this.proyects = res.body || [];
 
@@ -79,6 +79,7 @@ export class ProyectComponent implements OnInit, OnDestroy {
   }
 
   loadFilter(): void {
+    this.filterOn = true;
     const showAllCategories = this.category === -1;
 
     const queryName = { 'Name.contains': this.description };
@@ -94,6 +95,9 @@ export class ProyectComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
+    this.filterOn = false;
+    this.sortBy = 'creationDate';
+
     if (this.description !== '' || !this.nonprofit || !this.profitable || this.category !== -1) {
       this.description = '';
       this.profitable = true;

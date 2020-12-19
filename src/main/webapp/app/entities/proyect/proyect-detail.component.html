@@ -252,7 +252,7 @@
                                                                 <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
                                                                         (click)="exclusiveContentBuyout(exclusiveContent)">
                                                                     <i class="fa fa-shopping-cart"></i>
-                                                            </button>
+                                                                </button>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -301,7 +301,7 @@
                                                             <span *ngIf="auction.winner?.id == userId" class="badge badge-pill badge-success">Tú</span>
                                                         </td>
                                                         <td *ngIf="isProjectOwner">{{ auction.state | state}}</td>
-                                                        <td class="text-center">
+                                                        <td style="width: 8rem;" class="text-center">
                                                             <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                     [routerLink]="['/auction', auction.id, 'view']">
                                                                 <i class="fa fa-eye"></i>
@@ -369,7 +369,7 @@
                                                         <span *ngIf="raffle.buyer?.id == userId" class="badge badge-pill badge-success">Tú</span>
                                                     </td>
                                                     <td *ngIf="isProjectOwner">{{ raffle.state | state}}</td>
-                                                    <td class="text-center">
+                                                    <td style="width: 8rem;" class="text-center">
                                                         <button type="submit" rel="tooltip" class="btn btn-info btn-icon btn-sm"
                                                                 [routerLink]="['/raffle', raffle.id, 'view']">
                                                             <i class="fa fa-eye"></i>
@@ -378,10 +378,15 @@
                                                                 [disabled]="raffle.buyer?.id" [routerLink]="['/raffle', raffle.id, 'edit']">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-success btn-icon btn-sm"
-                                                            (click)="buy(raffle)" [disabled]="raffle.buyer?.id == userId">
-                                                            <i class="fa fa-gavel"></i>
-                                                        </button>
+                                                        <button *ngIf="!isProjectOwner" type="submit" rel="tooltip" class="btn btn-warning btn-icon btn-sm"
+                                                        (click)="buyTicket(raffle)" [disabled]="raffle.buyer?.id == userId || (raffle && raffle.expirationDate && raffle.expirationDate < now)">
+                                                        <i class="fa fa-usd"></i>
+                                                    </button>
+                                                    <button *ngIf="isProjectOwner && raffle && raffle.expirationDate && raffle.expirationDate < now"
+                                                    [disabled]="raffle?.state === 'FINISHED'"
+                                                type="submit" rel="tooltip" class="btn btn-danger btn-icon btn-sm" (click)="changeStatusRaffle(raffle)">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
                                                     </td>
                                                 </tr>
                                                 </tbody>

@@ -16,6 +16,7 @@ import { PartnerRequestComponent } from './partner-request/partner-request.compo
 import { PartnerRequestListComponent } from './partner-request-list/partner-request-list.component';
 import { ProyectManagementComponent } from './proyect-management/proyect-management.component';
 import { ExclusiveContentBuyoutComponent } from './exclusive-content-buyout/exclusive-content-buyout.component';
+import { TicketComponent } from './ticket/ticket.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { ExclusiveContentBuyoutComponent } from './exclusive-content-buyout/excl
     PartnerRequestListComponent,
     ProyectManagementComponent,
     ExclusiveContentBuyoutComponent,
+    TicketComponent,
   ],
   entryComponents: [ProyectDeleteDialogComponent],
 })

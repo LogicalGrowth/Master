@@ -1,8 +1,9 @@
 package cr.ac.ucenfotec.fun4fund.web.rest;
 
-import cr.ac.ucenfotec.fun4fund.domain.Prize;
-import cr.ac.ucenfotec.fun4fund.domain.AuctionAnswerStatistics;
-import cr.ac.ucenfotec.fun4fund.domain.Raffle;
+import cr.ac.ucenfotec.fun4fund.domain.*;
+import cr.ac.ucenfotec.fun4fund.domain.enumeration.ActivityStatus;
+import cr.ac.ucenfotec.fun4fund.repository.TicketRepository;
+import cr.ac.ucenfotec.fun4fund.service.MailService;
 import cr.ac.ucenfotec.fun4fund.service.PrizeService;
 import cr.ac.ucenfotec.fun4fund.service.RaffleService;
 import cr.ac.ucenfotec.fun4fund.web.rest.errors.BadRequestAlertException;
@@ -22,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * REST controller for managing {@link cr.ac.ucenfotec.fun4fund.domain.Raffle}.
@@ -38,15 +40,17 @@ public class RaffleResource {
     private String applicationName;
 
     private final RaffleService raffleService;
-
     private final RaffleQueryService raffleQueryService;
-
+    private final MailService mailService;
     private final PrizeService prizeService;
+    private final TicketRepository ticketRepository;
 
-    public RaffleResource(RaffleService raffleService, RaffleQueryService raffleQueryService, PrizeService prizeService) {
+    public RaffleResource(RaffleService raffleService, RaffleQueryService raffleQueryService, MailService mailService, PrizeService prizeService, TicketRepository ticketRepository) {
         this.raffleService = raffleService;
         this.raffleQueryService = raffleQueryService;
+        this.mailService = mailService;
         this.prizeService = prizeService;
+        this.ticketRepository = ticketRepository;
     }
 
     /**
@@ -83,12 +87,32 @@ public class RaffleResource {
     @PutMapping("/raffles")
     public ResponseEntity<Raffle> updateRaffle(@Valid @RequestBody Raffle raffle) throws URISyntaxException {
         log.debug("REST request to update Raffle : {}", raffle);
+        String msgSubject = "Rifa terminada.";
+        String msgUser = "Ha ganado la rifa del proyecto "+raffle.getProyect().getName()+ " su premio es " + raffle.getPrize().getName() + ".";
+
         if (raffle.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Prize prizeResult = raffle.getPrize();
-        Prize newPrize = prizeService.save(prizeResult);
-        raffle.setPrize(newPrize);
+
+        if (raffle.getState() == ActivityStatus.FINISHED){
+            Random random = new Random();
+            List<Ticket> ticketList = ticketRepository.findByRaffle(raffle);
+            int ticketCount = ticketList.size()-1;
+            int randomPosition = random.nextInt(ticketCount - 0 + 1) + 0;
+            Ticket ticketWinner = ticketList.get(randomPosition);
+            ApplicationUser user = ticketWinner.getBuyer();
+            raffle.setBuyer(user);
+            String msgAdmin = "El ganador de la rifa fue " + raffle.getBuyer().getInternalUser().getFirstName() + " " + raffle.getBuyer().getInternalUser().getLastName() +
+                "<br> Pongase en contacto con el ganador por el correo " + raffle.getBuyer().getInternalUser().getEmail() +
+                "<br> El premio fue " + raffle.getPrize().getName() + ".";
+            mailService.sendEmail(user.getInternalUser().getEmail(),msgSubject,msgUser,false,true);
+            mailService.sendEmail(raffle.getProyect().getOwner().getInternalUser().getEmail(),msgSubject,msgAdmin,false,true);
+        }else{
+            Prize prizeResult = raffle.getPrize();
+            Prize newPrize = prizeService.save(prizeResult);
+            raffle.setPrize(newPrize);
+        }
+
         Raffle result = raffleService.save(raffle);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, raffle.getId().toString()))

@@ -21,6 +21,7 @@ import { ApplicationUserService } from '../application-user/application-user.ser
 import { IApplicationUser } from 'app/shared/model/application-user.model';
 import { ProductType } from 'app/shared/model/enumerations/product-type.model';
 import { DonationModalService } from './donation/donationModal.service';
+import { TicketModalService } from './ticket/ticketModal.service';
 import { ExclusiveContentBuyoutService } from './exclusive-content-buyout/exclusive-content-buyout.service';
 import { BidModalService } from '../auction/bid/bidModal.service';
 import { PartnerRequestModalService } from './partner-request/partnerRequestModal.service';
@@ -86,7 +87,8 @@ export class ProyectDetailComponent implements OnInit {
     private bidModalService: BidModalService,
     private partnerRequestModalService: PartnerRequestModalService,
     private raffleService: RaffleService,
-    private reviewModalService: ReviewModalService
+    private reviewModalService: ReviewModalService,
+    private ticketModalService: TicketModalService
   ) {}
 
   loadExclusiveContent(projectId: number): void {
@@ -224,6 +226,10 @@ export class ProyectDetailComponent implements OnInit {
     this.donationModalService.open(this.proyect!);
   }
 
+  buyTicket(raffle: IRaffle): void {
+    this.ticketModalService.open(raffle, this.proyect!);
+  }
+
   exclusiveContentBuyout(exclusiveContent: IExclusiveContent): void {
     this.exclusiveContentBuyoutService.open(exclusiveContent);
   }
@@ -232,9 +238,6 @@ export class ProyectDetailComponent implements OnInit {
     this.bidModalService.open(auction);
   }
 
-  buy(raffle: IRaffle): void {
-    /*Usar ticket service*/
-  }
   partnerRequest(): void {
     this.partnerRequestModalService.open(this.proyect!, this.applicationUser![0]);
   }
@@ -257,6 +260,11 @@ export class ProyectDetailComponent implements OnInit {
       this.proyect!.collected = res.body!.proyect!.collected;
       this.loadDonors(this.proyect?.id);
     });
+  }
+
+  changeStatusRaffle(raffle: IRaffle): void {
+    raffle.state = ActivityStatus.FINISHED;
+    this.raffleService.update(raffle).subscribe((res: HttpResponse<IAuction>) => {});
   }
 
   checkReview(user: any): void {

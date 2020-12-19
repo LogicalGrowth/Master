@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')">
+        <span aria-hidden="true">x</span>
+    </button>
+    <h4 class="modal-title d-inline">Comprar tiquete</h4>
+    <h6 class="modal-title">Precio: ${{raffle?.price}}</h6>
+</div>
+<div class="modal-body"><jhi-paypal-button description="Donación proyecto {{ proyect?.name }}" [amount]="data"
+    projectId="{{ proyect?.id }}" [productType]="productType"></jhi-paypal-button>
+</div>
+

@@ -1,9 +1,6 @@
 package cr.ac.ucenfotec.fun4fund.service;
 
-import cr.ac.ucenfotec.fun4fund.domain.ApplicationUser;
-import cr.ac.ucenfotec.fun4fund.domain.Checkpoint;
-import cr.ac.ucenfotec.fun4fund.domain.Payment;
-import cr.ac.ucenfotec.fun4fund.domain.Proyect;
+import cr.ac.ucenfotec.fun4fund.domain.*;
 import cr.ac.ucenfotec.fun4fund.domain.enumeration.ProductType;
 import cr.ac.ucenfotec.fun4fund.repository.CheckpointRepository;
 import cr.ac.ucenfotec.fun4fund.repository.PaymentRepository;
@@ -165,12 +162,11 @@ public class PaymentService {
         Proyect proyectResult = proyectService.save(proyect);
         Payment result = save(payment);
 
-        /*Guardar aquí fee
         ConfigSystem config = configSystemService.findByType("FeeValue").get(0);
         Double value = (Double.parseDouble(config.getValue()) + fee);
         config.setValue(value.toString());
         configSystemService.save(config);
-         */
-        return  result;
+
+        return result;
     }
 }

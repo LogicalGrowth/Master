@@ -1,6 +1,6 @@
 <header class="masthead text-center text-white">
     <div class="mask rgba-gradient masthead-content">
-        <div class="container bcontent mt-5" style="margin-bottom: -148px; max-width: 1500px !important;">
+        <div class="container bcontent mt-5" style="margin-bottom: -148px; max-width: 1375px !important;">
             <h2 id="page-heading" class="main-title">Proyectos</h2>
 
             <div class="row">
@@ -20,14 +20,14 @@
                     <div class="row">
                         <div class="col-sm-3 active-cyan-4">
                             <div class="form-group has-label">
-                                <label for="filer_searchBar" class="control-label text-uppercase font-weight-bold">Nombre</label>
+                                <label for="filer_searchBar" class="control-label">Nombre</label>
                                 <input type="text" class="form-control" name="descriptionName" id="filer_searchBar" [(ngModel)]="description">
                             </div>
                         </div>
 
                         <div class="col-sm-2 active-cyan-4">
                             <div class="form-group">
-                                <label for="category" class="text-uppercase font-weight-bold">Categoría</label>
+                                <label for="category">Categoría</label>
                                 <select name="categories" id="category" class="form-control" [(ngModel)]="category">
                                     <option value="-1">Todas</option>
                                     <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="col-sm-3">
-                            <label class="col-sm-6 col-form-label text-uppercase font-weight-bold">Tipo de proyecto</label>
+                            <label for="sortBy"></label>
                             <div class="col-sm-10">
                                 <div class="form-check form-check-inline">
                                     <label class="form-check-label">
@@ -57,7 +57,7 @@
 
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <label for="sortBy" class="text-uppercase font-weight-bold">Ordenar</label>
+                                <label for="sortBy">Ordenar</label>
                                 <select class="form-control active-cyan-4" id="sortBy" [(ngModel)]="sortBy">
                                     <option value="creationDate" selected>Fecha de creación</option>
                                     <option value="lastUpdated">Fecha de actualización</option>
@@ -68,15 +68,7 @@
 
                         <div class="col-sm-2">
                             <div class="form-group" style="margin-top: 1rem;">
-                                <jhi-icon-button type="primary" label=" Buscar" icon="nc-zoom-split" (click)="loadFilter()"></jhi-icon-button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <p (click)="clearFilters()">Limpiar filtros</p>
+                                <jhi-simple-button type="warning" label=" Buscar" (click)="loadFilter()"></jhi-simple-button>
                             </div>
                         </div>
                     </div>
@@ -90,13 +82,27 @@
     <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
 
-    <p class="section-subheading font-weight-light" *ngIf="proyects?.length > 1">Hemos encontrado {{proyects?.length}} resultados</p>
-    <p class="section-subheading font-weight-light" *ngIf="proyects?.length === 1">Hemos encontrado {{proyects?.length}} resultado</p>
-    <p class="section-subheading font-weight-light" *ngIf="!proyects?.length">No hemos encontrado resultados</p>
+    <div class="row">
+        <div class="col-md-3">
+            <p class="section-subheading secondary-text" *ngIf="proyects?.length">
+                Hemos encontrado {{proyects?.length}} resultado(s).
+            </p>
+            <p class="section-subheading secondary-text" *ngIf="!proyects?.length">
+                No hemos encontrado resultados
+            </p>
+        </div>
+        <div class="col-md-2">
+            <div class="timeline-heading" style="margin-left: 1rem;">
+                <span class="badge badge-pill badge-warning">2 filtros aplicados</span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <p (click)="clearFilters()" class="text-warning font-weight-bold">Limpiar filtros</p>
+        </div>
+    </div>
 
-    <div class="alert alert-warning" id="no-result" *ngIf="proyects?.length === 0">
-        <span>No existen resultados con los filtros seleccionados.</span>
-        <p (click)="clearFilters()">Limpiar filtros</p>
+    <div *ngIf="proyects?.length === 0">
+        <p>Lo sentimos, no existen coincidencias con su búsqueda.</p>
     </div>
 
     <div class="card proyect-card" *ngFor="let proyect of proyects | orderBy: sortBy:true;trackBy: trackId">
@@ -120,7 +126,7 @@
                         por {{ proyect.owner?.internalUser?.firstName }} {{ proyect.owner?.internalUser?.lastName }}
                         | {{ proyect.creationDate | date:"MM/dd/yy" }}
                     </p>
-                    <p class="card-text"> {{ (proyect.description.length > 200)? (proyect.description | slice:0:200)+'..':(proyect.description) }}</p>
+                    <p class="card-text"> {{ (proyect.description) }}</p>
                 </div>
             </div>
             <div class="col-sm-3">

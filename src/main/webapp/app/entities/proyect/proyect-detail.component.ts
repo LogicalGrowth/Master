@@ -62,7 +62,7 @@ export class ProyectDetailComponent implements OnInit {
   items?: IResource[];
   css = `#gallery iframe{
     width: 100% !important;
-    height: 37vw !important;
+    height: 520px !important;
   }`;
   applicationUser?: IApplicationUser[];
   productType?: ProductType;

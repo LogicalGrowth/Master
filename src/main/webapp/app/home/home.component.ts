@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
-    this.proyectService.query({}).subscribe((res: HttpResponse<IProyect[]>) => {
+    this.proyectService.query({ 'status.equals': true }).subscribe((res: HttpResponse<IProyect[]>) => {
       if (res.body) {
         this.proyects = this.shuffleArray(res.body).slice(0, 3) || [];
       }

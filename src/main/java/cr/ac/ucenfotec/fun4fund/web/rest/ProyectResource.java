@@ -96,6 +96,7 @@ public class ProyectResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         Proyect result = proyectService.save(proyect);
+        proyectService.updateDate(proyect);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, proyect.getId().toString()))
             .body(result);

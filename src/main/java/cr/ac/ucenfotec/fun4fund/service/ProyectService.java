@@ -56,7 +56,6 @@ public class ProyectService {
      */
     public Proyect save(Proyect proyect) {
         log.debug("Request to save Proyect : {}", proyect);
-        updateDate(proyect);
         return proyectRepository.save(proyect);
     }
 
@@ -103,12 +102,14 @@ public class ProyectService {
                 updateProyect.setLastUpdated(ZonedDateTime.now());
                 Proyect saved = proyectRepository.save(updateProyect);
                 List<Favorite> favorites = favoriteRepository.findByProyect(saved);
-                for (Favorite favorite: favorites) {
-                    String subject = "El proyecto " + favorite.getProyect().getName() + " ha sido actualizado.";
-                    String content = "El proyecto " + favorite.getProyect().getName() + " ha sido actualizado." +
-                        "<br> Visítanos para ver cuales son las últimas actualizaciones";
-                    String email = favorite.getUser().getInternalUser().getEmail();
-                    mailService.sendEmail(email,subject,content,false,true);
+                if (favorites.size() > 0) {
+                    for (Favorite favorite: favorites) {
+                        String subject = "El proyecto " + favorite.getProyect().getName() + " ha sido actualizado.";
+                        String content = "El proyecto " + favorite.getProyect().getName() + " ha sido actualizado." +
+                            "<br> Visítanos para ver cuales son las últimas actualizaciones";
+                        String email = favorite.getUser().getInternalUser().getEmail();
+                        mailService.sendEmail(email,subject,content,false,true);
+                    }
                 }
             }
         }
